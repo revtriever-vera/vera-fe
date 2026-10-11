@@ -112,6 +112,10 @@
         background-repeat: no-repeat;
     }
 
+    .login-photo-placeholder {
+        background: linear-gradient(160deg, var(--color-accent-soft), var(--color-accent) 55%, var(--color-accent-strong));
+    }
+
     .login-photo-overlay {
         background: linear-gradient(
             180deg,

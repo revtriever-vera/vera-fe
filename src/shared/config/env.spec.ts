@@ -7,7 +7,8 @@ const DEFAULTED_KEYS: readonly string[] = [
     'VITE_GOOGLE_CLIENT_ID',
     'VITE_FACEBOOK_APP_ID',
     'VITE_TERMS_URL',
-    'VITE_PRIVACY_URL'
+    'VITE_PRIVACY_URL',
+    'VITE_LOGIN_PHOTO_URL'
 ];
 
 describe('env', () => {
@@ -28,6 +29,7 @@ describe('env', () => {
         expect(env.VITE_FACEBOOK_APP_ID).toBe('');
         expect(env.VITE_TERMS_URL).toBe('');
         expect(env.VITE_PRIVACY_URL).toBe('');
+        expect(env.VITE_LOGIN_PHOTO_URL).toBe('');
     });
 
     it('reads the identity provider variables', async () => {
@@ -45,6 +47,15 @@ describe('env', () => {
     it('fails with an invalid VITE_TERMS_URL', async () => {
         vi.stubEnv('VITE_TERMS_URL', 'not-a-url');
         await expect(import('./env')).rejects.toThrow('VITE_TERMS_URL');
+    });
+
+    it('reads VITE_LOGIN_PHOTO_URL and rejects an invalid one', async () => {
+        vi.stubEnv('VITE_LOGIN_PHOTO_URL', 'https://example.test/foto.jpg');
+        const { env } = await import('./env');
+        expect(env.VITE_LOGIN_PHOTO_URL).toBe('https://example.test/foto.jpg');
+        vi.resetModules();
+        vi.stubEnv('VITE_LOGIN_PHOTO_URL', 'not-a-url');
+        await expect(import('./env')).rejects.toThrow('VITE_LOGIN_PHOTO_URL');
     });
 
     it('fails with an invalid VITE_PRIVACY_URL', async () => {
