@@ -12,10 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthAppRouteImport } from './routes/_auth/_app'
+import { Route as AuthOnboardingRouteImport } from './routes/_auth/onboarding'
 import { Route as DevUiRouteImport } from './routes/_dev/ui'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/_app/index'
 import { Route as AuthAppAccountRouteImport } from './routes/_auth/_app/account'
 import { Route as AuthAppPatrimonioRouteImport } from './routes/_auth/_app/patrimonio'
+import { Route as AuthOnboardingIndexRouteImport } from './routes/_auth/onboarding/index'
+import { Route as AuthOnboardingAssetsRouteImport } from './routes/_auth/onboarding/assets'
+import { Route as AuthOnboardingBanksRouteImport } from './routes/_auth/onboarding/banks'
+import { Route as AuthOnboardingDoneRouteImport } from './routes/_auth/onboarding/done'
 import { Route as AuthAppPatrimonioIndexRouteImport } from './routes/_auth/_app/patrimonio.index'
 import { Route as AuthAppPatrimonioAporteRouteImport } from './routes/_auth/_app/patrimonio.aporte'
 import { Route as AuthAppPatrimonioAtivosRouteImport } from './routes/_auth/_app/patrimonio.ativos'
@@ -34,6 +39,11 @@ const LoginRoute = LoginRouteImport.update({
 } as any)
 const AuthAppRoute = AuthAppRouteImport.update({
   id: '/_app',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthOnboardingRoute = AuthOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
   getParentRoute: () => AuthRoute,
 } as any)
 const DevUiRoute = DevUiRouteImport.update({
@@ -55,6 +65,26 @@ const AuthAppPatrimonioRoute = AuthAppPatrimonioRouteImport.update({
   id: '/patrimonio',
   path: '/patrimonio',
   getParentRoute: () => AuthAppRoute,
+} as any)
+const AuthOnboardingIndexRoute = AuthOnboardingIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthOnboardingRoute,
+} as any)
+const AuthOnboardingAssetsRoute = AuthOnboardingAssetsRouteImport.update({
+  id: '/assets',
+  path: '/assets',
+  getParentRoute: () => AuthOnboardingRoute,
+} as any)
+const AuthOnboardingBanksRoute = AuthOnboardingBanksRouteImport.update({
+  id: '/banks',
+  path: '/banks',
+  getParentRoute: () => AuthOnboardingRoute,
+} as any)
+const AuthOnboardingDoneRoute = AuthOnboardingDoneRouteImport.update({
+  id: '/done',
+  path: '/done',
+  getParentRoute: () => AuthOnboardingRoute,
 } as any)
 const AuthAppPatrimonioIndexRoute = AuthAppPatrimonioIndexRouteImport.update({
   id: '/',
@@ -93,9 +123,14 @@ const AuthAppPatrimonioClassesClassIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof AuthAppIndexRoute
   '/login': typeof LoginRoute
+  '/onboarding': typeof AuthOnboardingRouteWithChildren
   '/ui': typeof DevUiRoute
   '/account': typeof AuthAppAccountRoute
   '/patrimonio': typeof AuthAppPatrimonioRouteWithChildren
+  '/onboarding/assets': typeof AuthOnboardingAssetsRoute
+  '/onboarding/banks': typeof AuthOnboardingBanksRoute
+  '/onboarding/done': typeof AuthOnboardingDoneRoute
+  '/onboarding/': typeof AuthOnboardingIndexRoute
   '/patrimonio/aporte': typeof AuthAppPatrimonioAporteRoute
   '/patrimonio/ativos': typeof AuthAppPatrimonioAtivosRoute
   '/patrimonio/carteira-alvo': typeof AuthAppPatrimonioCarteiraAlvoRoute
@@ -108,6 +143,10 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/ui': typeof DevUiRoute
   '/account': typeof AuthAppAccountRoute
+  '/onboarding/assets': typeof AuthOnboardingAssetsRoute
+  '/onboarding/banks': typeof AuthOnboardingBanksRoute
+  '/onboarding/done': typeof AuthOnboardingDoneRoute
+  '/onboarding': typeof AuthOnboardingIndexRoute
   '/patrimonio/aporte': typeof AuthAppPatrimonioAporteRoute
   '/patrimonio/ativos': typeof AuthAppPatrimonioAtivosRoute
   '/patrimonio/carteira-alvo': typeof AuthAppPatrimonioCarteiraAlvoRoute
@@ -120,10 +159,15 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
   '/_auth/_app': typeof AuthAppRouteWithChildren
+  '/_auth/onboarding': typeof AuthOnboardingRouteWithChildren
   '/_dev/ui': typeof DevUiRoute
   '/_auth/_app/account': typeof AuthAppAccountRoute
   '/_auth/_app/patrimonio': typeof AuthAppPatrimonioRouteWithChildren
+  '/_auth/onboarding/assets': typeof AuthOnboardingAssetsRoute
+  '/_auth/onboarding/banks': typeof AuthOnboardingBanksRoute
+  '/_auth/onboarding/done': typeof AuthOnboardingDoneRoute
   '/_auth/_app/': typeof AuthAppIndexRoute
+  '/_auth/onboarding/': typeof AuthOnboardingIndexRoute
   '/_auth/_app/patrimonio/aporte': typeof AuthAppPatrimonioAporteRoute
   '/_auth/_app/patrimonio/ativos': typeof AuthAppPatrimonioAtivosRoute
   '/_auth/_app/patrimonio/carteira-alvo': typeof AuthAppPatrimonioCarteiraAlvoRoute
@@ -136,9 +180,14 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/onboarding'
     | '/ui'
     | '/account'
     | '/patrimonio'
+    | '/onboarding/assets'
+    | '/onboarding/banks'
+    | '/onboarding/done'
+    | '/onboarding/'
     | '/patrimonio/aporte'
     | '/patrimonio/ativos'
     | '/patrimonio/carteira-alvo'
@@ -151,6 +200,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/ui'
     | '/account'
+    | '/onboarding/assets'
+    | '/onboarding/banks'
+    | '/onboarding/done'
+    | '/onboarding'
     | '/patrimonio/aporte'
     | '/patrimonio/ativos'
     | '/patrimonio/carteira-alvo'
@@ -162,10 +215,15 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/login'
     | '/_auth/_app'
+    | '/_auth/onboarding'
     | '/_dev/ui'
     | '/_auth/_app/account'
     | '/_auth/_app/patrimonio'
+    | '/_auth/onboarding/assets'
+    | '/_auth/onboarding/banks'
+    | '/_auth/onboarding/done'
     | '/_auth/_app/'
+    | '/_auth/onboarding/'
     | '/_auth/_app/patrimonio/aporte'
     | '/_auth/_app/patrimonio/ativos'
     | '/_auth/_app/patrimonio/carteira-alvo'
@@ -203,6 +261,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAppRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/onboarding': {
+      id: '/_auth/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthOnboardingRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_dev/ui': {
       id: '/_dev/ui'
       path: '/ui'
@@ -230,6 +295,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/patrimonio'
       preLoaderRoute: typeof AuthAppPatrimonioRouteImport
       parentRoute: typeof AuthAppRoute
+    }
+    '/_auth/onboarding/': {
+      id: '/_auth/onboarding/'
+      path: '/'
+      fullPath: '/onboarding/'
+      preLoaderRoute: typeof AuthOnboardingIndexRouteImport
+      parentRoute: typeof AuthOnboardingRoute
+    }
+    '/_auth/onboarding/assets': {
+      id: '/_auth/onboarding/assets'
+      path: '/assets'
+      fullPath: '/onboarding/assets'
+      preLoaderRoute: typeof AuthOnboardingAssetsRouteImport
+      parentRoute: typeof AuthOnboardingRoute
+    }
+    '/_auth/onboarding/banks': {
+      id: '/_auth/onboarding/banks'
+      path: '/banks'
+      fullPath: '/onboarding/banks'
+      preLoaderRoute: typeof AuthOnboardingBanksRouteImport
+      parentRoute: typeof AuthOnboardingRoute
+    }
+    '/_auth/onboarding/done': {
+      id: '/_auth/onboarding/done'
+      path: '/done'
+      fullPath: '/onboarding/done'
+      preLoaderRoute: typeof AuthOnboardingDoneRouteImport
+      parentRoute: typeof AuthOnboardingRoute
     }
     '/_auth/_app/patrimonio/': {
       id: '/_auth/_app/patrimonio/'
@@ -312,12 +405,32 @@ const AuthAppRouteChildren: AuthAppRouteChildren = {
 const AuthAppRouteWithChildren =
   AuthAppRoute._addFileChildren(AuthAppRouteChildren)
 
+interface AuthOnboardingRouteChildren {
+  AuthOnboardingAssetsRoute: typeof AuthOnboardingAssetsRoute
+  AuthOnboardingBanksRoute: typeof AuthOnboardingBanksRoute
+  AuthOnboardingDoneRoute: typeof AuthOnboardingDoneRoute
+  AuthOnboardingIndexRoute: typeof AuthOnboardingIndexRoute
+}
+
+const AuthOnboardingRouteChildren: AuthOnboardingRouteChildren = {
+  AuthOnboardingAssetsRoute: AuthOnboardingAssetsRoute,
+  AuthOnboardingBanksRoute: AuthOnboardingBanksRoute,
+  AuthOnboardingDoneRoute: AuthOnboardingDoneRoute,
+  AuthOnboardingIndexRoute: AuthOnboardingIndexRoute,
+}
+
+const AuthOnboardingRouteWithChildren = AuthOnboardingRoute._addFileChildren(
+  AuthOnboardingRouteChildren,
+)
+
 interface AuthRouteChildren {
   AuthAppRoute: typeof AuthAppRouteWithChildren
+  AuthOnboardingRoute: typeof AuthOnboardingRouteWithChildren
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthAppRoute: AuthAppRouteWithChildren,
+  AuthOnboardingRoute: AuthOnboardingRouteWithChildren,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)

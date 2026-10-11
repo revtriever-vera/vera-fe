@@ -15,6 +15,8 @@ import ptBRPortfolioTargets from './pt-BR/portfolioTargets.json';
 import enPortfolioTargets from './en/portfolioTargets.json';
 import ptBRPortfolioContribution from './pt-BR/portfolioContribution.json';
 import enPortfolioContribution from './en/portfolioContribution.json';
+import ptBROnboarding from './pt-BR/onboarding.json';
+import enOnboarding from './en/onboarding.json';
 
 type TranslationNode = string | { readonly [key: string]: TranslationNode };
 
@@ -45,7 +47,8 @@ const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'portfolioOverview', ptBR: ptBRPortfolioOverview, en: enPortfolioOverview },
     { name: 'portfolioAssets', ptBR: ptBRPortfolioAssets, en: enPortfolioAssets },
     { name: 'portfolioTargets', ptBR: ptBRPortfolioTargets, en: enPortfolioTargets },
-    { name: 'portfolioContribution', ptBR: ptBRPortfolioContribution, en: enPortfolioContribution }
+    { name: 'portfolioContribution', ptBR: ptBRPortfolioContribution, en: enPortfolioContribution },
+    { name: 'onboarding', ptBR: ptBROnboarding, en: enOnboarding }
 ];
 
 describe('paridade de chaves entre os namespaces de tradução', () => {

@@ -16,6 +16,8 @@ import ptBRPortfolioTargets from './resources/pt-BR/portfolioTargets.json';
 import enPortfolioTargets from './resources/en/portfolioTargets.json';
 import ptBRPortfolioContribution from './resources/pt-BR/portfolioContribution.json';
 import enPortfolioContribution from './resources/en/portfolioContribution.json';
+import ptBROnboarding from './resources/pt-BR/onboarding.json';
+import enOnboarding from './resources/en/onboarding.json';
 import { DEFAULT_LOCALE, resolveLocale, type SupportedLocale } from './resolve-locale';
 
 type CommonResource = typeof ptBRCommon;
@@ -30,6 +32,7 @@ type LocaleResources = {
     readonly portfolioAssets: typeof ptBRPortfolioAssets;
     readonly portfolioTargets: typeof ptBRPortfolioTargets;
     readonly portfolioContribution: typeof ptBRPortfolioContribution;
+    readonly onboarding: typeof ptBROnboarding;
 };
 
 const resources: Record<SupportedLocale, LocaleResources> = {
@@ -41,7 +44,8 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolioOverview: ptBRPortfolioOverview,
         portfolioAssets: ptBRPortfolioAssets,
         portfolioTargets: ptBRPortfolioTargets,
-        portfolioContribution: ptBRPortfolioContribution
+        portfolioContribution: ptBRPortfolioContribution,
+        onboarding: ptBROnboarding
     },
     en: {
         common: enCommon,
@@ -51,7 +55,8 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolioOverview: enPortfolioOverview,
         portfolioAssets: enPortfolioAssets,
         portfolioTargets: enPortfolioTargets,
-        portfolioContribution: enPortfolioContribution
+        portfolioContribution: enPortfolioContribution,
+        onboarding: enOnboarding
     }
 };
 
@@ -64,7 +69,17 @@ void i18next.use(initReactI18next).init({
     resources,
     lng: initialLocale(),
     fallbackLng: DEFAULT_LOCALE,
-    ns: ['common', 'auth', 'account', 'portfolio', 'portfolioOverview', 'portfolioAssets', 'portfolioTargets', 'portfolioContribution'],
+    ns: [
+        'common',
+        'auth',
+        'account',
+        'portfolio',
+        'portfolioOverview',
+        'portfolioAssets',
+        'portfolioTargets',
+        'portfolioContribution',
+        'onboarding'
+    ],
     defaultNS: 'common',
     interpolation: { escapeValue: false },
     returnNull: false

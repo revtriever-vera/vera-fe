@@ -6,6 +6,7 @@ import type ptBRPortfolioOverview from './shared/lib/i18n/resources/pt-BR/portfo
 import type ptBRPortfolioAssets from './shared/lib/i18n/resources/pt-BR/portfolioAssets.json';
 import type ptBRPortfolioTargets from './shared/lib/i18n/resources/pt-BR/portfolioTargets.json';
 import type ptBRPortfolioContribution from './shared/lib/i18n/resources/pt-BR/portfolioContribution.json';
+import type ptBROnboarding from './shared/lib/i18n/resources/pt-BR/onboarding.json';
 
 declare module 'i18next' {
     interface CustomTypeOptions {
@@ -20,6 +21,7 @@ declare module 'i18next' {
             portfolioAssets: typeof ptBRPortfolioAssets;
             portfolioTargets: typeof ptBRPortfolioTargets;
             portfolioContribution: typeof ptBRPortfolioContribution;
+            onboarding: typeof ptBROnboarding;
         };
     }
 }
