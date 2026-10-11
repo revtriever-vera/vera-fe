@@ -3,6 +3,8 @@ import { Link } from '@tanstack/react-router';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { Plus, Wallet } from 'lucide-react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
+import { useLocale } from '@/shared/lib/i18n';
+import type { SupportedLocale } from '@/shared/lib/locale';
 import { Button, buttonVariants } from '@/shared/ui/button';
 import { EmptyState } from '@/shared/ui/empty-state';
 import { FailureAlert } from '@/shared/ui/failure-alert';
@@ -17,6 +19,8 @@ import { ClassTable } from '../components/class-table';
 import { QualityNotice } from '../components/quality-notice';
 import { TotalCard } from '../components/total-card';
 import { buildOverviewViewModel, type OverviewViewModel } from '../lib/overview-view-model';
+
+const BPS_PER_POINT: number = 100;
 
 function OverviewHeader(): ReactElement {
     const { t }: UseTranslationResponse<'portfolioOverview', undefined> = useTranslation('portfolioOverview');
@@ -75,7 +79,8 @@ function OverviewEmpty(): ReactElement {
 
 function DistributionCard({ model, overview }: { readonly model: OverviewViewModel; readonly overview: Overview }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioOverview', undefined> = useTranslation('portfolioOverview');
-    const tolerance: number = overview.toleranceBps / 100;
+    const locale: SupportedLocale = useLocale();
+    const tolerance: string = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(overview.toleranceBps / BPS_PER_POINT);
     return (
         <section className="flex flex-col gap-3">
             <div>

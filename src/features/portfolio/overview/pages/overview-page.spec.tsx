@@ -90,6 +90,26 @@ describe('visão geral: conteúdo', () => {
     });
 });
 
+describe('visão geral: tolerância fracionária', () => {
+    it('em pt-BR usa vírgula decimal', async () => {
+        installOverviewApi({ overview: { ...sampleOverview(), toleranceBps: 650 } });
+        await openOverview();
+
+        expect(screen.getByText(/Faixa de tolerância: ±6,5 pp/)).toBeInTheDocument();
+    });
+
+    it('em inglês usa ponto decimal', async () => {
+        installOverviewApi({ overview: { ...sampleOverview(), toleranceBps: 650 } });
+        server.use(
+            http.post('*/auth/refresh', () => HttpResponse.json({ outcome: 'authenticated', accessToken: 'access-token-1' })),
+            http.get('*/auth/me', () => HttpResponse.json(sessionIdentity({ locale: 'en' })))
+        );
+        renderRouterAt('/patrimonio');
+
+        expect(await screen.findByText(/Tolerance range: ±6\.5 pp/)).toBeInTheDocument();
+    });
+});
+
 describe('visão geral: barras e tooltips', () => {
     it('cada segmento é um botão com os valores no rótulo', async () => {
         installOverviewApi();
