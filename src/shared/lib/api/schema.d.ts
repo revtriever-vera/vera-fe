@@ -580,230 +580,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/auth/me/preferences": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /**
-         * Save the preferences of the signed-in person
-         * @description Today only the personal locale. Null goes back to following the company locale. The effective locale carried by the access token changes at the next refresh.
-         */
-        patch: operations["AuthController_updatePreferences"];
-        trace?: never;
-    };
-    "/account/export": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Download everything Vera keeps about the signed-in account
-         * @description One JSON attachment with the identity data under `account` and one entry per module under `sections`. It is delivered whole or not at all: a module that fails to export turns the answer into a 500.
-         */
-        get: operations["AccountController_exportData"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/account": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Delete the account and every piece of data behind it
-         * @description Immediate and irreversible. The owner confirms by typing their email again. Every registered eraser runs first, then the company row is deleted and the foreign keys cascade. Clears the rt_refresh cookie.
-         */
-        delete: operations["AccountController_deleteAccount"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/onboarding": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Current onboarding state
-         * @description Creates the company onboarding row on the first call. `status` tells the front which screen to resume.
-         */
-        get: operations["OnboardingController_current"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/onboarding/summary": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * What was configured so far
-         * @description Asks every registered module for its area summary. An area with no module, or whose module failed, is null.
-         */
-        get: operations["OnboardingController_summary"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/onboarding/start": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Leave the welcome screen
-         * @description Idempotent.
-         */
-        post: operations["OnboardingController_start"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/onboarding/steps/{step}/complete": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Mark a step as done
-         * @description `step` is `assets` or `banks`. Clears a previous skip of the same step. Idempotent.
-         */
-        post: operations["OnboardingController_complete"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/onboarding/steps/{step}/skip": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Skip a step
-         * @description `step` is `assets` or `banks`. Clears a previous completion of the same step. Idempotent.
-         */
-        post: operations["OnboardingController_skip"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/onboarding/finish": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Go to the dashboard
-         * @description Closes the onboarding for good. Idempotent.
-         */
-        post: operations["OnboardingController_finish"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/onboarding/dismiss": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Skip the whole setup
-         * @description Closes the onboarding for good. Idempotent.
-         */
-        post: operations["OnboardingController_dismiss"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/onboarding/sample": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Load sample data
-         * @description Asks every module that registered sample data to seed it, all in one transaction. Areas that already hold real data are skipped. Closes the onboarding when it was still open.
-         */
-        post: operations["OnboardingSampleController_load"];
-        /**
-         * Remove sample data
-         * @description Removes only the rows marked as sample from every module. Safe to call with no sample data loaded.
-         */
-        delete: operations["OnboardingSampleController_clear"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/fixed-income/titles": {
         parameters: {
             query?: never;
@@ -952,6 +728,66 @@ export interface paths {
          * @description Latest PTAX sell rate dated on or before today, with its date. USD only in the MVP.
          */
         get: operations["MarketDataController_exchangeRate"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/portfolio/holdings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the holdings of the portfolio
+         * @description Positions and fixed income titles with the value in the base currency, where the value comes from and the quality of the data (missing or old quote, estimate, missing exchange rate). Nothing is stored: the value is computed on every read from quantity x latest quote, or from the curve for fixed income, converted by the latest PTAX. Ordered by class and value.
+         */
+        get: operations["PortfolioController_holdings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/portfolio/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Overview of the portfolio: current versus target
+         * @description Net worth, exposure to the dollar, and for every class the value, share, target, deviation, status inside the tolerance and the gap to the target. Also returns the class with the largest deviation and counters of data quality. All values are integers in the minor unit of the base currency and every share is in basis points.
+         */
+        get: operations["PortfolioController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/portfolio/classes/{classId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Detail of one class
+         * @description The holdings inside the class with value, share inside the class, effective target (the stored one, or an equal split when none is set), deviation, status and gap. Positions with quantity zero appear with 0%.
+         */
+        get: operations["PortfolioController_classDetail"];
         put?: never;
         post?: never;
         delete?: never;
@@ -4655,1546 +4491,6 @@ export interface operations {
             };
         };
     };
-    AuthController_updatePreferences: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /**
-                     * @description Personal locale preference; null follows the company locale
-                     * @enum {string|null}
-                     */
-                    locale?: "pt-BR" | "en" | null;
-                };
-            };
-        };
-        responses: {
-            /** @description Identity with the saved preferences */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * Format: uuid
-                         * @description Authenticated user id
-                         */
-                        userId: string;
-                        /**
-                         * Format: uuid
-                         * @description Tenant of the current session
-                         */
-                        companyId: string;
-                        /** @description User display name */
-                        name: string;
-                        /** @description User email */
-                        email: string;
-                        /**
-                         * @description Role inside the company
-                         * @enum {string}
-                         */
-                        role: "owner" | "member";
-                        /**
-                         * @description Effective locale: the personal preference when set, otherwise the company locale
-                         * @enum {string}
-                         */
-                        locale: "pt-BR" | "en";
-                        /**
-                         * @description Personal locale preference; null follows the company locale
-                         * @enum {string|null}
-                         */
-                        preferredLocale: "pt-BR" | "en" | null;
-                        /**
-                         * @description Provider the current session signed in with
-                         * @enum {string}
-                         */
-                        loginProvider: "google" | "facebook";
-                        /** @description Name of the current tenant */
-                        companyName: string;
-                    };
-                };
-            };
-            /** @description Invalid payload (zod validation details in meta.errors) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    AccountController_exportData: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description JSON attachment vera-export-<date>.json */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description Version of the export layout
-                         * @enum {string}
-                         */
-                        format: "vera-export/1";
-                        /**
-                         * Format: date-time
-                         * @description When the file was produced (ISO 8601)
-                         */
-                        exportedAt: string;
-                        /** @description Identity data: company, user, sign-in methods and active sessions. Never secrets or provider subjects */
-                        account: {
-                            company: {
-                                name: string;
-                                locale: string;
-                                timezone: string;
-                                /** Format: date-time */
-                                createdAt: string;
-                            };
-                            user: {
-                                name: string;
-                                email: string;
-                                role: string;
-                                locale: string | null;
-                                /** Format: date-time */
-                                termsAcceptedAt: string | null;
-                                /** Format: date-time */
-                                createdAt: string;
-                            };
-                            identities: {
-                                provider: string;
-                                /** Format: date-time */
-                                createdAt: string;
-                                /** Format: date-time */
-                                lastLoginAt: string | null;
-                            }[];
-                            sessions: {
-                                /** Format: date-time */
-                                createdAt: string;
-                                ip: string | null;
-                                userAgent: string | null;
-                            }[];
-                        };
-                        /** @description One entry per module that registered an exporter, keyed by area */
-                        sections: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Too many exports for this user (core.too_many_attempts) */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description An area failed to export (identity.export_failed, meta.area) */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    AccountController_deleteAccount: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /**
-                     * Format: email
-                     * @description Email of the signed-in user, typed again to confirm the deletion
-                     */
-                    confirmEmail: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Only the owner can delete the company (identity.forbidden) */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Typed email does not match (identity.confirmation_mismatch) */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Too many attempts for this user (core.too_many_attempts) */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description An area failed to erase, nothing was deleted (identity.erasure_failed, meta.area) */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    OnboardingController_current: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Onboarding state */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description Derived: `closed` once finished or dismissed, otherwise the first screen still open
-                         * @enum {string}
-                         */
-                        status: "welcome" | "assets" | "banks" | "summary" | "closed";
-                        /**
-                         * Format: date-time
-                         * @description When the person left the welcome screen, or null
-                         */
-                        startedAt: string | null;
-                        steps: {
-                            /** @description Assets step, optional */
-                            assets: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                            /** @description Banks and spending step, optional */
-                            banks: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                        };
-                        /**
-                         * Format: date-time
-                         * @description When the person went to the dashboard from the summary, or null
-                         */
-                        completedAt: string | null;
-                        /**
-                         * Format: date-time
-                         * @description When the person skipped the whole setup, or null
-                         */
-                        dismissedAt: string | null;
-                        sample: {
-                            /** @description True while sample data is loaded */
-                            active: boolean;
-                            /** @description True when a sample data provider is registered */
-                            available: boolean;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    OnboardingController_summary: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Per area summary */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Null when no module registered a summary for the area or it failed */
-                        assets: {
-                            /** @description How many items were configured in the area */
-                            items: number;
-                            /** @description Total amount in integer cents, or null when the area has no amount */
-                            amountCents: number | null;
-                            /** @description Currency of `amountCents`, or null */
-                            currency: string | null;
-                            /** @description Area specific counters, such as banks `connections` and `imports` */
-                            breakdown?: {
-                                [key: string]: number;
-                            };
-                        } | null;
-                        /** @description Null when no module registered a summary for the area or it failed */
-                        banks: {
-                            /** @description How many items were configured in the area */
-                            items: number;
-                            /** @description Total amount in integer cents, or null when the area has no amount */
-                            amountCents: number | null;
-                            /** @description Currency of `amountCents`, or null */
-                            currency: string | null;
-                            /** @description Area specific counters, such as banks `connections` and `imports` */
-                            breakdown?: {
-                                [key: string]: number;
-                            };
-                        } | null;
-                        /** @description Null when no module registered a summary for the area or it failed */
-                        target: {
-                            /** @description How many items were configured in the area */
-                            items: number;
-                            /** @description Total amount in integer cents, or null when the area has no amount */
-                            amountCents: number | null;
-                            /** @description Currency of `amountCents`, or null */
-                            currency: string | null;
-                            /** @description Area specific counters, such as banks `connections` and `imports` */
-                            breakdown?: {
-                                [key: string]: number;
-                            };
-                        } | null;
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    OnboardingController_start: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Updated onboarding state */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description Derived: `closed` once finished or dismissed, otherwise the first screen still open
-                         * @enum {string}
-                         */
-                        status: "welcome" | "assets" | "banks" | "summary" | "closed";
-                        /**
-                         * Format: date-time
-                         * @description When the person left the welcome screen, or null
-                         */
-                        startedAt: string | null;
-                        steps: {
-                            /** @description Assets step, optional */
-                            assets: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                            /** @description Banks and spending step, optional */
-                            banks: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                        };
-                        /**
-                         * Format: date-time
-                         * @description When the person went to the dashboard from the summary, or null
-                         */
-                        completedAt: string | null;
-                        /**
-                         * Format: date-time
-                         * @description When the person skipped the whole setup, or null
-                         */
-                        dismissedAt: string | null;
-                        sample: {
-                            /** @description True while sample data is loaded */
-                            active: boolean;
-                            /** @description True when a sample data provider is registered */
-                            available: boolean;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Onboarding already closed (onboarding.already_closed) */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    OnboardingController_complete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                step: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Updated onboarding state */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description Derived: `closed` once finished or dismissed, otherwise the first screen still open
-                         * @enum {string}
-                         */
-                        status: "welcome" | "assets" | "banks" | "summary" | "closed";
-                        /**
-                         * Format: date-time
-                         * @description When the person left the welcome screen, or null
-                         */
-                        startedAt: string | null;
-                        steps: {
-                            /** @description Assets step, optional */
-                            assets: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                            /** @description Banks and spending step, optional */
-                            banks: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                        };
-                        /**
-                         * Format: date-time
-                         * @description When the person went to the dashboard from the summary, or null
-                         */
-                        completedAt: string | null;
-                        /**
-                         * Format: date-time
-                         * @description When the person skipped the whole setup, or null
-                         */
-                        dismissedAt: string | null;
-                        sample: {
-                            /** @description True while sample data is loaded */
-                            active: boolean;
-                            /** @description True when a sample data provider is registered */
-                            available: boolean;
-                        };
-                    };
-                };
-            };
-            /** @description Unknown step (onboarding.unknown_step) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Onboarding already closed (onboarding.already_closed) */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    OnboardingController_skip: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                step: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Updated onboarding state */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description Derived: `closed` once finished or dismissed, otherwise the first screen still open
-                         * @enum {string}
-                         */
-                        status: "welcome" | "assets" | "banks" | "summary" | "closed";
-                        /**
-                         * Format: date-time
-                         * @description When the person left the welcome screen, or null
-                         */
-                        startedAt: string | null;
-                        steps: {
-                            /** @description Assets step, optional */
-                            assets: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                            /** @description Banks and spending step, optional */
-                            banks: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                        };
-                        /**
-                         * Format: date-time
-                         * @description When the person went to the dashboard from the summary, or null
-                         */
-                        completedAt: string | null;
-                        /**
-                         * Format: date-time
-                         * @description When the person skipped the whole setup, or null
-                         */
-                        dismissedAt: string | null;
-                        sample: {
-                            /** @description True while sample data is loaded */
-                            active: boolean;
-                            /** @description True when a sample data provider is registered */
-                            available: boolean;
-                        };
-                    };
-                };
-            };
-            /** @description Unknown step (onboarding.unknown_step) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Onboarding already closed (onboarding.already_closed) */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    OnboardingController_finish: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Updated onboarding state */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description Derived: `closed` once finished or dismissed, otherwise the first screen still open
-                         * @enum {string}
-                         */
-                        status: "welcome" | "assets" | "banks" | "summary" | "closed";
-                        /**
-                         * Format: date-time
-                         * @description When the person left the welcome screen, or null
-                         */
-                        startedAt: string | null;
-                        steps: {
-                            /** @description Assets step, optional */
-                            assets: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                            /** @description Banks and spending step, optional */
-                            banks: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                        };
-                        /**
-                         * Format: date-time
-                         * @description When the person went to the dashboard from the summary, or null
-                         */
-                        completedAt: string | null;
-                        /**
-                         * Format: date-time
-                         * @description When the person skipped the whole setup, or null
-                         */
-                        dismissedAt: string | null;
-                        sample: {
-                            /** @description True while sample data is loaded */
-                            active: boolean;
-                            /** @description True when a sample data provider is registered */
-                            available: boolean;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Onboarding was dismissed (onboarding.already_closed) */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    OnboardingController_dismiss: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Updated onboarding state */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description Derived: `closed` once finished or dismissed, otherwise the first screen still open
-                         * @enum {string}
-                         */
-                        status: "welcome" | "assets" | "banks" | "summary" | "closed";
-                        /**
-                         * Format: date-time
-                         * @description When the person left the welcome screen, or null
-                         */
-                        startedAt: string | null;
-                        steps: {
-                            /** @description Assets step, optional */
-                            assets: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                            /** @description Banks and spending step, optional */
-                            banks: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                        };
-                        /**
-                         * Format: date-time
-                         * @description When the person went to the dashboard from the summary, or null
-                         */
-                        completedAt: string | null;
-                        /**
-                         * Format: date-time
-                         * @description When the person skipped the whole setup, or null
-                         */
-                        dismissedAt: string | null;
-                        sample: {
-                            /** @description True while sample data is loaded */
-                            active: boolean;
-                            /** @description True when a sample data provider is registered */
-                            available: boolean;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Onboarding was finished (onboarding.already_closed) */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    OnboardingSampleController_load: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Updated onboarding state */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description Derived: `closed` once finished or dismissed, otherwise the first screen still open
-                         * @enum {string}
-                         */
-                        status: "welcome" | "assets" | "banks" | "summary" | "closed";
-                        /**
-                         * Format: date-time
-                         * @description When the person left the welcome screen, or null
-                         */
-                        startedAt: string | null;
-                        steps: {
-                            /** @description Assets step, optional */
-                            assets: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                            /** @description Banks and spending step, optional */
-                            banks: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                        };
-                        /**
-                         * Format: date-time
-                         * @description When the person went to the dashboard from the summary, or null
-                         */
-                        completedAt: string | null;
-                        /**
-                         * Format: date-time
-                         * @description When the person skipped the whole setup, or null
-                         */
-                        dismissedAt: string | null;
-                        sample: {
-                            /** @description True while sample data is loaded */
-                            active: boolean;
-                            /** @description True when a sample data provider is registered */
-                            available: boolean;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description No module registered sample data (onboarding.sample_unavailable) */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Too many attempts (core.too_many_attempts) */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description A module failed and everything was rolled back (onboarding.sample_failed) */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    OnboardingSampleController_clear: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Updated onboarding state */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description Derived: `closed` once finished or dismissed, otherwise the first screen still open
-                         * @enum {string}
-                         */
-                        status: "welcome" | "assets" | "banks" | "summary" | "closed";
-                        /**
-                         * Format: date-time
-                         * @description When the person left the welcome screen, or null
-                         */
-                        startedAt: string | null;
-                        steps: {
-                            /** @description Assets step, optional */
-                            assets: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                            /** @description Banks and spending step, optional */
-                            banks: {
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was completed, or null
-                                 */
-                                doneAt: string | null;
-                                /**
-                                 * Format: date-time
-                                 * @description When the step was skipped, or null
-                                 */
-                                skippedAt: string | null;
-                            };
-                        };
-                        /**
-                         * Format: date-time
-                         * @description When the person went to the dashboard from the summary, or null
-                         */
-                        completedAt: string | null;
-                        /**
-                         * Format: date-time
-                         * @description When the person skipped the whole setup, or null
-                         */
-                        dismissedAt: string | null;
-                        sample: {
-                            /** @description True while sample data is loaded */
-                            active: boolean;
-                            /** @description True when a sample data provider is registered */
-                            available: boolean;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description A module failed and nothing was removed (onboarding.sample_failed) */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
     FixedIncomeController_create: {
         parameters: {
             query?: never;
@@ -6571,185 +4867,6 @@ export interface operations {
             };
         };
     };
-    FixedIncomeController_preview: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /**
-                     * @description Kind of security: cdb, lci, lca, lc, debenture, cri or cra
-                     * @enum {string}
-                     */
-                    kind: "cdb" | "lci" | "lca" | "lc" | "debenture" | "cri" | "cra";
-                    /**
-                     * @description Indexer: `cdi_percent` (percentage of CDI), `prefixed` or `ipca_plus` (IPCA + fixed rate)
-                     * @enum {string}
-                     */
-                    indexer: "cdi_percent" | "prefixed" | "ipca_plus";
-                    /** @description Rate in basis points. `cdi_percent`: 100% of CDI = 10000 (1 to 30000). `prefixed` and `ipca_plus`: yearly rate, 12.5% = 1250 (prefixed 0 to 10000, ipca_plus 0 to 5000) */
-                    rateBps: number;
-                    /**
-                     * @description Currency of the security. `USD` only with the `prefixed` indexer; defaults to `BRL`
-                     * @enum {string}
-                     */
-                    currency?: "BRL" | "USD";
-                    /** @description Applied amount in the smallest unit of the currency (cents), greater than zero */
-                    appliedMinor: number;
-                    /** @description Application date, YYYY-MM-DD, from 2010-01-01 until today */
-                    appliedAt: string;
-                    /** @description Maturity date, YYYY-MM-DD, after the application date and at most 50 years ahead of it */
-                    maturityDate: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Valuation today of the given terms */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Reference date of the valuation, YYYY-MM-DD (São Paulo time) */
-                        asOf: string;
-                        /** @description Gross value on the curve in the smallest unit of the security currency */
-                        valueMinor: number;
-                        /**
-                         * @description Currency of the value
-                         * @enum {string}
-                         */
-                        currency: "BRL" | "USD";
-                        /** @description Gross yield accrued over the applied amount, in basis points */
-                        accruedBps: number;
-                        /** @description The security reached maturity; the value is frozen at the maturity date */
-                        matured: boolean;
-                        /** @description The value used projected business days or an unpublished IPCA */
-                        estimated: boolean;
-                        /**
-                         * @description `index_data_missing`: the index series do not cover the period and the value is the applied amount
-                         * @enum {string}
-                         */
-                        status: "ok" | "index_data_missing";
-                        /**
-                         * @description Curve used: `curve_cdi`, `curve_pre` or `curve_ipca`
-                         * @enum {string}
-                         */
-                        source: "curve_cdi" | "curve_pre" | "curve_ipca";
-                        /**
-                         * @description `regressive` income tax or `exempt` (LCI and LCA)
-                         * @enum {string}
-                         */
-                        taxRegime: "regressive" | "exempt";
-                        /** @description Estimated income tax. Detail only: never part of the net worth total */
-                        taxEstimatedMinor: number;
-                        /** @description Value net of the estimated income tax. Detail only: never part of the net worth total */
-                        netEstimatedMinor: number;
-                    };
-                };
-            };
-            /** @description Invalid payload (zod validation details in meta.errors) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description The application date is before 2010-01-01 or in the future (fixed_income.applied_date_out_of_range); The terms contradict each other: USD without prefixed, maturity not after application, term over 50 years or rate out of range (fixed_income.invalid_terms) */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description More than 120 previews in a minute (core.too_many_attempts) */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
     FixedIncomeController_remove: {
         parameters: {
             query?: never;
@@ -7045,153 +5162,88 @@ export interface operations {
             };
         };
     };
-    MarketDataController_exchangeRate: {
+    FixedIncomeController_preview: {
         parameters: {
             query?: never;
-            header?: never;
-            path: {
-                /** @description ISO 4217 code of the foreign currency */
-                currency: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The latest stored rate */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description ISO 4217 code of the currency */
-                        currency: string;
-                        /** @description How many reais one unit of the currency is worth, as a decimal string */
-                        brlPerUnit: string;
-                        /** @description Date (YYYY-MM-DD) of the rate, the latest on or before today */
-                        date: string;
-                        /** @description bcb-ptax, or mock outside live environments */
-                        source: string;
-                    };
-                };
-            };
-            /** @description Malformed currency code (zod validation details in meta.errors) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description No rate stored for the currency (market-data.exchange_rate_unavailable) */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    MarketDataController_quotes: {
-        parameters: {
-            query: {
-                /** @description Comma separated catalog asset ids, from 1 to 30 */
-                assetIds: unknown;
-            };
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * @description Kind of security: cdb, lci, lca, lc, debenture, cri or cra
+                     * @enum {string}
+                     */
+                    kind: "cdb" | "lci" | "lca" | "lc" | "debenture" | "cri" | "cra";
+                    /**
+                     * @description Indexer: `cdi_percent` (percentage of CDI), `prefixed` or `ipca_plus` (IPCA + fixed rate)
+                     * @enum {string}
+                     */
+                    indexer: "cdi_percent" | "prefixed" | "ipca_plus";
+                    /** @description Rate in basis points. `cdi_percent`: 100% of CDI = 10000 (1 to 30000). `prefixed` and `ipca_plus`: yearly rate, 12.5% = 1250 (prefixed 0 to 10000, ipca_plus 0 to 5000) */
+                    rateBps: number;
+                    /**
+                     * @description Currency of the security. `USD` only with the `prefixed` indexer; defaults to `BRL`
+                     * @enum {string}
+                     */
+                    currency?: "BRL" | "USD";
+                    /** @description Applied amount in the smallest unit of the currency (cents), greater than zero */
+                    appliedMinor: number;
+                    /** @description Application date, YYYY-MM-DD, from 2010-01-01 until today */
+                    appliedAt: string;
+                    /** @description Maturity date, YYYY-MM-DD, after the application date and at most 50 years ahead of it */
+                    maturityDate: string;
+                };
+            };
+        };
         responses: {
-            /** @description Stored prices and the assets still pending */
+            /** @description Valuation today of the given terms */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": {
-                        /** @description Prices already stored */
-                        quotes: {
-                            /**
-                             * Format: uuid
-                             * @description Catalog asset id
-                             */
-                            assetId: string;
-                            /** @description Last known price as a decimal string, in the asset currency */
-                            price: string;
-                            /** @description ISO 4217 currency of the price */
-                            currency: string;
-                            /** @description Date (YYYY-MM-DD) of the session the price refers to */
-                            priceDate: string;
-                            /** @description Provider that answered: brapi, finnhub, twelvedata, alphavantage, coingecko, tesouro or mock */
-                            source: string;
-                            /** @description Whether the price is older than the freshness window; the value is still shown, with a warning */
-                            stale: boolean;
-                        }[];
-                        /** @description Assets without a price yet; a background fetch was queued for them */
-                        pendingAssetIds: string[];
+                        /** @description Reference date of the valuation, YYYY-MM-DD (São Paulo time) */
+                        asOf: string;
+                        /** @description Gross value on the curve in the smallest unit of the security currency */
+                        valueMinor: number;
+                        /**
+                         * @description Currency of the value
+                         * @enum {string}
+                         */
+                        currency: "BRL" | "USD";
+                        /** @description Gross yield accrued over the applied amount, in basis points */
+                        accruedBps: number;
+                        /** @description The security reached maturity; the value is frozen at the maturity date */
+                        matured: boolean;
+                        /** @description The value used projected business days or an unpublished IPCA */
+                        estimated: boolean;
+                        /**
+                         * @description `index_data_missing`: the index series do not cover the period and the value is the applied amount
+                         * @enum {string}
+                         */
+                        status: "ok" | "index_data_missing";
+                        /**
+                         * @description Curve used: `curve_cdi`, `curve_pre` or `curve_ipca`
+                         * @enum {string}
+                         */
+                        source: "curve_cdi" | "curve_pre" | "curve_ipca";
+                        /**
+                         * @description `regressive` income tax or `exempt` (LCI and LCA)
+                         * @enum {string}
+                         */
+                        taxRegime: "regressive" | "exempt";
+                        /** @description Estimated income tax. Detail only: never part of the net worth total */
+                        taxEstimatedMinor: number;
+                        /** @description Value net of the estimated income tax. Detail only: never part of the net worth total */
+                        netEstimatedMinor: number;
                     };
                 };
             };
-            /** @description Invalid query: missing, malformed or more than 30 ids (zod validation details in meta.errors) */
+            /** @description Invalid payload (zod validation details in meta.errors) */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -7239,7 +5291,31 @@ export interface operations {
                     };
                 };
             };
-            /** @description More than 120 reads in a minute for the company */
+            /** @description The application date is before 2010-01-01 or in the future (fixed_income.applied_date_out_of_range); The terms contradict each other: USD without prefixed, maturity not after application, term over 50 years or rate out of range (fixed_income.invalid_terms) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 120 previews in a minute (core.too_many_attempts) */
             429: {
                 headers: {
                     [name: string]: unknown;
@@ -7758,6 +5834,644 @@ export interface operations {
             };
             /** @description Too many decimal places for the asset (positions.invalid_quantity) */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    MarketDataController_quotes: {
+        parameters: {
+            query: {
+                /** @description Comma separated catalog asset ids, from 1 to 30 */
+                assetIds: unknown;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Stored prices and the assets still pending */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Prices already stored */
+                        quotes: {
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset id
+                             */
+                            assetId: string;
+                            /** @description Last known price as a decimal string, in the asset currency */
+                            price: string;
+                            /** @description ISO 4217 currency of the price */
+                            currency: string;
+                            /** @description Date (YYYY-MM-DD) of the session the price refers to */
+                            priceDate: string;
+                            /** @description Provider that answered: brapi, finnhub, twelvedata, alphavantage, coingecko, tesouro or mock */
+                            source: string;
+                            /** @description Whether the price is older than the freshness window; the value is still shown, with a warning */
+                            stale: boolean;
+                        }[];
+                        /** @description Assets without a price yet; a background fetch was queued for them */
+                        pendingAssetIds: string[];
+                    };
+                };
+            };
+            /** @description Invalid query: missing, malformed or more than 30 ids (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 120 reads in a minute for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    MarketDataController_exchangeRate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ISO 4217 code of the foreign currency */
+                currency: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The latest stored rate */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description ISO 4217 code of the currency */
+                        currency: string;
+                        /** @description How many reais one unit of the currency is worth, as a decimal string */
+                        brlPerUnit: string;
+                        /** @description Date (YYYY-MM-DD) of the rate, the latest on or before today */
+                        date: string;
+                        /** @description bcb-ptax, or mock outside live environments */
+                        source: string;
+                    };
+                };
+            };
+            /** @description Malformed currency code (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No rate stored for the currency (market-data.exchange_rate_unavailable) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PortfolioController_holdings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Holdings of the company */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Base currency chosen in the portfolio preferences; every valueMinor is expressed in it
+                         * @enum {string}
+                         */
+                        baseCurrency: "BRL" | "USD";
+                        /** @description Reference date of the calculation (YYYY-MM-DD, Brazil time zone) */
+                        asOf: string;
+                        /** @description Holdings ordered by class sort order and, inside a class, by value descending */
+                        data: {
+                            /**
+                             * @description position: asset valued by quantity x quote; fixed_income: title valued on its curve
+                             * @enum {string}
+                             */
+                            kind: "position" | "fixed_income";
+                            /**
+                             * Format: uuid
+                             * @description Position id or fixed income title id, according to kind
+                             */
+                            id: string;
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset id; null for fixed income
+                             */
+                            assetId: string | null;
+                            /** @description Ticker or title name */
+                            symbol: string;
+                            /** @description Asset or title name */
+                            name: string;
+                            /**
+                             * @description Market of the asset; null for fixed income
+                             * @enum {string|null}
+                             */
+                            market: "B3" | "US" | "CRYPTO" | "TESOURO" | null;
+                            /**
+                             * @description Kind of holding used to group and label it
+                             * @enum {string}
+                             */
+                            typeGroup: "fixed_income" | "tesouro" | "acoes_br" | "fii" | "acoes_eua" | "reits" | "cripto";
+                            /**
+                             * Format: uuid
+                             * @description Asset class of the holding; null only for an orphan holding without assignment
+                             */
+                            classId: string | null;
+                            /** @description Quantity held, decimal string; null for fixed income */
+                            quantity: string | null;
+                            /** @description Decimal places accepted in the quantity; null for fixed income */
+                            quantityDecimals: number | null;
+                            /** @description Latest quote price, decimal string in priceCurrency; null for fixed income or without quote */
+                            unitPrice: string | null;
+                            /** @description Currency of the quote; null when unitPrice is null */
+                            priceCurrency: string | null;
+                            /** @description Value in minor units of the native currency */
+                            nativeValueMinor: number;
+                            /**
+                             * @description Currency the asset is traded or the title is denominated in
+                             * @enum {string}
+                             */
+                            nativeCurrency: "BRL" | "USD";
+                            /** @description Value in minor units of the base currency; 0 when the quote or the exchange rate is missing */
+                            valueMinor: number;
+                            /**
+                             * @description Where the value comes from: the quote provider or the fixed income curve
+                             * @enum {string}
+                             */
+                            valueSource: "brapi" | "finnhub" | "twelvedata" | "alphavantage" | "coingecko" | "tesouro_direto" | "curve_cdi" | "curve_pre" | "curve_ipca";
+                            /** @description Date of the quote, or the valuation date of the title (YYYY-MM-DD) */
+                            priceDate: string | null;
+                            /** @description True when the holding is quoted in USD or its asset has exposure to the dollar */
+                            dollarExposure: boolean;
+                            /** @description No quote yet for an asset with quantity: value is 0 and a fetch was requested */
+                            missingQuote: boolean;
+                            /** @description The quote is older than the freshness window of its market */
+                            stale: boolean;
+                            /** @description Fixed income valuation uses projected index days */
+                            estimated: boolean;
+                            /** @description The fixed income title has matured */
+                            matured: boolean;
+                            /** @description The exchange rate needed to convert to the base currency is missing: value is 0 */
+                            missingRate: boolean;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PortfolioController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Overview of the company portfolio */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Base currency chosen in the portfolio preferences; every valueMinor is expressed in it
+                         * @enum {string}
+                         */
+                        baseCurrency: "BRL" | "USD";
+                        /** @description Reference date of the calculation (YYYY-MM-DD, Brazil time zone) */
+                        asOf: string;
+                        /** @description Tolerance band around the target, in basis points */
+                        toleranceBps: number;
+                        /** @description True when the portfolio has no holding */
+                        empty: boolean;
+                        /** @description Net worth in minor units of the base currency */
+                        totalMinor: number;
+                        /** @description Value of holdings without class; the classes plus this value equal the total */
+                        unclassifiedMinor: number;
+                        dollarExposure: {
+                            /** @description Value of the holdings exposed to the dollar */
+                            valueMinor: number;
+                            /** @description Exposure to the dollar as a share of the total, in basis points */
+                            shareBps: number;
+                        };
+                        /** @description Latest PTAX rate on or before today; null when none is stored */
+                        usdRate: {
+                            /** @description Reais per US dollar, decimal string */
+                            brlPerUnit: string;
+                            /** @description Date of the exchange rate (YYYY-MM-DD) */
+                            date: string;
+                            /** @description Source of the exchange rate */
+                            source: string;
+                        } | null;
+                        /** @description Every class of the company, even empty ones, by sort order */
+                        classes: {
+                            /**
+                             * Format: uuid
+                             * @description Asset class id
+                             */
+                            classId: string;
+                            /** @description Key of a default class; null for a user class */
+                            systemKey: string | null;
+                            /** @description Name chosen by the user; null when the default name of the key applies */
+                            name: string | null;
+                            /** @description Name to show, resolved in the language of the request */
+                            displayName: string;
+                            /** @description Color token of the class */
+                            colorKey: string;
+                            /** @description Value of the class in minor units of the base currency */
+                            valueMinor: number;
+                            /** @description Share of the class in the total, in basis points; the shares add up to 10000 */
+                            shareBps: number;
+                            /** @description Target share of the class, in basis points */
+                            targetBps: number;
+                            /** @description shareBps minus targetBps; positive means over target */
+                            deviationBps: number;
+                            /**
+                             * @description within: |deviation| is inside the tolerance; above: over target beyond the tolerance; below: under target beyond the tolerance
+                             * @enum {string}
+                             */
+                            status: "within" | "above" | "below";
+                            /** @description Target value minus current value in minor units: positive is missing, negative is excess */
+                            gapMinor: number;
+                            /** @description Number of holdings in the class */
+                            holdingsCount: number;
+                        }[];
+                        /** @description Number of classes outside the tolerance band */
+                        outsideCount: number;
+                        /** @description Null when the portfolio has no value */
+                        largestDeviation: {
+                            /**
+                             * Format: uuid
+                             * @description Class with the largest absolute deviation
+                             */
+                            classId: string;
+                            /** @description Deviation of that class, in basis points */
+                            deviationBps: number;
+                            /** @description Gap of that class in minor units */
+                            gapMinor: number;
+                            /**
+                             * @description within: |deviation| is inside the tolerance; above: over target beyond the tolerance; below: under target beyond the tolerance
+                             * @enum {string}
+                             */
+                            status: "within" | "above" | "below";
+                        } | null;
+                        quality: {
+                            /** @description Holdings served without quote */
+                            missingQuotes: number;
+                            /** @description Holdings served with an old quote */
+                            staleQuotes: number;
+                            /** @description Fixed income titles valued with projected index days */
+                            estimatedFixedIncome: number;
+                            /** @description Fixed income titles whose index data is not available yet */
+                            indexDataMissing: number;
+                            /** @description Holdings that could not be converted for lack of exchange rate */
+                            missingRates: number;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PortfolioController_classDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Asset class id */
+                classId: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Class with its holdings */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        class: {
+                            /**
+                             * Format: uuid
+                             * @description Asset class id
+                             */
+                            classId: string;
+                            /** @description Key of a default class; null for a user class */
+                            systemKey: string | null;
+                            /** @description Name chosen by the user; null when the default name of the key applies */
+                            name: string | null;
+                            /** @description Name to show, resolved in the language of the request */
+                            displayName: string;
+                            /** @description Color token of the class */
+                            colorKey: string;
+                            /** @description Value of the class in minor units of the base currency */
+                            valueMinor: number;
+                            /** @description Share of the class in the total, in basis points; the shares add up to 10000 */
+                            shareBps: number;
+                            /** @description Target share of the class, in basis points */
+                            targetBps: number;
+                            /** @description shareBps minus targetBps; positive means over target */
+                            deviationBps: number;
+                            /**
+                             * @description within: |deviation| is inside the tolerance; above: over target beyond the tolerance; below: under target beyond the tolerance
+                             * @enum {string}
+                             */
+                            status: "within" | "above" | "below";
+                            /** @description Target value minus current value in minor units: positive is missing, negative is excess */
+                            gapMinor: number;
+                        };
+                        /**
+                         * @description Base currency chosen in the portfolio preferences; every valueMinor is expressed in it
+                         * @enum {string}
+                         */
+                        baseCurrency: "BRL" | "USD";
+                        /** @description Tolerance band, in basis points */
+                        toleranceBps: number;
+                        /** @description Sum of the targets stored inside the class; 0 means the split is equal */
+                        targetsSumBps: number;
+                        /** @description Holdings of the class by value descending */
+                        assets: {
+                            /**
+                             * @description Kind of holding
+                             * @enum {string}
+                             */
+                            kind: "position" | "fixed_income";
+                            /**
+                             * Format: uuid
+                             * @description Position id or fixed income title id
+                             */
+                            id: string;
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset id; null for fixed income
+                             */
+                            assetId: string | null;
+                            /** @description Ticker or title name */
+                            symbol: string;
+                            /** @description Asset or title name */
+                            name: string;
+                            /** @description Value in minor units of the base currency */
+                            valueMinor: number;
+                            /** @description Share of the holding inside its class, in basis points */
+                            shareInClassBps: number;
+                            /** @description Effective target inside the class: the stored one, or an equal split when none is set */
+                            targetInClassBps: number;
+                            /** @description shareInClassBps minus targetInClassBps */
+                            deviationBps: number;
+                            /**
+                             * @description within: |deviation| is inside the tolerance; above: over target beyond the tolerance; below: under target beyond the tolerance
+                             * @enum {string}
+                             */
+                            status: "within" | "above" | "below";
+                            /** @description Target value minus current value inside the class, in minor units */
+                            gapMinor: number;
+                            /** @description The position exists with quantity zero */
+                            isZeroQuantity: boolean;
+                            /** @description No quote yet for the asset */
+                            missingQuote: boolean;
+                            /** @description The quote is old */
+                            stale: boolean;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The class does not exist in this company (allocation.class_not_found) */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

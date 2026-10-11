@@ -24,3 +24,8 @@ export function formatPpBps(bps: number, locale: SupportedLocale): string {
     });
     return `${formatter.format(bps / BPS_PER_POINT).replace('-', MINUS_SIGN)} pp`;
 }
+
+export function formatPpMagnitudeBps(bps: number, locale: SupportedLocale): string {
+    const formatter: Intl.NumberFormat = new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    return `${formatter.format(Math.abs(bps) / BPS_PER_POINT)} pp`;
+}

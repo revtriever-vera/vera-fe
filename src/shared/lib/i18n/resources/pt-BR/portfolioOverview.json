@@ -1,3 +1,72 @@
 {
-  "title": "Visão geral"
+  "title": "Seu patrimônio",
+  "subtitle": "Como a carteira está distribuída hoje, comparada com a distribuição que você definiu.",
+  "loading": "Carregando a visão geral",
+  "loadError": "Não foi possível carregar a visão geral.",
+  "retry": "Tentar de novo",
+  "total": {
+    "label": "Patrimônio total",
+    "dollarExposure": "Exposição ao dólar",
+    "outside": "Fora da faixa",
+    "outsideValue": "{{outside}} de {{total}}",
+    "usdRate": "US$ 1 = {{rate}}",
+    "usdRateDate": "Cotação PTAX de {{date}}"
+  },
+  "callout": {
+    "label": "Maior desvio",
+    "above": "Maior desvio: {{name}}, {{pp}} acima da meta.",
+    "below": "Maior desvio: {{name}}, {{pp}} abaixo da meta.",
+    "action": "Onde aportar"
+  },
+  "chart": {
+    "title": "Atual × meta",
+    "hint": "Passe o mouse sobre as barras para ver os valores.",
+    "actual": "Atual",
+    "target": "Meta",
+    "legend": "Classes do gráfico",
+    "segmentLabel": "{{name}}: atual {{actual}}, meta {{target}}"
+  },
+  "tooltip": {
+    "actual": "Atual: {{share}} · {{value}}",
+    "target": "Meta: {{share}} · {{value}}",
+    "deviation": "Desvio: {{pp}}"
+  },
+  "gap": {
+    "within": "Na faixa de tolerância",
+    "below": "Faltam {{amount}} para a meta",
+    "above": "{{amount}} acima da meta"
+  },
+  "table": {
+    "title": "Distribuição por classe",
+    "hint": "Clique numa classe para calibrar os ativos dentro dela. Faixa de tolerância: ±{{tolerance}} pp.",
+    "label": "Distribuição por classe",
+    "listLabel": "Classes da carteira",
+    "columns": {
+      "class": "Classe",
+      "value": "Valor",
+      "actual": "Atual",
+      "target": "Meta",
+      "gauge": "Atual vs meta",
+      "status": "Situação"
+    },
+    "cardShares": "{{actual}} → meta {{target}}",
+    "openClass": "Ver a classe {{name}}"
+  },
+  "quality": {
+    "title": "Atenção aos dados",
+    "missingQuotes_one": "{{count}} ativo ainda sem cotação: o valor dele não entra no total.",
+    "missingQuotes_other": "{{count}} ativos ainda sem cotação: o valor deles não entra no total.",
+    "staleQuotes_one": "{{count}} cotação desatualizada.",
+    "staleQuotes_other": "{{count}} cotações desatualizadas.",
+    "estimatedFixedIncome": "Renda fixa calculada por estimativa.",
+    "indexDataMissing_one": "{{count}} título sem dado do índice.",
+    "indexDataMissing_other": "{{count}} títulos sem dado do índice.",
+    "missingRates": "Sem câmbio disponível para parte dos valores.",
+    "action": "Ver meus ativos"
+  },
+  "empty": {
+    "title": "Sua carteira ainda está vazia",
+    "description": "Cadastre seus ativos para ver como o patrimônio está distribuído em relação à sua meta.",
+    "action": "Cadastrar meu primeiro ativo"
+  }
 }

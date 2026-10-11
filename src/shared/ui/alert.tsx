@@ -25,7 +25,7 @@ const DEFAULT_ICONS: Record<AlertTone, LucideIcon> = {
 
 export interface AlertProps {
     readonly title: string;
-    readonly detail?: string;
+    readonly detail?: ReactNode;
     readonly requestId?: string | null;
     readonly tone?: AlertTone;
     readonly action?: ReactNode;
@@ -43,7 +43,7 @@ export function Alert({ title, detail, requestId, tone = 'critical', action, ico
                 <span className={cn('mt-px shrink-0', TITLES[tone])}>{shownIcon}</span>
                 <div className="flex flex-col gap-1">
                     <span className={cn('font-medium', TITLES[tone])}>{title}</span>
-                    {detail && <span className="text-content-muted">{detail}</span>}
+                    {detail && <div className="text-content-muted">{detail}</div>}
                     {requestId && <span className="font-mono text-2xs text-content-subtle">{t.requestId(requestId)}</span>}
                 </div>
             </div>

@@ -1,3 +1,72 @@
 {
-  "title": "Overview"
+  "title": "Your net worth",
+  "subtitle": "How your portfolio is distributed today, compared with the distribution you defined.",
+  "loading": "Loading the overview",
+  "loadError": "We could not load the overview.",
+  "retry": "Try again",
+  "total": {
+    "label": "Total net worth",
+    "dollarExposure": "Dollar exposure",
+    "outside": "Out of range",
+    "outsideValue": "{{outside}} of {{total}}",
+    "usdRate": "US$ 1 = {{rate}}",
+    "usdRateDate": "PTAX rate of {{date}}"
+  },
+  "callout": {
+    "label": "Largest deviation",
+    "above": "Largest deviation: {{name}}, {{pp}} above target.",
+    "below": "Largest deviation: {{name}}, {{pp}} below target.",
+    "action": "Where to invest"
+  },
+  "chart": {
+    "title": "Current × target",
+    "hint": "Hover over the bars to see the values.",
+    "actual": "Current",
+    "target": "Target",
+    "legend": "Chart classes",
+    "segmentLabel": "{{name}}: current {{actual}}, target {{target}}"
+  },
+  "tooltip": {
+    "actual": "Current: {{share}} · {{value}}",
+    "target": "Target: {{share}} · {{value}}",
+    "deviation": "Deviation: {{pp}}"
+  },
+  "gap": {
+    "within": "Within the tolerance range",
+    "below": "{{amount}} short of the target",
+    "above": "{{amount}} above the target"
+  },
+  "table": {
+    "title": "Distribution by class",
+    "hint": "Click a class to fine-tune the assets inside it. Tolerance range: ±{{tolerance}} pp.",
+    "label": "Distribution by class",
+    "listLabel": "Portfolio classes",
+    "columns": {
+      "class": "Class",
+      "value": "Value",
+      "actual": "Current",
+      "target": "Target",
+      "gauge": "Current vs target",
+      "status": "Status"
+    },
+    "cardShares": "{{actual}} → target {{target}}",
+    "openClass": "Open the {{name}} class"
+  },
+  "quality": {
+    "title": "Heads up on the data",
+    "missingQuotes_one": "{{count}} asset still has no quote: its value is not part of the total.",
+    "missingQuotes_other": "{{count}} assets still have no quote: their value is not part of the total.",
+    "staleQuotes_one": "{{count}} outdated quote.",
+    "staleQuotes_other": "{{count}} outdated quotes.",
+    "estimatedFixedIncome": "Fixed income is calculated by estimate.",
+    "indexDataMissing_one": "{{count}} bond without index data.",
+    "indexDataMissing_other": "{{count}} bonds without index data.",
+    "missingRates": "No exchange rate available for part of the values.",
+    "action": "See my assets"
+  },
+  "empty": {
+    "title": "Your portfolio is still empty",
+    "description": "Add your assets to see how your net worth is distributed against your target.",
+    "action": "Add my first asset"
+  }
 }

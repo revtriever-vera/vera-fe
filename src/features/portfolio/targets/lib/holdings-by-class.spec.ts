@@ -15,4 +15,8 @@ describe('holdingsByClass', () => {
         expect(holdingsByClass([]).size).toBe(0);
         expect(holdingsByClass([holding({ classId: 'x' })]).get('x')).toBe(1);
     });
+
+    it('ignora o ativo órfão sem classe', () => {
+        expect(holdingsByClass([holding({ classId: null })]).size).toBe(0);
+    });
 });
