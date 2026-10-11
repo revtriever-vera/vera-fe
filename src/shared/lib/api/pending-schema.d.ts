@@ -249,82 +249,6 @@ export interface PendingSyncAllQueued {
     queued: number;
 }
 
-export type PendingImportFormat = 'ofx' | 'csv_nubank_card' | 'csv_nubank_account' | 'csv_generic';
-
-export type PendingImportRejectionReason = 'invalid_date' | 'invalid_amount' | 'zero_amount' | 'empty_description';
-
-export interface PendingImportRejection {
-    line: number;
-    reason: PendingImportRejectionReason;
-}
-
-export interface PendingImportPreview {
-    detectedFormat: PendingImportFormat;
-    format: PendingImportFormat;
-    fileName: string;
-    rows: number;
-    rejected: number;
-    rejections: PendingImportRejection[];
-    periodStart: string | null;
-    periodEnd: string | null;
-    currency: string | null;
-    sample: {
-        date: string;
-        description: string;
-        amountMinor: number;
-    }[];
-    columns: string[] | null;
-    accountHint: {
-        institution: string | null;
-        numberLast4: string | null;
-    } | null;
-    suggestedAccountId: string | null;
-    alreadyImportedAt: string | null;
-}
-
-export interface PendingImportView {
-    id: string;
-    accountId: string;
-    accountName: string;
-    format: PendingImportFormat;
-    fileName: string;
-    rows: number;
-    inserted: number;
-    duplicates: number;
-    rejected: number;
-    periodStart: string | null;
-    periodEnd: string | null;
-    status: 'completed' | 'undone' | 'failed';
-    createdAt: string;
-}
-
-export interface PendingImportCreated extends PendingImportView {
-    rejections: PendingImportRejection[];
-}
-
-export interface PendingImportsResponse {
-    data: PendingImportView[];
-    pagination: PendingPageInfo;
-}
-
-export interface PendingMultipartBody {
-    content: {
-        'multipart/form-data': {
-            file: string;
-            format?: PendingImportFormat;
-            mapping?: string;
-            accountId?: string;
-            newAccountName?: string;
-            newAccountKind?: 'checking' | 'savings' | 'credit_card' | 'other';
-            newAccountInstitution?: string;
-        };
-    };
-}
-
-export interface PendingRemoved {
-    removed: number;
-}
-
 export interface PendingIdPath {
     id: string;
 }
@@ -395,20 +319,6 @@ export interface PendingConnectionsSyncPath extends PendingPathItem {
     post: PendingOperation<never, PendingNoPath, never, { 202: PendingJson<PendingSyncAllQueued> }>;
 }
 
-export interface PendingImportPreviewPath extends PendingPathItem {
-    post: PendingOperation<never, PendingNoPath, PendingMultipartBody, { 200: PendingJson<PendingImportPreview> }>;
-}
-
-export interface PendingImportsPath extends PendingPathItem {
-    get: PendingOperation<{ page?: number; pageSize?: number }, PendingNoPath, never, { 200: PendingJson<PendingImportsResponse> }>;
-    post: PendingOperation<never, PendingNoPath, PendingMultipartBody, { 201: PendingJson<PendingImportCreated> }>;
-}
-
-export interface PendingImportPath extends PendingPathItem {
-    parameters: { query?: never; header?: never; path: PendingIdPath; cookie?: never };
-    delete: PendingOperation<never, PendingIdPath, never, { 200: PendingJson<PendingRemoved> }>;
-}
-
 export interface PendingPaths {
     '/spending/transactions': PendingTransactionsPath;
     '/spending/transactions/uncategorized-count': PendingUncategorizedCountPath;
@@ -422,7 +332,4 @@ export interface PendingPaths {
     '/spending/connections/sync': PendingConnectionsSyncPath;
     '/spending/connections/{id}': PendingConnectionPath;
     '/spending/connections/{id}/sync': PendingConnectionSyncPath;
-    '/spending/imports/preview': PendingImportPreviewPath;
-    '/spending/imports': PendingImportsPath;
-    '/spending/imports/{id}': PendingImportPath;
 }
