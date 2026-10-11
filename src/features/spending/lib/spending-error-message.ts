@@ -20,6 +20,7 @@ export type SpendingErrorKey =
     | 'errors.providerUnavailable'
     | 'errors.providerDisabled'
     | 'errors.syncInProgress'
+    | 'errors.syncUnavailable'
     | 'errors.secretOpenFailed'
     | 'errors.secretSealerMismatch'
     | 'errors.tooManyAttempts'
@@ -57,6 +58,7 @@ export const SPENDING_ERROR_KEYS: Readonly<Record<string, SpendingErrorKey>> = {
     'connections.provider_unavailable': 'errors.providerUnavailable',
     'connections.provider_disabled': 'errors.providerDisabled',
     'connections.sync_in_progress': 'errors.syncInProgress',
+    'connections.sync_unavailable': 'errors.syncUnavailable',
     'core.secret_open_failed': 'errors.secretOpenFailed',
     'core.secret_sealer_mismatch': 'errors.secretSealerMismatch',
     'core.too_many_attempts': 'errors.tooManyAttempts',
