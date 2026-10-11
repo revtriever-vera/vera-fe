@@ -21,6 +21,11 @@ export interface UiText {
     readonly fileRejected: string;
     readonly requestId: (value: string) => string;
     readonly dismissAlert: string;
+    readonly sampleExplore: string;
+    readonly sampleBannerText: string;
+    readonly sampleClear: string;
+    readonly sampleConfirmTitle: string;
+    readonly sampleConfirmBody: string;
 }
 
 export function useUiText(): UiText {
@@ -43,7 +48,12 @@ export function useUiText(): UiText {
         orClickToChoose: t('orClickToChoose'),
         fileRejected: t('fileRejected'),
         requestId: (value: string): string => t('requestId', { value }),
-        dismissAlert: t('dismissAlert')
+        dismissAlert: t('dismissAlert'),
+        sampleExplore: t('sampleExplore'),
+        sampleBannerText: t('sampleBannerText'),
+        sampleClear: t('sampleClear'),
+        sampleConfirmTitle: t('sampleConfirmTitle'),
+        sampleConfirmBody: t('sampleConfirmBody')
     };
 }
 

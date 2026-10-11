@@ -21,7 +21,12 @@ const STATIC_KEYS: readonly StaticKey[] = [
     'dropFileHere',
     'orClickToChoose',
     'fileRejected',
-    'dismissAlert'
+    'dismissAlert',
+    'sampleExplore',
+    'sampleBannerText',
+    'sampleClear',
+    'sampleConfirmTitle',
+    'sampleConfirmBody'
 ];
 
 describe('useUiText', () => {

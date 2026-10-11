@@ -33,5 +33,12 @@
   "navPortfolioOverview": "Overview",
   "navPortfolioAssets": "My assets",
   "navPortfolioTargets": "Target portfolio",
-  "navPortfolioContribution": "Smart contribution"
+  "navPortfolioContribution": "Smart contribution",
+  "sampleExplore": "Explore with sample data",
+  "sampleBannerText": "You are looking at sample data. It is not yours.",
+  "sampleClear": "Clear sample data",
+  "sampleConfirmTitle": "Remove the sample data?",
+  "sampleConfirmBody": "The data you added yourself is not affected.",
+  "sampleLoaded": "Sample data loaded",
+  "sampleCleared": "Sample data removed"
 }

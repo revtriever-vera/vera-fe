@@ -10,6 +10,9 @@ import { ConfirmDialog } from '@/shared/ui/confirm-dialog';
 import { CopyField } from '@/shared/ui/copy-field';
 import { DateField } from '@/shared/ui/date-field';
 import { EmptyState } from '@/shared/ui/empty-state';
+import { SampleDataBanner } from '@/shared/ui/sample-data-banner';
+import { SampleDataButton } from '@/shared/ui/sample-data-button';
+import { SampleDataContext, type SampleDataControls } from '@/shared/lib/sample-data/sample-data-context';
 import { FailureAlert } from '@/shared/ui/failure-alert';
 import { Field } from '@/shared/ui/field';
 import { FileDrop } from '@/shared/ui/file-drop';
@@ -211,6 +214,43 @@ export function DialogsSection(): ReactElement {
     );
 }
 
+function SampleDataDemo(): ReactElement {
+    const [active, setActive] = useState<boolean>(false);
+    const controls: SampleDataControls = {
+        available: true,
+        active,
+        isLoading: false,
+        load: (): Promise<void> => {
+            setActive(true);
+            return Promise.resolve();
+        },
+        clear: (): Promise<void> => {
+            setActive(false);
+            return Promise.resolve();
+        }
+    };
+    return (
+        <SampleDataContext value={controls}>
+            <div className="flex w-full flex-col overflow-hidden rounded-card border border-border">
+                <SampleDataBanner />
+                <div className="p-4">
+                    <EmptyState
+                        icon={<Wallet className="size-6" />}
+                        title="Sua carteira ainda está vazia"
+                        description="Cadastre o que você tem informando só a quantidade."
+                        actions={
+                            <>
+                                <Button>Adicionar primeiro ativo</Button>
+                                <SampleDataButton />
+                            </>
+                        }
+                    />
+                </div>
+            </div>
+        </SampleDataContext>
+    );
+}
+
 export function DataSection(): ReactElement {
     const [page, setPage] = useState<number>(2);
     return (
@@ -220,6 +260,7 @@ export function DataSection(): ReactElement {
                 <Pager page={page} totalPages={5} onChange={setPage} />
                 <SkeletonTable label="Carregando carteira" columns={['Ativo', 'Valor']} />
                 <EmptyState title="Nada por aqui" description="Cadastre seu primeiro ativo." action={<Button>Adicionar</Button>} />
+                <SampleDataDemo />
             </div>
         </Section>
     );
