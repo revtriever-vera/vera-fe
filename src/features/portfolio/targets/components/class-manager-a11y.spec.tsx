@@ -82,14 +82,14 @@ describe('ClassManagerDialog: inglês e plural', () => {
         await i18n.changeLanguage('en');
         const { user }: Setup = setup();
         await user.click(
-            within(await rowOf('Real estate funds (FIIs)')).getByRole('button', { name: 'Merge Real estate funds (FIIs) into another' })
+            within(await rowOf('Brazilian REITs (FIIs)')).getByRole('button', { name: 'Merge Brazilian REITs (FIIs) into another' })
         );
         await user.click(screen.getByRole('combobox'));
-        await user.click(screen.getByRole('option', { name: 'REITs' }));
+        await user.click(screen.getByRole('option', { name: 'US REITs' }));
         await user.click(screen.getByRole('button', { name: 'Continue' }));
 
-        expect(screen.getByRole('dialog', { name: 'Merge Real estate funds (FIIs) into REITs?' })).toHaveTextContent(
-            'The 2 assets in Real estate funds (FIIs) move to REITs, the targets of both classes add up (7% + 8% = 15%)'
+        expect(screen.getByRole('dialog', { name: 'Merge Brazilian REITs (FIIs) into US REITs?' })).toHaveTextContent(
+            'The 2 assets in Brazilian REITs (FIIs) move to US REITs, the targets of both classes add up (7% + 8% = 15%)'
         );
     });
 

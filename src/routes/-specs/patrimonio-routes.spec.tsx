@@ -7,7 +7,6 @@ const ROUTES: readonly string[] = [
     '/patrimonio',
     '/patrimonio/ativos',
     '/patrimonio/comecar',
-    '/patrimonio/carteira-alvo',
     '/patrimonio/classes/class-fii',
     '/patrimonio/aporte'
 ];
