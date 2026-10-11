@@ -40,4 +40,22 @@ describe('ConfirmDialog', () => {
 
         expect(screen.getByRole('button', { name: 'Aguarde…' })).toBeDisabled();
     });
+
+    it('usa o rótulo próprio de cancelar quando informado', async () => {
+        const onCancel: Mock = vi.fn();
+        render(
+            <ConfirmDialog
+                title="Pular"
+                description="Descrição"
+                confirmLabel="Pular"
+                cancelLabel="Continuar configurando"
+                onConfirm={vi.fn()}
+                onCancel={onCancel}
+            />
+        );
+
+        expect(screen.queryByRole('button', { name: 'Cancelar' })).not.toBeInTheDocument();
+        await userEvent.click(screen.getByRole('button', { name: 'Continuar configurando' }));
+        expect(onCancel).toHaveBeenCalledTimes(1);
+    });
 });

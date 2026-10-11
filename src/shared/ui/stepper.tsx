@@ -1,9 +1,10 @@
 import { Check } from 'lucide-react';
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import { cn } from '@/shared/lib/cn';
 
 export interface StepperStep {
     readonly label: string;
+    readonly skipped?: boolean;
 }
 
 export interface StepperProps {
@@ -12,7 +13,12 @@ export interface StepperProps {
     readonly activeIndex: number;
 }
 
-function markClass(status: 'done' | 'active' | 'pending'): string {
+type StepStatus = 'done' | 'active' | 'pending' | 'skipped';
+
+function markClass(status: StepStatus): string {
+    if (status === 'skipped') {
+        return 'border border-border bg-surface-muted text-content-muted';
+    }
     if (status === 'done') {
         return 'bg-accent-strong text-accent-contrast';
     }
@@ -22,7 +28,10 @@ function markClass(status: 'done' | 'active' | 'pending'): string {
     return 'border border-border text-content-subtle';
 }
 
-function statusOf(index: number, activeIndex: number): 'done' | 'active' | 'pending' {
+function statusOf(index: number, activeIndex: number, skipped: boolean | undefined): StepStatus {
+    if (index !== activeIndex && skipped === true) {
+        return 'skipped';
+    }
     if (index < activeIndex) {
         return 'done';
     }
@@ -32,11 +41,18 @@ function statusOf(index: number, activeIndex: number): 'done' | 'active' | 'pend
     return 'pending';
 }
 
+function markOf(status: StepStatus, index: number): ReactNode {
+    if (status === 'done') {
+        return <Check className="h-3.5 w-3.5" aria-hidden />;
+    }
+    return status === 'skipped' ? <span aria-hidden>–</span> : index + 1;
+}
+
 export function Stepper({ label, steps, activeIndex }: StepperProps): ReactElement {
     return (
         <ol aria-label={label} className="flex w-full items-center">
             {steps.map((step: StepperStep, index: number): ReactElement => {
-                const status: 'done' | 'active' | 'pending' = statusOf(index, activeIndex);
+                const status: StepStatus = statusOf(index, activeIndex, step.skipped);
                 return (
                     <li key={step.label} className="flex flex-1 items-center last:flex-none">
                         <div className="flex flex-col items-center gap-1">
@@ -47,9 +63,9 @@ export function Stepper({ label, steps, activeIndex }: StepperProps): ReactEleme
                                     markClass(status)
                                 )}
                             >
-                                {status === 'done' ? <Check className="h-3.5 w-3.5" aria-hidden /> : index + 1}
+                                {markOf(status, index)}
                             </span>
-                            <span className="text-2xs text-content-muted">{step.label}</span>
+                            <span className={cn('text-2xs text-content-muted', status === 'skipped' && 'line-through')}>{step.label}</span>
                         </div>
                         {index === steps.length - 1 ? null : (
                             <span className={cn('mx-2 h-px flex-1', status === 'done' ? 'bg-accent' : 'bg-border')} />
