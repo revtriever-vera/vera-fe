@@ -952,6 +952,50 @@ export interface paths {
         patch: operations["RulesController_update"];
         trace?: never;
     };
+    "/spending/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Monthly spending summary
+         * @description Monthly summary computed on demand from the transactions, in BRL and integer cents (accounts in another currency are left out and counted in `excludedCurrencyCount`). Without `month`, returns the last closed month in the company timezone. Formulas: `spentMinor` of an expense category is minus the sum of its transactions in the month (a refund reduces it). `uncategorizedMinor` is minus the sum of the outflows without category; inflows without category are neither income nor expense (`uncategorizedInflowMinor`). `expensesMinor` = sum of `spentMinor` + `uncategorizedMinor`. `income.minor` is the sum of the `income` transactions (mode `transactions`) or `declaredIncomeMinor` (mode `declared`). `savedMinor` = income - expenses. `savingsRateBps` = round(saved * 10000 / income), half up, null when income is 0. `goal.minor` = round(income * goal.bps / 10000). `gapMinor` = max(0, goal - saved). `fixedMinor` and `flexibleMinor` sum `spentMinor` by flexibility; `fixedShareBps` = fixed / income. `transfersOutMinor` is the outflow of `transfer` categories (card bill payments, investments, own transfers), informative only. The average of a category is the mean of `spentMinor` over the 3 calendar months before `month` that have at least one transaction (`averageMonths` = how many entered; `averageMinor` and `deltaBps` are null with 0). `deltaBps` = round((spent - average) * 10000 / average) when average > 0; with average 0 and spent > 0 it is null and `isNew` is true. `categories` lists expense categories with spending or average, by `spentMinor` descending then `position`. `incomeCategories` carries the received amount in `spentMinor`, without average. Sample transactions count. A future month or a malformed one returns 422.
+         */
+        get: operations["SummaryController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read the spending settings
+         * @description Returns the savings goal and the income source. The first read creates the defaults: 2000 bps (20%) and `transactions`.
+         */
+        get: operations["SettingsController_get"];
+        /**
+         * Change the spending settings
+         * @description Changes the savings goal (0 to 9000 bps) and/or the income source. In `declared` mode the declared income must be greater than zero. The declared value is kept when the mode goes back to `transactions`. Takes effect on the next summary, with no cache.
+         */
+        put: operations["SettingsController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -8203,6 +8247,310 @@ export interface operations {
             };
             /** @description Another rule already has this match (categories.rule_conflict, meta.ruleId) */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    SummaryController_get: {
+        parameters: {
+            query?: {
+                /** @description Calendar month, YYYY-MM, from 2000-01 to the current month. Defaults to the last closed month */
+                month?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Monthly summary */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        month: string;
+                        isPartial: boolean;
+                        hasData: boolean;
+                        /** @enum {string} */
+                        currency: "BRL";
+                        previousMonth: string | null;
+                        nextMonth: string | null;
+                        availableMonths: string[];
+                        income: {
+                            minor: number;
+                            /**
+                             * @description `transactions` takes the income from the `income` transactions; `declared` uses `declaredIncomeMinor`
+                             * @enum {string}
+                             */
+                            mode: "transactions" | "declared";
+                            fromTransactionsMinor: number;
+                        };
+                        expensesMinor: number;
+                        uncategorizedMinor: number;
+                        uncategorizedCount: number;
+                        uncategorizedInflowMinor: number;
+                        savedMinor: number;
+                        savingsRateBps: number | null;
+                        goal: {
+                            bps: number;
+                            minor: number;
+                        };
+                        gapMinor: number;
+                        fixedMinor: number;
+                        fixedShareBps: number | null;
+                        flexibleMinor: number;
+                        transfersOutMinor: number;
+                        averageMonths: number;
+                        excludedCurrencyCount: number;
+                        categories: {
+                            /** Format: uuid */
+                            categoryId: string;
+                            systemKey: string | null;
+                            name: string | null;
+                            icon: string;
+                            /** @enum {string|null} */
+                            flexibility: "fixed" | "flexible" | null;
+                            spentMinor: number;
+                            averageMinor: number | null;
+                            deltaBps: number | null;
+                            isNew: boolean;
+                            transactionCount: number;
+                        }[];
+                        incomeCategories: {
+                            /** Format: uuid */
+                            categoryId: string;
+                            systemKey: string | null;
+                            name: string | null;
+                            icon: string;
+                            /** @enum {string|null} */
+                            flexibility: "fixed" | "flexible" | null;
+                            spentMinor: number;
+                            averageMinor: number | null;
+                            deltaBps: number | null;
+                            isNew: boolean;
+                            transactionCount: number;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Malformed, earlier than 2000-01 or future month (summary.invalid_month) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    SettingsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Spending settings */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Savings goal as a share of the income, in basis points (2000 = 20%), 0 to 9000 */
+                        savingsGoalBps: number;
+                        /**
+                         * @description `transactions` takes the income from the `income` transactions; `declared` uses `declaredIncomeMinor`
+                         * @enum {string}
+                         */
+                        incomeMode: "transactions" | "declared";
+                        /** @description Monthly income declared by the user, in cents. Required and greater than zero when the mode is `declared` */
+                        declaredIncomeMinor: number | null;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    SettingsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Savings goal as a share of the income, in basis points (2000 = 20%), 0 to 9000 */
+                    savingsGoalBps?: number;
+                    /**
+                     * @description `transactions` takes the income from the `income` transactions; `declared` uses `declaredIncomeMinor`
+                     * @enum {string}
+                     */
+                    incomeMode?: "transactions" | "declared";
+                    /** @description Monthly income declared by the user, in cents. Required and greater than zero when the mode is `declared` */
+                    declaredIncomeMinor?: number | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Spending settings after the change */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Savings goal as a share of the income, in basis points (2000 = 20%), 0 to 9000 */
+                        savingsGoalBps: number;
+                        /**
+                         * @description `transactions` takes the income from the `income` transactions; `declared` uses `declaredIncomeMinor`
+                         * @enum {string}
+                         */
+                        incomeMode: "transactions" | "declared";
+                        /** @description Monthly income declared by the user, in cents. Required and greater than zero when the mode is `declared` */
+                        declaredIncomeMinor: number | null;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Declared mode without a declared income (summary.declared_income_required) */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
