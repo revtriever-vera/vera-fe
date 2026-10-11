@@ -796,6 +796,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/portfolio/contributions/suggest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Suggest where to put a new contribution
+         * @description Distributes the amount among the classes and, inside each class, among the holdings, to bring the portfolio closer to the target without selling anything. A class below its target receives the difference up to the target; when the amount does not cover everything the money is split in proportion to what is missing, and any surplus follows the targets. Amounts are integers in the minor unit of the base currency and add up exactly to the contribution on both layers. Matured fixed income titles receive nothing. Nothing is stored. The result approximates the target; it is not an individual investment recommendation.
+         */
+        post: operations["ContributionController_suggest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -6472,6 +6492,213 @@ export interface operations {
             };
             /** @description The class does not exist in this company (allocation.class_not_found) */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    ContributionController_suggest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Contribution in minor units of the base currency of the portfolio, from 1 to 100,000,000,000 */
+                    amountMinor: number;
+                };
+            };
+        };
+        responses: {
+            /** @description The suggestion on both layers */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Base currency of the portfolio; every amount is expressed in its minor unit
+                         * @enum {string}
+                         */
+                        baseCurrency: "BRL" | "USD";
+                        /** @description The contribution that was distributed */
+                        amountMinor: number;
+                        /** @description Net worth before the contribution */
+                        totalBeforeMinor: number;
+                        /** @description Net worth after the contribution */
+                        totalAfterMinor: number;
+                        /** @description class_targets_not_100: the class targets do not add up to 100% */
+                        warnings: "class_targets_not_100"[];
+                        /** @description Only classes that receive money, by amount descending; the amounts add up to amountMinor */
+                        classes: {
+                            /**
+                             * Format: uuid
+                             * @description Asset class id
+                             */
+                            classId: string;
+                            /** @description Key of a default class; null for a user class */
+                            systemKey: string | null;
+                            /** @description Name chosen by the user; null when the default name of the key applies */
+                            name: string | null;
+                            /** @description Color token of the class */
+                            colorKey: string;
+                            /** @description Suggested amount for the class, in minor units of the base currency */
+                            amountMinor: number;
+                            /** @description Value of the class before the contribution, in minor units */
+                            valueBeforeMinor: number;
+                            /** @description Share of the class in the total before the contribution, in basis points */
+                            shareBeforeBps: number;
+                            /** @description Share of the class in the total after the contribution, in basis points */
+                            shareAfterBps: number;
+                            /** @description Target share of the class, in basis points */
+                            targetBps: number;
+                            /**
+                             * @description no_assets: the class got money but has no holding that can receive it
+                             * @enum {string|null}
+                             */
+                            note: "no_assets" | null;
+                            /** @description Holdings that receive money, by amount descending; the amounts add up to the class amount */
+                            assets: {
+                                /**
+                                 * @description position: asset valued by quantity x quote; fixed_income: title
+                                 * @enum {string}
+                                 */
+                                kind: "position" | "fixed_income";
+                                /**
+                                 * Format: uuid
+                                 * @description Position id or fixed income title id, according to kind
+                                 */
+                                id: string;
+                                /**
+                                 * Format: uuid
+                                 * @description Catalog asset id; null for fixed income
+                                 */
+                                assetId: string | null;
+                                /**
+                                 * @description Kind of holding used to group and label it
+                                 * @enum {string}
+                                 */
+                                typeGroup: "fixed_income" | "tesouro" | "acoes_br" | "fii" | "acoes_eua" | "reits" | "cripto";
+                                /** @description Ticker or title name */
+                                symbol: string;
+                                /** @description Asset or title name */
+                                name: string;
+                                /** @description Suggested amount for this holding, in minor units of the base currency */
+                                amountMinor: number;
+                                /** @description Approximate quantity the amount buys, decimal string rounded down to the decimals the asset accepts; "0" when it does not buy one unit; null for fixed income or without quote or exchange rate */
+                                approxUnits: string | null;
+                                /** @description Latest quote price, decimal string in priceCurrency; null for fixed income or without quote */
+                                unitPrice: string | null;
+                                /** @description Currency of the quote; null when unitPrice is null */
+                                priceCurrency: string | null;
+                                /** @description Share of the holding inside its class before the contribution, in basis points */
+                                shareInClassBeforeBps: number;
+                                /** @description Share of the holding inside its class after the contribution, in basis points */
+                                shareInClassAfterBps: number;
+                                /** @description Effective target inside the class, in basis points */
+                                targetInClassBps: number;
+                            }[];
+                        }[];
+                    };
+                };
+            };
+            /** @description Invalid amount: not an integer from 1 to 100,000,000,000 (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Every class target is zero (contribution.targets_not_set) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 60 suggestions in a minute for the company */
+            429: {
                 headers: {
                     [name: string]: unknown;
                 };
