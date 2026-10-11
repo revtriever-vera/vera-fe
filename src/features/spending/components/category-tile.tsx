@@ -5,8 +5,10 @@ import { categoryIcon } from '../lib/category-icons';
 import { CATEGORY_TONE_CLASSES, CATEGORY_TONE_ICONS, toneOf } from '../lib/category-tone';
 import type { CategoryTone, CategoryView } from '../types';
 
+export type CategoryTileTarget = Pick<CategoryView, 'kind' | 'flexibility'> & { readonly icon: string };
+
 export interface CategoryTileProps {
-    readonly category: CategoryView | null;
+    readonly category: CategoryTileTarget | null;
     readonly size?: Extract<IconTileSize, 'sm' | 'md'>;
 }
 

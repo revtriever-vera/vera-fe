@@ -28,4 +28,16 @@ describe('KpiTile', () => {
 
         expect(container.querySelector('svg')).not.toBeNull();
     });
+
+    it('destaca o cartão com o anel de foco quando pedido', () => {
+        const { container } = render(<KpiTile label="Guardado" value="R$ 10,00" focus />);
+
+        expect(container.firstElementChild).toHaveClass('ring-2');
+    });
+
+    it('sem destaque o cartão não tem anel', () => {
+        const { container } = render(<KpiTile label="Guardado" value="R$ 10,00" />);
+
+        expect(container.firstElementChild).not.toHaveClass('ring-2');
+    });
 });

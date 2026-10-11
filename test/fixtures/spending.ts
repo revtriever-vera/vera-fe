@@ -474,7 +474,9 @@ export function canonicalSummary(overrides: Partial<MonthlySummary> = {}): Month
         flexibleMinor: 1154000,
         transfersOutMinor: 1200000,
         averageMonths: 3,
-        categories: EXPENSE_SUMMARY_SEEDS.map(summaryRow),
+        categories: [...EXPENSE_SUMMARY_SEEDS]
+            .sort((first: SummarySeed, second: SummarySeed): number => second.spentMinor - first.spentMinor)
+            .map(summaryRow),
         incomeCategories: [
             {
                 categoryId: income.id,

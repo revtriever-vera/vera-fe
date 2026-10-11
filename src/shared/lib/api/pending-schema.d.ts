@@ -145,59 +145,6 @@ export interface PendingAccountsResponse {
     accounts: PendingAccountView[];
 }
 
-export interface PendingSummaryCategoryRow {
-    categoryId: string;
-    systemKey: string | null;
-    name: string | null;
-    icon: string;
-    flexibility: 'fixed' | 'flexible' | null;
-    spentMinor: number;
-    averageMinor: number | null;
-    deltaBps: number | null;
-    isNew: boolean;
-    transactionCount: number;
-}
-
-export interface PendingMonthlySummary {
-    month: string;
-    isPartial: boolean;
-    hasData: boolean;
-    currency: 'BRL';
-    previousMonth: string | null;
-    nextMonth: string | null;
-    availableMonths: string[];
-    income: {
-        minor: number;
-        mode: 'transactions' | 'declared';
-        fromTransactionsMinor: number;
-    };
-    expensesMinor: number;
-    uncategorizedMinor: number;
-    uncategorizedCount: number;
-    uncategorizedInflowMinor: number;
-    savedMinor: number;
-    savingsRateBps: number | null;
-    goal: {
-        bps: number;
-        minor: number;
-    };
-    gapMinor: number;
-    fixedMinor: number;
-    fixedShareBps: number | null;
-    flexibleMinor: number;
-    transfersOutMinor: number;
-    averageMonths: number;
-    excludedCurrencyCount: number;
-    categories: PendingSummaryCategoryRow[];
-    incomeCategories: PendingSummaryCategoryRow[];
-}
-
-export interface PendingSpendingSettings {
-    savingsGoalBps: number;
-    incomeMode: 'transactions' | 'declared';
-    declaredIncomeMinor: number | null;
-}
-
 export interface PendingCutSuggestion {
     categoryId: string;
     systemKey: string | null;
@@ -410,20 +357,6 @@ export interface PendingAccountPath extends PendingPathItem {
     delete: PendingOperation<never, PendingIdPath, never, { 204: PendingNoContent }>;
 }
 
-export interface PendingSummaryPath extends PendingPathItem {
-    get: PendingOperation<{ month?: string }, PendingNoPath, never, { 200: PendingJson<PendingMonthlySummary> }>;
-}
-
-export interface PendingSettingsPath extends PendingPathItem {
-    get: PendingOperation<never, PendingNoPath, never, { 200: PendingJson<PendingSpendingSettings> }>;
-    put: PendingOperation<
-        never,
-        PendingNoPath,
-        PendingJsonBody<Partial<PendingSpendingSettings>>,
-        { 200: PendingJson<PendingSpendingSettings> }
-    >;
-}
-
 export interface PendingCutsPath extends PendingPathItem {
     get: PendingOperation<{ month?: string; goalBps?: number }, PendingNoPath, never, { 200: PendingJson<PendingCutsResponse> }>;
 }
@@ -482,8 +415,6 @@ export interface PendingPaths {
     '/spending/transactions/{id}': PendingTransactionPath;
     '/spending/accounts': PendingAccountsPath;
     '/spending/accounts/{id}': PendingAccountPath;
-    '/spending/summary': PendingSummaryPath;
-    '/spending/settings': PendingSettingsPath;
     '/spending/cuts': PendingCutsPath;
     '/spending/connections/credentials': PendingCredentialsPath;
     '/spending/connections/credentials/test': PendingCredentialsTestPath;
