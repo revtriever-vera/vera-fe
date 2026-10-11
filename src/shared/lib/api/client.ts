@@ -2,7 +2,7 @@ import createClient, { type Client, type Middleware } from 'openapi-fetch';
 import { env } from '@/shared/config/env';
 import { ApiError } from './api-error';
 import { tokenStore } from './token-store';
-import type { paths } from './schema';
+import type { ApiPaths } from './api-paths';
 
 const REFRESH_PATH: string = '/auth/refresh';
 
@@ -76,7 +76,7 @@ const authMiddleware: Middleware = {
     }
 };
 
-export const apiClient: Client<paths> = createClient<paths>({
+export const apiClient: Client<ApiPaths> = createClient<ApiPaths>({
     baseUrl: env.VITE_API_URL,
     credentials: 'include',
     fetch: async (request: Request) => globalThis.fetch(request)

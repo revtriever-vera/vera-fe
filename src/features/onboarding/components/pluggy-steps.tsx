@@ -2,12 +2,12 @@ import type { ReactElement } from 'react';
 import { TriangleAlert } from 'lucide-react';
 import { Trans } from 'react-i18next';
 import { track } from '@/shared/lib/analytics';
-import { PLUGGY_HOSTS, PLUGGY_LINKS, type PluggyTarget } from '../lib/pluggy-links';
+import { PLUGGY_HOSTS, PLUGGY_LINKS, type PluggyTarget } from '@/shared/lib/pluggy-links';
 
 const LINK_CLASS: string = 'font-semibold text-accent-strong underline underline-offset-2';
 const KBD_CLASS: string = 'rounded-sm border border-border bg-surface-muted px-1.5 py-0.5 font-mono text-xs text-content';
 
-function ExternalLink({ target, children }: { readonly target: PluggyTarget; readonly children: string }): ReactElement {
+function ExternalLink({ target, children }: { readonly target: Exclude<PluggyTarget, 'github'>; readonly children: string }): ReactElement {
     return (
         <a
             href={PLUGGY_LINKS[target]}

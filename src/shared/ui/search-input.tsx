@@ -8,9 +8,15 @@ export interface SearchInputProps {
     readonly placeholder: string;
     readonly label: string;
     readonly className?: string;
+    readonly combobox?: SearchComboboxProps;
 }
 
-export function SearchInput({ value, onChange, placeholder, label, className }: SearchInputProps): ReactElement {
+export interface SearchComboboxProps {
+    readonly listId: string;
+    readonly activeId: string | undefined;
+}
+
+export function SearchInput({ value, onChange, placeholder, label, className, combobox }: SearchInputProps): ReactElement {
     return (
         <div className={cn('relative', className)}>
             <input
@@ -21,6 +27,11 @@ export function SearchInput({ value, onChange, placeholder, label, className }: 
                 }}
                 placeholder={placeholder}
                 aria-label={label}
+                role={combobox === undefined ? undefined : 'combobox'}
+                aria-expanded={combobox === undefined ? undefined : true}
+                aria-controls={combobox?.listId}
+                aria-activedescendant={combobox?.activeId}
+                aria-autocomplete={combobox === undefined ? undefined : 'list'}
                 className="w-full rounded-full border border-border bg-surface-muted py-2.5 pr-4 pl-10 text-sm text-content transition outline-none placeholder:text-content-subtle focus:border-accent focus:bg-surface focus:ring-4 focus:ring-accent/10 [&::-webkit-search-cancel-button]:hidden"
             />
             <Search

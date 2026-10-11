@@ -13,7 +13,7 @@ import { toClassColorKey } from '../../lib/class-color';
 import { useSaveAssetTargets } from '../api/use-save-asset-targets.mutation';
 import { toAssetFormValues, toAssetTargetsBody, withAutomaticSplit, withEqualSplit } from '../lib/asset-targets-form';
 import { useAssetTargetsForm, type AssetTargetsFormState } from '../lib/use-asset-targets-form';
-import { useUnsavedGuard, type UnsavedGuard } from '../lib/use-unsaved-guard';
+import { useUnsavedGuard, type UnsavedGuard } from '@/shared/lib/use-unsaved-guard';
 import type { AssetTargetsFormValues } from '../schemas/asset-targets.schema';
 import type { AssetTargetsInput, ClassDetail, SavedAssetTargets } from '../types';
 import { AssetTargetsActions } from './asset-targets-actions';

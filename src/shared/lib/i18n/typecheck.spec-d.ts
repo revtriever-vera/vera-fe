@@ -22,4 +22,19 @@ describe('tipagem das chaves de tradução', () => {
     it('rejeita uma chave inexistente do namespace portfolio', () => {
         expectTypeOf<'chave-inexistente'>().not.toExtend<ParseKeys<'portfolio'>>();
     });
+
+    it('conhece os sete namespaces dos gastos', () => {
+        expectTypeOf<'layout.title'>().toExtend<ParseKeys<'spending'>>();
+        expectTypeOf<'categories.names.housing'>().toExtend<ParseKeys<'spending'>>();
+        expectTypeOf<ParseKeys<'spendingSummary'>>().toBeNever();
+        expectTypeOf<ParseKeys<'spendingTransactions'>>().toBeNever();
+        expectTypeOf<ParseKeys<'spendingCuts'>>().toBeNever();
+        expectTypeOf<ParseKeys<'spendingConnections'>>().toBeNever();
+        expectTypeOf<ParseKeys<'spendingImports'>>().toBeNever();
+        expectTypeOf<ParseKeys<'spendingRules'>>().toBeNever();
+    });
+
+    it('rejeita uma chave inexistente do namespace spending', () => {
+        expectTypeOf<'chave-inexistente'>().not.toExtend<ParseKeys<'spending'>>();
+    });
 });

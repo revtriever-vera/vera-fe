@@ -1,0 +1,158 @@
+{
+  "layout": {
+    "title": "Gastos",
+    "tabsLabel": "Seções dos gastos",
+    "tabs": {
+      "summary": "Resumo do mês",
+      "transactions": "Transações",
+      "cuts": "Onde cortar",
+      "connections": "Conexões",
+      "rules": "Regras"
+    }
+  },
+  "underConstruction": {
+    "title": "Esta tela está em construção",
+    "description": "Em breve você poderá usar esta parte dos gastos por aqui."
+  },
+  "categories": {
+    "names": {
+      "housing": "Moradia",
+      "education": "Educação",
+      "health": "Saúde",
+      "home_services": "Casa e serviços",
+      "taxes_fees": "Impostos e tarifas",
+      "groceries": "Mercado",
+      "eating_out": "Delivery e restaurantes",
+      "transport": "Transporte",
+      "leisure": "Lazer",
+      "subscriptions": "Assinaturas",
+      "shopping": "Compras",
+      "other_expenses": "Outros gastos",
+      "income": "Renda",
+      "other_income": "Outras entradas",
+      "own_transfer": "Transferência entre suas contas",
+      "card_payment": "Pagamento de fatura",
+      "investments": "Investimentos"
+    },
+    "uncategorized": "Sem categoria",
+    "customName": "Categoria",
+    "none": "Nenhuma categoria",
+    "groups": {
+      "expense": "Gastos",
+      "income": "Entradas",
+      "transfer": "Transferências"
+    },
+    "flexibility": {
+      "fixed": "fixo",
+      "flexible": "flexível"
+    }
+  },
+  "origin": {
+    "labels": {
+      "user": "você corrigiu",
+      "rule": "por sua regra",
+      "dictionary": "por dicionário",
+      "provider": "pela Pluggy",
+      "none": "sem categoria"
+    },
+    "tips": {
+      "user": "Você escolheu esta categoria à mão. Ela não muda mais sozinha.",
+      "rule": "Esta categoria veio de uma regra criada por você.",
+      "dictionary": "Esta categoria veio do dicionário de estabelecimentos da Vera.",
+      "provider": "Esta categoria veio da própria Pluggy, que lê o banco.",
+      "none": "Nenhuma regra, dicionário ou categoria da Pluggy serviu para esta transação."
+    }
+  },
+  "accountKinds": {
+    "checking": "Conta corrente",
+    "savings": "Poupança",
+    "credit_card": "Cartão de crédito",
+    "other": "Outra conta"
+  },
+  "sources": {
+    "pluggy": "Open Finance (Meu Pluggy)",
+    "file": "Arquivo do banco",
+    "ofx": "Extrato OFX",
+    "csv": "Extrato CSV",
+    "sample": "Dados de exemplo"
+  },
+  "picker": {
+    "search": "Buscar categoria",
+    "searchLabel": "Buscar entre as categorias",
+    "empty": "Nenhuma categoria encontrada",
+    "incomeInOutflow": "Categoria de entrada não vale para um gasto",
+    "expenseInInflow": "Categoria de gasto não vale para uma entrada",
+    "listLabel": "Categorias"
+  },
+  "month": {
+    "label": "Mês",
+    "previous": "Mês anterior",
+    "next": "Próximo mês",
+    "partial": "mês em andamento"
+  },
+  "amount": {
+    "incoming": "Entrada",
+    "outgoing": "Saída"
+  },
+  "emptyState": {
+    "title": "Nenhum gasto por aqui ainda",
+    "description": "Conecte seus bancos pelo Meu Pluggy ou importe um extrato do banco. A partir daí, os gastos chegam sozinhos e já categorizados.",
+    "connect": "Conectar bancos",
+    "import": "Importar extrato"
+  },
+  "flexibility": {
+    "toggleLabel": "Natureza de {{name}}: {{state}}",
+    "hint": "Mudar entre fixo e flexível",
+    "failed": "Não deu para mudar a categoria. Tente de novo."
+  },
+  "income": {
+    "title": "De onde vem a sua renda",
+    "description": "A Vera usa a renda para calcular quanto você guardou e quanto precisa cortar.",
+    "modeLabel": "Origem da renda",
+    "fromTransactions": "Das transações",
+    "declared": "Valor fixo por mês",
+    "transactionsHint": "A renda do mês é a soma das entradas categorizadas como renda.",
+    "declaredLabel": "Renda por mês",
+    "declaredHint": "Use o valor que cai na sua conta todo mês.",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "saved": "Origem da renda atualizada",
+    "declaredRequired": "Informe um valor maior que zero",
+    "loading": "Carregando a origem da renda"
+  },
+  "errors": {
+    "generic": "Não foi possível concluir. Tente de novo em instantes.",
+    "validationFailed": "Confira os dados informados e tente de novo.",
+    "categoryNotFound": "Essa categoria não existe mais.",
+    "invalidRule": "Essa regra não é válida. Confira o texto e o sentido.",
+    "categoryLimitReached": "Você chegou ao limite de categorias ou de regras.",
+    "categoryNameTaken": "Já existe uma categoria com esse nome.",
+    "ruleConflict": "Já existe uma regra igual a essa.",
+    "ruleNotFound": "Essa regra não existe mais.",
+    "systemCategoryLocked": "Essa categoria padrão não aceita essa mudança.",
+    "connectionNotFound": "Essa conexão não existe mais.",
+    "credentialsMissing": "Cadastre antes a sua credencial do Meu Pluggy.",
+    "invalidCredentials": "A Pluggy não aceitou essas credenciais. Confira o Client ID e o Client Secret.",
+    "itemNotFound": "Esse Item ID não foi encontrado na sua conta do Meu Pluggy.",
+    "providerUnavailable": "A Pluggy está fora do ar agora. Tente de novo em instantes.",
+    "syncInProgress": "Já existe uma atualização em andamento para essa conexão.",
+    "secretOpenFailed": "Não foi possível ler a credencial guardada. Cadastre-a de novo.",
+    "secretSealerMismatch": "A credencial guardada foi criada com outra chave. Cadastre-a de novo.",
+    "tooManyAttempts": "Muitas tentativas seguidas. Espere um pouco e tente de novo.",
+    "currencyMismatch": "A moeda do arquivo é diferente da moeda da conta escolhida.",
+    "fileTooLarge": "O arquivo é grande demais.",
+    "importNotFound": "Essa importação não existe mais.",
+    "invalidFile": "Não foi possível ler esse arquivo.",
+    "mappingRequired": "Indique quais colunas do arquivo são a data, a descrição e o valor.",
+    "tooManyRows": "O arquivo tem linhas demais.",
+    "unsupportedFormat": "Esse formato de arquivo não é aceito.",
+    "declaredIncomeRequired": "Informe a renda por mês para usar o valor fixo.",
+    "invalidMonth": "Esse mês não é válido.",
+    "accountManagedByConnection": "Essa conta vem de uma conexão. Remova a conexão para tirar a conta.",
+    "accountNotFound": "Essa conta não existe mais.",
+    "categoryKindMismatch": "Essa categoria não vale para esse tipo de transação.",
+    "exportTooLarge": "Há transações demais para exportar de uma vez. Escolha um período menor.",
+    "transactionsLimitReached": "Você chegou ao limite de transações ou de contas.",
+    "transactionNotFound": "Essa transação não existe mais."
+  }
+}

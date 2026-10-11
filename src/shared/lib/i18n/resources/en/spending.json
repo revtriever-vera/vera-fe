@@ -1,0 +1,158 @@
+{
+  "layout": {
+    "title": "Spending",
+    "tabsLabel": "Spending sections",
+    "tabs": {
+      "summary": "Month summary",
+      "transactions": "Transactions",
+      "cuts": "Where to cut",
+      "connections": "Connections",
+      "rules": "Rules"
+    }
+  },
+  "underConstruction": {
+    "title": "This screen is under construction",
+    "description": "Soon you will be able to use this part of spending here."
+  },
+  "categories": {
+    "names": {
+      "housing": "Housing",
+      "education": "Education",
+      "health": "Health",
+      "home_services": "Home and services",
+      "taxes_fees": "Taxes and fees",
+      "groceries": "Groceries",
+      "eating_out": "Delivery and restaurants",
+      "transport": "Transport",
+      "leisure": "Leisure",
+      "subscriptions": "Subscriptions",
+      "shopping": "Shopping",
+      "other_expenses": "Other expenses",
+      "income": "Income",
+      "other_income": "Other inflows",
+      "own_transfer": "Transfer between your accounts",
+      "card_payment": "Card bill payment",
+      "investments": "Investments"
+    },
+    "uncategorized": "Uncategorized",
+    "customName": "Category",
+    "none": "No category",
+    "groups": {
+      "expense": "Expenses",
+      "income": "Inflows",
+      "transfer": "Transfers"
+    },
+    "flexibility": {
+      "fixed": "fixed",
+      "flexible": "flexible"
+    }
+  },
+  "origin": {
+    "labels": {
+      "user": "you corrected",
+      "rule": "by your rule",
+      "dictionary": "by dictionary",
+      "provider": "by Pluggy",
+      "none": "uncategorized"
+    },
+    "tips": {
+      "user": "You picked this category by hand. It never changes on its own.",
+      "rule": "This category came from a rule you created.",
+      "dictionary": "This category came from the Vera merchant dictionary.",
+      "provider": "This category came from Pluggy itself, which reads the bank.",
+      "none": "No rule, dictionary entry or Pluggy category fit this transaction."
+    }
+  },
+  "accountKinds": {
+    "checking": "Checking account",
+    "savings": "Savings account",
+    "credit_card": "Credit card",
+    "other": "Other account"
+  },
+  "sources": {
+    "pluggy": "Open Finance (Meu Pluggy)",
+    "file": "Bank file",
+    "ofx": "OFX statement",
+    "csv": "CSV statement",
+    "sample": "Sample data"
+  },
+  "picker": {
+    "search": "Search category",
+    "searchLabel": "Search among the categories",
+    "empty": "No category found",
+    "incomeInOutflow": "An inflow category does not apply to an expense",
+    "expenseInInflow": "An expense category does not apply to an inflow",
+    "listLabel": "Categories"
+  },
+  "month": {
+    "label": "Month",
+    "previous": "Previous month",
+    "next": "Next month",
+    "partial": "month in progress"
+  },
+  "amount": {
+    "incoming": "Inflow",
+    "outgoing": "Outflow"
+  },
+  "emptyState": {
+    "title": "No spending here yet",
+    "description": "Connect your banks through Meu Pluggy or import a bank statement. From then on, spending arrives on its own and already categorized.",
+    "connect": "Connect banks",
+    "import": "Import statement"
+  },
+  "flexibility": {
+    "toggleLabel": "Nature of {{name}}: {{state}}",
+    "hint": "Switch between fixed and flexible",
+    "failed": "Could not change the category. Try again."
+  },
+  "income": {
+    "title": "Where your income comes from",
+    "description": "Vera uses your income to work out how much you saved and how much you need to cut.",
+    "modeLabel": "Income source",
+    "fromTransactions": "From transactions",
+    "declared": "Fixed amount per month",
+    "transactionsHint": "Monthly income is the sum of the inflows categorized as income.",
+    "declaredLabel": "Income per month",
+    "declaredHint": "Use the amount that lands in your account every month.",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "Income source updated",
+    "declaredRequired": "Enter an amount greater than zero",
+    "loading": "Loading the income source"
+  },
+  "errors": {
+    "generic": "Could not finish. Try again in a moment.",
+    "validationFailed": "Check the data you entered and try again.",
+    "categoryNotFound": "That category no longer exists.",
+    "invalidRule": "That rule is not valid. Check the text and the direction.",
+    "categoryLimitReached": "You reached the limit of categories or rules.",
+    "categoryNameTaken": "A category with that name already exists.",
+    "ruleConflict": "A rule just like this one already exists.",
+    "ruleNotFound": "That rule no longer exists.",
+    "systemCategoryLocked": "That default category does not accept this change.",
+    "connectionNotFound": "That connection no longer exists.",
+    "credentialsMissing": "Register your Meu Pluggy credentials first.",
+    "invalidCredentials": "Pluggy did not accept these credentials. Check the Client ID and the Client Secret.",
+    "itemNotFound": "That Item ID was not found in your Meu Pluggy account.",
+    "providerUnavailable": "Pluggy is down right now. Try again in a moment.",
+    "syncInProgress": "An update is already running for that connection.",
+    "secretOpenFailed": "Could not read the stored credentials. Register them again.",
+    "secretSealerMismatch": "The stored credentials were created with another key. Register them again.",
+    "tooManyAttempts": "Too many attempts in a row. Wait a moment and try again.",
+    "currencyMismatch": "The file currency differs from the chosen account currency.",
+    "fileTooLarge": "The file is too large.",
+    "importNotFound": "That import no longer exists.",
+    "invalidFile": "Could not read that file.",
+    "mappingRequired": "Say which columns of the file are the date, the description and the amount.",
+    "tooManyRows": "The file has too many rows.",
+    "unsupportedFormat": "That file format is not supported.",
+    "declaredIncomeRequired": "Enter the monthly income to use the fixed amount.",
+    "invalidMonth": "That month is not valid.",
+    "accountManagedByConnection": "That account comes from a connection. Remove the connection to remove the account.",
+    "accountNotFound": "That account no longer exists.",
+    "categoryKindMismatch": "That category does not apply to this kind of transaction.",
+    "exportTooLarge": "There are too many transactions to export at once. Pick a shorter period.",
+    "transactionsLimitReached": "You reached the limit of transactions or accounts.",
+    "transactionNotFound": "That transaction no longer exists."
+  }
+}

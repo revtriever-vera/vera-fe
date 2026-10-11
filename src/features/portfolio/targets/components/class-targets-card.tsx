@@ -16,7 +16,7 @@ import type { AssetClassView, ClassesResponse, Overview, OverviewClass, SaveClas
 import { useSaveClassTargets } from '../api/use-save-class-targets.mutation';
 import { sortedClasses, sumReceivedBps, toFormValues, toSaveBody } from '../lib/targets-form';
 import { useClassTargetsForm, type ClassTargetsFormState } from '../lib/use-class-targets-form';
-import { useUnsavedGuard, type UnsavedGuard } from '../lib/use-unsaved-guard';
+import { useUnsavedGuard, type UnsavedGuard } from '@/shared/lib/use-unsaved-guard';
 import { FULL_TARGET_BPS, type ClassTargetsFormValues } from '../schemas/class-targets.schema';
 import { ClassTargetRow } from './class-target-row';
 import { ResetTargetsDialog } from './reset-targets-dialog';

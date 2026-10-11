@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { act, render, screen, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Wallet, PieChart } from 'lucide-react';
+import { List, Wallet, PieChart } from 'lucide-react';
+import { http, HttpResponse } from 'msw';
 import {
     Link,
     Outlet,
@@ -21,6 +22,17 @@ import type { NavItem } from './app-nav';
 import { AppShell } from './app-shell';
 
 const ASSETS_PATH: string = '/patrimonio/ativos';
+
+const BADGE_ITEMS: readonly NavItem[] = [
+    {
+        id: 'transactions',
+        to: '/patrimonio',
+        labelKey: 'navSpendingTransactions',
+        icon: List,
+        group: 'spending',
+        badge: 'spendingUncategorized'
+    }
+];
 
 const ITEMS: readonly NavItem[] = [
     { id: 'overview', to: '/patrimonio', labelKey: 'navPortfolioOverview', icon: PieChart, group: 'portfolio' },
@@ -147,5 +159,40 @@ describe('AppShell', () => {
 
         await user.tab({ shift: true });
         expect(focusables[focusables.length - 1]).toHaveFocus();
+    });
+
+    it('shows the uncategorized count in the menu and in the top bar button', async () => {
+        const user: UserEvent = userEvent.setup();
+        server.use(http.get('*/spending/transactions/uncategorized-count', () => HttpResponse.json({ count: 3 })));
+        renderShell(BADGE_ITEMS, '/patrimonio');
+
+        const nav: HTMLElement = await screen.findByRole('navigation', { name: 'Navegação principal' });
+        expect(await within(nav).findByRole('link', { name: /3 transações sem categoria/ })).toBeInTheDocument();
+
+        await user.click(await screen.findByRole('button', { name: 'Abrir menu, 3 transações sem categoria' }));
+        expect(within(screen.getByRole('dialog')).getByRole('link', { name: /3 transações sem categoria/ })).toBeInTheDocument();
+    });
+
+    it('uses the singular when there is one uncategorized transaction', async () => {
+        server.use(http.get('*/spending/transactions/uncategorized-count', () => HttpResponse.json({ count: 1 })));
+        renderShell(BADGE_ITEMS, '/patrimonio');
+
+        expect(await screen.findByRole('button', { name: 'Abrir menu, 1 transação sem categoria' })).toBeInTheDocument();
+    });
+
+    it('does not ask for the count when no item carries a badge', async () => {
+        const calls: string[] = [];
+        server.use(
+            http.get('*/spending/transactions/uncategorized-count', () => {
+                calls.push('count');
+                return HttpResponse.json({ count: 3 });
+            })
+        );
+        renderShell(ITEMS, '/patrimonio');
+
+        await screen.findByRole('navigation', { name: 'Navegação principal' });
+
+        expect(calls).toEqual([]);
+        expect(screen.getByRole('button', { name: 'Abrir menu' })).toBeInTheDocument();
     });
 });
