@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import type { AnyRouter } from '@tanstack/react-router';
+import { installContributionApi } from '../../../test/helpers/contribution-api';
 import { renderRouterAt } from '../../../test/router';
 
-const ROUTES: readonly string[] = ['/patrimonio/ativos', '/patrimonio/comecar', '/patrimonio/classes/class-fii', '/patrimonio/aporte'];
+const ROUTES: readonly string[] = ['/patrimonio/ativos', '/patrimonio/comecar', '/patrimonio/classes/class-fii'];
 
 describe('rotas de /patrimonio', () => {
     it.each(ROUTES)('%s abre dentro do layout com o título e a página em construção', async (path: string) => {
@@ -56,16 +57,20 @@ describe('rotas de /patrimonio', () => {
     });
 
     it('lê o valor do aporte como número', async () => {
+        installContributionApi();
         const router: AnyRouter = renderRouterAt('/patrimonio/aporte?amount=1500', { signedIn: true });
-        await screen.findByRole('heading', { name: 'Em construção' });
+        await screen.findByRole('heading', { name: 'Aporte inteligente', level: 2 });
 
         expect(router.state.location.search).toEqual({ amount: 1500 });
     });
 
     it('degrada /patrimonio/aporte?amount=abc sem lançar', async () => {
+        installContributionApi();
         const router: AnyRouter = renderRouterAt('/patrimonio/aporte?amount=abc', { signedIn: true });
-        await screen.findByRole('heading', { name: 'Em construção' });
+        await screen.findByRole('heading', { name: 'Aporte inteligente', level: 2 });
 
-        expect(router.state.location.search).toEqual({});
+        await waitFor(() => {
+            expect(router.state.location.search).toEqual({ amount: 10000 });
+        });
     });
 });

@@ -1,6 +1,7 @@
 import { http, HttpResponse, type RequestHandler } from 'msw';
 import type { UpdatePortfolioSettings } from '@/features/portfolio/types';
 import { exchangeRate, positionView, previewResult, titleView } from '../../fixtures/assets';
+import { sampleSuggestion } from '../../fixtures/contribution';
 import { defaultClasses, emptyHoldings, emptyOverview, portfolioSettings } from '../../fixtures/portfolio';
 
 export function portfolioHandlers(): RequestHandler[] {
@@ -9,6 +10,7 @@ export function portfolioHandlers(): RequestHandler[] {
         http.get('*/portfolio/overview', () => HttpResponse.json(emptyOverview())),
         http.get('*/allocation/classes', () => HttpResponse.json(defaultClasses())),
         http.get('*/allocation/settings', () => HttpResponse.json(portfolioSettings())),
+        http.post('*/portfolio/contributions/suggest', () => HttpResponse.json(sampleSuggestion())),
         http.get('*/catalog/assets', () => HttpResponse.json({ data: [] })),
         http.get('*/market-data/quotes', () => HttpResponse.json({ quotes: [], pendingAssetIds: [] })),
         http.get('*/market-data/exchange-rates/:currency', () => HttpResponse.json(exchangeRate())),
