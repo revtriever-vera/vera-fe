@@ -14,6 +14,7 @@ describe('local/no-fixed-color', () => {
     it('reporta e aceita os casos do card', () => {
         ruleTester.run('no-fixed-color', rules.rules['no-fixed-color'], {
             valid: [
+                { code: 'const Page = () => <div className="bg-[length:var(--w)] w-[calc(100%-2rem)]" />;' },
                 { code: 'const Page = () => <div className="bg-surface" />;' },
                 { code: 'const Page = () => <div style={{ color: "var(--color-accent)" }} />;' },
                 { code: "const classes = cn('bg-surface', condition && 'text-accent');" },
@@ -22,6 +23,14 @@ describe('local/no-fixed-color', () => {
                 }
             ],
             invalid: [
+                {
+                    code: 'const Page = () => <div className="bg-[color:#fff]" />;',
+                    errors: [{ messageId: 'className' }]
+                },
+                {
+                    code: "const classes = cn('text-[color:rgb(0,0,0)]');",
+                    errors: [{ messageId: 'className' }]
+                },
                 {
                     code: 'const Page = () => <div className="bg-[#fff]" />;',
                     errors: [{ messageId: 'className' }]
