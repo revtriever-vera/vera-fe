@@ -69,42 +69,6 @@ export interface PendingPageInfo {
     totalPages: number;
 }
 
-export interface PendingCutSuggestion {
-    categoryId: string;
-    systemKey: string | null;
-    name: string | null;
-    icon: string;
-    spentMinor: number;
-    averageMinor: number | null;
-    excessMinor: number;
-    cutMinor: number;
-    limitMinor: number;
-}
-
-export interface PendingCutsResponse {
-    month: string;
-    limitMonth: string;
-    isPartial: boolean;
-    status: 'no_data' | 'no_income' | 'goal_met' | 'cut_suggested' | 'exceeds_flexible';
-    goal: {
-        bps: number;
-        minor: number;
-        simulated: boolean;
-    };
-    incomeMinor: number;
-    savedMinor: number;
-    savingsRateBps: number | null;
-    gapMinor: number;
-    surplusMinor: number;
-    totalCutMinor: number;
-    flexibleTotalMinor: number;
-    excessTotalMinor: number;
-    categoriesWithCut: number;
-    uncategorizedMinor: number;
-    averageMonths: number;
-    suggestions: PendingCutSuggestion[];
-}
-
 export interface PendingCredentialsView {
     configured: boolean;
     clientIdHint: string | null;
@@ -177,10 +141,6 @@ export interface PendingIdPath {
     id: string;
 }
 
-export interface PendingCutsPath extends PendingPathItem {
-    get: PendingOperation<{ month?: string; goalBps?: number }, PendingNoPath, never, { 200: PendingJson<PendingCutsResponse> }>;
-}
-
 export interface PendingCredentialsPath extends PendingPathItem {
     get: PendingOperation<never, PendingNoPath, never, { 200: PendingJson<PendingCredentialsView> }>;
     put: PendingOperation<never, PendingNoPath, PendingJsonBody<PendingSaveCredentialsBody>, { 200: PendingJson<PendingCredentialsView> }>;
@@ -216,7 +176,6 @@ export interface PendingConnectionsSyncPath extends PendingPathItem {
 }
 
 export interface PendingPaths {
-    '/spending/cuts': PendingCutsPath;
     '/spending/connections/credentials': PendingCredentialsPath;
     '/spending/connections/credentials/test': PendingCredentialsTestPath;
     '/spending/connections': PendingConnectionsPath;
