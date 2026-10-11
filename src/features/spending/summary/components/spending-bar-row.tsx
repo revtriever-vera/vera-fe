@@ -54,14 +54,16 @@ export function SpendingBarRow({ row, scale, month, currency, averageMonths }: S
             : t('bars.trackLabelAverage', { name: label(row), spent, average: formatCurrency(row.averageMinor, currency, locale) });
     return (
         <div className="flex flex-col gap-1.5">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <div className="flex items-center gap-2">
                 <CategoryTile category={{ icon: row.icon, kind: CATEGORY_KIND.expense, flexibility: row.flexibility }} size="sm" />
-                <CategoryName category={row} className="min-w-0 flex-1 truncate text-sm font-semibold" />
-                <FlexibilityToggle category={target} />
-                <span className="flex items-center gap-2">
+                <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1">
+                    <CategoryName category={row} className="text-sm font-semibold break-words" />
+                    <FlexibilityToggle category={target} />
+                </div>
+                <div className="flex shrink-0 flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-2">
+                    <span className="numeric text-sm font-semibold sm:order-2">{spent}</span>
                     <RowBadges row={row} />
-                    <span className="numeric text-sm font-semibold">{spent}</span>
-                </span>
+                </div>
             </div>
             <BarTrack
                 label={trackLabel}

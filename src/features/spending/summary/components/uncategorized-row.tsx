@@ -46,7 +46,7 @@ export function UncategorizedRow(props: UncategorizedRowProps): ReactElement {
         <div className="flex flex-col gap-1.5">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                 <CategoryTile category={null} size="sm" />
-                <span className="min-w-0 flex-1 truncate text-sm font-semibold">{tSpending('categories.uncategorized')}</span>
+                <span className="min-w-0 flex-1 text-sm font-semibold break-words">{tSpending('categories.uncategorized')}</span>
                 <Link
                     to="/spending/transactions"
                     search={{ month: props.month, uncategorized: true }}
