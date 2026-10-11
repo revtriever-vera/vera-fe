@@ -4,6 +4,7 @@ import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { cn } from '@/shared/lib/cn';
 import { BrandLogo } from '@/shared/ui/brand-logo';
 import { activeNavId, type NavGroup, type NavItem, type NavLabelKey } from './app-nav';
+import { useNavBadgeCount } from './use-nav-badge-count';
 import { UserBox } from './user-box';
 
 const GROUP_ORDER: readonly NavGroup[] = ['portfolio', 'spending', 'settings'];
@@ -18,9 +19,25 @@ interface SectionProps {
     readonly items: readonly NavItem[];
     readonly activeId: string | null;
     readonly heading?: string;
+    readonly badgeCount: number;
 }
 
-function NavSection({ items, activeId, heading }: SectionProps): ReactElement {
+function CountBadge({ count }: { readonly count: number }): ReactElement {
+    const { t }: UseTranslationResponse<'common', undefined> = useTranslation();
+    return (
+        <>
+            <span
+                aria-hidden="true"
+                className="ml-auto grid min-w-5 place-items-center rounded-full bg-caution-soft px-1.5 text-2xs font-bold text-caution"
+            >
+                {count}
+            </span>
+            <span className="sr-only">{t('navSpendingUncategorizedCount', { count })}</span>
+        </>
+    );
+}
+
+function NavSection({ items, activeId, heading, badgeCount }: SectionProps): ReactElement {
     const { t }: UseTranslationResponse<'common', undefined> = useTranslation();
     return (
         <div className="flex flex-col gap-0.5">
@@ -46,6 +63,7 @@ function NavSection({ items, activeId, heading }: SectionProps): ReactElement {
                         <item.icon className="size-4" aria-hidden="true" />
                     </span>
                     {t(item.labelKey)}
+                    {item.badge !== undefined && badgeCount > 0 ? <CountBadge count={badgeCount} /> : null}
                 </Link>
             ))}
         </div>
@@ -71,6 +89,7 @@ export function SidebarContent({ items, topSlot }: SidebarContentProps): ReactEl
     const activeId: string | null = activeNavId(pathname, items);
     const byGroup: ReadonlyMap<NavGroup | undefined, readonly NavItem[]> = groupItems(items);
     const ungrouped: readonly NavItem[] = byGroup.get(undefined) ?? [];
+    const badgeCount: number = useNavBadgeCount(items);
 
     return (
         <div className="flex h-full flex-col gap-5">
@@ -79,11 +98,17 @@ export function SidebarContent({ items, topSlot }: SidebarContentProps): ReactEl
             </div>
             {topSlot}
             <nav aria-label={t('navLabel')} className="flex flex-1 flex-col gap-5 overflow-y-auto">
-                {ungrouped.length > 0 ? <NavSection items={ungrouped} activeId={activeId} /> : null}
+                {ungrouped.length > 0 ? <NavSection items={ungrouped} activeId={activeId} badgeCount={badgeCount} /> : null}
                 {GROUP_ORDER.map((group: NavGroup): ReactElement | null => {
                     const inGroup: readonly NavItem[] = byGroup.get(group) ?? [];
                     return inGroup.length === 0 ? null : (
-                        <NavSection key={group} items={inGroup} activeId={activeId} heading={t(GROUP_LABEL[group])} />
+                        <NavSection
+                            key={group}
+                            items={inGroup}
+                            activeId={activeId}
+                            heading={t(GROUP_LABEL[group])}
+                            badgeCount={badgeCount}
+                        />
                     );
                 })}
             </nav>

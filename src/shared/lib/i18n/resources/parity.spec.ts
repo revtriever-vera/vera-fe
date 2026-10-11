@@ -18,6 +18,21 @@ import enPortfolioContribution from './en/portfolioContribution.json';
 import ptBROnboarding from './pt-BR/onboarding.json';
 import enOnboarding from './en/onboarding.json';
 
+import ptBRSpending from './pt-BR/spending.json';
+import enSpending from './en/spending.json';
+import ptBRSpendingSummary from './pt-BR/spendingSummary.json';
+import enSpendingSummary from './en/spendingSummary.json';
+import ptBRSpendingTransactions from './pt-BR/spendingTransactions.json';
+import enSpendingTransactions from './en/spendingTransactions.json';
+import ptBRSpendingCuts from './pt-BR/spendingCuts.json';
+import enSpendingCuts from './en/spendingCuts.json';
+import ptBRSpendingConnections from './pt-BR/spendingConnections.json';
+import enSpendingConnections from './en/spendingConnections.json';
+import ptBRSpendingImports from './pt-BR/spendingImports.json';
+import enSpendingImports from './en/spendingImports.json';
+import ptBRSpendingRules from './pt-BR/spendingRules.json';
+import enSpendingRules from './en/spendingRules.json';
+
 type TranslationNode = string | { readonly [key: string]: TranslationNode };
 
 function flattenKeys(node: TranslationNode, prefix: string): string[] {
@@ -48,7 +63,14 @@ const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'portfolioAssets', ptBR: ptBRPortfolioAssets, en: enPortfolioAssets },
     { name: 'portfolioTargets', ptBR: ptBRPortfolioTargets, en: enPortfolioTargets },
     { name: 'portfolioContribution', ptBR: ptBRPortfolioContribution, en: enPortfolioContribution },
-    { name: 'onboarding', ptBR: ptBROnboarding, en: enOnboarding }
+    { name: 'onboarding', ptBR: ptBROnboarding, en: enOnboarding },
+    { name: 'spending', ptBR: ptBRSpending, en: enSpending },
+    { name: 'spendingSummary', ptBR: ptBRSpendingSummary, en: enSpendingSummary },
+    { name: 'spendingTransactions', ptBR: ptBRSpendingTransactions, en: enSpendingTransactions },
+    { name: 'spendingCuts', ptBR: ptBRSpendingCuts, en: enSpendingCuts },
+    { name: 'spendingConnections', ptBR: ptBRSpendingConnections, en: enSpendingConnections },
+    { name: 'spendingImports', ptBR: ptBRSpendingImports, en: enSpendingImports },
+    { name: 'spendingRules', ptBR: ptBRSpendingRules, en: enSpendingRules }
 ];
 
 describe('paridade de chaves entre os namespaces de tradução', () => {

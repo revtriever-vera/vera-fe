@@ -7,6 +7,13 @@ import type ptBRPortfolioAssets from './shared/lib/i18n/resources/pt-BR/portfoli
 import type ptBRPortfolioTargets from './shared/lib/i18n/resources/pt-BR/portfolioTargets.json';
 import type ptBRPortfolioContribution from './shared/lib/i18n/resources/pt-BR/portfolioContribution.json';
 import type ptBROnboarding from './shared/lib/i18n/resources/pt-BR/onboarding.json';
+import type ptBRSpending from './shared/lib/i18n/resources/pt-BR/spending.json';
+import type ptBRSpendingSummary from './shared/lib/i18n/resources/pt-BR/spendingSummary.json';
+import type ptBRSpendingTransactions from './shared/lib/i18n/resources/pt-BR/spendingTransactions.json';
+import type ptBRSpendingCuts from './shared/lib/i18n/resources/pt-BR/spendingCuts.json';
+import type ptBRSpendingConnections from './shared/lib/i18n/resources/pt-BR/spendingConnections.json';
+import type ptBRSpendingImports from './shared/lib/i18n/resources/pt-BR/spendingImports.json';
+import type ptBRSpendingRules from './shared/lib/i18n/resources/pt-BR/spendingRules.json';
 
 declare module 'i18next' {
     interface CustomTypeOptions {
@@ -22,6 +29,13 @@ declare module 'i18next' {
             portfolioTargets: typeof ptBRPortfolioTargets;
             portfolioContribution: typeof ptBRPortfolioContribution;
             onboarding: typeof ptBROnboarding;
+            spending: typeof ptBRSpending;
+            spendingSummary: typeof ptBRSpendingSummary;
+            spendingTransactions: typeof ptBRSpendingTransactions;
+            spendingCuts: typeof ptBRSpendingCuts;
+            spendingConnections: typeof ptBRSpendingConnections;
+            spendingImports: typeof ptBRSpendingImports;
+            spendingRules: typeof ptBRSpendingRules;
         };
     }
 }

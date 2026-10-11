@@ -18,6 +18,20 @@ import ptBRPortfolioContribution from './resources/pt-BR/portfolioContribution.j
 import enPortfolioContribution from './resources/en/portfolioContribution.json';
 import ptBROnboarding from './resources/pt-BR/onboarding.json';
 import enOnboarding from './resources/en/onboarding.json';
+import ptBRSpending from './resources/pt-BR/spending.json';
+import enSpending from './resources/en/spending.json';
+import ptBRSpendingSummary from './resources/pt-BR/spendingSummary.json';
+import enSpendingSummary from './resources/en/spendingSummary.json';
+import ptBRSpendingTransactions from './resources/pt-BR/spendingTransactions.json';
+import enSpendingTransactions from './resources/en/spendingTransactions.json';
+import ptBRSpendingCuts from './resources/pt-BR/spendingCuts.json';
+import enSpendingCuts from './resources/en/spendingCuts.json';
+import ptBRSpendingConnections from './resources/pt-BR/spendingConnections.json';
+import enSpendingConnections from './resources/en/spendingConnections.json';
+import ptBRSpendingImports from './resources/pt-BR/spendingImports.json';
+import enSpendingImports from './resources/en/spendingImports.json';
+import ptBRSpendingRules from './resources/pt-BR/spendingRules.json';
+import enSpendingRules from './resources/en/spendingRules.json';
 import { DEFAULT_LOCALE, resolveLocale, type SupportedLocale } from './resolve-locale';
 
 type CommonResource = typeof ptBRCommon;
@@ -33,6 +47,13 @@ type LocaleResources = {
     readonly portfolioTargets: typeof ptBRPortfolioTargets;
     readonly portfolioContribution: typeof ptBRPortfolioContribution;
     readonly onboarding: typeof ptBROnboarding;
+    readonly spending: typeof ptBRSpending;
+    readonly spendingSummary: typeof ptBRSpendingSummary;
+    readonly spendingTransactions: typeof ptBRSpendingTransactions;
+    readonly spendingCuts: typeof ptBRSpendingCuts;
+    readonly spendingConnections: typeof ptBRSpendingConnections;
+    readonly spendingImports: typeof ptBRSpendingImports;
+    readonly spendingRules: typeof ptBRSpendingRules;
 };
 
 const resources: Record<SupportedLocale, LocaleResources> = {
@@ -45,7 +66,14 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolioAssets: ptBRPortfolioAssets,
         portfolioTargets: ptBRPortfolioTargets,
         portfolioContribution: ptBRPortfolioContribution,
-        onboarding: ptBROnboarding
+        onboarding: ptBROnboarding,
+        spending: ptBRSpending,
+        spendingSummary: ptBRSpendingSummary,
+        spendingTransactions: ptBRSpendingTransactions,
+        spendingCuts: ptBRSpendingCuts,
+        spendingConnections: ptBRSpendingConnections,
+        spendingImports: ptBRSpendingImports,
+        spendingRules: ptBRSpendingRules
     },
     en: {
         common: enCommon,
@@ -56,7 +84,14 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolioAssets: enPortfolioAssets,
         portfolioTargets: enPortfolioTargets,
         portfolioContribution: enPortfolioContribution,
-        onboarding: enOnboarding
+        onboarding: enOnboarding,
+        spending: enSpending,
+        spendingSummary: enSpendingSummary,
+        spendingTransactions: enSpendingTransactions,
+        spendingCuts: enSpendingCuts,
+        spendingConnections: enSpendingConnections,
+        spendingImports: enSpendingImports,
+        spendingRules: enSpendingRules
     }
 };
 
@@ -78,7 +113,14 @@ void i18next.use(initReactI18next).init({
         'portfolioAssets',
         'portfolioTargets',
         'portfolioContribution',
-        'onboarding'
+        'onboarding',
+        'spending',
+        'spendingSummary',
+        'spendingTransactions',
+        'spendingCuts',
+        'spendingConnections',
+        'spendingImports',
+        'spendingRules'
     ],
     defaultNS: 'common',
     interpolation: { escapeValue: false },

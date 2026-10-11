@@ -4,6 +4,10 @@ export type AssetTypeName = 'fixed_income' | 'tesouro' | 'acoes_br' | 'fii' | 'a
 export type AddAssetSource = 'search' | 'fixed_income';
 export type ExportFormatName = 'csv' | 'xlsx';
 export type CurrencyCode = 'BRL' | 'USD';
+export type SpendingImportFormatName = 'ofx' | 'csv_nubank_card' | 'csv_nubank_account' | 'csv_generic';
+export type SpendingFlexibilityName = 'fixed' | 'flexible';
+export type SpendingRuleMatchName = 'description' | 'contains';
+export type SpendingCutsStatusName = 'no_data' | 'no_income' | 'goal_met' | 'cut_suggested' | 'exceeds_flexible';
 
 export interface AnalyticsEventMap {
     auth_screen_viewed: undefined;
@@ -36,6 +40,25 @@ export interface AnalyticsEventMap {
     portfolio_asset_targets_saved: { assetCount: number };
     portfolio_contribution_calculated: { classesFunded: number; currency: CurrencyCode };
     portfolio_onboarding_assets_step: { count: number };
+    spending_credentials_saved: undefined;
+    spending_credentials_removed: undefined;
+    spending_items_added: { connected: number; failed: number };
+    spending_sync_requested: { scope: 'one' | 'all' };
+    spending_tutorial_step_checked: { step: number };
+    spending_pluggy_link_clicked: { target: 'meu' | 'dashboard' | 'github' };
+    spending_import_previewed: { format: SpendingImportFormatName };
+    spending_import_completed: { format: SpendingImportFormatName; inserted: number; duplicates: number };
+    spending_import_undone: undefined;
+    spending_transaction_recategorized: { withRule: boolean; scope: 'counterparty' | 'description' | null };
+    spending_rule_created: { matchType: SpendingRuleMatchName };
+    spending_rule_deleted: undefined;
+    spending_category_created: undefined;
+    spending_flexibility_changed: { flexibility: SpendingFlexibilityName };
+    spending_goal_saved: undefined;
+    spending_income_mode_changed: { mode: 'transactions' | 'declared' };
+    spending_cuts_viewed: { status: SpendingCutsStatusName };
+    spending_contribution_shortcut: undefined;
+    spending_export_downloaded: { format: ExportFormatName };
 }
 
 export type AnalyticsEventName = keyof AnalyticsEventMap;

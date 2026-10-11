@@ -4,6 +4,7 @@ import { Menu, X } from 'lucide-react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { BrandLogo } from '@/shared/ui/brand-logo';
 import { SidebarContent, type SidebarContentProps } from './sidebar';
+import { useNavBadgeCount } from './use-nav-badge-count';
 
 const FOCUSABLE: string = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
@@ -91,6 +92,7 @@ export function MobileTopBar(props: SidebarContentProps): ReactElement {
     const { t }: UseTranslationResponse<'common', undefined> = useTranslation();
     const [open, setOpen] = useState<boolean>(false);
     const triggerRef: RefObject<HTMLButtonElement | null> = useRef<HTMLButtonElement>(null);
+    const pending: number = useNavBadgeCount(props.items);
 
     const close = (): void => {
         setOpen(false);
@@ -103,14 +105,15 @@ export function MobileTopBar(props: SidebarContentProps): ReactElement {
             <button
                 ref={triggerRef}
                 type="button"
-                aria-label={t('openMenu')}
+                aria-label={pending > 0 ? t('openMenuPending', { count: pending }) : t('openMenu')}
                 aria-expanded={open}
                 onClick={(): void => {
                     setOpen(true);
                 }}
-                className="grid size-11 place-items-center rounded-control text-content hover:bg-surface-muted"
+                className="relative grid size-11 place-items-center rounded-control text-content hover:bg-surface-muted"
             >
                 <Menu className="size-5" aria-hidden="true" />
+                {pending > 0 ? <span aria-hidden="true" className="absolute top-2 right-2 size-2.5 rounded-full bg-caution" /> : null}
             </button>
             {open ? <Drawer {...props} onClose={close} /> : null}
         </header>
