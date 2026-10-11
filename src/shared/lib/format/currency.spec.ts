@@ -1,26 +1,30 @@
 import { describe, expect, it, vi } from 'vitest';
-import { formatMoney } from './currency';
+import { formatCurrency } from './currency';
 
-describe('formatMoney', () => {
+describe('formatCurrency', () => {
     it('formata reais com o separador de pt-BR', () => {
-        expect(formatMoney(123456, 'BRL', 'pt-BR')).toBe('R$ 1.234,56');
+        expect(formatCurrency(123456, 'BRL', 'pt-BR')).toBe('R$ 1.234,56');
+    });
+
+    it('formata dólares com a pontuação brasileira', () => {
+        expect(formatCurrency(123456, 'USD', 'pt-BR')).toBe('US$\u00a01.234,56');
     });
 
     it('formata pesos argentinos com o separador de pt-BR', () => {
-        expect(formatMoney(123456, 'ARS', 'pt-BR')).toBe('ARS 1.234,56');
+        expect(formatCurrency(123456, 'ARS', 'pt-BR')).toBe('ARS 1.234,56');
     });
 
     it('formata dólares com o separador de en', () => {
-        expect(formatMoney(123456, 'USD', 'en')).toBe('$1,234.56');
+        expect(formatCurrency(123456, 'USD', 'en')).toBe('$1,234.56');
     });
 
     it('não usa casas decimais para uma moeda sem centavos (CLP)', () => {
-        expect(formatMoney(1234, 'CLP', 'pt-BR')).toBe('CLP\u00a01.234');
+        expect(formatCurrency(1234, 'CLP', 'pt-BR')).toBe('CLP\u00a01.234');
     });
 
     it('nunca divide por 100 de forma fixa: usa o expoente do Intl para a moeda', () => {
-        expect(formatMoney(123456, 'ARS', 'pt-BR')).toBe('ARS 1.234,56');
-        expect(formatMoney(1234, 'CLP', 'pt-BR')).not.toContain(',');
+        expect(formatCurrency(123456, 'ARS', 'pt-BR')).toBe('ARS 1.234,56');
+        expect(formatCurrency(1234, 'CLP', 'pt-BR')).not.toContain(',');
     });
 
     it('cai para duas casas quando o Intl não informa o expoente', () => {
@@ -42,7 +46,7 @@ describe('formatMoney', () => {
             maximumFractionDigits: undefined
         } as unknown as Intl.ResolvedNumberFormatOptions);
 
-        expect(formatMoney(123456, 'BRL', 'pt-BR')).toMatch(/R\$\s*1\.234,56/);
+        expect(formatCurrency(123456, 'BRL', 'pt-BR')).toMatch(/R\$\s*1\.234,56/);
 
         vi.restoreAllMocks();
     });

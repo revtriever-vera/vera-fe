@@ -4,6 +4,7 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import boundaries from 'eslint-plugin-boundaries';
+import i18next from 'eslint-plugin-i18next';
 import prettier from 'eslint-config-prettier';
 import local from './eslint-rules/index.mjs';
 
@@ -27,11 +28,40 @@ export default tseslint.config(
         languageOptions: {
             parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname }
         },
-        plugins: { react, 'react-hooks': reactHooks, 'jsx-a11y': jsxA11y, local },
+        plugins: { react, 'react-hooks': reactHooks, 'jsx-a11y': jsxA11y, i18next, local },
         settings: { react: { version: 'detect' } },
         rules: {
             ...reactHooks.configs.recommended.rules,
             ...jsxA11y.flatConfigs.recommended.rules,
+            'i18next/no-literal-string': [
+                'error',
+                {
+                    mode: 'jsx-only',
+                    'jsx-attributes': {
+                        exclude: [
+                            'className',
+                            'style',
+                            'styleName',
+                            'type',
+                            'key',
+                            'id',
+                            'width',
+                            'height',
+                            'data-.*',
+                            'aria-hidden',
+                            'to',
+                            'href',
+                            'role',
+                            'name',
+                            'htmlFor',
+                            'variant',
+                            'size',
+                            'tone',
+                            'field'
+                        ]
+                    }
+                }
+            ],
             'react/jsx-key': 'error',
             'react/self-closing-comp': 'error',
             eqeqeq: ['error', 'always'],
@@ -107,10 +137,15 @@ export default tseslint.config(
         rules: { '@typescript-eslint/only-throw-error': 'off' }
     },
     {
+        files: ['src/features/dev/**/*.tsx', 'src/routes/_dev/**/*.tsx'],
+        rules: { 'i18next/no-literal-string': 'off' }
+    },
+    {
         files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx', 'test/**/*.ts', 'test/**/*.tsx'],
         rules: {
             'local/no-else': 'off',
             'local/no-search-in-loop': 'off',
+            'i18next/no-literal-string': 'off',
             'max-lines-per-function': 'off'
         }
     },

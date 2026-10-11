@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import { cn } from '@/shared/lib/cn';
-import { formatMoney } from '@/shared/lib/format/currency';
+import { formatCurrency } from '@/shared/lib/format/currency';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { useUiLocale } from './ui-text';
 
@@ -15,7 +15,7 @@ export function Money({ amountMinor, currency, tone = 'default', className }: Mo
     const locale: SupportedLocale = useUiLocale();
     return (
         <span className={cn('numeric', tone === 'positive' && 'text-positive font-semibold', className)}>
-            {formatMoney(amountMinor, currency, locale)}
+            {formatCurrency(amountMinor, currency, locale)}
         </span>
     );
 }

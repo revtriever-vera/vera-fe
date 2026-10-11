@@ -1,5 +1,6 @@
+import { useTranslation, type UseTranslationResponse } from 'react-i18next';
+import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
-import { DEFAULT_LOCALE } from '@/shared/lib/locale';
 
 export interface UiText {
     readonly previous: string;
@@ -22,31 +23,30 @@ export interface UiText {
     readonly dismissAlert: string;
 }
 
-const PT_BR_TEXT: UiText = {
-    previous: 'Anterior',
-    next: 'Próxima',
-    close: 'Fechar',
-    cancel: 'Cancelar',
-    pleaseWait: 'Aguarde…',
-    previousMonth: 'Mês anterior',
-    nextMonth: 'Próximo mês',
-    openCalendarFor: (label: string): string => `Abrir calendário de ${label}`,
-    datePlaceholder: 'dd/mm/aaaa',
-    hidePassword: 'Ocultar senha',
-    showPassword: 'Mostrar senha',
-    copied: 'Copiado',
-    change: 'Trocar',
-    dropFileHere: 'Arraste o arquivo aqui',
-    orClickToChoose: 'ou clique para escolher',
-    fileRejected: 'Arquivo recusado — confira o formato e o tamanho.',
-    requestId: (value: string): string => `requestId: ${value}`,
-    dismissAlert: 'Fechar aviso'
-};
-
 export function useUiText(): UiText {
-    return PT_BR_TEXT;
+    const { t }: UseTranslationResponse<'common', undefined> = useTranslation();
+    return {
+        previous: t('previous'),
+        next: t('next'),
+        close: t('close'),
+        cancel: t('cancel'),
+        pleaseWait: t('pleaseWait'),
+        previousMonth: t('previousMonth'),
+        nextMonth: t('nextMonth'),
+        openCalendarFor: (label: string): string => t('openCalendarFor', { label }),
+        datePlaceholder: t('datePlaceholder'),
+        hidePassword: t('hidePassword'),
+        showPassword: t('showPassword'),
+        copied: t('copied'),
+        change: t('change'),
+        dropFileHere: t('dropFileHere'),
+        orClickToChoose: t('orClickToChoose'),
+        fileRejected: t('fileRejected'),
+        requestId: (value: string): string => t('requestId', { value }),
+        dismissAlert: t('dismissAlert')
+    };
 }
 
 export function useUiLocale(): SupportedLocale {
-    return DEFAULT_LOCALE;
+    return useLocale();
 }
