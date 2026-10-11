@@ -34,6 +34,9 @@ function useFlexibilityChange(category: FlexibilityTarget): FlexibilityChange {
     return {
         pending: update.isPending,
         toggle: (): void => {
+            if (update.isPending) {
+                return;
+            }
             const flexibility: CategoryFlexibility =
                 category.flexibility === FLEXIBILITY.flexible ? FLEXIBILITY.fixed : FLEXIBILITY.flexible;
             update.mutate(
@@ -65,10 +68,10 @@ export function FlexibilityToggle({ category, size = 'sm' }: FlexibilityTogglePr
             type="button"
             aria-pressed={flexible}
             aria-label={t('flexibility.toggleLabel', { name: label(category), state })}
-            disabled={change.pending}
+            aria-disabled={change.pending}
             onClick={change.toggle}
             className={cn(
-                'rounded-control border font-semibold transition-colors disabled:pointer-events-none disabled:opacity-60',
+                'rounded-control border font-semibold transition-colors aria-disabled:cursor-progress aria-disabled:opacity-60',
                 SIZE_CLASS[size],
                 flexible ? 'border-accent bg-accent-soft text-accent-strong' : 'border-border bg-surface-muted text-content-muted'
             )}

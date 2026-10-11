@@ -160,6 +160,16 @@ describe('ConnectionsPage: sincronizar e remover', () => {
         expect(screen.getByText('Não foi possível pedir a atualização agora. Tente de novo em instantes.')).toBeInTheDocument();
     });
 
+    it('o 422 de item não encontrado orienta a autorizar de novo', async () => {
+        const { user } = await openConnectionsPage({ ...withConnections(connectionView()), syncStatus: 422 });
+
+        await user.click(await screen.findByRole('button', { name: /Sincronizar agora Itaú/ }));
+
+        expect(await screen.findByText('Não foi possível pedir a atualização')).toBeInTheDocument();
+        expect(screen.getByText(/Autorize de novo na Demo da sua aplicação/)).toBeInTheDocument();
+        expect(screen.queryByText('Esse Item ID não foi encontrado na sua conta do Meu Pluggy.')).not.toBeInTheDocument();
+    });
+
     it('"Sincronizar tudo" com 503 mostra o toast crítico', async () => {
         const { user } = await openConnectionsPage({ ...withConnections(connectionView()), syncStatus: 503 });
 

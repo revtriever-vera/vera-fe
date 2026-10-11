@@ -16,6 +16,7 @@ export const ITEM_MISSING: string = '00000000-0000-4000-8000-00000000a404';
 
 const SYNC_ERRORS: Readonly<Record<number, string>> = {
     409: 'connections.sync_in_progress',
+    422: 'connections.item_not_found',
     503: 'connections.sync_unavailable'
 };
 

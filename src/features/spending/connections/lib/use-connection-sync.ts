@@ -24,8 +24,8 @@ export function useConnectionSync(onRequested: () => void): ConnectionSync {
         const inProgress: boolean = error instanceof ApiError && error.problem.type === 'connections.sync_in_progress';
         toast.show({
             tone: inProgress ? 'neutral' : 'critical',
-            title: inProgress ? spendingErrorMessage(ts, error) : t('banks.toasts.syncFailed'),
-            detail: inProgress ? undefined : spendingErrorMessage(ts, error)
+            title: inProgress ? spendingErrorMessage(ts, error, 'sync') : t('banks.toasts.syncFailed'),
+            detail: inProgress ? undefined : spendingErrorMessage(ts, error, 'sync')
         });
     };
     const syncOne = (id: string): void => {

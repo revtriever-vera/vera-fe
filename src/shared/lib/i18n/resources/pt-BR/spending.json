@@ -136,6 +136,7 @@
     "credentialsMissing": "Cadastre antes a sua credencial do Meu Pluggy.",
     "invalidCredentials": "A Pluggy não aceitou essas credenciais. Confira o Client ID e o Client Secret.",
     "itemNotFound": "Esse Item ID não foi encontrado na sua conta do Meu Pluggy.",
+    "itemNotFoundOnSync": "Essa conexão perdeu o acesso à Pluggy. Autorize de novo na Demo da sua aplicação e cole o novo Item ID.",
     "providerUnavailable": "A Pluggy está fora do ar agora. Tente de novo em instantes.",
     "providerDisabled": "Esta instalação ainda não tem a integração com a Pluggy ligada.",
     "syncInProgress": "Já existe uma atualização em andamento para essa conexão.",
