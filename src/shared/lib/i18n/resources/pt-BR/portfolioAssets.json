@@ -1,3 +1,190 @@
 {
-  "title": "Meus ativos"
+  "title": "Meus ativos",
+  "addButton": "Adicionar ativo",
+  "modal": {
+    "title": "O que você quer adicionar?",
+    "description": "Escolha o tipo de investimento. Você pode adicionar quantos quiser, um de cada vez.",
+    "back": "Voltar aos tipos",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "add": "Adicionar à carteira",
+    "adding": "Adicionando…"
+  },
+  "typeCards": {
+    "label": "Tipos de investimento",
+    "count_one": "{{count}} ativo",
+    "count_other": "{{count}} ativos"
+  },
+  "types": {
+    "fixed_income": {
+      "name": "Renda fixa",
+      "description": "CDB, LCI, LCA, LC, debêntures"
+    },
+    "tesouro": {
+      "name": "Tesouro Direto",
+      "description": "Selic, Prefixado, IPCA+"
+    },
+    "acoes_br": {
+      "name": "Ações brasileiras",
+      "description": "ações e ETFs da B3"
+    },
+    "fii": {
+      "name": "Fundos imobiliários",
+      "description": "FIIs da B3"
+    },
+    "acoes_eua": {
+      "name": "Ações americanas",
+      "description": "ações, ETFs e BDRs"
+    },
+    "reits": {
+      "name": "REITs",
+      "description": "imóveis nos EUA"
+    },
+    "cripto": {
+      "name": "Criptomoedas",
+      "description": "Bitcoin, Ethereum e outras"
+    }
+  },
+  "search": {
+    "label": "Buscar em {{type}}",
+    "placeholder": "Busque por ticker ou nome",
+    "resultsLabel": "Resultados da busca",
+    "loading": "Buscando…",
+    "empty": "Nada encontrado para essa busca.",
+    "found_one": "{{count}} resultado",
+    "found_other": "{{count}} resultados",
+    "failed": "Não foi possível buscar agora. Tente de novo em instantes."
+  },
+  "kinds": {
+    "stock": "Ação",
+    "etf": "ETF",
+    "fii": "FII",
+    "bdr": "BDR",
+    "reit": "REIT",
+    "crypto": "Cripto",
+    "treasury": "Tesouro"
+  },
+  "result": {
+    "held": "Já na carteira",
+    "pricePending": "buscando preço…",
+    "priceUnavailable": "preço indisponível"
+  },
+  "exposure": {
+    "etf": "ETF negociado na B3 com exposição a ações dos EUA",
+    "bdr": "BDR negociado na B3 com exposição a ações dos EUA",
+    "generic": "Negociado na B3 com exposição ao dólar"
+  },
+  "exposurePreview": {
+    "etf": "ETF negociado na B3 com exposição a ações dos EUA, por isso entra em {{className}}. Você pode trocar a classe.",
+    "bdr": "BDR negociado na B3 com exposição a ações dos EUA, por isso entra em {{className}}. Você pode trocar a classe.",
+    "generic": "Negociado na B3 com exposição ao dólar, por isso entra em {{className}}. Você pode trocar a classe."
+  },
+  "position": {
+    "pickHint": "Escolha um ativo na lista para informar a quantidade.",
+    "quantity": "Quantidade",
+    "quantityHint_one": "Até {{count}} casa decimal",
+    "quantityHint_other": "Até {{count}} casas decimais",
+    "quantityHintInteger": "Só quantidades inteiras",
+    "averagePrice": "Preço médio (opcional)",
+    "class": "Classe",
+    "classPlaceholder": "Escolha a classe",
+    "classNoSuggestion": "Não temos uma sugestão para este ativo. Escolha a classe em que ele entra.",
+    "valueLabel": "Valor hoje",
+    "valueEmpty": "—",
+    "legendQuote": "Valor estimado, atualizado todo dia pela cotação",
+    "legendTreasury": "Valor estimado, atualizado todo dia pelo preço oficial do Tesouro",
+    "noPrice": "Ainda sem cotação. O valor oficial aparece depois de salvar.",
+    "noRate": "Câmbio do dia indisponível. O valor oficial aparece depois de salvar.",
+    "errors": {
+      "quantityRequired": "Informe a quantidade.",
+      "quantityInvalid": "Use só números, sem sinal negativo.",
+      "quantityInteger": "Este ativo só aceita quantidades inteiras.",
+      "quantityDecimals_one": "Este ativo aceita até {{count}} casa decimal.",
+      "quantityDecimals_other": "Este ativo aceita até {{count}} casas decimais.",
+      "priceInvalid": "Informe um preço válido.",
+      "classRequired": "Escolha a classe do ativo."
+    }
+  },
+  "existing": {
+    "title": "Você já tem este ativo",
+    "description": "Cada ativo entra uma vez só na carteira. Ajuste a quantidade da posição que já existe.",
+    "current": "Quantidade atual",
+    "quantity": "Nova quantidade",
+    "update": "Atualizar quantidade",
+    "updating": "Atualizando…",
+    "loadFailed": "Não foi possível abrir a posição existente."
+  },
+  "fixedIncome": {
+    "kind": "Tipo do título",
+    "kinds": {
+      "cdb": "CDB",
+      "lci": "LCI",
+      "lca": "LCA",
+      "lc": "LC",
+      "debenture": "Debênture",
+      "cri": "CRI",
+      "cra": "CRA"
+    },
+    "name": "Nome do título",
+    "namePlaceholder": "Ex.: CDB Banco XP",
+    "indexer": "Indexador",
+    "indexers": {
+      "cdi_percent": "% do CDI",
+      "prefixed": "Prefixado",
+      "ipca_plus": "IPCA+"
+    },
+    "rate": {
+      "cdi_percent": "Percentual do CDI",
+      "prefixed": "Taxa ao ano (%)",
+      "ipca_plus": "Taxa real ao ano (%) acima do IPCA"
+    },
+    "applied": "Valor aplicado",
+    "currency": "Moeda",
+    "appliedAt": "Data da aplicação",
+    "maturityDate": "Vencimento",
+    "class": "Classe",
+    "classPlaceholder": "Escolha a classe",
+    "tesouroNotice": "Tem Tesouro Direto? Volte e escolha o card Tesouro Direto: lá você informa só a quantidade de títulos.",
+    "errors": {
+      "nameRequired": "Informe o nome do título.",
+      "nameTooLong": "Use até 80 caracteres.",
+      "rateRequired": "Informe a taxa.",
+      "rateOutOfRange": "A taxa está fora do intervalo aceito para este indexador.",
+      "appliedRequired": "Informe o valor aplicado.",
+      "appliedAtRequired": "Informe a data da aplicação.",
+      "appliedAtOutOfRange": "A aplicação precisa ser de 2010 em diante e não pode ser no futuro.",
+      "maturityRequired": "Informe o vencimento.",
+      "maturityBeforeApplied": "O vencimento precisa ser depois da aplicação.",
+      "usdRequiresPrefixed": "Em dólar, só títulos prefixados.",
+      "classRequired": "Escolha a classe do título."
+    },
+    "preview": {
+      "empty": "Preencha os dados do título para ver quanto ele vale hoje.",
+      "terms": "{{kind}} · {{indexer}}",
+      "loading": "Calculando…",
+      "failed": "Não foi possível calcular agora. Você ainda pode adicionar o título.",
+      "label": "Valor estimado hoje",
+      "labelMatured": "Valor estimado no vencimento",
+      "matured": "Vencido",
+      "summary": "{{applied}} aplicados há {{years}} · {{rate}} a.a.",
+      "summaryNoRate": "{{applied}} aplicados há {{years}}",
+      "years_one": "{{years}} ano",
+      "years_other": "{{years}} anos",
+      "maturesOn": "vence {{date}}",
+      "sources": {
+        "curve_cdi": "Curva do CDI (BC)",
+        "curve_pre": "Taxa contratada",
+        "curve_ipca": "IPCA + taxa (BC)"
+      },
+      "note": "O sistema recalcula esse valor todo dia com as séries do Banco Central. Você nunca precisa atualizar o saldo à mão.",
+      "indexMissing": "Ainda não temos as séries do Banco Central para todo esse período. Mostramos o valor aplicado até a atualização."
+    }
+  },
+  "toasts": {
+    "added": "{{name}} adicionado em {{className}}",
+    "updated": "{{symbol}} atualizado",
+    "duplicate": "Esse ativo já estava na sua carteira. Ajuste a quantidade abaixo.",
+    "addFailed": "Não foi possível adicionar",
+    "updateFailed": "Não foi possível atualizar"
+  }
 }

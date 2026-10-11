@@ -804,6 +804,162 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/fixed-income/titles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Register a fixed income security
+         * @description Registers a private fixed income security by its contract terms and returns its value today, accrued on the curve with the Brazilian central bank series (CDI daily, IPCA monthly; prefixed by its rate). The class is assigned in the same transaction: the sent `classId` or the one suggested by the indexer. Securities are never deduplicated. A company holds at most 200.
+         */
+        post: operations["FixedIncomeController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/fixed-income/titles/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read a fixed income security
+         * @description Returns the security with its valuation today. `valuation.estimated` flags projected business days or an unpublished IPCA; `valuation.status = index_data_missing` means the series do not cover the period and the value is the applied amount. The estimated net value is detail only and never part of the net worth total.
+         */
+        get: operations["FixedIncomeController_get"];
+        put?: never;
+        post?: never;
+        /**
+         * Remove a fixed income security
+         * @description Soft deletes the security and releases its class assignment.
+         */
+        delete: operations["FixedIncomeController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Edit a fixed income security
+         * @description Changes any term of the security; the merged terms are validated again and the valuation is recalculated. The class is changed through the allocation assignments, not here.
+         */
+        patch: operations["FixedIncomeController_update"];
+        trace?: never;
+    };
+    "/fixed-income/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Estimate the value of a security without saving it
+         * @description Calculates the valuation today for the given terms with the same engine as the registration, and stores nothing. Limited to 120 calls per minute per company.
+         */
+        post: operations["FixedIncomeController_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/positions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Add an asset to the portfolio
+         * @description Creates the position of an active catalog asset with the class recorded in the same transaction. Without classId the class suggested by the catalog is used. Quantity zero is valid (an asset still to be bought). The same asset cannot be added twice: the 409 carries the id of the existing position so the client can edit it. The company holds at most 500 positions.
+         */
+        post: operations["PositionsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/positions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read a position
+         * @description Returns one position of the company with its class.
+         */
+        get: operations["PositionsController_get"];
+        put?: never;
+        post?: never;
+        /**
+         * Remove a position
+         * @description Removes the position and releases its class assignment and its target inside the class. The asset can be added again.
+         */
+        delete: operations["PositionsController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Edit the quantity or the average price of a position
+         * @description Changes quantity and/or average price (null clears it). The class changes through the assignment route of the allocation module.
+         */
+        patch: operations["PositionsController_update"];
+        trace?: never;
+    };
+    "/market-data/quotes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read the stored prices of up to 30 assets
+         * @description Reads only the shared quote table, never a provider. Assets with no price yet come back in pendingAssetIds and a background fetch is queued (one per asset per day); stale prices are returned with stale = true and also refreshed.
+         */
+        get: operations["MarketDataController_quotes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/market-data/exchange-rates/{currency}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read the latest exchange rate to BRL
+         * @description Latest PTAX sell rate dated on or before today, with its date. USD only in the MVP.
+         */
+        get: operations["MarketDataController_exchangeRate"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -6015,6 +6171,1593 @@ export interface operations {
             };
             /** @description A module failed and nothing was removed (onboarding.sample_failed) */
             500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    FixedIncomeController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * @description Kind of security: cdb, lci, lca, lc, debenture, cri or cra
+                     * @enum {string}
+                     */
+                    kind: "cdb" | "lci" | "lca" | "lc" | "debenture" | "cri" | "cra";
+                    /**
+                     * @description Indexer: `cdi_percent` (percentage of CDI), `prefixed` or `ipca_plus` (IPCA + fixed rate)
+                     * @enum {string}
+                     */
+                    indexer: "cdi_percent" | "prefixed" | "ipca_plus";
+                    /** @description Rate in basis points. `cdi_percent`: 100% of CDI = 10000 (1 to 30000). `prefixed` and `ipca_plus`: yearly rate, 12.5% = 1250 (prefixed 0 to 10000, ipca_plus 0 to 5000) */
+                    rateBps: number;
+                    /**
+                     * @description Currency of the security. `USD` only with the `prefixed` indexer; defaults to `BRL`
+                     * @enum {string}
+                     */
+                    currency?: "BRL" | "USD";
+                    /** @description Applied amount in the smallest unit of the currency (cents), greater than zero */
+                    appliedMinor: number;
+                    /** @description Application date, YYYY-MM-DD, from 2010-01-01 until today */
+                    appliedAt: string;
+                    /** @description Maturity date, YYYY-MM-DD, after the application date and at most 50 years ahead of it */
+                    maturityDate: string;
+                    /** @description Name given by the user, trimmed, 1 to 80 characters without control characters. Untrusted text */
+                    name: string;
+                    /**
+                     * Format: uuid
+                     * @description Class of the security; omitted uses the class suggested by the indexer
+                     */
+                    classId?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Security registered, with its valuation today */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Fixed income security id
+                         */
+                        id: string;
+                        /**
+                         * @description Kind of security: cdb, lci, lca, lc, debenture, cri or cra
+                         * @enum {string}
+                         */
+                        kind: "cdb" | "lci" | "lca" | "lc" | "debenture" | "cri" | "cra";
+                        /** @description Name given by the user */
+                        name: string;
+                        /**
+                         * @description Indexer: `cdi_percent` (percentage of CDI), `prefixed` or `ipca_plus` (IPCA + fixed rate)
+                         * @enum {string}
+                         */
+                        indexer: "cdi_percent" | "prefixed" | "ipca_plus";
+                        /** @description Rate in basis points. `cdi_percent`: 100% of CDI = 10000 (1 to 30000). `prefixed` and `ipca_plus`: yearly rate, 12.5% = 1250 (prefixed 0 to 10000, ipca_plus 0 to 5000) */
+                        rateBps: number;
+                        /**
+                         * @description Currency of the security
+                         * @enum {string}
+                         */
+                        currency: "BRL" | "USD";
+                        /** @description Applied amount in the smallest unit of the currency (cents), greater than zero */
+                        appliedMinor: number;
+                        /** @description Application date, YYYY-MM-DD */
+                        appliedAt: string;
+                        /** @description Maturity date, YYYY-MM-DD */
+                        maturityDate: string;
+                        /**
+                         * Format: uuid
+                         * @description Asset class the security belongs to
+                         */
+                        classId: string;
+                        /** @description Creation instant, ISO 8601 */
+                        createdAt: string;
+                        /** @description Last update instant, ISO 8601 */
+                        updatedAt: string;
+                        /** @description Valuation of the security today. A company holds at most 200 securities */
+                        valuation: {
+                            /** @description Reference date of the valuation, YYYY-MM-DD (São Paulo time) */
+                            asOf: string;
+                            /** @description Gross value on the curve in the smallest unit of the security currency */
+                            valueMinor: number;
+                            /**
+                             * @description Currency of the value
+                             * @enum {string}
+                             */
+                            currency: "BRL" | "USD";
+                            /** @description Gross yield accrued over the applied amount, in basis points */
+                            accruedBps: number;
+                            /** @description The security reached maturity; the value is frozen at the maturity date */
+                            matured: boolean;
+                            /** @description The value used projected business days or an unpublished IPCA */
+                            estimated: boolean;
+                            /**
+                             * @description `index_data_missing`: the index series do not cover the period and the value is the applied amount
+                             * @enum {string}
+                             */
+                            status: "ok" | "index_data_missing";
+                            /**
+                             * @description Curve used: `curve_cdi`, `curve_pre` or `curve_ipca`
+                             * @enum {string}
+                             */
+                            source: "curve_cdi" | "curve_pre" | "curve_ipca";
+                            /**
+                             * @description `regressive` income tax or `exempt` (LCI and LCA)
+                             * @enum {string}
+                             */
+                            taxRegime: "regressive" | "exempt";
+                            /** @description Estimated income tax. Detail only: never part of the net worth total */
+                            taxEstimatedMinor: number;
+                            /** @description Value net of the estimated income tax. Detail only: never part of the net worth total */
+                            netEstimatedMinor: number;
+                        };
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The sent classId does not exist in this company (allocation.class_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The application date is before 2010-01-01 or in the future (fixed_income.applied_date_out_of_range); The terms contradict each other: USD without prefixed, maturity not after application, term over 50 years or rate out of range (fixed_income.invalid_terms); or the company reached 200 securities (fixed_income.limit_reached) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    FixedIncomeController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Fixed income security id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Security with its valuation today */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Fixed income security id
+                         */
+                        id: string;
+                        /**
+                         * @description Kind of security: cdb, lci, lca, lc, debenture, cri or cra
+                         * @enum {string}
+                         */
+                        kind: "cdb" | "lci" | "lca" | "lc" | "debenture" | "cri" | "cra";
+                        /** @description Name given by the user */
+                        name: string;
+                        /**
+                         * @description Indexer: `cdi_percent` (percentage of CDI), `prefixed` or `ipca_plus` (IPCA + fixed rate)
+                         * @enum {string}
+                         */
+                        indexer: "cdi_percent" | "prefixed" | "ipca_plus";
+                        /** @description Rate in basis points. `cdi_percent`: 100% of CDI = 10000 (1 to 30000). `prefixed` and `ipca_plus`: yearly rate, 12.5% = 1250 (prefixed 0 to 10000, ipca_plus 0 to 5000) */
+                        rateBps: number;
+                        /**
+                         * @description Currency of the security
+                         * @enum {string}
+                         */
+                        currency: "BRL" | "USD";
+                        /** @description Applied amount in the smallest unit of the currency (cents), greater than zero */
+                        appliedMinor: number;
+                        /** @description Application date, YYYY-MM-DD */
+                        appliedAt: string;
+                        /** @description Maturity date, YYYY-MM-DD */
+                        maturityDate: string;
+                        /**
+                         * Format: uuid
+                         * @description Asset class the security belongs to
+                         */
+                        classId: string;
+                        /** @description Creation instant, ISO 8601 */
+                        createdAt: string;
+                        /** @description Last update instant, ISO 8601 */
+                        updatedAt: string;
+                        /** @description Valuation of the security today. A company holds at most 200 securities */
+                        valuation: {
+                            /** @description Reference date of the valuation, YYYY-MM-DD (São Paulo time) */
+                            asOf: string;
+                            /** @description Gross value on the curve in the smallest unit of the security currency */
+                            valueMinor: number;
+                            /**
+                             * @description Currency of the value
+                             * @enum {string}
+                             */
+                            currency: "BRL" | "USD";
+                            /** @description Gross yield accrued over the applied amount, in basis points */
+                            accruedBps: number;
+                            /** @description The security reached maturity; the value is frozen at the maturity date */
+                            matured: boolean;
+                            /** @description The value used projected business days or an unpublished IPCA */
+                            estimated: boolean;
+                            /**
+                             * @description `index_data_missing`: the index series do not cover the period and the value is the applied amount
+                             * @enum {string}
+                             */
+                            status: "ok" | "index_data_missing";
+                            /**
+                             * @description Curve used: `curve_cdi`, `curve_pre` or `curve_ipca`
+                             * @enum {string}
+                             */
+                            source: "curve_cdi" | "curve_pre" | "curve_ipca";
+                            /**
+                             * @description `regressive` income tax or `exempt` (LCI and LCA)
+                             * @enum {string}
+                             */
+                            taxRegime: "regressive" | "exempt";
+                            /** @description Estimated income tax. Detail only: never part of the net worth total */
+                            taxEstimatedMinor: number;
+                            /** @description Value net of the estimated income tax. Detail only: never part of the net worth total */
+                            netEstimatedMinor: number;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The security does not exist in this company (fixed_income.title_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    FixedIncomeController_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * @description Kind of security: cdb, lci, lca, lc, debenture, cri or cra
+                     * @enum {string}
+                     */
+                    kind: "cdb" | "lci" | "lca" | "lc" | "debenture" | "cri" | "cra";
+                    /**
+                     * @description Indexer: `cdi_percent` (percentage of CDI), `prefixed` or `ipca_plus` (IPCA + fixed rate)
+                     * @enum {string}
+                     */
+                    indexer: "cdi_percent" | "prefixed" | "ipca_plus";
+                    /** @description Rate in basis points. `cdi_percent`: 100% of CDI = 10000 (1 to 30000). `prefixed` and `ipca_plus`: yearly rate, 12.5% = 1250 (prefixed 0 to 10000, ipca_plus 0 to 5000) */
+                    rateBps: number;
+                    /**
+                     * @description Currency of the security. `USD` only with the `prefixed` indexer; defaults to `BRL`
+                     * @enum {string}
+                     */
+                    currency?: "BRL" | "USD";
+                    /** @description Applied amount in the smallest unit of the currency (cents), greater than zero */
+                    appliedMinor: number;
+                    /** @description Application date, YYYY-MM-DD, from 2010-01-01 until today */
+                    appliedAt: string;
+                    /** @description Maturity date, YYYY-MM-DD, after the application date and at most 50 years ahead of it */
+                    maturityDate: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Valuation today of the given terms */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Reference date of the valuation, YYYY-MM-DD (São Paulo time) */
+                        asOf: string;
+                        /** @description Gross value on the curve in the smallest unit of the security currency */
+                        valueMinor: number;
+                        /**
+                         * @description Currency of the value
+                         * @enum {string}
+                         */
+                        currency: "BRL" | "USD";
+                        /** @description Gross yield accrued over the applied amount, in basis points */
+                        accruedBps: number;
+                        /** @description The security reached maturity; the value is frozen at the maturity date */
+                        matured: boolean;
+                        /** @description The value used projected business days or an unpublished IPCA */
+                        estimated: boolean;
+                        /**
+                         * @description `index_data_missing`: the index series do not cover the period and the value is the applied amount
+                         * @enum {string}
+                         */
+                        status: "ok" | "index_data_missing";
+                        /**
+                         * @description Curve used: `curve_cdi`, `curve_pre` or `curve_ipca`
+                         * @enum {string}
+                         */
+                        source: "curve_cdi" | "curve_pre" | "curve_ipca";
+                        /**
+                         * @description `regressive` income tax or `exempt` (LCI and LCA)
+                         * @enum {string}
+                         */
+                        taxRegime: "regressive" | "exempt";
+                        /** @description Estimated income tax. Detail only: never part of the net worth total */
+                        taxEstimatedMinor: number;
+                        /** @description Value net of the estimated income tax. Detail only: never part of the net worth total */
+                        netEstimatedMinor: number;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The application date is before 2010-01-01 or in the future (fixed_income.applied_date_out_of_range); The terms contradict each other: USD without prefixed, maturity not after application, term over 50 years or rate out of range (fixed_income.invalid_terms) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 120 previews in a minute (core.too_many_attempts) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    FixedIncomeController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Fixed income security id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Security removed */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The security does not exist in this company (fixed_income.title_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    FixedIncomeController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Fixed income security id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * @description Kind of security: cdb, lci, lca, lc, debenture, cri or cra
+                     * @enum {string}
+                     */
+                    kind?: "cdb" | "lci" | "lca" | "lc" | "debenture" | "cri" | "cra";
+                    /** @description Name given by the user, trimmed, 1 to 80 characters without control characters. Untrusted text */
+                    name?: string;
+                    /**
+                     * @description Indexer: `cdi_percent` (percentage of CDI), `prefixed` or `ipca_plus` (IPCA + fixed rate)
+                     * @enum {string}
+                     */
+                    indexer?: "cdi_percent" | "prefixed" | "ipca_plus";
+                    /** @description Rate in basis points. `cdi_percent`: 100% of CDI = 10000 (1 to 30000). `prefixed` and `ipca_plus`: yearly rate, 12.5% = 1250 (prefixed 0 to 10000, ipca_plus 0 to 5000) */
+                    rateBps?: number;
+                    /**
+                     * @description Currency of the security. `USD` only with the `prefixed` indexer; defaults to `BRL`
+                     * @enum {string}
+                     */
+                    currency?: "BRL" | "USD";
+                    /** @description Applied amount in the smallest unit of the currency (cents), greater than zero */
+                    appliedMinor?: number;
+                    /** @description Application date, YYYY-MM-DD, from 2010-01-01 until today */
+                    appliedAt?: string;
+                    /** @description Maturity date, YYYY-MM-DD, after the application date and at most 50 years ahead of it */
+                    maturityDate?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Security after the change, with its valuation today */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Fixed income security id
+                         */
+                        id: string;
+                        /**
+                         * @description Kind of security: cdb, lci, lca, lc, debenture, cri or cra
+                         * @enum {string}
+                         */
+                        kind: "cdb" | "lci" | "lca" | "lc" | "debenture" | "cri" | "cra";
+                        /** @description Name given by the user */
+                        name: string;
+                        /**
+                         * @description Indexer: `cdi_percent` (percentage of CDI), `prefixed` or `ipca_plus` (IPCA + fixed rate)
+                         * @enum {string}
+                         */
+                        indexer: "cdi_percent" | "prefixed" | "ipca_plus";
+                        /** @description Rate in basis points. `cdi_percent`: 100% of CDI = 10000 (1 to 30000). `prefixed` and `ipca_plus`: yearly rate, 12.5% = 1250 (prefixed 0 to 10000, ipca_plus 0 to 5000) */
+                        rateBps: number;
+                        /**
+                         * @description Currency of the security
+                         * @enum {string}
+                         */
+                        currency: "BRL" | "USD";
+                        /** @description Applied amount in the smallest unit of the currency (cents), greater than zero */
+                        appliedMinor: number;
+                        /** @description Application date, YYYY-MM-DD */
+                        appliedAt: string;
+                        /** @description Maturity date, YYYY-MM-DD */
+                        maturityDate: string;
+                        /**
+                         * Format: uuid
+                         * @description Asset class the security belongs to
+                         */
+                        classId: string;
+                        /** @description Creation instant, ISO 8601 */
+                        createdAt: string;
+                        /** @description Last update instant, ISO 8601 */
+                        updatedAt: string;
+                        /** @description Valuation of the security today. A company holds at most 200 securities */
+                        valuation: {
+                            /** @description Reference date of the valuation, YYYY-MM-DD (São Paulo time) */
+                            asOf: string;
+                            /** @description Gross value on the curve in the smallest unit of the security currency */
+                            valueMinor: number;
+                            /**
+                             * @description Currency of the value
+                             * @enum {string}
+                             */
+                            currency: "BRL" | "USD";
+                            /** @description Gross yield accrued over the applied amount, in basis points */
+                            accruedBps: number;
+                            /** @description The security reached maturity; the value is frozen at the maturity date */
+                            matured: boolean;
+                            /** @description The value used projected business days or an unpublished IPCA */
+                            estimated: boolean;
+                            /**
+                             * @description `index_data_missing`: the index series do not cover the period and the value is the applied amount
+                             * @enum {string}
+                             */
+                            status: "ok" | "index_data_missing";
+                            /**
+                             * @description Curve used: `curve_cdi`, `curve_pre` or `curve_ipca`
+                             * @enum {string}
+                             */
+                            source: "curve_cdi" | "curve_pre" | "curve_ipca";
+                            /**
+                             * @description `regressive` income tax or `exempt` (LCI and LCA)
+                             * @enum {string}
+                             */
+                            taxRegime: "regressive" | "exempt";
+                            /** @description Estimated income tax. Detail only: never part of the net worth total */
+                            taxEstimatedMinor: number;
+                            /** @description Value net of the estimated income tax. Detail only: never part of the net worth total */
+                            netEstimatedMinor: number;
+                        };
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The security does not exist in this company (fixed_income.title_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The application date is before 2010-01-01 or in the future (fixed_income.applied_date_out_of_range); The terms contradict each other: USD without prefixed, maturity not after application, term over 50 years or rate out of range (fixed_income.invalid_terms) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    MarketDataController_exchangeRate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ISO 4217 code of the foreign currency */
+                currency: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The latest stored rate */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description ISO 4217 code of the currency */
+                        currency: string;
+                        /** @description How many reais one unit of the currency is worth, as a decimal string */
+                        brlPerUnit: string;
+                        /** @description Date (YYYY-MM-DD) of the rate, the latest on or before today */
+                        date: string;
+                        /** @description bcb-ptax, or mock outside live environments */
+                        source: string;
+                    };
+                };
+            };
+            /** @description Malformed currency code (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No rate stored for the currency (market-data.exchange_rate_unavailable) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    MarketDataController_quotes: {
+        parameters: {
+            query: {
+                /** @description Comma separated catalog asset ids, from 1 to 30 */
+                assetIds: unknown;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Stored prices and the assets still pending */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Prices already stored */
+                        quotes: {
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset id
+                             */
+                            assetId: string;
+                            /** @description Last known price as a decimal string, in the asset currency */
+                            price: string;
+                            /** @description ISO 4217 currency of the price */
+                            currency: string;
+                            /** @description Date (YYYY-MM-DD) of the session the price refers to */
+                            priceDate: string;
+                            /** @description Provider that answered: brapi, finnhub, twelvedata, alphavantage, coingecko, tesouro or mock */
+                            source: string;
+                            /** @description Whether the price is older than the freshness window; the value is still shown, with a warning */
+                            stale: boolean;
+                        }[];
+                        /** @description Assets without a price yet; a background fetch was queued for them */
+                        pendingAssetIds: string[];
+                    };
+                };
+            };
+            /** @description Invalid query: missing, malformed or more than 30 ids (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 120 reads in a minute for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PositionsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: uuid
+                     * @description Id of an active asset of the catalog
+                     */
+                    assetId: string;
+                    /** @description Decimal string, zero or more, up to 18 integer and 10 fractional digits, no sign or exponent. The decimal places allowed depend on the asset (B3 whole units, US up to 6, crypto up to 8, Tesouro 2) */
+                    quantity: string;
+                    /** @description Average price paid, decimal string zero or more, in the currency of the asset; null when unknown. Informational only */
+                    averagePrice?: string | null;
+                    /**
+                     * Format: uuid
+                     * @description Class of the position; omitted uses the class suggested by the catalog for the asset
+                     */
+                    classId?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Position created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Position id
+                         */
+                        id: string;
+                        /**
+                         * Format: uuid
+                         * @description Id of the catalog asset
+                         */
+                        assetId: string;
+                        /** @description Quantity held, decimal string without trailing zeros */
+                        quantity: string;
+                        /** @description Average price paid in the asset currency, or null */
+                        averagePrice: string | null;
+                        /**
+                         * Format: uuid
+                         * @description Class the position belongs to
+                         */
+                        classId: string;
+                        /**
+                         * Format: date-time
+                         * @description Creation instant, ISO 8601
+                         */
+                        createdAt: string;
+                        /**
+                         * Format: date-time
+                         * @description Last change instant, ISO 8601
+                         */
+                        updatedAt: string;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The asset (catalog.asset_not_found) or the class (allocation.class_not_found) does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The asset is already in the portfolio (positions.asset_already_in_portfolio); meta.positionId is the existing position */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Too many decimal places for the asset (positions.invalid_quantity), no class to record (positions.class_required), asset no longer listed (positions.asset_not_available) or position limit reached (positions.limit_reached) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PositionsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Position id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Position */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Position id
+                         */
+                        id: string;
+                        /**
+                         * Format: uuid
+                         * @description Id of the catalog asset
+                         */
+                        assetId: string;
+                        /** @description Quantity held, decimal string without trailing zeros */
+                        quantity: string;
+                        /** @description Average price paid in the asset currency, or null */
+                        averagePrice: string | null;
+                        /**
+                         * Format: uuid
+                         * @description Class the position belongs to
+                         */
+                        classId: string;
+                        /**
+                         * Format: date-time
+                         * @description Creation instant, ISO 8601
+                         */
+                        createdAt: string;
+                        /**
+                         * Format: date-time
+                         * @description Last change instant, ISO 8601
+                         */
+                        updatedAt: string;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The position does not exist in this company (positions.position_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PositionsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Position id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Position removed */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The position does not exist in this company (positions.position_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PositionsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Position id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Decimal string, zero or more, up to 18 integer and 10 fractional digits, no sign or exponent. The decimal places allowed depend on the asset (B3 whole units, US up to 6, crypto up to 8, Tesouro 2) */
+                    quantity?: string;
+                    /** @description Average price paid, decimal string zero or more, in the currency of the asset; null when unknown. Informational only */
+                    averagePrice?: string | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Position after the change */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Position id
+                         */
+                        id: string;
+                        /**
+                         * Format: uuid
+                         * @description Id of the catalog asset
+                         */
+                        assetId: string;
+                        /** @description Quantity held, decimal string without trailing zeros */
+                        quantity: string;
+                        /** @description Average price paid in the asset currency, or null */
+                        averagePrice: string | null;
+                        /**
+                         * Format: uuid
+                         * @description Class the position belongs to
+                         */
+                        classId: string;
+                        /**
+                         * Format: date-time
+                         * @description Creation instant, ISO 8601
+                         */
+                        createdAt: string;
+                        /**
+                         * Format: date-time
+                         * @description Last change instant, ISO 8601
+                         */
+                        updatedAt: string;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The position does not exist in this company (positions.position_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Too many decimal places for the asset (positions.invalid_quantity) */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };

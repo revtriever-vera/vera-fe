@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDate } from './date';
+import { formatDate, formatIsoDate } from './date';
 
 const SAME_INSTANT: Date = new Date('2026-01-15T14:30:00Z');
 
@@ -15,5 +15,13 @@ describe('formatDate', () => {
         const inEnglish: string = formatDate(SAME_INSTANT, 'en', 'America/Sao_Paulo');
         expect(inPortuguese).toBe('15/01/2026, 11:30');
         expect(inEnglish).toBe('1/15/26, 11:30 AM');
+    });
+});
+
+describe('formatIsoDate', () => {
+    it('formata a data civil sem depender do fuso do navegador', () => {
+        expect(formatIsoDate('2028-03-10', 'pt-BR')).toBe('10/03/2028');
+        expect(formatIsoDate('2028-03-10', 'en')).toBe('03/10/2028');
+        expect(formatIsoDate('2028-03-10T23:59:59Z', 'pt-BR')).toBe('10/03/2028');
     });
 });

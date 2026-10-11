@@ -1,3 +1,190 @@
 {
-  "title": "My assets"
+  "title": "My assets",
+  "addButton": "Add asset",
+  "modal": {
+    "title": "What do you want to add?",
+    "description": "Pick the type of investment. You can add as many as you like, one at a time.",
+    "back": "Back to types",
+    "cancel": "Cancel",
+    "close": "Close",
+    "add": "Add to portfolio",
+    "adding": "Adding…"
+  },
+  "typeCards": {
+    "label": "Investment types",
+    "count_one": "{{count}} asset",
+    "count_other": "{{count}} assets"
+  },
+  "types": {
+    "fixed_income": {
+      "name": "Fixed income",
+      "description": "CDB, LCI, LCA, LC, debentures"
+    },
+    "tesouro": {
+      "name": "Tesouro Direto",
+      "description": "Selic, fixed-rate, IPCA+"
+    },
+    "acoes_br": {
+      "name": "Brazilian stocks",
+      "description": "B3 stocks and ETFs"
+    },
+    "fii": {
+      "name": "Real estate funds",
+      "description": "B3 real estate funds (FIIs)"
+    },
+    "acoes_eua": {
+      "name": "US stocks",
+      "description": "stocks, ETFs and BDRs"
+    },
+    "reits": {
+      "name": "REITs",
+      "description": "US real estate"
+    },
+    "cripto": {
+      "name": "Cryptocurrencies",
+      "description": "Bitcoin, Ethereum and others"
+    }
+  },
+  "search": {
+    "label": "Search {{type}}",
+    "placeholder": "Search by ticker or name",
+    "resultsLabel": "Search results",
+    "loading": "Searching…",
+    "empty": "Nothing found for this search.",
+    "found_one": "{{count}} result",
+    "found_other": "{{count}} results",
+    "failed": "We could not search right now. Try again in a moment."
+  },
+  "kinds": {
+    "stock": "Stock",
+    "etf": "ETF",
+    "fii": "FII",
+    "bdr": "BDR",
+    "reit": "REIT",
+    "crypto": "Crypto",
+    "treasury": "Treasury"
+  },
+  "result": {
+    "held": "Already in portfolio",
+    "pricePending": "fetching price…",
+    "priceUnavailable": "price unavailable"
+  },
+  "exposure": {
+    "etf": "ETF traded on B3 with exposure to US stocks",
+    "bdr": "BDR traded on B3 with exposure to US stocks",
+    "generic": "Traded on B3 with dollar exposure"
+  },
+  "exposurePreview": {
+    "etf": "ETF traded on B3 with exposure to US stocks, so it goes into {{className}}. You can change the class.",
+    "bdr": "BDR traded on B3 with exposure to US stocks, so it goes into {{className}}. You can change the class.",
+    "generic": "Traded on B3 with dollar exposure, so it goes into {{className}}. You can change the class."
+  },
+  "position": {
+    "pickHint": "Pick an asset from the list to enter the quantity.",
+    "quantity": "Quantity",
+    "quantityHint_one": "Up to {{count}} decimal place",
+    "quantityHint_other": "Up to {{count}} decimal places",
+    "quantityHintInteger": "Whole quantities only",
+    "averagePrice": "Average price (optional)",
+    "class": "Class",
+    "classPlaceholder": "Choose the class",
+    "classNoSuggestion": "We have no suggestion for this asset. Choose the class it belongs to.",
+    "valueLabel": "Value today",
+    "valueEmpty": "—",
+    "legendQuote": "Estimated value, updated every day from the quote",
+    "legendTreasury": "Estimated value, updated every day from the official Tesouro price",
+    "noPrice": "No quote yet. The official value appears after saving.",
+    "noRate": "Today's exchange rate is unavailable. The official value appears after saving.",
+    "errors": {
+      "quantityRequired": "Enter the quantity.",
+      "quantityInvalid": "Use numbers only, no negative sign.",
+      "quantityInteger": "This asset only accepts whole quantities.",
+      "quantityDecimals_one": "This asset accepts up to {{count}} decimal place.",
+      "quantityDecimals_other": "This asset accepts up to {{count}} decimal places.",
+      "priceInvalid": "Enter a valid price.",
+      "classRequired": "Choose the asset's class."
+    }
+  },
+  "existing": {
+    "title": "You already have this asset",
+    "description": "Each asset is added once to the portfolio. Adjust the quantity of the position you already have.",
+    "current": "Current quantity",
+    "quantity": "New quantity",
+    "update": "Update quantity",
+    "updating": "Updating…",
+    "loadFailed": "We could not open the existing position."
+  },
+  "fixedIncome": {
+    "kind": "Security type",
+    "kinds": {
+      "cdb": "CDB",
+      "lci": "LCI",
+      "lca": "LCA",
+      "lc": "LC",
+      "debenture": "Debenture",
+      "cri": "CRI",
+      "cra": "CRA"
+    },
+    "name": "Security name",
+    "namePlaceholder": "E.g. CDB Banco XP",
+    "indexer": "Indexer",
+    "indexers": {
+      "cdi_percent": "% of CDI",
+      "prefixed": "Fixed-rate",
+      "ipca_plus": "IPCA+"
+    },
+    "rate": {
+      "cdi_percent": "Percentage of CDI",
+      "prefixed": "Annual rate (%)",
+      "ipca_plus": "Real annual rate (%) above IPCA"
+    },
+    "applied": "Amount invested",
+    "currency": "Currency",
+    "appliedAt": "Investment date",
+    "maturityDate": "Maturity",
+    "class": "Class",
+    "classPlaceholder": "Choose the class",
+    "tesouroNotice": "Have Tesouro Direto? Go back and pick the Tesouro Direto card: there you enter only the number of bonds.",
+    "errors": {
+      "nameRequired": "Enter the security name.",
+      "nameTooLong": "Use up to 80 characters.",
+      "rateRequired": "Enter the rate.",
+      "rateOutOfRange": "The rate is outside the accepted range for this indexer.",
+      "appliedRequired": "Enter the amount invested.",
+      "appliedAtRequired": "Enter the investment date.",
+      "appliedAtOutOfRange": "The investment must be from 2010 onwards and cannot be in the future.",
+      "maturityRequired": "Enter the maturity.",
+      "maturityBeforeApplied": "The maturity must be after the investment date.",
+      "usdRequiresPrefixed": "In dollars, only fixed-rate securities.",
+      "classRequired": "Choose the security's class."
+    },
+    "preview": {
+      "empty": "Fill in the security details to see what it is worth today.",
+      "terms": "{{kind}} · {{indexer}}",
+      "loading": "Calculating…",
+      "failed": "We could not calculate right now. You can still add the security.",
+      "label": "Estimated value today",
+      "labelMatured": "Estimated value at maturity",
+      "matured": "Matured",
+      "summary": "{{applied}} invested {{years}} ago · {{rate}} p.a.",
+      "summaryNoRate": "{{applied}} invested {{years}} ago",
+      "years_one": "{{years}} year",
+      "years_other": "{{years}} years",
+      "maturesOn": "matures {{date}}",
+      "sources": {
+        "curve_cdi": "CDI curve (BCB)",
+        "curve_pre": "Contracted rate",
+        "curve_ipca": "IPCA + rate (BCB)"
+      },
+      "note": "The system recalculates this value every day with the Central Bank series. You never need to update the balance by hand.",
+      "indexMissing": "We do not have the Central Bank series for this whole period yet. We show the amount invested until it is updated."
+    }
+  },
+  "toasts": {
+    "added": "{{name}} added to {{className}}",
+    "updated": "{{symbol}} updated",
+    "duplicate": "This asset was already in your portfolio. Adjust the quantity below.",
+    "addFailed": "Could not add",
+    "updateFailed": "Could not update"
+  }
 }
