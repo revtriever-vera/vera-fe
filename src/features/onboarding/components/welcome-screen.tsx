@@ -4,14 +4,18 @@ import { ArrowRight, Plug, Sparkles, Wallet } from 'lucide-react';
 import { Trans, useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { ONBOARDING_DESTINATIONS } from '@/app/onboarding-destinations';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
+import { track } from '@/shared/lib/analytics';
 import { Button } from '@/shared/ui/button';
 import { useLoadSample } from '../api/use-load-sample.mutation';
 import { useStartOnboarding } from '../api/use-start-onboarding.mutation';
 import { useLeaveOnboarding, type LeaveOnboarding } from '../lib/use-leave-onboarding';
 import { useOnboardingRunner, type RunOnboarding } from '../lib/use-onboarding-runner';
+import { useTrackStepViewed } from '../lib/use-track-step-viewed';
 import { ONBOARDING_PATHS } from '../types';
 import { PathCard } from './path-card';
 import { StepHeading } from './step-heading';
+
+const WELCOME_SCREEN: string = 'onboarding';
 
 export interface WelcomeScreenProps {
     readonly sampleAvailable: boolean;
@@ -51,6 +55,7 @@ function SampleButton(): ReactElement {
                 void run(
                     async () => sample.mutateAsync(),
                     async (state) => {
+                        track('sample_data_loaded', { source: 'welcome', screen: WELCOME_SCREEN });
                         toast.show({ tone: 'positive', title: t('sampleLoaded') });
                         await leave(state, ONBOARDING_DESTINATIONS.overview);
                     }
@@ -76,7 +81,10 @@ function StartButton(): ReactElement {
             onClick={(): void => {
                 void run(
                     async () => start.mutateAsync(),
-                    async () => navigate({ to: ONBOARDING_PATHS.assets })
+                    async () => {
+                        track('onboarding_started');
+                        await navigate({ to: ONBOARDING_PATHS.assets });
+                    }
                 );
             }}
         >
@@ -88,6 +96,7 @@ function StartButton(): ReactElement {
 
 export function WelcomeScreen({ sampleAvailable }: WelcomeScreenProps): ReactElement {
     const { t }: UseTranslationResponse<'onboarding', undefined> = useTranslation('onboarding');
+    useTrackStepViewed('welcome');
 
     return (
         <div className="mt-3 grid w-[min(1100px,100%)] items-start gap-8 min-[861px]:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">

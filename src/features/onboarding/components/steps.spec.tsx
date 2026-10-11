@@ -1,7 +1,8 @@
+import { track as trackEvent } from '@/shared/lib/analytics';
 import type { ReactElement } from 'react';
 import { describe, expect, it } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import {
@@ -86,6 +87,8 @@ describe('AssetsStep', () => {
         });
         expect(skip.calls()).toBe(1);
         expect(complete.calls()).toBe(0);
+        expect(trackEvent).toHaveBeenCalledWith('onboarding_step_skipped', { step: 'assets' });
+        expect(trackEvent).toHaveBeenCalledWith('portfolio_onboarding_assets_step', { count: 0 });
     });
 
     it('lista os três motivos e a nota do cadastro manual', async () => {
@@ -119,6 +122,9 @@ describe('AssetsStep', () => {
             expect(router.state.location.pathname).toBe('/onboarding/banks');
         });
         expect(complete.calls()).toBe(1);
+        expect(trackEvent).toHaveBeenCalledWith('portfolio_onboarding_assets_step', { count: 3 });
+        expect(trackEvent).toHaveBeenCalledWith('onboarding_step_completed', { step: 'assets' });
+        expect(trackEvent).toHaveBeenCalledWith('onboarding_step_viewed', { step: 'assets' });
     });
 
     it('usa o singular com um ativo e o inglês quando o idioma muda', async () => {
@@ -159,6 +165,8 @@ describe('BanksStep', () => {
         const steps: HTMLElement = (await screen.findByText(/Crie sua conta e conecte seus bancos em/)).closest('ol') as HTMLElement;
         expect(steps.tagName).toBe('OL');
         expect(within(steps).getAllByRole('listitem')).toHaveLength(4);
+        fireEvent.click(screen.getByRole('link', { name: 'meu.pluggy.ai' }));
+        expect(trackEvent).toHaveBeenCalledWith('onboarding_pluggy_link_clicked', { target: 'meu' });
         for (const host of ['meu.pluggy.ai', 'dashboard.pluggy.ai']) {
             const link: HTMLElement = screen.getByRole('link', { name: host });
             expect(link).toHaveAttribute('href', `https://${host}`);
@@ -184,6 +192,7 @@ describe('BanksStep', () => {
         });
         expect(complete.calls()).toBe(0);
         expect(skip.calls()).toBe(0);
+        expect(trackEvent).toHaveBeenCalledWith('onboarding_connections_opened');
     });
 
     it('sem destino o botão fica desabilitado com a dica e Pular continua valendo', async () => {

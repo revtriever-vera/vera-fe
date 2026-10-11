@@ -1,6 +1,7 @@
-import type { ReactElement } from 'react';
+import { useEffect, type ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { env } from '@/shared/config/env';
+import { track } from '@/shared/lib/analytics';
 import { Alert } from '@/shared/ui/alert';
 import { BrandLogo } from '@/shared/ui/brand-logo';
 import { authErrorMessage } from '../lib/auth-error-message';
@@ -15,6 +16,10 @@ export function LoginBox({ accountDeleted = false }: { readonly accountDeleted?:
     const providers: ProviderAvailability = useProviderAvailability();
     const login: SocialLogin = useSocialLogin();
     const noProvider: boolean = !providers.google && !providers.facebook;
+
+    useEffect((): void => {
+        track('auth_screen_viewed');
+    }, []);
 
     return (
         <div className="w-full max-w-[380px]">

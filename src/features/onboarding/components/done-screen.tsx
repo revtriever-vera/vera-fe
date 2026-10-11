@@ -6,9 +6,11 @@ import { Alert } from '@/shared/ui/alert';
 import { Button } from '@/shared/ui/button';
 import { Loading, Skeleton } from '@/shared/ui/skeleton';
 import { useFinishOnboarding } from '../api/use-finish-onboarding.mutation';
+import { track } from '@/shared/lib/analytics';
 import { useOnboardingSummary } from '../api/use-onboarding-summary.query';
 import { isConfigured, landingDestination } from '../lib/landing-destination';
 import { useLeaveOnboarding, type LeaveOnboarding } from '../lib/use-leave-onboarding';
+import { useTrackStepViewed } from '../lib/use-track-step-viewed';
 import { useOnboardingRunner, type RunOnboarding } from '../lib/use-onboarding-runner';
 import type { OnboardingSummary } from '../types';
 import { StepHeading } from './step-heading';
@@ -62,7 +64,10 @@ function FinishButton({ summary }: { readonly summary: OnboardingSummary | undef
             onClick={(): void => {
                 void run(
                     async () => finish.mutateAsync(),
-                    async (state) => leave(state, landingDestination(summary, ONBOARDING_DESTINATIONS))
+                    async (state) => {
+                        track('onboarding_finished');
+                        await leave(state, landingDestination(summary, ONBOARDING_DESTINATIONS));
+                    }
                 );
             }}
         >
@@ -74,6 +79,7 @@ function FinishButton({ summary }: { readonly summary: OnboardingSummary | undef
 
 export function DoneScreen(): ReactElement {
     const { t }: UseTranslationResponse<'onboarding', undefined> = useTranslation('onboarding');
+    useTrackStepViewed('done');
     const query: ReturnType<typeof useOnboardingSummary> = useOnboardingSummary();
     const ready: boolean = isConfigured(query.data);
 

@@ -1,3 +1,4 @@
+import { track } from '@/shared/lib/analytics';
 import { describe, expect, it } from 'vitest';
 import { screen, waitFor, within } from '@testing-library/react';
 import type { UserEvent } from '@testing-library/user-event';
@@ -70,6 +71,7 @@ describe('AddAssetModal: renda fixa', () => {
         });
         expect(await screen.findByText('CDB Banco XP adicionado em Renda fixa pós')).toBeInTheDocument();
         expect(onOpenChange).toHaveBeenCalledWith(false);
+        expect(track).toHaveBeenCalledWith('portfolio_asset_added', { type: 'fixed_income', source: 'fixed_income' });
     });
 
     it('dois CDBs iguais podem ser adicionados em sequência', async () => {

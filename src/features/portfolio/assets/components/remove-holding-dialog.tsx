@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
+import { track } from '@/shared/lib/analytics';
 import type { ApiError } from '@/shared/lib/api/api-error';
 import { ConfirmDialog } from '@/shared/ui/confirm-dialog';
 import { portfolioErrorMessage } from '../../lib/portfolio-error-message';
@@ -23,6 +24,7 @@ export function RemoveHoldingDialog({ holding, onClose }: RemoveHoldingDialogPro
             { kind: holding.kind, id: holding.id },
             {
                 onSuccess: (): void => {
+                    track('portfolio_asset_removed');
                     toast.show({ tone: 'positive', title: t('toasts.removed', { symbol: holding.symbol }) });
                     onClose();
                 },

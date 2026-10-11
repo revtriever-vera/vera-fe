@@ -1,3 +1,4 @@
+import { track } from '@/shared/lib/analytics';
 import { describe, expect, it } from 'vitest';
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
@@ -36,6 +37,7 @@ describe('aporte: sugestão', () => {
             ['Ações Brasil', 'R$ 2.193,25', '12,4% → 12,5% (meta 15%)'],
             ['FIIs', 'R$ 390,33', '6,6% → 6,6% (meta 7%)']
         ];
+        expect(track).toHaveBeenCalledWith('portfolio_contribution_calculated', { classesFunded: 4, currency: 'BRL' });
         expected.forEach((texts: readonly string[], index: number): void => {
             texts.forEach((text: string): void => {
                 expect(shown[index]).toHaveTextContent(text);

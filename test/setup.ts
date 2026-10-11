@@ -1,8 +1,16 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup, configure } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
+import { resetAnalytics, track } from '@/shared/lib/analytics';
 import { i18n } from '@/shared/lib/i18n';
 import { server } from './msw/server';
+
+vi.mock('@/shared/lib/analytics', () => ({
+    track: vi.fn(),
+    initAnalytics: vi.fn(),
+    resetAnalytics: vi.fn(),
+    isAnalyticsEnabled: vi.fn((): boolean => false)
+}));
 
 configure({ asyncUtilTimeout: 5000 });
 
@@ -34,6 +42,8 @@ beforeEach(async () => {
 });
 
 afterEach(() => {
+    vi.mocked(track).mockClear();
+    vi.mocked(resetAnalytics).mockClear();
     cleanup();
     server.resetHandlers();
 });

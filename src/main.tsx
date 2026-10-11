@@ -6,8 +6,11 @@ import { I18nProvider } from '@/app/providers/i18n-provider';
 import { QueryProvider } from '@/app/providers/query-provider';
 import { SessionProvider } from '@/app/providers/session-provider';
 import { ToastProvider } from '@/app/providers/toast-provider';
+import { initAnalytics } from '@/shared/lib/analytics';
 import { routeTree } from './routeTree.gen';
 import './index.css';
+
+initAnalytics();
 
 const router = createRouter({ routeTree });
 

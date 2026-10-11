@@ -2,6 +2,7 @@ import type { BaseSyntheticEvent, ReactElement } from 'react';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
+import { track } from '@/shared/lib/analytics';
 import type { ApiError } from '@/shared/lib/api/api-error';
 import { Alert } from '@/shared/ui/alert';
 import { Button } from '@/shared/ui/button';
@@ -83,6 +84,7 @@ function useSubmit(state: AssetTargetsFormState, save: SaveMutation): (event?: B
         }
         try {
             await save.mutateAsync(toAssetTargetsBody(input));
+            track('portfolio_asset_targets_saved', { assetCount: input.targets.length });
             toast.show({ tone: 'positive', title: t('classDetail.saved') });
         } catch {
             return;

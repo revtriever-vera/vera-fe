@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
+import { track } from '@/shared/lib/analytics';
 import type { ApiError } from '@/shared/lib/api/api-error';
 import { Button } from '@/shared/ui/button';
 import { DropdownMenu, type DropdownItem } from '@/shared/ui/dropdown-menu';
@@ -24,6 +25,7 @@ export function ExportMenu(): ReactElement {
                 { format },
                 {
                     onSuccess: (): void => {
+                        track('portfolio_export_downloaded', { format });
                         toast.show({ tone: 'positive', title: t('toasts.exported') });
                     },
                     onError: (error: Error): void => {

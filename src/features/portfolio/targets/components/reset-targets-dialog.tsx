@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
+import { track } from '@/shared/lib/analytics';
 import type { ApiError } from '@/shared/lib/api/api-error';
 import { ConfirmDialog } from '@/shared/ui/confirm-dialog';
 import { portfolioErrorMessage } from '../../lib/portfolio-error-message';
@@ -21,6 +22,7 @@ export function ResetTargetsDialog({ onReset, onClose }: ResetTargetsDialogProps
     const confirm = async (): Promise<void> => {
         try {
             onReset(await reset.mutateAsync());
+            track('portfolio_targets_reset');
             toast.show({ tone: 'positive', title: t('reset.success') });
         } catch (error) {
             toast.show({ tone: 'critical', title: t('reset.failed'), detail: portfolioErrorMessage(tp, error as Error) });

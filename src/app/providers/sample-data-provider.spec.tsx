@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { describe, expect, it, vi, type Mock } from 'vitest';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { QueryClient, QueryClientProvider, useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
@@ -13,6 +13,16 @@ import { sampleServer, type SampleServer } from '../../../test/msw/handlers/onbo
 import { server } from '../../../test/msw/server';
 import { SampleDataProvider } from './sample-data-provider';
 import { ToastProvider } from './toast-provider';
+
+const tracked: Mock = vi.hoisted((): Mock => vi.fn());
+
+vi.mock('@/shared/lib/analytics', () => ({ track: tracked }));
+
+vi.mock('@tanstack/react-router', async (importOriginal) => ({
+    ...(await importOriginal<typeof import('@tanstack/react-router')>()),
+    useRouterState: ({ select }: { select: (state: { matches: { routeId: string }[] }) => string }): string =>
+        select({ matches: [{ routeId: '/_auth/_app/patrimonio/ativos' }] })
+}));
 
 interface Counters {
     readonly assets: Mock;
@@ -81,6 +91,10 @@ function setup(
 }
 
 describe('SampleDataProvider', () => {
+    beforeEach(() => {
+        tracked.mockClear();
+    });
+
     it('não mostra o botão quando nenhum módulo registrou dados de exemplo', async () => {
         const { counters, client } = setup({ active: false, available: false });
         render(<Harness counters={counters} client={client} />);
@@ -106,6 +120,7 @@ describe('SampleDataProvider', () => {
         expect(counters.assets).toHaveBeenCalledTimes(2);
         expect(counters.session).toHaveBeenCalledTimes(1);
         expect(client.getQueryState(onboardingKeys.state())?.isInvalidated).toBe(false);
+        expect(tracked).toHaveBeenCalledWith('sample_data_loaded', { source: 'empty_state', screen: '/_auth/_app/patrimonio/ativos' });
     });
 
     it('limpa o exemplo depois da confirmação e volta ao estado vazio', async () => {
@@ -126,6 +141,7 @@ describe('SampleDataProvider', () => {
         expect(sample.calls.clear).toBe(1);
         expect(screen.queryByText('Você está vendo dados de exemplo. Eles não são seus.')).not.toBeInTheDocument();
         expect(await screen.findByText('Dados de exemplo removidos')).toBeInTheDocument();
+        expect(tracked).toHaveBeenCalledWith('sample_data_cleared');
     });
 
     it.each([
@@ -147,6 +163,7 @@ describe('SampleDataProvider', () => {
         expect(screen.queryByText('internal detail')).not.toBeInTheDocument();
         expect(sample.calls.load).toBe(0);
         expect(screen.getByRole('heading', { name: 'Sua carteira ainda está vazia' })).toBeInTheDocument();
+        expect(tracked).not.toHaveBeenCalled();
     });
 
     it('evita clique duplo enquanto a carga está em andamento', async () => {
