@@ -1204,6 +1204,98 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/spending/connections/credentials": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Show the state of the Pluggy credentials
+         * @description Whether the company has credentials saved, the masked Client ID and the result of the last test. The Client Secret and the full Client ID are never returned by any route.
+         */
+        get: operations["CredentialsController_get"];
+        /**
+         * Save or replace the Pluggy credentials
+         * @description Tests the credentials against Pluggy first and saves them sealed only when the test passes. The same route creates and rotates: the previous credentials are hard deleted so a replaced secret is not kept, and connections paused because of invalid credentials are resumed and queued for a synchronization. The Client Secret and the full Client ID are never returned by any route. The error body never repeats what was sent.
+         */
+        put: operations["CredentialsController_save"];
+        post?: never;
+        /**
+         * Remove the Pluggy credentials
+         * @description Hard deletes the sealed credentials and disconnects every bank connection. The imported accounts and transactions stay unless `purgeTransactions=true`, which also soft deletes the accounts that came from the connections and their transactions.
+         */
+        delete: operations["CredentialsController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/connections/credentials/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Test the saved Pluggy credentials again
+         * @description Authenticates with the saved credentials. On success the status becomes valid; when Pluggy answers 401 the status becomes invalid and the route still answers 200. The Client Secret and the full Client ID are never returned by any route.
+         */
+        post: operations["CredentialsController_test"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/connections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the credentials state and the bank connections
+         * @description Reads only the database, never Pluggy. Each connection carries its status, the linked accounts and the last synchronization run. The Client Secret, the full Client ID and the full Item IDs are never returned.
+         */
+        get: operations["ConnectionsController_overview"];
+        put?: never;
+        /**
+         * Connect banks from their Pluggy Item IDs
+         * @description Checks each Item ID against Pluggy with the saved credentials and creates a connection for each one found, then queues the first synchronization. The answer is 200 even when only some items succeed: each entry reports its own outcome (connected, already_connected, not_found, limit_reached or failed), in the order sent. Repeated ids are collapsed.
+         */
+        post: operations["ConnectionsController_connect"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/connections/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Disconnect a bank
+         * @description Marks the connection as disconnected and soft deletes it. The imported accounts and transactions stay unless `purgeTransactions=true`, which also soft deletes the accounts of the connection and their transactions.
+         */
+        delete: operations["ConnectionsController_disconnect"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -10524,6 +10616,861 @@ export interface operations {
             };
             /** @description Malformed, earlier than 2000-01 or future month (summary.invalid_month) */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    CredentialsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Credentials state */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Whether the company has Pluggy credentials saved */
+                        configured: boolean;
+                        /** @description First and last 4 characters of the Client ID. The secret and the full Client ID are never returned */
+                        clientIdHint: string | null;
+                        /**
+                         * @description `valid` after a successful test, `invalid` after Pluggy rejected the credentials
+                         * @enum {string|null}
+                         */
+                        status: "valid" | "invalid" | null;
+                        /**
+                         * Format: date-time
+                         * @description When the credentials last passed a test
+                         */
+                        lastVerifiedAt: string | null;
+                        /**
+                         * Format: date-time
+                         * @description When the credentials were last saved or changed
+                         */
+                        updatedAt: string | null;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    CredentialsController_save: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: uuid
+                     * @description Client ID of the Pluggy application, as an UUID
+                     */
+                    clientId: string;
+                    /** @description Client Secret of the Pluggy application, 16 to 256 printable characters without spaces. Never returned by any route */
+                    clientSecret: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Credentials saved */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Whether the company has Pluggy credentials saved */
+                        configured: boolean;
+                        /** @description First and last 4 characters of the Client ID. The secret and the full Client ID are never returned */
+                        clientIdHint: string | null;
+                        /**
+                         * @description `valid` after a successful test, `invalid` after Pluggy rejected the credentials
+                         * @enum {string|null}
+                         */
+                        status: "valid" | "invalid" | null;
+                        /**
+                         * Format: date-time
+                         * @description When the credentials last passed a test
+                         */
+                        lastVerifiedAt: string | null;
+                        /**
+                         * Format: date-time
+                         * @description When the credentials were last saved or changed
+                         */
+                        updatedAt: string | null;
+                    };
+                };
+            };
+            /** @description Invalid payload (only the field path and the rule are reported) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Pluggy rejected the credentials (connections.invalid_credentials). Nothing was saved */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 5 attempts in 10 minutes for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Pluggy is unavailable (connections.provider_unavailable). Nothing was saved */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    CredentialsController_remove: {
+        parameters: {
+            query?: {
+                /** @description `true` also soft deletes the accounts that came from the connection and their transactions. Default `false` keeps the history */
+                purgeTransactions?: "true" | "false";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Credentials removed */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    CredentialsController_test: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Credentials state after the test */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Whether the company has Pluggy credentials saved */
+                        configured: boolean;
+                        /** @description First and last 4 characters of the Client ID. The secret and the full Client ID are never returned */
+                        clientIdHint: string | null;
+                        /**
+                         * @description `valid` after a successful test, `invalid` after Pluggy rejected the credentials
+                         * @enum {string|null}
+                         */
+                        status: "valid" | "invalid" | null;
+                        /**
+                         * Format: date-time
+                         * @description When the credentials last passed a test
+                         */
+                        lastVerifiedAt: string | null;
+                        /**
+                         * Format: date-time
+                         * @description When the credentials were last saved or changed
+                         */
+                        updatedAt: string | null;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No credentials saved (connections.credentials_missing) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 10 tests in 10 minutes for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Pluggy is unavailable (connections.provider_unavailable) */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    ConnectionsController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Credentials state and connections */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        credentials: {
+                            /** @description Whether the company has Pluggy credentials saved */
+                            configured: boolean;
+                            /** @description First and last 4 characters of the Client ID. The secret and the full Client ID are never returned */
+                            clientIdHint: string | null;
+                            /**
+                             * @description `valid` after a successful test, `invalid` after Pluggy rejected the credentials
+                             * @enum {string|null}
+                             */
+                            status: "valid" | "invalid" | null;
+                            /**
+                             * Format: date-time
+                             * @description When the credentials last passed a test
+                             */
+                            lastVerifiedAt: string | null;
+                            /**
+                             * Format: date-time
+                             * @description When the credentials were last saved or changed
+                             */
+                            updatedAt: string | null;
+                        };
+                        /** @description Active bank connections, oldest first */
+                        connections: {
+                            /**
+                             * Format: uuid
+                             * @description Bank connection id
+                             */
+                            id: string;
+                            /** @description First and last 4 characters of the Item ID */
+                            itemIdHint: string;
+                            /** @description Name of the bank connector */
+                            connectorName: string | null;
+                            /**
+                             * @description Connection status
+                             * @enum {string}
+                             */
+                            status: "active" | "needs_attention" | "revoked" | "paused";
+                            /** @description Why the status is not active: login_error, outdated, waiting_user_input, item_not_found or credentials_invalid */
+                            statusReason: string | null;
+                            /**
+                             * Format: date-time
+                             * @description When the bank consent expires
+                             */
+                            consentExpiresAt: string | null;
+                            /**
+                             * Format: date-time
+                             * @description Last synchronization attempt
+                             */
+                            lastSyncAt: string | null;
+                            /**
+                             * Format: date-time
+                             * @description Last successful synchronization
+                             */
+                            lastSuccessAt: string | null;
+                            /** @description Whether a synchronization is running */
+                            syncing: boolean;
+                            /** @description Financial accounts linked to the connection */
+                            accounts: {
+                                /**
+                                 * Format: uuid
+                                 * @description Financial account id
+                                 */
+                                accountId: string;
+                                /** @description Account name */
+                                name: string;
+                                /** @description Account kind: checking, savings, credit_card or other */
+                                kind: string;
+                                /** @description Last 4 digits of the account number */
+                                numberLast4: string | null;
+                            }[];
+                            /** @description Most recent synchronization run */
+                            lastRun: {
+                                /** @description What started the run: initial, daily, manual or credentials_rotated */
+                                trigger: string;
+                                /** @description running, succeeded, partial or failed */
+                                status: string;
+                                /**
+                                 * Format: date-time
+                                 * @description Start of the run
+                                 */
+                                startedAt: string;
+                                /**
+                                 * Format: date-time
+                                 * @description End of the run, null while running
+                                 */
+                                finishedAt: string | null;
+                                /** @description Transactions inserted by the run */
+                                inserted: number;
+                                /** @description Neutral failure code when the run did not succeed */
+                                failureCode: string | null;
+                            } | null;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    ConnectionsController_connect: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Item IDs to connect, 1 to 10. Repeated ids are collapsed after trimming and lowercasing */
+                    itemIds: string[];
+                };
+            };
+        };
+        responses: {
+            /** @description One result per distinct Item ID */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description One entry per distinct Item ID, in the order sent */
+                        results: {
+                            /** @description First and last 4 characters of the Item ID */
+                            itemIdHint: string;
+                            /**
+                             * @description What happened to the Item ID
+                             * @enum {string}
+                             */
+                            outcome: "connected" | "already_connected" | "not_found" | "limit_reached" | "failed";
+                            /** @description The connection, when connected or already connected */
+                            connection: {
+                                /**
+                                 * Format: uuid
+                                 * @description Bank connection id
+                                 */
+                                id: string;
+                                /** @description First and last 4 characters of the Item ID */
+                                itemIdHint: string;
+                                /** @description Name of the bank connector */
+                                connectorName: string | null;
+                                /**
+                                 * @description Connection status
+                                 * @enum {string}
+                                 */
+                                status: "active" | "needs_attention" | "revoked" | "paused";
+                                /** @description Why the status is not active: login_error, outdated, waiting_user_input, item_not_found or credentials_invalid */
+                                statusReason: string | null;
+                                /**
+                                 * Format: date-time
+                                 * @description When the bank consent expires
+                                 */
+                                consentExpiresAt: string | null;
+                                /**
+                                 * Format: date-time
+                                 * @description Last synchronization attempt
+                                 */
+                                lastSyncAt: string | null;
+                                /**
+                                 * Format: date-time
+                                 * @description Last successful synchronization
+                                 */
+                                lastSuccessAt: string | null;
+                                /** @description Whether a synchronization is running */
+                                syncing: boolean;
+                                /** @description Financial accounts linked to the connection */
+                                accounts: {
+                                    /**
+                                     * Format: uuid
+                                     * @description Financial account id
+                                     */
+                                    accountId: string;
+                                    /** @description Account name */
+                                    name: string;
+                                    /** @description Account kind: checking, savings, credit_card or other */
+                                    kind: string;
+                                    /** @description Last 4 digits of the account number */
+                                    numberLast4: string | null;
+                                }[];
+                                /** @description Most recent synchronization run */
+                                lastRun: {
+                                    /** @description What started the run: initial, daily, manual or credentials_rotated */
+                                    trigger: string;
+                                    /** @description running, succeeded, partial or failed */
+                                    status: string;
+                                    /**
+                                     * Format: date-time
+                                     * @description Start of the run
+                                     */
+                                    startedAt: string;
+                                    /**
+                                     * Format: date-time
+                                     * @description End of the run, null while running
+                                     */
+                                    finishedAt: string | null;
+                                    /** @description Transactions inserted by the run */
+                                    inserted: number;
+                                    /** @description Neutral failure code when the run did not succeed */
+                                    failureCode: string | null;
+                                } | null;
+                            } | null;
+                        }[];
+                    };
+                };
+            };
+            /** @description Invalid payload (only the field path and the rule are reported) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No usable credentials: none saved (connections.credentials_missing) or Pluggy rejected them (connections.invalid_credentials) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 10 attempts in 10 minutes for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Pluggy is unavailable for the authentication (connections.provider_unavailable) */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    ConnectionsController_disconnect: {
+        parameters: {
+            query?: {
+                /** @description `true` also soft deletes the accounts that came from the connection and their transactions. Default `false` keeps the history */
+                purgeTransactions?: "true" | "false";
+            };
+            header?: never;
+            path: {
+                /** @description Bank connection id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Connection removed */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The connection does not exist in this company (connections.connection_not_found) */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
