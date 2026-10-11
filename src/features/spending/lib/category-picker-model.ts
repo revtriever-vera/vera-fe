@@ -42,12 +42,14 @@ export interface PickerInput {
     readonly label: CategoryLabel;
     readonly query: string;
     readonly direction: PickerDirection | undefined;
+    readonly onlyKind?: CategoryKind;
+    readonly excludeId?: string;
 }
 
 function groupOf(kind: CategoryKind, input: PickerInput): PickerGroup {
     const needle: string = normalizeSearch(input.query);
     const options: PickerOption[] = input.categories
-        .filter((category: CategoryView): boolean => category.kind === kind)
+        .filter((category: CategoryView): boolean => category.kind === kind && category.id !== input.excludeId)
         .sort(byPosition)
         .map((category: CategoryView): PickerOption => ({
             id: category.id,
@@ -60,9 +62,10 @@ function groupOf(kind: CategoryKind, input: PickerInput): PickerGroup {
 }
 
 export function pickerGroups(input: PickerInput, noneLabel: string | null): readonly PickerGroup[] {
-    const groups: PickerGroup[] = PICKER_KIND_ORDER.map((kind: CategoryKind): PickerGroup => groupOf(kind, input)).filter(
-        (group: PickerGroup): boolean => group.options.length > 0
-    );
+    const kinds: readonly CategoryKind[] = input.onlyKind === undefined ? PICKER_KIND_ORDER : [input.onlyKind];
+    const groups: PickerGroup[] = kinds
+        .map((kind: CategoryKind): PickerGroup => groupOf(kind, input))
+        .filter((group: PickerGroup): boolean => group.options.length > 0);
     const showNone: boolean = noneLabel !== null && normalizeSearch(noneLabel).includes(normalizeSearch(input.query));
     if (noneLabel === null || !showNone) {
         return groups;

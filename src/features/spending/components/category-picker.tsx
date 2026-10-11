@@ -1,6 +1,7 @@
 import { useId, useState, type KeyboardEvent, type ReactElement } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import { ChevronDown } from 'lucide-react';
+import type { TFunction } from 'i18next';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { SearchInput } from '@/shared/ui/search-input';
@@ -14,7 +15,7 @@ import {
     type PickerOption
 } from '../lib/category-picker-model';
 import { useCategoryLabel, type CategoryLabel } from '../lib/use-category-label';
-import type { CategoriesResponse, CategoryView } from '../types';
+import type { CategoriesResponse, CategoryKind, CategoryView } from '../types';
 import { CategoryPickerList, optionDomId } from './category-picker-list';
 import { CategoryTile } from './category-tile';
 
@@ -23,6 +24,9 @@ export interface CategoryPickerProps {
     readonly onChange: (id: string | null) => void;
     readonly direction?: PickerDirection;
     readonly allowNone?: boolean;
+    readonly noneLabel?: string;
+    readonly onlyKind?: CategoryKind;
+    readonly excludeId?: string;
     readonly label: string;
 }
 
@@ -63,12 +67,24 @@ interface PanelProps extends CategoryPickerProps {
     readonly onPicked: (id: string | null) => void;
 }
 
-function PickerPanel({ categories, value, direction, allowNone = false, onPicked }: PanelProps): ReactElement {
+function PickerPanel({
+    categories,
+    value,
+    direction,
+    allowNone = false,
+    noneLabel,
+    onlyKind,
+    excludeId,
+    onPicked
+}: PanelProps): ReactElement {
     const { t }: UseTranslationResponse<'spending', undefined> = useTranslation('spending');
     const label: CategoryLabel = useCategoryLabel();
     const listId: string = useId();
     const [query, setQuery] = useState<string>('');
-    const groups: readonly PickerGroup[] = pickerGroups({ categories, label, query, direction }, allowNone ? t('categories.none') : null);
+    const groups: readonly PickerGroup[] = pickerGroups(
+        { categories, label, query, direction, onlyKind, excludeId },
+        allowNone ? (noneLabel ?? t('categories.none')) : null
+    );
     const options: readonly PickerOption[] = selectableOptions(groups);
     const keys: ActiveIndex = useActiveIndex(options, onPicked);
     const active: PickerOption | undefined = options[keys.index];
@@ -89,6 +105,10 @@ function PickerPanel({ categories, value, direction, allowNone = false, onPicked
     );
 }
 
+function emptyText(props: CategoryPickerProps, t: TFunction<'spending'>): string {
+    return props.allowNone === true && props.noneLabel !== undefined ? props.noneLabel : t('categories.uncategorized');
+}
+
 export function CategoryPicker(props: CategoryPickerProps): ReactElement {
     const { t }: UseTranslationResponse<'spending', undefined> = useTranslation('spending');
     const categories: UseQueryResult<CategoriesResponse> = useCategories();
@@ -96,6 +116,7 @@ export function CategoryPicker(props: CategoryPickerProps): ReactElement {
     const [open, setOpen] = useState<boolean>(false);
     const selected: CategoryView | null =
         categories.data?.categories.find((item: CategoryView): boolean => item.id === props.value) ?? null;
+    const triggerText: string = props.value === null ? emptyText(props, t) : labelOf(selected);
     return (
         <Popover.Root open={open} onOpenChange={setOpen}>
             <Popover.Trigger asChild>
@@ -108,7 +129,7 @@ export function CategoryPicker(props: CategoryPickerProps): ReactElement {
                 >
                     <span className="flex min-w-0 items-center gap-2">
                         <CategoryTile category={selected} size="sm" />
-                        <span className="truncate">{props.value === null ? t('categories.uncategorized') : labelOf(selected)}</span>
+                        <span className="truncate">{triggerText}</span>
                     </span>
                     <ChevronDown className="size-4 shrink-0 text-content-subtle" aria-hidden="true" />
                 </button>

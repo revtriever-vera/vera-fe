@@ -10,6 +10,8 @@ const EPIC_CODES: readonly string[] = [
     'categories.invalid_rule',
     'categories.limit_reached',
     'categories.name_taken',
+    'categories.name_required',
+    'categories.flexibility_not_applicable',
     'categories.rule_conflict',
     'categories.rule_not_found',
     'categories.system_category_locked',

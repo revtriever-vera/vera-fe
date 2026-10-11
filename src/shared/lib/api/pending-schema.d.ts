@@ -48,60 +48,6 @@ export interface PendingPathItem {
 
 export type PendingJsonBody<Body> = { content: { 'application/json': Body } };
 
-export type PendingIconKey =
-    | 'Home'
-    | 'BookOpen'
-    | 'HeartPulse'
-    | 'Wrench'
-    | 'Landmark'
-    | 'ShoppingCart'
-    | 'UtensilsCrossed'
-    | 'Car'
-    | 'Film'
-    | 'Repeat'
-    | 'ShoppingBag'
-    | 'CircleEllipsis'
-    | 'TrendingUp'
-    | 'PlusCircle'
-    | 'ArrowLeftRight'
-    | 'CreditCard'
-    | 'PiggyBank'
-    | 'Coffee'
-    | 'Dumbbell'
-    | 'PawPrint'
-    | 'Plane'
-    | 'Gift'
-    | 'Baby'
-    | 'Briefcase';
-
-export interface PendingCategoryView {
-    id: string;
-    systemKey: string | null;
-    name: string | null;
-    kind: 'expense' | 'income' | 'transfer';
-    flexibility: 'fixed' | 'flexible' | null;
-    icon: PendingIconKey;
-    position: number;
-    isSystem: boolean;
-}
-
-export interface PendingCategoriesResponse {
-    categories: PendingCategoryView[];
-}
-
-export interface PendingCreateCategoryBody {
-    name: string;
-    kind: 'expense' | 'income';
-    flexibility?: 'fixed' | 'flexible';
-    icon: PendingIconKey;
-}
-
-export interface PendingUpdateCategoryBody {
-    name?: string | null;
-    flexibility?: 'fixed' | 'flexible';
-    icon?: PendingIconKey;
-}
-
 export interface PendingRecategorized {
     recategorized: number;
 }
@@ -114,38 +60,6 @@ export interface PendingRuleView {
     categoryId: string;
     createdAt: string;
     updatedAt: string;
-}
-
-export interface PendingRulesResponse {
-    rules: PendingRuleView[];
-}
-
-export interface PendingCreateRuleBody {
-    matchType: 'description' | 'contains';
-    pattern: string;
-    appliesTo: 'out' | 'in' | 'any';
-    categoryId: string;
-    applyToPast?: boolean;
-}
-
-export interface PendingRuleResult extends PendingRecategorized {
-    rule: PendingRuleView;
-}
-
-export interface PendingRulePreviewBody {
-    matchType: 'description' | 'contains';
-    pattern: string;
-    appliesTo: 'out' | 'in' | 'any';
-}
-
-export interface PendingRulePreview {
-    normalizedPattern: string;
-    matches: number;
-}
-
-export interface PendingUpdateRuleBody {
-    categoryId?: string;
-    appliesTo?: 'out' | 'in' | 'any';
 }
 
 export interface PendingPageInfo {
@@ -468,32 +382,6 @@ export interface PendingIdPath {
     id: string;
 }
 
-export interface PendingCategoriesPath extends PendingPathItem {
-    get: PendingOperation<never, PendingNoPath, never, { 200: PendingJson<PendingCategoriesResponse> }>;
-    post: PendingOperation<never, PendingNoPath, PendingJsonBody<PendingCreateCategoryBody>, { 201: PendingJson<PendingCategoryView> }>;
-}
-
-export interface PendingCategoryPath extends PendingPathItem {
-    parameters: { query?: never; header?: never; path: PendingIdPath; cookie?: never };
-    patch: PendingOperation<never, PendingIdPath, PendingJsonBody<PendingUpdateCategoryBody>, { 200: PendingJson<PendingCategoryView> }>;
-    delete: PendingOperation<{ moveTo?: string }, PendingIdPath, never, { 200: PendingJson<PendingRecategorized> }>;
-}
-
-export interface PendingRulesPath extends PendingPathItem {
-    get: PendingOperation<never, PendingNoPath, never, { 200: PendingJson<PendingRulesResponse> }>;
-    post: PendingOperation<never, PendingNoPath, PendingJsonBody<PendingCreateRuleBody>, { 201: PendingJson<PendingRuleResult> }>;
-}
-
-export interface PendingRulesPreviewPath extends PendingPathItem {
-    post: PendingOperation<never, PendingNoPath, PendingJsonBody<PendingRulePreviewBody>, { 200: PendingJson<PendingRulePreview> }>;
-}
-
-export interface PendingRulePath extends PendingPathItem {
-    parameters: { query?: never; header?: never; path: PendingIdPath; cookie?: never };
-    patch: PendingOperation<never, PendingIdPath, PendingJsonBody<PendingUpdateRuleBody>, { 200: PendingJson<PendingRuleResult> }>;
-    delete: PendingOperation<never, PendingIdPath, never, { 200: PendingJson<PendingRecategorized> }>;
-}
-
 export interface PendingTransactionsPath extends PendingPathItem {
     get: PendingOperation<PendingTransactionsQuery, PendingNoPath, never, { 200: PendingJson<PendingTransactionsResponse> }>;
 }
@@ -589,11 +477,6 @@ export interface PendingImportPath extends PendingPathItem {
 }
 
 export interface PendingPaths {
-    '/spending/categories': PendingCategoriesPath;
-    '/spending/categories/{id}': PendingCategoryPath;
-    '/spending/rules': PendingRulesPath;
-    '/spending/rules/preview': PendingRulesPreviewPath;
-    '/spending/rules/{id}': PendingRulePath;
     '/spending/transactions': PendingTransactionsPath;
     '/spending/transactions/uncategorized-count': PendingUncategorizedCountPath;
     '/spending/transactions/{id}': PendingTransactionPath;

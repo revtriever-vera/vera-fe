@@ -21,6 +21,10 @@ export type RuleView = RulesResponse['rules'][number];
 export type CreateRuleBody = NonNullable<ApiPaths['/spending/rules']['post']['requestBody']>['content']['application/json'];
 export type RuleResult = Json<ApiPaths['/spending/rules']['post']>;
 export type RulePreview = Json<ApiPaths['/spending/rules/preview']['post']>;
+export type RuleMatchType = RuleView['matchType'];
+export type RuleAppliesTo = RuleView['appliesTo'];
+export type UpdateRuleBody = NonNullable<ApiPaths['/spending/rules/{id}']['patch']['requestBody']>['content']['application/json'];
+export type Recategorized = Json<ApiPaths['/spending/rules/{id}']['delete']>;
 export type RulePreviewInput = NonNullable<ApiPaths['/spending/rules/preview']['post']['requestBody']>['content']['application/json'];
 
 export type TransactionsResponse = Json<ApiPaths['/spending/transactions']['get']>;
@@ -96,6 +100,18 @@ export const ICON_KEYS = [
     'Baby',
     'Briefcase'
 ] as const satisfies readonly IconKey[];
+
+export const RULE_APPLIES_TO = ['out', 'in', 'any'] as const satisfies readonly RuleAppliesTo[];
+
+export const CREATABLE_RULE_TYPES = ['contains', 'description'] as const satisfies readonly RuleMatchType[];
+
+export const CREATABLE_CATEGORY_KINDS = ['expense', 'income'] as const satisfies readonly CreateCategoryBody['kind'][];
+
+export const CATEGORY_NAME_MAX_LENGTH: number = 40;
+
+export const RULE_PATTERN_MIN_LENGTH: number = 2;
+
+export const RULE_PATTERN_MAX_LENGTH: number = 80;
 
 export const SYSTEM_CATEGORY_KEYS = [
     'housing',

@@ -127,6 +127,8 @@
     "invalidRule": "Essa regra não é válida. Confira o texto e o sentido.",
     "categoryLimitReached": "Você chegou ao limite de categorias ou de regras.",
     "categoryNameTaken": "Já existe uma categoria com esse nome.",
+    "categoryNameRequired": "Informe um nome para a categoria.",
+    "flexibilityNotApplicable": "Entradas e transferências não têm fixo ou flexível.",
     "ruleConflict": "Já existe uma regra igual a essa.",
     "ruleNotFound": "Essa regra não existe mais.",
     "systemCategoryLocked": "Essa categoria padrão não aceita essa mudança.",

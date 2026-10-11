@@ -836,6 +836,122 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/spending/categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the spending categories of the company
+         * @description Returns the categories ordered by position. The first read creates the 17 default categories. Default categories carry a null name until the user renames them: the client shows the translated name from the systemKey.
+         */
+        get: operations["CategoriesController_list"];
+        put?: never;
+        /**
+         * Create a spending category
+         * @description Creates an expense or income category. Expense categories need flexibility (fixed or flexible). The company holds at most 50 categories of its own.
+         */
+        post: operations["CategoriesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/categories/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete a category created by the user
+         * @description Soft delete. Its transactions go to `moveTo` (same kind) or are recategorized by the pipeline, and the rules that pointed to it are deleted in the same database transaction. Returns how many transactions changed category.
+         */
+        delete: operations["CategoriesController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Rename a category, change its flexibility or its icon
+         * @description A null name restores the translated default name and is only valid on a default category. Default categories cannot change icon or kind. Flexibility only exists on expense categories.
+         */
+        patch: operations["CategoriesController_update"];
+        trace?: never;
+    };
+    "/spending/rules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the categorization rules of the company
+         * @description Newest first.
+         */
+        get: operations["RulesController_list"];
+        put?: never;
+        /**
+         * Create a categorization rule
+         * @description Saves the rule and, with applyToPast (default true), recategorizes the matching past transactions in the same database transaction. Precedence between rules: counterparty, then description, then contains (longest pattern, then most recent). The company holds at most 500 rules.
+         */
+        post: operations["RulesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/rules/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Preview how many transactions a rule would affect
+         * @description Normalizes the pattern and counts the matching transactions. Writes nothing. Returns 0 matches while no transaction driver is registered. Limited to 60 calls per minute per company.
+         */
+        post: operations["RulesController_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/rules/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete a categorization rule
+         * @description Soft delete. The transactions it categorized are recategorized by the pipeline in the same database transaction.
+         */
+        delete: operations["RulesController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Change the category or the direction of a rule
+         * @description Recategorizes the matching past transactions in the same database transaction.
+         */
+        patch: operations["RulesController_update"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -6869,6 +6985,1230 @@ export interface operations {
                     };
                     "text/csv": {
                         /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    CategoriesController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Categories of the company */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Categories of the company ordered by `position` */
+                        categories: {
+                            /**
+                             * Format: uuid
+                             * @description Category id
+                             */
+                            id: string;
+                            /** @description Key of a default category; null for a category created by the user. Immutable */
+                            systemKey: string | null;
+                            /** @description Name chosen by the user; null on a default category means "show the translated default name" */
+                            name: string | null;
+                            /**
+                             * @description `expense` counts as spending, `income` as income, `transfer` is left out of both
+                             * @enum {string}
+                             */
+                            kind: "expense" | "income" | "transfer";
+                            /**
+                             * @description `fixed` or `flexible`; only expense categories have it
+                             * @enum {string|null}
+                             */
+                            flexibility: "fixed" | "flexible" | null;
+                            /**
+                             * @description Icon of the category, one of the 24 closed lucide icon names
+                             * @enum {string}
+                             */
+                            icon: "Home" | "BookOpen" | "HeartPulse" | "Wrench" | "Landmark" | "ShoppingCart" | "UtensilsCrossed" | "Car" | "Film" | "Repeat" | "ShoppingBag" | "CircleEllipsis" | "TrendingUp" | "PlusCircle" | "ArrowLeftRight" | "CreditCard" | "PiggyBank" | "Plane" | "Gift" | "PawPrint" | "Dumbbell" | "Baby" | "Coffee" | "Briefcase";
+                            /** @description Position of the category in the listing */
+                            position: number;
+                            /** @description True for the default categories, which cannot be deleted or change kind */
+                            isSystem: boolean;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    CategoriesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Category name, trimmed, 1 to 40 characters without control characters; unique per company ignoring case */
+                    name: string;
+                    /**
+                     * @description `expense` or `income`; transfer categories exist only as defaults
+                     * @enum {string}
+                     */
+                    kind: "expense" | "income";
+                    /**
+                     * @description `fixed` or `flexible`; only expense categories have it
+                     * @enum {string}
+                     */
+                    flexibility?: "fixed" | "flexible";
+                    /**
+                     * @description Icon of the category, one of the 24 closed lucide icon names
+                     * @enum {string}
+                     */
+                    icon: "Home" | "BookOpen" | "HeartPulse" | "Wrench" | "Landmark" | "ShoppingCart" | "UtensilsCrossed" | "Car" | "Film" | "Repeat" | "ShoppingBag" | "CircleEllipsis" | "TrendingUp" | "PlusCircle" | "ArrowLeftRight" | "CreditCard" | "PiggyBank" | "Plane" | "Gift" | "PawPrint" | "Dumbbell" | "Baby" | "Coffee" | "Briefcase";
+                };
+            };
+        };
+        responses: {
+            /** @description Category created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Category id
+                         */
+                        id: string;
+                        /** @description Key of a default category; null for a category created by the user. Immutable */
+                        systemKey: string | null;
+                        /** @description Name chosen by the user; null on a default category means "show the translated default name" */
+                        name: string | null;
+                        /**
+                         * @description `expense` counts as spending, `income` as income, `transfer` is left out of both
+                         * @enum {string}
+                         */
+                        kind: "expense" | "income" | "transfer";
+                        /**
+                         * @description `fixed` or `flexible`; only expense categories have it
+                         * @enum {string|null}
+                         */
+                        flexibility: "fixed" | "flexible" | null;
+                        /**
+                         * @description Icon of the category, one of the 24 closed lucide icon names
+                         * @enum {string}
+                         */
+                        icon: "Home" | "BookOpen" | "HeartPulse" | "Wrench" | "Landmark" | "ShoppingCart" | "UtensilsCrossed" | "Car" | "Film" | "Repeat" | "ShoppingBag" | "CircleEllipsis" | "TrendingUp" | "PlusCircle" | "ArrowLeftRight" | "CreditCard" | "PiggyBank" | "Plane" | "Gift" | "PawPrint" | "Dumbbell" | "Baby" | "Coffee" | "Briefcase";
+                        /** @description Position of the category in the listing */
+                        position: number;
+                        /** @description True for the default categories, which cannot be deleted or change kind */
+                        isSystem: boolean;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Another category already uses this name (categories.name_taken) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The company reached 50 categories of its own (categories.limit_reached) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    CategoriesController_remove: {
+        parameters: {
+            query?: {
+                /** @description Category that receives the transactions of the removed one; same kind required. Omitted lets the pipeline recategorize them */
+                moveTo?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Category id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Category deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Transactions whose category changed because of this operation */
+                        recategorized: number;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The category does not exist in this company (categories.category_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Default categories cannot be deleted (categories.system_category_locked); destination of another kind (transactions.category_kind_mismatch) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    CategoriesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Category id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Category name, trimmed, 1 to 40 characters without control characters; unique per company ignoring case */
+                    name?: string | null;
+                    /**
+                     * @description `fixed` or `flexible`; only expense categories have it
+                     * @enum {string}
+                     */
+                    flexibility?: "fixed" | "flexible";
+                    /**
+                     * @description Icon of the category, one of the 24 closed lucide icon names
+                     * @enum {string}
+                     */
+                    icon?: "Home" | "BookOpen" | "HeartPulse" | "Wrench" | "Landmark" | "ShoppingCart" | "UtensilsCrossed" | "Car" | "Film" | "Repeat" | "ShoppingBag" | "CircleEllipsis" | "TrendingUp" | "PlusCircle" | "ArrowLeftRight" | "CreditCard" | "PiggyBank" | "Plane" | "Gift" | "PawPrint" | "Dumbbell" | "Baby" | "Coffee" | "Briefcase";
+                };
+            };
+        };
+        responses: {
+            /** @description Category updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Category id
+                         */
+                        id: string;
+                        /** @description Key of a default category; null for a category created by the user. Immutable */
+                        systemKey: string | null;
+                        /** @description Name chosen by the user; null on a default category means "show the translated default name" */
+                        name: string | null;
+                        /**
+                         * @description `expense` counts as spending, `income` as income, `transfer` is left out of both
+                         * @enum {string}
+                         */
+                        kind: "expense" | "income" | "transfer";
+                        /**
+                         * @description `fixed` or `flexible`; only expense categories have it
+                         * @enum {string|null}
+                         */
+                        flexibility: "fixed" | "flexible" | null;
+                        /**
+                         * @description Icon of the category, one of the 24 closed lucide icon names
+                         * @enum {string}
+                         */
+                        icon: "Home" | "BookOpen" | "HeartPulse" | "Wrench" | "Landmark" | "ShoppingCart" | "UtensilsCrossed" | "Car" | "Film" | "Repeat" | "ShoppingBag" | "CircleEllipsis" | "TrendingUp" | "PlusCircle" | "ArrowLeftRight" | "CreditCard" | "PiggyBank" | "Plane" | "Gift" | "PawPrint" | "Dumbbell" | "Baby" | "Coffee" | "Briefcase";
+                        /** @description Position of the category in the listing */
+                        position: number;
+                        /** @description True for the default categories, which cannot be deleted or change kind */
+                        isSystem: boolean;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The category does not exist in this company (categories.category_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Another category already uses this name (categories.name_taken) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Icon change on a default category (categories.system_category_locked), null name on a category of the user (categories.name_required) or flexibility on a category that is not an expense (categories.flexibility_not_applicable) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    RulesController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Rules of the company */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Rules of the company, newest first */
+                        rules: {
+                            /**
+                             * Format: uuid
+                             * @description Rule id
+                             */
+                            id: string;
+                            /**
+                             * @description `counterparty` (learned from a correction), `description` (whole description) or `contains`
+                             * @enum {string}
+                             */
+                            matchType: "counterparty" | "description" | "contains";
+                            /** @description Text shown to the user, e.g. the payee name; for counterparty rules never the document */
+                            label: string;
+                            /**
+                             * @description `out` matches negative amounts, `in` positive amounts, `any` both
+                             * @enum {string}
+                             */
+                            appliesTo: "out" | "in" | "any";
+                            /**
+                             * Format: uuid
+                             * @description Category the rule assigns
+                             */
+                            categoryId: string;
+                            /**
+                             * Format: date-time
+                             * @description Creation instant, ISO 8601 UTC
+                             */
+                            createdAt: string;
+                            /**
+                             * Format: date-time
+                             * @description Last change instant, ISO 8601 UTC
+                             */
+                            updatedAt: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    RulesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * @description `description` matches the whole normalized description, `contains` a part of it
+                     * @enum {string}
+                     */
+                    matchType: "description" | "contains";
+                    /** @description Text to match; it is normalized (no accents, uppercase, no punctuation) before saving and must keep 2 to 80 characters for `contains` */
+                    pattern: string;
+                    /**
+                     * @description `out` matches negative amounts, `in` positive amounts, `any` both
+                     * @enum {string}
+                     */
+                    appliesTo: "out" | "in" | "any";
+                    /**
+                     * Format: uuid
+                     * @description Category the rule assigns
+                     */
+                    categoryId: string;
+                    /**
+                     * @description Whether past transactions that match are recategorized now (default true)
+                     * @default true
+                     */
+                    applyToPast?: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description Rule created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        rule: {
+                            /**
+                             * Format: uuid
+                             * @description Rule id
+                             */
+                            id: string;
+                            /**
+                             * @description `counterparty` (learned from a correction), `description` (whole description) or `contains`
+                             * @enum {string}
+                             */
+                            matchType: "counterparty" | "description" | "contains";
+                            /** @description Text shown to the user, e.g. the payee name; for counterparty rules never the document */
+                            label: string;
+                            /**
+                             * @description `out` matches negative amounts, `in` positive amounts, `any` both
+                             * @enum {string}
+                             */
+                            appliesTo: "out" | "in" | "any";
+                            /**
+                             * Format: uuid
+                             * @description Category the rule assigns
+                             */
+                            categoryId: string;
+                            /**
+                             * Format: date-time
+                             * @description Creation instant, ISO 8601 UTC
+                             */
+                            createdAt: string;
+                            /**
+                             * Format: date-time
+                             * @description Last change instant, ISO 8601 UTC
+                             */
+                            updatedAt: string;
+                        };
+                        /** @description Past transactions recategorized in the same transaction */
+                        recategorized: number;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The category does not exist in this company (categories.category_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description A rule with the same match already exists (categories.rule_conflict, meta.ruleId) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Invalid pattern (categories.invalid_rule) or 500 rules reached (categories.limit_reached) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    RulesController_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * @description `description` or `contains`
+                     * @enum {string}
+                     */
+                    matchType: "description" | "contains";
+                    /** @description Text to match; it is normalized (no accents, uppercase, no punctuation) before saving and must keep 2 to 80 characters for `contains` */
+                    pattern: string;
+                    /**
+                     * @description `out` matches negative amounts, `in` positive amounts, `any` both
+                     * @enum {string}
+                     */
+                    appliesTo: "out" | "in" | "any";
+                };
+            };
+        };
+        responses: {
+            /** @description Normalized pattern and matches */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Pattern as it would be saved */
+                        normalizedPattern: string;
+                        /** @description Transactions the rule would affect */
+                        matches: number;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The pattern is not valid once normalized (categories.invalid_rule) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 60 previews in a minute (core.too_many_attempts) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    RulesController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Rule id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Rule deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Transactions whose category changed because of this operation */
+                        recategorized: number;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The rule does not exist in this company (categories.rule_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    RulesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Rule id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: uuid
+                     * @description New category of the rule
+                     */
+                    categoryId?: string;
+                    /**
+                     * @description `out` matches negative amounts, `in` positive amounts, `any` both
+                     * @enum {string}
+                     */
+                    appliesTo?: "out" | "in" | "any";
+                };
+            };
+        };
+        responses: {
+            /** @description Rule updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        rule: {
+                            /**
+                             * Format: uuid
+                             * @description Rule id
+                             */
+                            id: string;
+                            /**
+                             * @description `counterparty` (learned from a correction), `description` (whole description) or `contains`
+                             * @enum {string}
+                             */
+                            matchType: "counterparty" | "description" | "contains";
+                            /** @description Text shown to the user, e.g. the payee name; for counterparty rules never the document */
+                            label: string;
+                            /**
+                             * @description `out` matches negative amounts, `in` positive amounts, `any` both
+                             * @enum {string}
+                             */
+                            appliesTo: "out" | "in" | "any";
+                            /**
+                             * Format: uuid
+                             * @description Category the rule assigns
+                             */
+                            categoryId: string;
+                            /**
+                             * Format: date-time
+                             * @description Creation instant, ISO 8601 UTC
+                             */
+                            createdAt: string;
+                            /**
+                             * Format: date-time
+                             * @description Last change instant, ISO 8601 UTC
+                             */
+                            updatedAt: string;
+                        };
+                        /** @description Past transactions recategorized in the same transaction */
+                        recategorized: number;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The rule or the category does not exist (categories.rule_not_found, categories.category_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Another rule already has this match (categories.rule_conflict, meta.ruleId) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
