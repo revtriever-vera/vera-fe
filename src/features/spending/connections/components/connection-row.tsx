@@ -4,10 +4,10 @@ import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { Button } from '@/shared/ui/button';
+import { InstitutionAvatar } from '../../components/institution-avatar';
 import type { ConnectionView } from '../../types';
 import { consentExpiresSoon, shortDate, syncStamp, type SyncStamp } from '../lib/format-sync-time';
 import { connectionHelpKey, helpTarget, type HelpKey, type HelpTarget } from '../lib/connection-help';
-import { initialsOf } from '../lib/initials';
 import { ConnectionStatusChip } from './connection-status-chip';
 
 export interface ConnectionRowProps {
@@ -92,12 +92,7 @@ function RowHeader({ connection, now }: { readonly connection: ConnectionView; r
     const expiry: string | null = connection.consentExpiresAt;
     return (
         <div className="flex items-start gap-3">
-            <span
-                aria-hidden="true"
-                className="flex size-10 shrink-0 items-center justify-center rounded-control bg-accent/10 text-sm font-bold text-accent-strong"
-            >
-                {initialsOf(connection.connectorName)}
-            </span>
+            <InstitutionAvatar name={connection.connectorName} logoUrl={connection.institutionLogoUrl} />
             <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                 <div className="flex flex-wrap items-center gap-2">
                     <b className="text-sm text-content">{connection.connectorName ?? t('banks.unknownBank')}</b>

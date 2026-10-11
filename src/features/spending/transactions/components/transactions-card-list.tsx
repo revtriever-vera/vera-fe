@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import type { TransactionView } from '../../types';
+import { AccountLabel } from './account-label';
 import { TransactionAmount, TransactionCategory, TransactionDate, TransactionTitle } from './transaction-row';
 import type { TransactionsListProps } from './transactions-table';
 
@@ -10,9 +11,9 @@ function TransactionCard({ transaction }: { readonly transaction: TransactionVie
             <div className="flex items-start justify-between gap-3">
                 <div className="flex min-w-0 flex-col gap-1">
                     <TransactionTitle transaction={transaction} />
-                    <p className="flex flex-wrap gap-x-2 text-xs text-content-muted">
+                    <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-content-muted">
                         <TransactionDate transaction={transaction} />
-                        <span>{transaction.accountName}</span>
+                        <AccountLabel transaction={transaction} />
                     </p>
                 </div>
                 <TransactionAmount transaction={transaction} />

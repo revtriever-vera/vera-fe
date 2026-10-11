@@ -10039,6 +10039,8 @@ export interface operations {
                             kind: "checking" | "savings" | "credit_card" | "other";
                             /** @description Name of the bank or institution */
                             institutionName: string | null;
+                            /** @description HTTPS URL of the bank logo returned by Pluggy; null for file and sample accounts, the client falls back to initials */
+                            institutionLogoUrl: string | null;
                             /** @description Last four digits of the account or card number; the full number is never stored */
                             numberLast4: string | null;
                             /** @description Currency of the account, ISO 4217 */
@@ -10217,6 +10219,8 @@ export interface operations {
                         kind: "checking" | "savings" | "credit_card" | "other";
                         /** @description Name of the bank or institution */
                         institutionName: string | null;
+                        /** @description HTTPS URL of the bank logo returned by Pluggy; null for file and sample accounts, the client falls back to initials */
+                        institutionLogoUrl: string | null;
                         /** @description Last four digits of the account or card number; the full number is never stored */
                         numberLast4: string | null;
                         /** @description Currency of the account, ISO 4217 */
@@ -11145,6 +11149,8 @@ export interface operations {
                             itemIdHint: string;
                             /** @description Name of the bank connector */
                             connectorName: string | null;
+                            /** @description HTTPS URL of the bank logo returned by Pluggy; null when unknown, the client falls back to initials */
+                            institutionLogoUrl: string | null;
                             /**
                              * @description Connection status
                              * @enum {string}
@@ -11277,6 +11283,8 @@ export interface operations {
                                 itemIdHint: string;
                                 /** @description Name of the bank connector */
                                 connectorName: string | null;
+                                /** @description HTTPS URL of the bank logo returned by Pluggy; null when unknown, the client falls back to initials */
+                                institutionLogoUrl: string | null;
                                 /**
                                  * @description Connection status
                                  * @enum {string}

@@ -28,6 +28,7 @@ export const CURRENT_MONTH: string = '2026-10';
 export const CANONICAL_INCOME_MINOR: number = 2800000;
 export const CANONICAL_SAVED_MINOR: number = 336000;
 export const CANONICAL_UNCATEGORIZED_MINOR: number = 80000;
+export const NUBANK_LOGO_URL: string = 'https://logos.example.test/nubank.png';
 const CREATED_AT: string = '2026-10-01T12:00:00.000Z';
 
 interface CategorySeed {
@@ -143,6 +144,7 @@ export function accountView(overrides: Partial<AccountView> = {}): AccountView {
         name: 'Extrato do banco',
         kind: 'checking',
         institutionName: null,
+        institutionLogoUrl: null,
         numberLast4: null,
         currency: 'BRL',
         source: 'file',
@@ -166,6 +168,7 @@ export function canonicalAccounts(): AccountsResponse {
                 name: seed.name,
                 kind: seed.kind,
                 institutionName: seed.institution,
+                institutionLogoUrl: seed.institution === 'Nubank' ? NUBANK_LOGO_URL : null,
                 numberLast4: seed.last4,
                 source: 'pluggy',
                 transactionCount: counts[accountId(seed.key)] ?? 0,
@@ -654,6 +657,7 @@ export function connectionView(overrides: Partial<ConnectionView> = {}): Connect
         id: 'conn-itau',
         itemIdHint: '••••0001',
         connectorName: 'Itaú',
+        institutionLogoUrl: null,
         status: 'active',
         statusReason: null,
         consentExpiresAt: '2027-01-10T12:00:00.000Z',
@@ -675,6 +679,7 @@ export function canonicalConnections(): ConnectionsResponse {
                 id: 'conn-nubank',
                 itemIdHint: '••••0002',
                 connectorName: 'Nubank',
+                institutionLogoUrl: NUBANK_LOGO_URL,
                 status: 'needs_attention',
                 statusReason: 'login_error',
                 lastSuccessAt: null,

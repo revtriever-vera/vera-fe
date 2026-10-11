@@ -10,6 +10,7 @@ import { SelectMenu, type SelectChoice } from '@/shared/ui/select-menu';
 import { useAccounts } from '../../api/use-accounts.query';
 import { useCategories } from '../../api/use-categories.query';
 import { CategoryPicker } from '../../components/category-picker';
+import { InstitutionAvatar } from '../../components/institution-avatar';
 import { MonthSwitcher } from '../../components/month-switcher';
 import type { TransactionsSearch } from '../../schemas/spending-search.schema';
 import { useCategoryLabel, type CategoryLabel } from '../../lib/use-category-label';
@@ -32,18 +33,28 @@ export interface TransactionsFiltersProps {
 type FilterProps = Pick<TransactionsFiltersProps, 'search' | 'onChange'>;
 type Direction = 'all' | 'in' | 'out';
 
+function AccountAvatar({ account }: { readonly account: AccountView }): ReactElement {
+    return <InstitutionAvatar name={account.institutionName ?? account.name} logoUrl={account.institutionLogoUrl} size="sm" />;
+}
+
+function accountChoices(allLabel: string, accounts: readonly AccountView[]): readonly SelectChoice[] {
+    return [
+        { value: ALL, label: allLabel, warning: null },
+        ...accounts.map((account: AccountView): SelectChoice => ({
+            value: account.id,
+            label: account.name,
+            warning: null,
+            icon: <AccountAvatar account={account} />
+        }))
+    ];
+}
+
 function AccountFilter({ search, onChange }: FilterProps): ReactElement {
     const { t }: UseTranslationResponse<'spendingTransactions', undefined> = useTranslation('spendingTransactions');
     const accounts: UseQueryResult<AccountsResponse> = useAccounts();
     const labelId: string = useId();
-    const choices: readonly SelectChoice[] = [
-        { value: ALL, label: t('filters.allAccounts'), warning: null },
-        ...(accounts.data?.accounts ?? []).map((account: AccountView): SelectChoice => ({
-            value: account.id,
-            label: account.name,
-            warning: null
-        }))
-    ];
+    const list: readonly AccountView[] = accounts.data?.accounts ?? [];
+    const selected: AccountView | undefined = list.find((account: AccountView): boolean => account.id === search.accountId);
     return (
         <div className="min-w-0 sm:w-52">
             <span id={labelId} className="sr-only">
@@ -52,8 +63,9 @@ function AccountFilter({ search, onChange }: FilterProps): ReactElement {
             <SelectMenu
                 ariaLabelledBy={labelId}
                 value={search.accountId ?? ALL}
-                choices={choices}
+                choices={accountChoices(t('filters.allAccounts'), list)}
                 placeholder={t('filters.allAccounts')}
+                leading={selected === undefined ? undefined : <AccountAvatar account={selected} />}
                 onChange={(value: string): void => {
                     onChange({ accountId: value === ALL ? undefined : value });
                 }}

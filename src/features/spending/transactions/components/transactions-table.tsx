@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { Table, type TableColumn } from '@/shared/ui/table';
 import type { TransactionView } from '../../types';
+import { AccountLabel } from './account-label';
 import { TransactionAmount, TransactionCategory, TransactionDate, TransactionTitle } from './transaction-row';
 
 export interface TransactionsListProps {
@@ -28,7 +29,11 @@ export function TransactionsTable({ transactions }: TransactionsListProps): Reac
             header: t('columns.category'),
             render: (transaction: TransactionView): ReactElement => <TransactionCategory transaction={transaction} />
         },
-        { key: 'account', header: t('columns.account'), render: (transaction: TransactionView): string => transaction.accountName },
+        {
+            key: 'account',
+            header: t('columns.account'),
+            render: (transaction: TransactionView): ReactElement => <AccountLabel transaction={transaction} />
+        },
         {
             key: 'amount',
             header: t('columns.amount'),
