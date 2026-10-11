@@ -141,4 +141,14 @@ describe('CategoryPicker', () => {
 
         expect(screen.getByRole('button', { name: 'Categoria da transação' })).toBeDisabled();
     });
+
+    it('mostra o rótulo vazio e o nome da opção nula passados por quem usa', async () => {
+        const user: UserEvent = userEvent.setup();
+        renderWithProviders(<Harness allowNone emptyLabel="Todas as categorias" noneLabel="Sem categoria" />);
+
+        expect(screen.getByRole('button', { name: 'Categoria da transação' })).toHaveTextContent('Todas as categorias');
+        const list: HTMLElement = await openPicker(user);
+
+        expect(within(list).getByRole('option', { name: 'Sem categoria' })).toBeInTheDocument();
+    });
 });

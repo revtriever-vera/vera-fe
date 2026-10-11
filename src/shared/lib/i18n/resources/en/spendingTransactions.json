@@ -1,1 +1,98 @@
-{}
+{
+  "title": "Transactions",
+  "description": "Most of them sort themselves (Pluggy category, merchant dictionary and your rules). What is left, you teach once.",
+  "actions": {
+    "rules": "Manage rules",
+    "import": "Import statement"
+  },
+  "export": {
+    "button": "Download spreadsheet",
+    "exporting": "Preparing…",
+    "xlsx": "Spreadsheet (.xlsx)",
+    "csv": "Text (.csv)",
+    "done": "Spreadsheet downloaded",
+    "tooLarge": "Too many transactions for a single file. Choose a shorter period.",
+    "rateLimited": "Too many downloads in a row. Wait a moment and try again.",
+    "failed": "Could not download the spreadsheet. Try again."
+  },
+  "banner": {
+    "uncategorizedTitle_one": "{{count}} transaction without a category",
+    "uncategorizedTitle_other": "{{count}} transactions without a category",
+    "uncategorizedDetail": "Usually Pix to a person. Pick the category and tick “always” to create a rule.",
+    "show": "Show only uncategorized",
+    "allDoneTitle": "Everything is categorized",
+    "allDoneDetail": "The next matching transactions will land in the right category."
+  },
+  "filters": {
+    "label": "Transaction filters",
+    "account": "Account",
+    "allAccounts": "All accounts",
+    "category": "Category",
+    "categoryWithValue": "Category: {{value}}",
+    "allCategories": "All categories",
+    "noneOption": "Uncategorized",
+    "direction": "Type",
+    "all": "All",
+    "out": "Outflows",
+    "in": "Inflows",
+    "search": "Search by description or payee",
+    "clear": "Clear filters",
+    "panel": "Filters",
+    "panelCount": "Filters ({{count}})"
+  },
+  "columns": {
+    "date": "Date",
+    "description": "Description",
+    "category": "Category",
+    "account": "Account",
+    "amount": "Amount"
+  },
+  "list": {
+    "tableLabel": "Transactions of the month",
+    "cardsLabel": "Transaction list",
+    "loading": "Loading transactions",
+    "loadError": "Could not load the transactions",
+    "retry": "Try again"
+  },
+  "row": {
+    "installment": "{{number}}/{{total}}",
+    "sample": "example",
+    "changeCategory": "{{category}}: change the category of {{description}}"
+  },
+  "empty": {
+    "filteredTitle": "No transactions match these filters",
+    "filteredDescription": "Try another month or remove a filter.",
+    "monthTitle": "No transactions this month",
+    "monthDescription": "Pick another month to see the transactions."
+  },
+  "totals": {
+    "label": "Totals of the filter",
+    "in": "Inflows",
+    "out": "Outflows",
+    "count_one": "{{count}} transaction",
+    "count_other": "{{count}} transactions"
+  },
+  "inline": {
+    "pick": "Choose a category…",
+    "pickLabel": "Category of {{description}}",
+    "always": "always for {{target}}",
+    "apply": "Apply",
+    "invalidRule": "This transaction has no payee identified; the rule will use the description",
+    "kindMismatchOut": "An income category does not fit an outflow",
+    "kindMismatchIn": "An expense category does not fit an inflow"
+  },
+  "dialog": {
+    "title": "Change category",
+    "pickLabel": "New category",
+    "save": "Save",
+    "cancel": "Cancel",
+    "revert": "Back to automatic"
+  },
+  "toast": {
+    "applied": "Category applied",
+    "reverted": "The category went back to automatic",
+    "ruleCreated": "Rule created for {{target}}.",
+    "ruleCreatedWithCount_one": "Rule created for {{target}}: {{count}} more transaction recategorized.",
+    "ruleCreatedWithCount_other": "Rule created for {{target}}: {{count}} more transactions recategorized."
+  }
+}
