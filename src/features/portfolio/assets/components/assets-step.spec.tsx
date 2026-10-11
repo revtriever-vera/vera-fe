@@ -10,7 +10,10 @@ import { renderWithProviders } from '../../../../../test/render';
 import { server } from '../../../../../test/msw/server';
 import { AssetsStep, type AssetsStepState } from './assets-step';
 
-function renderStep(footer: (state: AssetsStepState) => ReactNode = (state) => <p>{`rodape ${state.count}`}</p>, eyebrow?: string): void {
+function renderStep(
+    footer: (state: AssetsStepState) => ReactNode = (state) => <p>{`rodape ${String(state.count)}`}</p>,
+    eyebrow?: string
+): void {
     renderWithProviders(<AssetsStep eyebrow={eyebrow} footer={footer} />);
 }
 
@@ -30,7 +33,7 @@ describe('AssetsStep', () => {
     it('ITUB4: abre o modal no passo 2 e a coluna cresce ao vivo, com o rodapé recebendo o estado', async () => {
         mockWalletApi([]);
         const footer: Mock<(state: AssetsStepState) => ReactNode> = vi.fn((state: AssetsStepState): ReactNode => (
-            <p>{`rodape ${state.count}`}</p>
+            <p>{`rodape ${String(state.count)}`}</p>
         ));
         const user: UserEvent = userEvent.setup();
         renderStep(footer);
