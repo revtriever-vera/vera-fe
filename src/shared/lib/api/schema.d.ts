@@ -1184,6 +1184,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/spending/cuts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Suggest where to cut to reach the savings goal
+         * @description Deterministic cut suggestion computed from the monthly summary (same `month` rules as `GET /spending/summary`; without `month`, the last closed month). Nothing is stored. `goalBps` simulates another goal in this response only; save it with `PUT /spending/settings`. Gap: `gapMinor` = max(0, goal - saved). Candidates: expense categories with `flexibility = flexible` and `spentMinor > 0`; `excessMinor` = max(0, spent - average), and 0 when there is no average. Ideal cut: when the gap is 0 it is 0; when the total excess covers the gap, `excess * gap / total excess`; otherwise `min(spent, excess + (gap - total excess) * spent / total flexible spent)`. Exact rounding: `totalCutMinor` is the sum of the ideal cuts rounded half up; each cut is floored and the missing cents go to the largest remainders (ties: higher spent, then `systemKey` or `categoryId` in lexical order). So the sum of `cutMinor` equals `totalCutMinor`, `0 <= cutMinor <= spentMinor` and `limitMinor = spentMinor - cutMinor`. `limitMonth` is the month after `month`; `isPartial` is true for the current month, which is not closed yet. `categoriesWithCut` counts cuts of at least 100 cents. `uncategorizedMinor` lowers what was saved but is left out of the cuts. Status: `no_data` (no transactions, empty list), `no_income` (income 0, empty list), `goal_met` (gap 0, all cuts 0, `surplusMinor` = saved - goal), `cut_suggested` (gap within the flexible total) and `exceeds_flexible` (gap above the flexible total: every category is cut to zero and the goal requires reviewing fixed spending or income). Sorted by cut descending, then spent descending, then category position.
+         */
+        get: operations["CutsController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -10378,6 +10398,137 @@ export interface operations {
                         };
                     };
                     "text/csv": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    CutsController_get: {
+        parameters: {
+            query?: {
+                /** @description Calendar month analysed, YYYY-MM, from 2000-01 to the current month. Defaults to the last closed month */
+                month?: string;
+                /** @description Simulated savings goal in basis points (2000 = 20%), 0 to 9000. Replaces the saved goal in this response only */
+                goalBps?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Cut suggestion */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        month: string;
+                        limitMonth: string;
+                        isPartial: boolean;
+                        /** @enum {string} */
+                        status: "no_data" | "no_income" | "goal_met" | "cut_suggested" | "exceeds_flexible";
+                        goal: {
+                            bps: number;
+                            minor: number;
+                            simulated: boolean;
+                        };
+                        incomeMinor: number;
+                        savedMinor: number;
+                        savingsRateBps: number | null;
+                        gapMinor: number;
+                        surplusMinor: number;
+                        totalCutMinor: number;
+                        flexibleTotalMinor: number;
+                        excessTotalMinor: number;
+                        categoriesWithCut: number;
+                        uncategorizedMinor: number;
+                        averageMonths: number;
+                        suggestions: {
+                            /** Format: uuid */
+                            categoryId: string;
+                            systemKey: string | null;
+                            name: string | null;
+                            icon: string;
+                            spentMinor: number;
+                            averageMinor: number | null;
+                            excessMinor: number;
+                            cutMinor: number;
+                            limitMinor: number;
+                        }[];
+                    };
+                };
+            };
+            /** @description `goalBps` outside 0 to 9000 or not an integer (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Malformed, earlier than 2000-01 or future month (summary.invalid_month) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
                         /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */

@@ -1,1 +1,55 @@
-{}
+{
+  "page": {
+    "loading": "Loading the cut suggestions",
+    "loadFailed": "Could not load the cut suggestions"
+  },
+  "goal": {
+    "title": "Your goal",
+    "sliderLabel": "Savings goal",
+    "valueText": "{{percent}} of income",
+    "goalPill": "Goal {{amount}}",
+    "savedPill": "Saved {{amount}} ({{rate}})",
+    "savedPillNoRate": "Saved {{amount}}",
+    "save": "Save goal",
+    "saved": "Goal saved",
+    "simulating": "Simulating a goal different from the saved one. Save it to apply it to the monthly summary."
+  },
+  "status": {
+    "gapLabel": "Missing per month",
+    "metLabel": "Goal reached",
+    "cutSuggested_one": "You can get there by cutting {{total}} in {{count}} flexible category.",
+    "cutSuggested_other": "You can get there by cutting {{total}} in {{count}} flexible categories.",
+    "exceedsFlexible": "More than all flexible spending combined. To reach this goal you would need to review a fixed expense or your income.",
+    "goalMet": "You saved more than your goal. That amount can go straight to the smart contribution.",
+    "noIncome": "No income recorded this month, so the goal cannot be calculated.",
+    "defineIncome": "Set your income",
+    "contribution": "Go to the smart contribution"
+  },
+  "table": {
+    "title": "Suggested limits for {{month}}",
+    "label": "Suggested limits by category",
+    "support": "It starts with what rose above your average; it only goes beyond that if there is still a gap.",
+    "partial": "The month has not closed yet; the numbers may change.",
+    "listLabel": "Suggested limits",
+    "columns": {
+      "category": "Category",
+      "average": "Your average",
+      "cut": "Cut",
+      "limit": "Suggested limit"
+    },
+    "averageMonths_one": "average of {{count}} month",
+    "averageMonths_other": "average of {{count}} months",
+    "noValue": "—",
+    "exact": "{{amount}} exactly"
+  },
+  "uncategorized": {
+    "text": "{{amount}} without a category was left out of the calculation.",
+    "action": "Categorize"
+  },
+  "unsaved": {
+    "title": "Leave without saving the goal?",
+    "description": "You changed the goal on the slider but did not save it. If you leave now, it goes back to the saved value.",
+    "leave": "Leave without saving",
+    "stay": "Keep editing"
+  }
+}

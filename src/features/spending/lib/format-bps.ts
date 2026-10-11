@@ -1,6 +1,6 @@
 import type { SupportedLocale } from '@/shared/lib/locale';
 
-const MINUS_SIGN: string = '−';
+export const MINUS_SIGN: string = '−';
 const BPS_PER_UNIT: number = 10000;
 
 function wholePercent(bps: number, locale: SupportedLocale, signDisplay: 'auto' | 'exceptZero'): string {
