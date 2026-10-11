@@ -31,7 +31,7 @@ describe('tipagem das chaves de tradução', () => {
         expectTypeOf<ParseKeys<'spendingCuts'>>().toBeNever();
         expectTypeOf<ParseKeys<'spendingConnections'>>().toBeNever();
         expectTypeOf<ParseKeys<'spendingImports'>>().toBeNever();
-        expectTypeOf<ParseKeys<'spendingRules'>>().toBeNever();
+        expectTypeOf<'rules.title'>().toExtend<ParseKeys<'spendingRules'>>();
     });
 
     it('rejeita uma chave inexistente do namespace spending', () => {

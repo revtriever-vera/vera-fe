@@ -1,1 +1,210 @@
-{}
+{
+  "rules": {
+    "title": "Your rules",
+    "description": "A rule always sends similar transactions to the same category. It beats the dictionary and Pluggy, and loses only to a correction you made.",
+    "listLabel": "Categorization rules",
+    "searchLabel": "Search rules by name",
+    "searchPlaceholder": "Search rules",
+    "new": "New rule",
+    "noMatch": "No rule with that name.",
+    "loading": "Loading the rules",
+    "loadFailed": "Could not load the rules",
+    "columns": {
+      "rule": "Rule",
+      "type": "Type",
+      "appliesTo": "Direction",
+      "category": "Category",
+      "date": "Created on",
+      "actions": "Actions"
+    },
+    "types": {
+      "counterparty": "payee",
+      "description": "exact description",
+      "contains": "contains"
+    },
+    "labels": {
+      "counterparty": "{{label}}",
+      "description": "equal to {{label}}",
+      "contains": "contains {{label}}"
+    },
+    "appliesTo": {
+      "out": "outflows",
+      "in": "inflows",
+      "any": "both"
+    },
+    "categoryLabel": "Category of the rule {{label}}",
+    "delete": "Delete the rule {{label}}",
+    "createdOn": "Created on {{date}}",
+    "empty": {
+      "title": "No rules yet",
+      "description": "When you correct a transaction and tick \"always\", the rule shows up here.",
+      "link": "See uncategorized transactions"
+    }
+  },
+  "deleteRule": {
+    "title": "Delete the rule {{label}}?",
+    "description": "Transactions this rule categorized go back to automatic categorization (dictionary, Pluggy or uncategorized). The ones you corrected by hand do not change.",
+    "confirm": "Delete rule"
+  },
+  "newRule": {
+    "title": "New rule",
+    "typeLabel": "How to match",
+    "types": {
+      "contains": "Contains the text",
+      "description": "Description equal to"
+    },
+    "patternLabel": "Text",
+    "patternHint": "Capital letters, accents and date numbers make no difference.",
+    "appliesToLabel": "Applies to",
+    "appliesTo": {
+      "out": "Outflows",
+      "in": "Inflows",
+      "any": "Both"
+    },
+    "categoryLabel": "Rule category",
+    "applyToPast": "Also apply to the transactions that already exist",
+    "cancel": "Cancel",
+    "create": "Create rule",
+    "creating": "Creating",
+    "errors": {
+      "patternTooShort": "Use at least 2 characters",
+      "patternTooLong": "Use at most 80 characters",
+      "categoryRequired": "Pick a category",
+      "patternInvalid": "This text is not valid as a rule. Use letters or numbers.",
+      "limitReached": "You reached the limit of 500 rules."
+    },
+    "conflict": {
+      "title": "An identical rule already exists",
+      "see": "See rule"
+    }
+  },
+  "preview": {
+    "loading": "Counting how many transactions the rule affects",
+    "result_one": "The text becomes “{{pattern}}” and matches {{count}} transaction",
+    "result_other": "The text becomes “{{pattern}}” and matches {{count}} transactions",
+    "result_zero": "The text becomes “{{pattern}}” and matches no transactions",
+    "failed": "Could not calculate the preview."
+  },
+  "categories": {
+    "title": "Categories",
+    "description": "Default categories can be renamed. Your own can also change icon and be deleted.",
+    "new": "New category",
+    "loading": "Loading the categories",
+    "loadFailed": "Could not load the categories",
+    "groupLabel": "{{group}} categories",
+    "groups": {
+      "expense": "Spending",
+      "income": "Income",
+      "transfer": "Transfers"
+    },
+    "transferNote": "They count as neither spending nor income",
+    "defaultBadge": "default",
+    "rename": "Rename {{name}}",
+    "nameLabel": "Name of the category {{name}}",
+    "renameHint": "Enter saves, Esc cancels",
+    "save": "Save",
+    "cancel": "Cancel",
+    "restoreName": "Restore name",
+    "changeIcon": "Change the icon of {{name}}",
+    "iconMenu": "Icons",
+    "delete": "Delete {{name}}",
+    "deleteLocked": "Default categories cannot be deleted; you can rename them",
+    "errors": {
+      "nameRequired": "Enter a name",
+      "nameTooLong": "Use at most 40 characters",
+      "nameTaken": "A category with this name already exists.",
+      "limitReached": "You reached the limit of 50 categories of your own."
+    }
+  },
+  "deleteCategory": {
+    "title": "Delete the category {{name}}?",
+    "moveTo": "Move the transactions to",
+    "moveToLabel": "Where the transactions go",
+    "auto": "Leave them to automatic categorization",
+    "rulesWarning": "Rules that point to this category will be deleted.",
+    "confirm": "Delete category",
+    "cancel": "Cancel"
+  },
+  "newCategory": {
+    "title": "New category",
+    "nameLabel": "Name",
+    "kindLabel": "Kind",
+    "kinds": {
+      "expense": "Spending",
+      "income": "Income"
+    },
+    "flexibilityLabel": "Type of spending",
+    "flexibility": {
+      "fixed": "Fixed",
+      "flexible": "Flexible"
+    },
+    "iconLabel": "Icon",
+    "cancel": "Cancel",
+    "create": "Create category",
+    "creating": "Creating",
+    "errors": {
+      "flexibilityRequired": "Choose fixed or flexible",
+      "flexibilityNotApplicable": "Income has no fixed or flexible"
+    }
+  },
+  "icons": {
+    "Home": "House",
+    "BookOpen": "Book",
+    "HeartPulse": "Health",
+    "Wrench": "Wrench",
+    "Landmark": "Bank",
+    "ShoppingCart": "Cart",
+    "UtensilsCrossed": "Cutlery",
+    "Car": "Car",
+    "Film": "Cinema",
+    "Repeat": "Subscription",
+    "ShoppingBag": "Bag",
+    "CircleEllipsis": "Ellipsis",
+    "TrendingUp": "Rising",
+    "PlusCircle": "Plus",
+    "ArrowLeftRight": "Transfer",
+    "CreditCard": "Card",
+    "PiggyBank": "Piggy bank",
+    "Coffee": "Coffee",
+    "Dumbbell": "Gym",
+    "PawPrint": "Paw",
+    "Plane": "Plane",
+    "Gift": "Gift",
+    "Baby": "Baby",
+    "Briefcase": "Briefcase"
+  },
+  "toasts": {
+    "ruleCreated_one": "Rule created: {{count}} transaction recategorized",
+    "ruleCreated_other": "Rule created: {{count}} transactions recategorized",
+    "ruleCreated_zero": "Rule created: no transaction changed",
+    "ruleCreatedFuture": "Rule created. It applies to the next transactions.",
+    "ruleUpdated_one": "Rule updated: {{count}} transaction recategorized",
+    "ruleUpdated_other": "Rule updated: {{count}} transactions recategorized",
+    "ruleUpdated_zero": "Rule updated: no transaction changed",
+    "ruleDeleted_one": "Rule deleted: {{count}} transaction went back to automatic categorization",
+    "ruleDeleted_other": "Rule deleted: {{count}} transactions went back to automatic categorization",
+    "ruleDeleted_zero": "Rule deleted: no transaction changed",
+    "categoryDeleted_one": "Category deleted: {{count}} transaction recategorized",
+    "categoryDeleted_other": "Category deleted: {{count}} transactions recategorized",
+    "categoryDeleted_zero": "Category deleted: no transaction changed",
+    "categoryCreated": "Category created",
+    "categoryRenamed": "Category renamed",
+    "nameRestored": "Default name restored",
+    "iconChanged": "Icon updated",
+    "ruleSaveFailed": "Could not save the rule",
+    "ruleUpdateFailed": "Could not update the rule",
+    "ruleDeleteFailed": "Could not delete the rule",
+    "categorySaveFailed": "Could not save the category",
+    "categoryDeleteFailed": "Could not delete the category"
+  },
+  "unsaved": {
+    "title": "Leave without saving?",
+    "description": "You have changes that were not saved yet. If you leave now, they will be lost.",
+    "leave": "Leave without saving",
+    "stay": "Keep editing"
+  },
+  "footer": {
+    "dictionary": "Vera's merchant dictionary is not edited here: it changes through a pull request in the repository.",
+    "link": "See the dictionary README"
+  }
+}

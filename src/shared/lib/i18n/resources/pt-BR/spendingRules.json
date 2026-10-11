@@ -1,1 +1,210 @@
-{}
+{
+  "rules": {
+    "title": "Suas regras",
+    "description": "Uma regra manda as transações parecidas sempre para a mesma categoria. Ela vale mais que o dicionário e que a Pluggy, e menos que uma correção sua.",
+    "listLabel": "Regras de categorização",
+    "searchLabel": "Buscar regra pelo nome",
+    "searchPlaceholder": "Buscar regra",
+    "new": "Nova regra",
+    "noMatch": "Nenhuma regra com esse nome.",
+    "loading": "Carregando as regras",
+    "loadFailed": "Não foi possível carregar as regras",
+    "columns": {
+      "rule": "Regra",
+      "type": "Tipo",
+      "appliesTo": "Sentido",
+      "category": "Categoria",
+      "date": "Criada em",
+      "actions": "Ações"
+    },
+    "types": {
+      "counterparty": "destinatário",
+      "description": "descrição igual",
+      "contains": "contém"
+    },
+    "labels": {
+      "counterparty": "{{label}}",
+      "description": "igual a {{label}}",
+      "contains": "contém {{label}}"
+    },
+    "appliesTo": {
+      "out": "saídas",
+      "in": "entradas",
+      "any": "ambas"
+    },
+    "categoryLabel": "Categoria da regra {{label}}",
+    "delete": "Excluir a regra {{label}}",
+    "createdOn": "Criada em {{date}}",
+    "empty": {
+      "title": "Nenhuma regra ainda",
+      "description": "Quando você corrige uma transação e marca \"sempre\", a regra aparece aqui.",
+      "link": "Ver transações sem categoria"
+    }
+  },
+  "deleteRule": {
+    "title": "Excluir a regra {{label}}?",
+    "description": "As transações que esta regra categorizou voltam para a categorização automática (dicionário, Pluggy ou sem categoria). As que você corrigiu à mão não mudam.",
+    "confirm": "Excluir regra"
+  },
+  "newRule": {
+    "title": "Nova regra",
+    "typeLabel": "Como comparar",
+    "types": {
+      "contains": "Contém o texto",
+      "description": "Descrição igual a"
+    },
+    "patternLabel": "Texto",
+    "patternHint": "Maiúsculas, acentos e números de data não fazem diferença.",
+    "appliesToLabel": "Vale para",
+    "appliesTo": {
+      "out": "Saídas",
+      "in": "Entradas",
+      "any": "Ambas"
+    },
+    "categoryLabel": "Categoria da regra",
+    "applyToPast": "Aplicar também às transações que já existem",
+    "cancel": "Cancelar",
+    "create": "Criar regra",
+    "creating": "Criando",
+    "errors": {
+      "patternTooShort": "Use pelo menos 2 caracteres",
+      "patternTooLong": "Use no máximo 80 caracteres",
+      "categoryRequired": "Escolha uma categoria",
+      "patternInvalid": "Esse texto não vale como regra. Use letras ou números.",
+      "limitReached": "Você chegou ao limite de 500 regras."
+    },
+    "conflict": {
+      "title": "Já existe uma regra igual",
+      "see": "Ver regra"
+    }
+  },
+  "preview": {
+    "loading": "Calculando quantas transações a regra afeta",
+    "result_one": "O texto vira “{{pattern}}” e encontra {{count}} transação",
+    "result_other": "O texto vira “{{pattern}}” e encontra {{count}} transações",
+    "result_zero": "O texto vira “{{pattern}}” e não encontra nenhuma transação",
+    "failed": "Não foi possível calcular a prévia."
+  },
+  "categories": {
+    "title": "Categorias",
+    "description": "As categorias padrão podem ser renomeadas. As suas também podem ter o ícone trocado e ser excluídas.",
+    "new": "Nova categoria",
+    "loading": "Carregando as categorias",
+    "loadFailed": "Não foi possível carregar as categorias",
+    "groupLabel": "Categorias de {{group}}",
+    "groups": {
+      "expense": "Gastos",
+      "income": "Entradas",
+      "transfer": "Transferências"
+    },
+    "transferNote": "Não contam como gasto nem como renda",
+    "defaultBadge": "padrão",
+    "rename": "Renomear {{name}}",
+    "nameLabel": "Nome da categoria {{name}}",
+    "renameHint": "Enter salva, Esc cancela",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "restoreName": "Restaurar nome",
+    "changeIcon": "Trocar o ícone de {{name}}",
+    "iconMenu": "Ícones",
+    "delete": "Excluir {{name}}",
+    "deleteLocked": "Categorias padrão não podem ser excluídas; você pode renomear",
+    "errors": {
+      "nameRequired": "Informe um nome",
+      "nameTooLong": "Use no máximo 40 caracteres",
+      "nameTaken": "Já existe uma categoria com esse nome.",
+      "limitReached": "Você chegou ao limite de 50 categorias próprias."
+    }
+  },
+  "deleteCategory": {
+    "title": "Excluir a categoria {{name}}?",
+    "moveTo": "Mover as transações para",
+    "moveToLabel": "Destino das transações",
+    "auto": "Deixar para a categorização automática",
+    "rulesWarning": "As regras que apontam para esta categoria serão excluídas.",
+    "confirm": "Excluir categoria",
+    "cancel": "Cancelar"
+  },
+  "newCategory": {
+    "title": "Nova categoria",
+    "nameLabel": "Nome",
+    "kindLabel": "Natureza",
+    "kinds": {
+      "expense": "Gasto",
+      "income": "Entrada"
+    },
+    "flexibilityLabel": "Tipo de gasto",
+    "flexibility": {
+      "fixed": "Fixo",
+      "flexible": "Flexível"
+    },
+    "iconLabel": "Ícone",
+    "cancel": "Cancelar",
+    "create": "Criar categoria",
+    "creating": "Criando",
+    "errors": {
+      "flexibilityRequired": "Escolha entre fixo e flexível",
+      "flexibilityNotApplicable": "Entradas não têm fixo ou flexível"
+    }
+  },
+  "icons": {
+    "Home": "Casa",
+    "BookOpen": "Livro",
+    "HeartPulse": "Saúde",
+    "Wrench": "Chave inglesa",
+    "Landmark": "Banco",
+    "ShoppingCart": "Carrinho",
+    "UtensilsCrossed": "Talheres",
+    "Car": "Carro",
+    "Film": "Cinema",
+    "Repeat": "Assinatura",
+    "ShoppingBag": "Sacola",
+    "CircleEllipsis": "Reticências",
+    "TrendingUp": "Alta",
+    "PlusCircle": "Mais",
+    "ArrowLeftRight": "Transferência",
+    "CreditCard": "Cartão",
+    "PiggyBank": "Cofrinho",
+    "Coffee": "Café",
+    "Dumbbell": "Academia",
+    "PawPrint": "Pata",
+    "Plane": "Avião",
+    "Gift": "Presente",
+    "Baby": "Bebê",
+    "Briefcase": "Maleta"
+  },
+  "toasts": {
+    "ruleCreated_one": "Regra criada: {{count}} transação recategorizada",
+    "ruleCreated_other": "Regra criada: {{count}} transações recategorizadas",
+    "ruleCreated_zero": "Regra criada: nenhuma transação mudou",
+    "ruleCreatedFuture": "Regra criada. Ela vale para as próximas transações.",
+    "ruleUpdated_one": "Regra atualizada: {{count}} transação recategorizada",
+    "ruleUpdated_other": "Regra atualizada: {{count}} transações recategorizadas",
+    "ruleUpdated_zero": "Regra atualizada: nenhuma transação mudou",
+    "ruleDeleted_one": "Regra excluída: {{count}} transação voltou para a categorização automática",
+    "ruleDeleted_other": "Regra excluída: {{count}} transações voltaram para a categorização automática",
+    "ruleDeleted_zero": "Regra excluída: nenhuma transação mudou",
+    "categoryDeleted_one": "Categoria excluída: {{count}} transação recategorizada",
+    "categoryDeleted_other": "Categoria excluída: {{count}} transações recategorizadas",
+    "categoryDeleted_zero": "Categoria excluída: nenhuma transação mudou",
+    "categoryCreated": "Categoria criada",
+    "categoryRenamed": "Categoria renomeada",
+    "nameRestored": "Nome padrão restaurado",
+    "iconChanged": "Ícone atualizado",
+    "ruleSaveFailed": "Não foi possível salvar a regra",
+    "ruleUpdateFailed": "Não foi possível atualizar a regra",
+    "ruleDeleteFailed": "Não foi possível excluir a regra",
+    "categorySaveFailed": "Não foi possível salvar a categoria",
+    "categoryDeleteFailed": "Não foi possível excluir a categoria"
+  },
+  "unsaved": {
+    "title": "Sair sem salvar?",
+    "description": "Você tem alterações que ainda não foram salvas. Se sair agora, elas serão perdidas.",
+    "leave": "Sair sem salvar",
+    "stay": "Continuar editando"
+  },
+  "footer": {
+    "dictionary": "O dicionário de estabelecimentos da Vera não se edita por aqui: ele muda por pull request no repositório.",
+    "link": "Ver o README do dicionário"
+  }
+}
