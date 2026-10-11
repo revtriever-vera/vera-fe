@@ -125,6 +125,10 @@
         animation-play-state: paused;
     }
 
+    .balloon-in {
+        animation: balloon-in 120ms ease-out both;
+    }
+
     .toast-in {
         animation: toast-in 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
     }
@@ -138,6 +142,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+        .balloon-in,
         .toast-in,
         .toast-out {
             animation-duration: 1ms;
@@ -145,6 +150,15 @@
 
         .toast-life {
             animation: none;
+        }
+    }
+
+    @keyframes balloon-in {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
         }
     }
 

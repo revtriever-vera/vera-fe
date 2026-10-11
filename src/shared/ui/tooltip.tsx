@@ -7,7 +7,7 @@ export interface BalloonProps {
 }
 
 const BUBBLE: string =
-    'z-[60] max-w-[220px] rounded-control bg-content px-2.5 py-1.5 text-2xs leading-snug text-surface shadow-lg animate-in fade-in-0';
+    'z-[60] max-w-[220px] rounded-control bg-content px-2.5 py-1.5 text-2xs leading-snug text-surface shadow-lg balloon-in';
 
 export function Balloon({ text, children }: BalloonProps): ReactElement {
     return (
