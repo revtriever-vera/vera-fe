@@ -76,13 +76,13 @@ describe('AssetsStep', () => {
         renderStep();
 
         await user.click(await screen.findByRole('button', { name: 'Remover ITUB4' }));
-        const dialog: HTMLElement = await screen.findByRole('dialog', { name: 'Remover ITUB4?' });
+        const dialog: HTMLElement = await screen.findByRole('dialog', { name: 'Remover ITUB4 da carteira?' });
         expect(api.deleted).toEqual([]);
         await user.click(within(dialog).getByRole('button', { name: 'Remover' }));
 
         expect(await screen.findByRole('heading', { name: 'Sua carteira (1)' })).toBeInTheDocument();
         expect(api.deleted).toEqual(['positions/p1']);
-        expect(screen.getByText('ITUB4 removido')).toBeInTheDocument();
+        expect(screen.getByText('ITUB4 removido da carteira')).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Remover ITUB4' })).toBeNull();
     });
 
