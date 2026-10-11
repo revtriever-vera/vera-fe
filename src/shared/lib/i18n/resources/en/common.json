@@ -17,5 +17,21 @@
   "fileRejected": "File rejected — check the format and size.",
   "requestId": "requestId: {{value}}",
   "dismissAlert": "Dismiss alert",
-  "brandName": "vera"
+  "brandName": "vera",
+  "navLabel": "Main navigation",
+  "openMenu": "Open menu",
+  "closeMenu": "Close menu",
+  "signOut": "Sign out",
+  "viaProvider": "via {{provider}}",
+  "providerGoogle": "Google",
+  "providerFacebook": "Facebook",
+  "openAccount": "Open my account",
+  "userBox": "Account",
+  "navGroupPortfolio": "Wealth",
+  "navGroupSpending": "Spending",
+  "navGroupSettings": "Settings",
+  "navPortfolioOverview": "Overview",
+  "navPortfolioAssets": "My assets",
+  "navPortfolioTargets": "Target portfolio",
+  "navPortfolioContribution": "Smart contribution"
 }

@@ -41,6 +41,8 @@ src/shared/     ui, lib (cliente da API, cn), config
 test/           MSW, helpers de render e setup
 ```
 
+Telas autenticadas vivem em `src/routes/_auth/_app/` e se registram em `APP_NAV_ITEMS` (`src/app/layouts/app-nav.ts`). Rotas fora de `_auth` ficam públicas; só `/login` e `/_dev/*` podem estar fora.
+
 ## Deploy
 
 Cloudflare Pages, um projeto por ambiente (`vera-app-dev` e `vera-app-prod`).

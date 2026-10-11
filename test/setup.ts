@@ -29,6 +29,7 @@ beforeAll(() => {
 });
 
 beforeEach(async () => {
+    vi.spyOn(navigator, 'language', 'get').mockReturnValue('pt-BR');
     await i18n.changeLanguage('pt-BR');
 });
 

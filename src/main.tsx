@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { LocaleSync } from '@/app/providers/locale-sync';
 import { I18nProvider } from '@/app/providers/i18n-provider';
 import { QueryProvider } from '@/app/providers/query-provider';
 import { SessionProvider } from '@/app/providers/session-provider';
@@ -27,6 +28,7 @@ createRoot(rootElement).render(
         <I18nProvider>
             <QueryProvider>
                 <SessionProvider>
+                    <LocaleSync />
                     <ToastProvider>
                         <RouterProvider router={router} />
                     </ToastProvider>

@@ -7,7 +7,7 @@ const assetsSearchSchema = z.object({
     classId: z.string().optional().catch(undefined)
 });
 
-export const Route = createFileRoute('/patrimonio/ativos')({
+export const Route = createFileRoute('/_auth/_app/patrimonio/ativos')({
     validateSearch: assetsSearchSchema,
     component: AssetsPage
 });
