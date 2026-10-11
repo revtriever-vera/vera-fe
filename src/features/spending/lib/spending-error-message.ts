@@ -8,6 +8,8 @@ export type SpendingErrorKey =
     | 'errors.invalidRule'
     | 'errors.categoryLimitReached'
     | 'errors.categoryNameTaken'
+    | 'errors.categoryNameRequired'
+    | 'errors.flexibilityNotApplicable'
     | 'errors.ruleConflict'
     | 'errors.ruleNotFound'
     | 'errors.systemCategoryLocked'
@@ -42,6 +44,8 @@ export const SPENDING_ERROR_KEYS: Readonly<Record<string, SpendingErrorKey>> = {
     'categories.invalid_rule': 'errors.invalidRule',
     'categories.limit_reached': 'errors.categoryLimitReached',
     'categories.name_taken': 'errors.categoryNameTaken',
+    'categories.name_required': 'errors.categoryNameRequired',
+    'categories.flexibility_not_applicable': 'errors.flexibilityNotApplicable',
     'categories.rule_conflict': 'errors.ruleConflict',
     'categories.rule_not_found': 'errors.ruleNotFound',
     'categories.system_category_locked': 'errors.systemCategoryLocked',

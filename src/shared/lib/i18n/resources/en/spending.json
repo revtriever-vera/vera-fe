@@ -127,6 +127,8 @@
     "invalidRule": "That rule is not valid. Check the text and the direction.",
     "categoryLimitReached": "You reached the limit of categories or rules.",
     "categoryNameTaken": "A category with that name already exists.",
+    "categoryNameRequired": "Enter a name for the category.",
+    "flexibilityNotApplicable": "Income and transfers have no fixed or flexible.",
     "ruleConflict": "A rule just like this one already exists.",
     "ruleNotFound": "That rule no longer exists.",
     "systemCategoryLocked": "That default category does not accept this change.",

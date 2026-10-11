@@ -50,7 +50,7 @@ function EmptyRules(): ReactElement {
             title={t('rules.empty.title')}
             description={t('rules.empty.description')}
             action={
-                <Link to="/gastos/transacoes" search={{ uncategorized: true }} className={buttonVariants({ variant: 'secondary' })}>
+                <Link to="/spending/transactions" search={{ uncategorized: true }} className={buttonVariants({ variant: 'secondary' })}>
                     {t('rules.empty.link')}
                 </Link>
             }

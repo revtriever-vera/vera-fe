@@ -10,7 +10,7 @@ import { clearViewport, installRulesApi, problemBody, stubViewport, type RulesAp
 import { server } from '../../../../../test/msw/server';
 import { renderRouterAt } from '../../../../../test/router';
 
-const PATH: string = '/gastos/regras';
+const PATH: string = '/spending/rules';
 
 async function openPage(
     wide: boolean = true,
@@ -67,7 +67,7 @@ describe('RulesPage: regras', () => {
         expect(await screen.findByText('Nenhuma regra ainda')).toBeInTheDocument();
         expect(screen.getByRole('link', { name: 'Ver transações sem categoria' })).toHaveAttribute(
             'href',
-            expect.stringContaining('/gastos/transacoes')
+            expect.stringContaining('/spending/transactions')
         );
     });
 
@@ -378,7 +378,7 @@ describe('RulesPage: alteração pendente', () => {
         await user.click(within(screen.getByRole('navigation', { name: 'Seções dos gastos' })).getByRole('link', { name: 'Transações' }));
         await user.click(await screen.findByRole('button', { name: 'Sair sem salvar' }));
         await waitFor(() => {
-            expect(router.state.location.pathname).toBe('/gastos/transacoes');
+            expect(router.state.location.pathname).toBe('/spending/transactions');
         });
     });
 
