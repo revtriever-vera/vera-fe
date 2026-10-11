@@ -18,4 +18,6 @@ export interface SessionContext {
     readonly isRestoring: boolean;
     readonly signIn: (accessToken: string, user: SessionUser) => void;
     readonly signOut: () => void;
+    readonly discardSession: () => void;
+    readonly replaceUser: (user: SessionUser) => void;
 }

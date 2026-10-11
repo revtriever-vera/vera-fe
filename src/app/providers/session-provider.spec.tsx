@@ -12,7 +12,7 @@ import type { SessionUser } from './session-context';
 import { SessionProvider, useSession } from './session-provider';
 
 function Probe(): ReactElement {
-    const { user, isAuthenticated, isRestoring, signIn, signOut } = useSession();
+    const { user, isAuthenticated, isRestoring, signIn, signOut, discardSession, replaceUser } = useSession();
     const maria: SessionUser = sessionUser({ id: 'maria', name: 'Maria' });
     const joao: SessionUser = sessionUser({ id: 'joao', name: 'João' });
     return (
@@ -37,6 +37,17 @@ function Probe(): ReactElement {
             </button>
             <button type="button" onClick={signOut}>
                 sair
+            </button>
+            <button type="button" onClick={discardSession}>
+                descartar
+            </button>
+            <button
+                type="button"
+                onClick={(): void => {
+                    replaceUser(sessionUser({ id: 'maria', name: 'Maria Nova' }));
+                }}
+            >
+                trocar usuária
             </button>
         </div>
     );
@@ -190,5 +201,39 @@ describe('SessionProvider sign in and sign out', () => {
         expect(() => render(<Probe />)).toThrow('useSession must be used inside SessionProvider');
 
         silence.mockRestore();
+    });
+});
+
+describe('SessionProvider discard and replace', () => {
+    it('discards the session without calling logout', async () => {
+        const logouts: string[] = [];
+        server.use(
+            http.post('*/auth/logout', (): Response => {
+                logouts.push('logout');
+                return new HttpResponse(null, { status: 204 });
+            })
+        );
+        const user: UserEvent = userEvent.setup();
+        renderProvider();
+        await screen.findByText('pronto');
+        await user.click(screen.getByRole('button', { name: 'entrar maria' }));
+
+        await user.click(screen.getByRole('button', { name: 'descartar' }));
+
+        expect(screen.getByText('anônima')).toBeInTheDocument();
+        expect(tokenStore.get()).toBeNull();
+        expect(logouts).toEqual([]);
+    });
+
+    it('replaces the user keeping the token', async () => {
+        const user: UserEvent = userEvent.setup();
+        renderProvider();
+        await screen.findByText('pronto');
+        await user.click(screen.getByRole('button', { name: 'entrar maria' }));
+
+        await user.click(screen.getByRole('button', { name: 'trocar usuária' }));
+
+        expect(screen.getByText('logada: Maria Nova')).toBeInTheDocument();
+        expect(tokenStore.get()).toBe('token-maria');
     });
 });
