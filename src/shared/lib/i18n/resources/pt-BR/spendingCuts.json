@@ -1,1 +1,55 @@
-{}
+{
+  "page": {
+    "loading": "Carregando a sugestão de cortes",
+    "loadFailed": "Não foi possível carregar a sugestão de cortes"
+  },
+  "goal": {
+    "title": "Sua meta",
+    "sliderLabel": "Meta de economia",
+    "valueText": "{{percent}} da renda",
+    "goalPill": "Meta {{amount}}",
+    "savedPill": "Guardado {{amount}} ({{rate}})",
+    "savedPillNoRate": "Guardado {{amount}}",
+    "save": "Salvar meta",
+    "saved": "Meta salva",
+    "simulating": "Simulando uma meta diferente da gravada. Salve para valer no resumo do mês."
+  },
+  "status": {
+    "gapLabel": "Falta por mês",
+    "metLabel": "Meta atingida",
+    "cutSuggested_one": "Dá pra chegar lá cortando {{total}} em {{count}} categoria flexível.",
+    "cutSuggested_other": "Dá pra chegar lá cortando {{total}} em {{count}} categorias flexíveis.",
+    "exceedsFlexible": "Mais do que todos os gastos flexíveis somados. Para essa meta, seria preciso rever algum gasto fixo ou a renda.",
+    "goalMet": "Você guardou mais do que a meta. Esse valor pode ir direto para o aporte inteligente.",
+    "noIncome": "Sem renda registrada neste mês, não dá para calcular a meta.",
+    "defineIncome": "Definir a renda",
+    "contribution": "Ir para o aporte inteligente"
+  },
+  "table": {
+    "title": "Sugestão de limites para {{month}}",
+    "label": "Sugestão de limites por categoria",
+    "support": "Começa pelo que subiu acima da sua média; só passa disso se ainda faltar.",
+    "partial": "O mês ainda não fechou; os números podem mudar.",
+    "listLabel": "Limites sugeridos",
+    "columns": {
+      "category": "Categoria",
+      "average": "Sua média",
+      "cut": "Cortar",
+      "limit": "Limite sugerido"
+    },
+    "averageMonths_one": "média de {{count}} mês",
+    "averageMonths_other": "média de {{count}} meses",
+    "noValue": "—",
+    "exact": "{{amount}} exatos"
+  },
+  "uncategorized": {
+    "text": "{{amount}} sem categoria ficaram de fora da conta.",
+    "action": "Categorizar"
+  },
+  "unsaved": {
+    "title": "Sair sem salvar a meta?",
+    "description": "Você mudou a meta no controle, mas não salvou. Se sair agora, ela volta para o valor gravado.",
+    "leave": "Sair sem salvar",
+    "stay": "Continuar editando"
+  }
+}

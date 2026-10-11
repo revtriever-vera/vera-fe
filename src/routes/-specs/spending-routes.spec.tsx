@@ -31,9 +31,9 @@ describe('rotas de /spending', () => {
     });
 
     it('mostra a tela em construção enquanto o card da página não existe', async () => {
-        renderRouterAt('/spending/cuts', { signedIn: true });
+        renderRouterAt('/spending/connections', { signedIn: true });
 
-        expect(await screen.findByRole('heading', { name: 'Esta tela está em construção' })).toBeInTheDocument();
+        expect(await screen.findAllByRole('heading', { name: 'Esta tela está em construção' })).not.toHaveLength(0);
     });
 
     it('as abas navegam entre as telas', async () => {
