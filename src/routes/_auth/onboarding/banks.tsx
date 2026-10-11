@@ -5,7 +5,8 @@ import { resolveConnectionsLink } from '@/features/onboarding/lib/connections-li
 import { BanksStepPage } from '@/features/onboarding/pages/banks-step-page';
 
 function BanksRoute(): ReactElement {
-    return <BanksStepPage connectionsLink={resolveConnectionsLink(ONBOARDING_DESTINATIONS.connections)} />;
+    const connectionsLink: string | null = resolveConnectionsLink(ONBOARDING_DESTINATIONS.connections);
+    return <BanksStepPage connectionsLink={connectionsLink} importLink={connectionsLink} />;
 }
 
 export const Route = createFileRoute('/_auth/onboarding/banks')({

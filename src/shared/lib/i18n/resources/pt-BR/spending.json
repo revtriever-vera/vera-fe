@@ -139,6 +139,7 @@
     "providerUnavailable": "A Pluggy está fora do ar agora. Tente de novo em instantes.",
     "providerDisabled": "Esta instalação ainda não tem a integração com a Pluggy ligada.",
     "syncInProgress": "Já existe uma atualização em andamento para essa conexão.",
+    "syncUnavailable": "Não foi possível pedir a atualização agora. Tente de novo em instantes.",
     "secretOpenFailed": "Não foi possível ler a credencial guardada. Cadastre-a de novo.",
     "secretSealerMismatch": "A credencial guardada foi criada com outra chave. Cadastre-a de novo.",
     "tooManyAttempts": "Muitas tentativas seguidas. Espere um pouco e tente de novo.",

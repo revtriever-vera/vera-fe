@@ -4,13 +4,18 @@ import type { AreaSummary } from '../types';
 import { onboardingSummary } from '../../../../test/fixtures/onboarding';
 import { isConfigured, landingDestination } from './landing-destination';
 
-const DESTINATIONS: OnboardingDestinations = { ...ONBOARDING_DESTINATIONS, overview: '/visao', spending: '/spending' };
+const DESTINATIONS: OnboardingDestinations = ONBOARDING_DESTINATIONS;
 const WITH_ITEMS: AreaSummary = { items: 2, amountCents: null, currency: null };
 const EMPTY: AreaSummary = { items: 0, amountCents: null, currency: null };
 
 describe('landingDestination', () => {
+    it('usa os destinos reais de gastos e de patrimônio', () => {
+        expect(DESTINATIONS.spending).toBe('/spending');
+        expect(DESTINATIONS.connections).toBe('/spending/connections');
+    });
+
     it('vai à Visão geral quando há ativos', () => {
-        expect(landingDestination(onboardingSummary({ assets: WITH_ITEMS, banks: WITH_ITEMS }), DESTINATIONS)).toBe('/visao');
+        expect(landingDestination(onboardingSummary({ assets: WITH_ITEMS, banks: WITH_ITEMS }), DESTINATIONS)).toBe('/portfolio');
     });
 
     it('vai ao resumo de gastos quando só há gastos', () => {
@@ -19,8 +24,8 @@ describe('landingDestination', () => {
     });
 
     it('vai à Visão geral quando nada foi configurado ou o resumo não chegou', () => {
-        expect(landingDestination(onboardingSummary({ assets: EMPTY, banks: EMPTY }), DESTINATIONS)).toBe('/visao');
-        expect(landingDestination(undefined, DESTINATIONS)).toBe('/visao');
+        expect(landingDestination(onboardingSummary({ assets: EMPTY, banks: EMPTY }), DESTINATIONS)).toBe('/portfolio');
+        expect(landingDestination(undefined, DESTINATIONS)).toBe('/portfolio');
     });
 });
 

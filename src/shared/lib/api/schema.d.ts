@@ -1296,6 +1296,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/spending/connections/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Synchronize every bank connection now
+         * @description Queues one synchronization for each connection of the company that can be synchronized (active or needing attention). Connections that are already syncing are left out. Poll `GET /spending/connections` while `syncing` is true.
+         */
+        post: operations["SyncController_syncAll"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/connections/{id}/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Synchronize one bank connection now
+         * @description Queues a synchronization for the connection. The answer only says it was queued: poll `GET /spending/connections` while `syncing` is true to follow it.
+         */
+        post: operations["SyncController_syncOne"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -11471,6 +11511,295 @@ export interface operations {
             };
             /** @description The connection does not exist in this company (connections.connection_not_found) */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    SyncController_syncAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Synchronizations queued */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description How many connections were queued. Connections already syncing are left out */
+                        queued: number;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No usable credentials: none saved (connections.credentials_missing) or Pluggy rejected them (connections.invalid_credentials) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 2 requests in 10 minutes for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No synchronization could be queued (connections.sync_unavailable) */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    SyncController_syncOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Bank connection id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Synchronization queued */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description The synchronization was queued. Poll `GET /spending/connections` while `syncing` is true */
+                        queued: boolean;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The connection does not exist in this company (connections.connection_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description A synchronization of this connection started less than 15 minutes ago and is still running (connections.sync_in_progress) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The item was revoked at Pluggy (connections.item_not_found) or there are no usable credentials (connections.credentials_missing, connections.invalid_credentials) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 3 requests in 10 minutes for the connection */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The synchronization could not be queued (connections.sync_unavailable) */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };

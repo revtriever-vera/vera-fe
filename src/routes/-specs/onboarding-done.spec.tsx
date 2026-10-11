@@ -144,7 +144,7 @@ describe('Pronto', () => {
         await userEvent.click(screen.getByRole('button', { name: 'Ir para o painel' }));
 
         await waitFor(() => {
-            expect(router.state.location.pathname).toBe('/');
+            expect(router.state.location.pathname).toBe('/spending');
         });
         expect(await screen.findByRole('navigation', { name: 'Navegação principal' })).toBeInTheDocument();
     });

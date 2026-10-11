@@ -11,6 +11,7 @@ import { useStepActions, type StepActions } from '../lib/use-step-actions';
 import { useTrackStepViewed } from '../lib/use-track-step-viewed';
 import { ONBOARDING_PATHS, type AreaSummary } from '../types';
 import { ConnectedBanksCard } from './connected-banks-card';
+import { ImportStatementLink } from './import-statement-link';
 import { PluggySteps } from './pluggy-steps';
 import { StepFooter } from './step-footer';
 import { StepLayout } from './step-layout';
@@ -18,6 +19,7 @@ import type { WhyItem } from './why-list';
 
 export interface BanksStepSlots {
     readonly connectionsLink: string | null;
+    readonly importLink: string | null;
 }
 
 function ConnectionsButton({ link }: { readonly link: string | null }): ReactElement {
@@ -55,7 +57,13 @@ function ConnectionsButton({ link }: { readonly link: string | null }): ReactEle
     );
 }
 
-function BanksBody({ connected }: { readonly connected: AreaSummary | null }): ReactElement {
+function BanksBody({
+    connected,
+    importLink
+}: {
+    readonly connected: AreaSummary | null;
+    readonly importLink: string | null;
+}): ReactElement {
     const { t }: UseTranslationResponse<'onboarding', undefined> = useTranslation('onboarding');
 
     if (connected !== null) {
@@ -69,11 +77,12 @@ function BanksBody({ connected }: { readonly connected: AreaSummary | null }): R
             </h2>
             <p className="mt-1 mb-4 text-sm text-content-muted">{t('banksCardDetail')}</p>
             <PluggySteps />
+            <ImportStatementLink link={importLink} />
         </>
     );
 }
 
-export function BanksStep({ connectionsLink }: BanksStepSlots): ReactElement {
+export function BanksStep({ connectionsLink, importLink }: BanksStepSlots): ReactElement {
     const { t }: UseTranslationResponse<'onboarding', undefined> = useTranslation('onboarding');
     const actions: StepActions = useStepActions('banks');
     useTrackStepViewed('banks');
@@ -97,7 +106,7 @@ export function BanksStep({ connectionsLink }: BanksStepSlots): ReactElement {
             noteText={t('banksNoteText')}
         >
             <Card className="p-5">
-                <BanksBody connected={hasBanks ? connected : null} />
+                <BanksBody connected={hasBanks ? connected : null} importLink={importLink} />
                 <StepFooter actions={actions} backTo={ONBOARDING_PATHS.assets} continueLabel={hasBanks ? t('continue') : null}>
                     <ConnectionsButton link={connectionsLink} />
                 </StepFooter>

@@ -103,6 +103,8 @@
   "pluggyStep3": "In the application Demo, authorize Meu Pluggy once per bank and copy each <kbd>Item ID</kbd>.",
   "pluggyStep4": "On the Connections screen, paste the <kbd>Client ID</kbd>, the <kbd>Client Secret</kbd> and the Item IDs.",
   "pluggyTrialWarning": "Creating the account on the Pluggy dashboard starts the <strong>15-day trial</strong>. Connect all your banks within that period.",
+  "importPrompt": "Prefer not to connect?",
+  "importAction": "Import a statement from your bank (OFX or CSV).",
   "goToConnections": "Go to Connections",
   "connectionsUnavailable": "Available soon",
   "banksConnectedTitle": "Banks connected",

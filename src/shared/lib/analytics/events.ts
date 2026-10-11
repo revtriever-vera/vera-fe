@@ -26,6 +26,7 @@ export interface AnalyticsEventMap {
     onboarding_dismissed: { at: OnboardingStepName };
     onboarding_finished: undefined;
     onboarding_connections_opened: undefined;
+    onboarding_import_opened: undefined;
     onboarding_pluggy_link_clicked: { target: 'meu' | 'dashboard' };
     sample_data_loaded: { source: 'empty_state' | 'welcome'; screen: string };
     sample_data_cleared: undefined;

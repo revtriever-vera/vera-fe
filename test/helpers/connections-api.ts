@@ -14,6 +14,11 @@ export const ITEM_NUBANK: string = '00000000-0000-4000-8000-00000000a001';
 export const ITEM_ITAU: string = '00000000-0000-4000-8000-00000000a002';
 export const ITEM_MISSING: string = '00000000-0000-4000-8000-00000000a404';
 
+const SYNC_ERRORS: Readonly<Record<number, string>> = {
+    409: 'connections.sync_in_progress',
+    503: 'connections.sync_unavailable'
+};
+
 export interface ConnectionsApi {
     credentials: CredentialsView;
     connections: ConnectionView[];
@@ -124,13 +129,17 @@ export function installConnectionsApi(options: ConnectionsApiOptions = {}): Conn
             api.syncAll += 1;
             return api.syncStatus === 202
                 ? HttpResponse.json({ queued: api.connections.length }, { status: 202 })
-                : HttpResponse.json(problemBody('connections.sync_in_progress', 409), { status: 409 });
+                : HttpResponse.json(problemBody(SYNC_ERRORS[api.syncStatus] ?? 'connections.sync_in_progress', api.syncStatus), {
+                      status: api.syncStatus
+                  });
         }),
         http.post('*/spending/connections/:id/sync', ({ params }) => {
             api.syncs.push(String(params['id']));
             return api.syncStatus === 202
                 ? HttpResponse.json({ queued: true }, { status: 202 })
-                : HttpResponse.json(problemBody('connections.sync_in_progress', 409), { status: 409 });
+                : HttpResponse.json(problemBody(SYNC_ERRORS[api.syncStatus] ?? 'connections.sync_in_progress', api.syncStatus), {
+                      status: api.syncStatus
+                  });
         }),
         http.post('*/spending/connections', async ({ request }) => {
             const body: AddItemsBody = (await request.json()) as AddItemsBody;

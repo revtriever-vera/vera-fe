@@ -23,6 +23,8 @@ import { AssetsStep, type AssetsStepSlots } from './assets-step';
 import { BanksStep } from './banks-step';
 
 const NOW: string = '2026-10-01T12:00:00.000Z';
+const CONNECTIONS: string = '/spending/connections';
+const IMPORT: string = '/spending/connections';
 
 function renderStep(path: string, element: ReactElement): AnyRouter {
     const root: AnyRoute = createRootRoute();
@@ -160,7 +162,7 @@ describe('AssetsStep', () => {
 
 describe('BanksStep', () => {
     it('renderiza os quatro passos em lista ordenada e links externos seguros', async () => {
-        renderStep('/onboarding/banks', <BanksStep connectionsLink="/spending/connections" />);
+        renderStep('/onboarding/banks', <BanksStep connectionsLink={CONNECTIONS} importLink={IMPORT} />);
 
         const steps: HTMLElement = (await screen.findByText(/Crie sua conta e conecte seus bancos em/)).closest('ol') as HTMLElement;
         expect(steps.tagName).toBe('OL');
@@ -183,7 +185,7 @@ describe('BanksStep', () => {
     it('Ir para Conexões navega sem chamar complete nem skip', async () => {
         const complete: Tracker = track('banks', 'complete');
         const skip: Tracker = track('banks', 'skip');
-        const router: AnyRouter = renderStep('/onboarding/banks', <BanksStep connectionsLink="/spending/connections" />);
+        const router: AnyRouter = renderStep('/onboarding/banks', <BanksStep connectionsLink={CONNECTIONS} importLink={IMPORT} />);
 
         await userEvent.click(await screen.findByRole('link', { name: /Ir para Conexões/ }));
 
@@ -195,13 +197,33 @@ describe('BanksStep', () => {
         expect(trackEvent).toHaveBeenCalledWith('onboarding_connections_opened');
     });
 
+    it('o link de importação aponta para Conexões com import=true e emite o evento', async () => {
+        const complete: Tracker = track('banks', 'complete');
+        const skip: Tracker = track('banks', 'skip');
+        const router: AnyRouter = renderStep('/onboarding/banks', <BanksStep connectionsLink={CONNECTIONS} importLink={IMPORT} />);
+
+        const link: HTMLElement = await screen.findByRole('link', { name: /Importe um extrato do seu banco/ });
+        expect(screen.getByText(/Prefere não conectar\?/)).toBeInTheDocument();
+        expect(link).toHaveAttribute('href', '/spending/connections?import=true');
+        await userEvent.click(link);
+
+        await waitFor(() => {
+            expect(router.state.location.pathname).toBe('/spending/connections');
+        });
+        expect(router.state.location.search).toEqual({ import: true });
+        expect(trackEvent).toHaveBeenCalledWith('onboarding_import_opened');
+        expect(complete.calls()).toBe(0);
+        expect(skip.calls()).toBe(0);
+    });
+
     it('sem destino o botão fica desabilitado com a dica e Pular continua valendo', async () => {
         const skip: Tracker = track('banks', 'skip');
-        const router: AnyRouter = renderStep('/onboarding/banks', <BanksStep connectionsLink={null} />);
+        const router: AnyRouter = renderStep('/onboarding/banks', <BanksStep connectionsLink={null} importLink={null} />);
 
         const button: HTMLElement = await screen.findByRole('button', { name: 'Ir para Conexões' });
         expect(button).toBeDisabled();
         expect(button).toHaveAccessibleDescription('Disponível em breve');
+        expect(screen.queryByRole('link', { name: /Importe um extrato/ })).not.toBeInTheDocument();
 
         await userEvent.click(screen.getByRole('button', { name: 'Pular por enquanto' }));
 
@@ -213,7 +235,7 @@ describe('BanksStep', () => {
 
     it('sem nada conectado só mostra Pular por enquanto e o Voltar', async () => {
         server.use(http.get('*/onboarding/summary', () => HttpResponse.json(onboardingSummary())));
-        renderStep('/onboarding/banks', <BanksStep connectionsLink="/spending/connections" />);
+        renderStep('/onboarding/banks', <BanksStep connectionsLink={CONNECTIONS} importLink={IMPORT} />);
 
         expect(await screen.findByRole('button', { name: 'Pular por enquanto' })).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Continuar' })).not.toBeInTheDocument();
@@ -229,7 +251,7 @@ describe('BanksStep', () => {
             )
         );
         const complete: Tracker = track('banks', 'complete');
-        const router: AnyRouter = renderStep('/onboarding/banks', <BanksStep connectionsLink="/spending/connections" />);
+        const router: AnyRouter = renderStep('/onboarding/banks', <BanksStep connectionsLink={CONNECTIONS} importLink={IMPORT} />);
 
         expect(await screen.findByText('Bancos conectados')).toBeInTheDocument();
         expect(screen.getByText('2 conexões bancárias · 1 extrato importado')).toBeInTheDocument();

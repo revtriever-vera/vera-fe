@@ -103,6 +103,8 @@
   "pluggyStep3": "Na Demo da aplicação, autorize o Meu Pluggy uma vez por banco e copie cada <kbd>Item ID</kbd>.",
   "pluggyStep4": "Na tela Conexões, cole o <kbd>Client ID</kbd>, o <kbd>Client Secret</kbd> e os Item IDs.",
   "pluggyTrialWarning": "Criar a conta no painel da Pluggy inicia os <strong>15 dias de teste</strong>. Conecte todos os bancos dentro desse prazo.",
+  "importPrompt": "Prefere não conectar?",
+  "importAction": "Importe um extrato do seu banco (OFX ou CSV).",
   "goToConnections": "Ir para Conexões",
   "connectionsUnavailable": "Disponível em breve",
   "banksConnectedTitle": "Bancos conectados",

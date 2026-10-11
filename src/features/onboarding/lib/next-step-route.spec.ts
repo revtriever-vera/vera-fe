@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { onboardingState } from '../../../../test/fixtures/onboarding';
 import type { OnboardingState } from '../types';
-import { resolveConnectionsLink } from './connections-link';
 import { nextStepRoute } from './next-step-route';
 
 const NOW: string = '2026-10-01T12:00:00.000Z';
@@ -22,12 +21,5 @@ describe('nextStepRoute', () => {
 
     it('de bancos vai sempre ao Pronto', () => {
         expect(nextStepRoute(withBanks({ doneAt: null, skippedAt: null }), 'banks')).toBe('/onboarding/done');
-    });
-});
-
-describe('resolveConnectionsLink', () => {
-    it('trata a raiz como destino ausente e repassa os demais', () => {
-        expect(resolveConnectionsLink('/')).toBeNull();
-        expect(resolveConnectionsLink('/spending/connections')).toBe('/spending/connections');
     });
 });

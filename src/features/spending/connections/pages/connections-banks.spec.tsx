@@ -151,6 +151,23 @@ describe('ConnectionsPage: sincronizar e remover', () => {
         expect(await screen.findByText('Já existe uma atualização em andamento para essa conexão.')).toBeInTheDocument();
     });
 
+    it('o 503 vira um toast crítico com o motivo', async () => {
+        const { user } = await openConnectionsPage({ ...withConnections(connectionView()), syncStatus: 503 });
+
+        await user.click(await screen.findByRole('button', { name: /Sincronizar agora Itaú/ }));
+
+        expect(await screen.findByText('Não foi possível pedir a atualização')).toBeInTheDocument();
+        expect(screen.getByText('Não foi possível pedir a atualização agora. Tente de novo em instantes.')).toBeInTheDocument();
+    });
+
+    it('"Sincronizar tudo" com 503 mostra o toast crítico', async () => {
+        const { user } = await openConnectionsPage({ ...withConnections(connectionView()), syncStatus: 503 });
+
+        await user.click(await screen.findByRole('button', { name: 'Sincronizar tudo' }));
+
+        expect(await screen.findByText('Não foi possível pedir a atualização agora. Tente de novo em instantes.')).toBeInTheDocument();
+    });
+
     it('"Sincronizar tudo" chama a rota geral', async () => {
         const { user, api } = await openConnectionsPage(withConnections(connectionView(), connectionView({ id: 'conn-2' })));
 

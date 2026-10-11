@@ -139,6 +139,7 @@
     "providerUnavailable": "Pluggy is down right now. Try again in a moment.",
     "providerDisabled": "This installation does not have the Pluggy integration turned on yet.",
     "syncInProgress": "An update is already running for that connection.",
+    "syncUnavailable": "Could not request the update right now. Try again in a moment.",
     "secretOpenFailed": "Could not read the stored credentials. Register them again.",
     "secretSealerMismatch": "The stored credentials were created with another key. Register them again.",
     "tooManyAttempts": "Too many attempts in a row. Wait a moment and try again.",

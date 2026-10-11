@@ -4,6 +4,7 @@ import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
 import { resetAnalytics, track } from '@/shared/lib/analytics';
 import { i18n } from '@/shared/lib/i18n';
 import { server } from './msw/server';
+import { disposeRenderedClients } from './rendered-clients';
 
 vi.mock('@/shared/lib/analytics', () => ({
     track: vi.fn(),
@@ -41,10 +42,11 @@ beforeEach(async () => {
     await i18n.changeLanguage('pt-BR');
 });
 
-afterEach(() => {
+afterEach(async () => {
     vi.mocked(track).mockClear();
     vi.mocked(resetAnalytics).mockClear();
     cleanup();
+    await disposeRenderedClients();
     server.resetHandlers();
 });
 
