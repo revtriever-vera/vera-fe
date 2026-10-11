@@ -12,8 +12,8 @@
     "test": "vitest run --config vitest.config.ts",
     "test:cov": "vitest run --config vitest.config.ts --coverage",
     "test:types": "vitest run --config vitest.config.ts --typecheck",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\"",
+    "format": "prettier --write \"{src,test,eslint-rules}/**/*.{ts,tsx,css,mjs}\" \"*.{mjs,ts,json}\" \".github/**/*.yml\"",
+    "format:check": "prettier --check \"{src,test,eslint-rules}/**/*.{ts,tsx,css,mjs}\" \"*.{mjs,ts,json}\" \".github/**/*.yml\"",
     "api:types": "curl -sf http://localhost:3333/docs-json -o /tmp/vera-openapi.json && openapi-typescript /tmp/vera-openapi.json -o src/shared/lib/api/schema.d.ts",
     "prepare": "husky"
   },
