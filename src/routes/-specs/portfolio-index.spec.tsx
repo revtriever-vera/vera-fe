@@ -7,12 +7,12 @@ import { installOverviewApi } from '../../../test/helpers/overview-api';
 import { renderRouterAt } from '../../../test/router';
 
 async function openOverview(): Promise<{ router: AnyRouter; user: UserEvent }> {
-    const router: AnyRouter = renderRouterAt('/patrimonio', { signedIn: true });
+    const router: AnyRouter = renderRouterAt('/portfolio', { signedIn: true });
     await screen.findByText('R$ 1.773.100,40');
     return { router, user: userEvent.setup() };
 }
 
-describe('/patrimonio: visão geral', () => {
+describe('/portfolio: visão geral', () => {
     it('abre no layout do patrimônio com a aba Visão geral marcada', async () => {
         installOverviewApi();
         await openOverview();
@@ -28,7 +28,7 @@ describe('/patrimonio: visão geral', () => {
 
         await user.click(screen.getByRole('link', { name: 'Onde aportar' }));
 
-        expect(router.state.location.pathname).toBe('/patrimonio/aporte');
+        expect(router.state.location.pathname).toBe('/portfolio/contribution');
     });
 
     it('clicar numa linha da tabela abre a classe', async () => {
@@ -38,7 +38,7 @@ describe('/patrimonio: visão geral', () => {
 
         await user.click(row);
 
-        expect(router.state.location.pathname).toBe('/patrimonio/classes/class-cripto');
+        expect(router.state.location.pathname).toBe('/portfolio/classes/class-cripto');
     });
 
     it('a linha da tabela se abre pelo teclado com Enter', async () => {
@@ -49,7 +49,7 @@ describe('/patrimonio: visão geral', () => {
         row.focus();
         await user.keyboard('{Enter}');
 
-        expect(router.state.location.pathname).toBe('/patrimonio/classes/class-fii');
+        expect(router.state.location.pathname).toBe('/portfolio/classes/class-fii');
     });
 
     it('o cartão da lista estreita é um link para a classe', async () => {
@@ -57,7 +57,7 @@ describe('/patrimonio: visão geral', () => {
         await openOverview();
         const card: HTMLElement = within(screen.getByRole('list', { name: 'Classes da carteira' })).getAllByRole('link')[5] as HTMLElement;
 
-        expect(card).toHaveAttribute('href', '/patrimonio/classes/class-acoes-eua');
+        expect(card).toHaveAttribute('href', '/portfolio/classes/class-acoes-eua');
     });
 
     it('trocar para US$ salva a moeda, refaz a consulta e mostra o total em dólar', async () => {
@@ -73,11 +73,11 @@ describe('/patrimonio: visão geral', () => {
 
     it('o estado vazio leva ao cadastro do primeiro ativo', async () => {
         installOverviewApi({ overview: emptyOverview() });
-        const router: AnyRouter = renderRouterAt('/patrimonio', { signedIn: true });
+        const router: AnyRouter = renderRouterAt('/portfolio', { signedIn: true });
         const user: UserEvent = userEvent.setup();
 
         await user.click(await screen.findByRole('link', { name: 'Cadastrar meu primeiro ativo' }));
 
-        expect(router.state.location.pathname).toBe('/patrimonio/comecar');
+        expect(router.state.location.pathname).toBe('/portfolio/get-started');
     });
 });

@@ -8,7 +8,7 @@ function StepFooter({ count }: { readonly count: number }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     return (
         <div className="flex justify-end">
-            <Link to="/patrimonio" className={buttonVariants({ variant: count > 0 ? 'primary' : 'ghost' })}>
+            <Link to="/portfolio" className={buttonVariants({ variant: count > 0 ? 'primary' : 'ghost' })}>
                 {count > 0 ? t('step.seeOverview') : t('step.skip')}
             </Link>
         </div>

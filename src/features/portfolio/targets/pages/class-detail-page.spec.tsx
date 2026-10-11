@@ -5,7 +5,7 @@ import { installClassDetailApi } from '../../../../../test/helpers/class-detail-
 import { server } from '../../../../../test/msw/server';
 import { renderRouterAt } from '../../../../../test/router';
 
-const PATH: string = '/patrimonio/classes/class-acoes-br';
+const PATH: string = '/portfolio/classes/class-acoes-br';
 
 describe('ClassDetailPage', () => {
     it('mostra o carregamento enquanto o detalhe não chega', async () => {

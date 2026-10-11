@@ -28,12 +28,12 @@ function initialMinor(amount: number | undefined, currency: BaseCurrency, locale
 
 function useAmountInUrl(amountMinor: number | null, currency: BaseCurrency): void {
     const locale: SupportedLocale = useLocale();
-    const search: { amount?: number } = useSearch({ from: '/_auth/_app/patrimonio/aporte' });
+    const search: { amount?: number } = useSearch({ from: '/_auth/_app/portfolio/contribution' });
     const navigate: UseNavigateResult<string> = useNavigate();
     const amount: number = amountMinor === null ? EMPTY_AMOUNT : minorToMajor(amountMinor, currency, locale);
     useEffect((): void => {
         if (amount !== search.amount) {
-            void navigate({ to: '/patrimonio/aporte', search: { amount }, replace: true });
+            void navigate({ to: '/portfolio/contribution', search: { amount }, replace: true });
         }
     }, [amount, search.amount, navigate]);
 }
@@ -48,7 +48,7 @@ function useTrackCalculated(suggestion: ContributionSuggestion | undefined, curr
 
 function ContributionBody({ currency }: { readonly currency: BaseCurrency }): ReactElement {
     const locale: SupportedLocale = useLocale();
-    const search: { amount?: number } = useSearch({ from: '/_auth/_app/patrimonio/aporte' });
+    const search: { amount?: number } = useSearch({ from: '/_auth/_app/portfolio/contribution' });
     const [draft, setDraft] = useState<number | null>((): number | null => initialMinor(search.amount, currency, locale));
     const amountMinor: number | null = useDebouncedValue(draft, DEBOUNCE_MS);
     const query: UseQueryResult<ContributionSuggestion> = useContributionSuggestion(amountMinor);

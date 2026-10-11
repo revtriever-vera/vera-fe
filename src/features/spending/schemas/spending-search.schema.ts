@@ -10,7 +10,7 @@ const textParam = z
     .catch(undefined);
 
 export const layoutSearchSchema = z.object({
-    importar: z.boolean().optional().catch(undefined)
+    import: z.boolean().optional().catch(undefined)
 });
 
 export const monthSearchSchema = z.object({

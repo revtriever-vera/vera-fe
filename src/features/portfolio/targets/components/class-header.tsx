@@ -23,7 +23,7 @@ export function ClassHeader({ detail }: ClassHeaderProps): ReactElement {
     return (
         <header className="flex flex-col gap-3">
             <Link
-                to="/patrimonio"
+                to="/portfolio"
                 activeOptions={{ exact: true }}
                 className="inline-flex items-center gap-1 self-start text-sm font-semibold text-accent-strong underline-offset-2 hover:underline"
             >

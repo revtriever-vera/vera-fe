@@ -7,11 +7,11 @@ import { ImportStatementHost } from '../imports/components/import-statement-host
 export function SpendingLayout(): ReactElement {
     const { t }: UseTranslationResponse<'spending', undefined> = useTranslation('spending');
     const tabs: readonly TabItem[] = [
-        { to: '/gastos', label: t('layout.tabs.summary'), exact: true },
-        { to: '/gastos/transacoes', label: t('layout.tabs.transactions') },
-        { to: '/gastos/cortes', label: t('layout.tabs.cuts') },
-        { to: '/gastos/conexoes', label: t('layout.tabs.connections') },
-        { to: '/gastos/regras', label: t('layout.tabs.rules') }
+        { to: '/spending', label: t('layout.tabs.summary'), exact: true },
+        { to: '/spending/transactions', label: t('layout.tabs.transactions') },
+        { to: '/spending/cuts', label: t('layout.tabs.cuts') },
+        { to: '/spending/connections', label: t('layout.tabs.connections') },
+        { to: '/spending/rules', label: t('layout.tabs.rules') }
     ];
     return (
         <div className="mx-auto flex w-full max-w-5xl min-w-0 flex-col gap-4 px-page-x py-page-y">

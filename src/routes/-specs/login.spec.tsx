@@ -433,11 +433,11 @@ describe('login route with a session', () => {
 describe('login route account deleted notice', () => {
     it('shows the notice once and removes the parameter from the address', async () => {
         connectProviders();
-        const router: AnyRouter = renderRouterAt('/login?deleted=1&redirect=%2Fpatrimonio');
+        const router: AnyRouter = renderRouterAt('/login?deleted=1&redirect=%2Fportfolio');
 
         expect(await screen.findByText('Sua conta foi excluída.')).toBeInTheDocument();
         await waitFor((): void => {
-            expect(router.state.location.search).toEqual({ redirect: '/patrimonio' });
+            expect(router.state.location.search).toEqual({ redirect: '/portfolio' });
         });
         expect(screen.getByText('Sua conta foi excluída.')).toBeInTheDocument();
     });

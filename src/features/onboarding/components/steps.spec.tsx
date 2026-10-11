@@ -26,7 +26,7 @@ const NOW: string = '2026-10-01T12:00:00.000Z';
 
 function renderStep(path: string, element: ReactElement): AnyRouter {
     const root: AnyRoute = createRootRoute();
-    const paths: readonly string[] = [path, '/onboarding/banks', '/onboarding/done', '/gastos/conexoes', '/'];
+    const paths: readonly string[] = [path, '/onboarding/banks', '/onboarding/done', '/spending/connections', '/'];
     const routes: AnyRoute[] = [...new Set(paths)].map((p: string) =>
         createRoute({
             getParentRoute: () => root,
@@ -160,7 +160,7 @@ describe('AssetsStep', () => {
 
 describe('BanksStep', () => {
     it('renderiza os quatro passos em lista ordenada e links externos seguros', async () => {
-        renderStep('/onboarding/banks', <BanksStep connectionsLink="/gastos/conexoes" />);
+        renderStep('/onboarding/banks', <BanksStep connectionsLink="/spending/connections" />);
 
         const steps: HTMLElement = (await screen.findByText(/Crie sua conta e conecte seus bancos em/)).closest('ol') as HTMLElement;
         expect(steps.tagName).toBe('OL');
@@ -183,12 +183,12 @@ describe('BanksStep', () => {
     it('Ir para Conexões navega sem chamar complete nem skip', async () => {
         const complete: Tracker = track('banks', 'complete');
         const skip: Tracker = track('banks', 'skip');
-        const router: AnyRouter = renderStep('/onboarding/banks', <BanksStep connectionsLink="/gastos/conexoes" />);
+        const router: AnyRouter = renderStep('/onboarding/banks', <BanksStep connectionsLink="/spending/connections" />);
 
         await userEvent.click(await screen.findByRole('link', { name: /Ir para Conexões/ }));
 
         await waitFor(() => {
-            expect(router.state.location.pathname).toBe('/gastos/conexoes');
+            expect(router.state.location.pathname).toBe('/spending/connections');
         });
         expect(complete.calls()).toBe(0);
         expect(skip.calls()).toBe(0);
@@ -213,7 +213,7 @@ describe('BanksStep', () => {
 
     it('sem nada conectado só mostra Pular por enquanto e o Voltar', async () => {
         server.use(http.get('*/onboarding/summary', () => HttpResponse.json(onboardingSummary())));
-        renderStep('/onboarding/banks', <BanksStep connectionsLink="/gastos/conexoes" />);
+        renderStep('/onboarding/banks', <BanksStep connectionsLink="/spending/connections" />);
 
         expect(await screen.findByRole('button', { name: 'Pular por enquanto' })).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Continuar' })).not.toBeInTheDocument();
@@ -229,7 +229,7 @@ describe('BanksStep', () => {
             )
         );
         const complete: Tracker = track('banks', 'complete');
-        const router: AnyRouter = renderStep('/onboarding/banks', <BanksStep connectionsLink="/gastos/conexoes" />);
+        const router: AnyRouter = renderStep('/onboarding/banks', <BanksStep connectionsLink="/spending/connections" />);
 
         expect(await screen.findByText('Bancos conectados')).toBeInTheDocument();
         expect(screen.getByText('2 conexões bancárias · 1 extrato importado')).toBeInTheDocument();

@@ -16,13 +16,13 @@ async function markedTabs(): Promise<string[]> {
         .map((link: HTMLElement): string => link.textContent ?? '');
 }
 
-describe('rotas de /gastos', () => {
+describe('rotas de /spending', () => {
     it.each([
-        ['/gastos', 'Resumo do mês'],
-        ['/gastos/transacoes', 'Transações'],
-        ['/gastos/cortes', 'Onde cortar'],
-        ['/gastos/conexoes', 'Conexões'],
-        ['/gastos/regras', 'Regras']
+        ['/spending', 'Resumo do mês'],
+        ['/spending/transactions', 'Transações'],
+        ['/spending/cuts', 'Onde cortar'],
+        ['/spending/connections', 'Conexões'],
+        ['/spending/rules', 'Regras']
     ])('%s abre sob o título Gastos e só a aba %s fica marcada', async (path: string, active: string) => {
         renderRouterAt(path, { signedIn: true });
 
@@ -31,46 +31,46 @@ describe('rotas de /gastos', () => {
     });
 
     it('mostra a tela em construção enquanto o card da página não existe', async () => {
-        renderRouterAt('/gastos/cortes', { signedIn: true });
+        renderRouterAt('/spending/cuts', { signedIn: true });
 
         expect(await screen.findByRole('heading', { name: 'Esta tela está em construção' })).toBeInTheDocument();
     });
 
     it('as abas navegam entre as telas', async () => {
         const user: UserEvent = userEvent.setup();
-        const router: AnyRouter = renderRouterAt('/gastos', { signedIn: true });
+        const router: AnyRouter = renderRouterAt('/spending', { signedIn: true });
         const tabs: HTMLElement = await screen.findByRole('navigation', { name: TABS_LABEL });
 
         await user.click(within(tabs).getByRole('link', { name: 'Regras' }));
 
         await waitFor(() => {
-            expect(router.state.location.pathname).toBe('/gastos/regras');
+            expect(router.state.location.pathname).toBe('/spending/rules');
         });
         expect(await markedTabs()).toEqual(['Regras']);
     });
 
     it('a página de Conexões monta o cartão de importação', async () => {
-        renderRouterAt('/gastos/conexoes', { signedIn: true });
+        renderRouterAt('/spending/connections', { signedIn: true });
 
         expect(await screen.findAllByRole('heading', { name: 'Esta tela está em construção' })).toHaveLength(2);
     });
 
     it('lê o mês no resumo e nos cortes', async () => {
-        const summary: AnyRouter = renderRouterAt('/gastos?month=2026-09', { signedIn: true });
+        const summary: AnyRouter = renderRouterAt('/spending?month=2026-09', { signedIn: true });
         await screen.findByRole('heading', { name: 'Gastos', level: 1 });
         expect(summary.state.location.search).toEqual({ month: '2026-09' });
     });
 
     it('degrada ?month=abc sem lançar', async () => {
-        const router: AnyRouter = renderRouterAt('/gastos?month=abc', { signedIn: true });
+        const router: AnyRouter = renderRouterAt('/spending?month=abc', { signedIn: true });
         await screen.findByRole('heading', { name: 'Gastos', level: 1 });
 
         expect(router.state.location.search).toEqual({});
     });
 
-    it('valida os filtros de /gastos/transacoes e descarta o que for inválido', async () => {
+    it('valida os filtros de /spending/transactions e descarta o que for inválido', async () => {
         const router: AnyRouter = renderRouterAt(
-            '/gastos/transacoes?month=2026-09&uncategorized=true&direction=out&q=padaria&page=2&direction=x',
+            '/spending/transactions?month=2026-09&uncategorized=true&direction=out&q=padaria&page=2&direction=x',
             { signedIn: true }
         );
         await screen.findByRole('heading', { name: 'Gastos', level: 1 });
@@ -78,11 +78,11 @@ describe('rotas de /gastos', () => {
         expect(router.state.location.search).toEqual({ month: '2026-09', uncategorized: true, q: 'padaria', page: 2 });
     });
 
-    it('aceita ?importar=true em qualquer tela de gastos', async () => {
-        const router: AnyRouter = renderRouterAt('/gastos/conexoes?importar=true', { signedIn: true });
+    it('aceita ?import=true em qualquer tela de gastos', async () => {
+        const router: AnyRouter = renderRouterAt('/spending/connections?import=true', { signedIn: true });
         await screen.findByRole('heading', { name: 'Gastos', level: 1 });
 
-        expect(router.state.location.search).toEqual({ importar: true });
+        expect(router.state.location.search).toEqual({ import: true });
     });
 });
 
@@ -94,7 +94,7 @@ async function menuLinks(): Promise<HTMLElement> {
 
 describe('menu lateral do grupo Gastos', () => {
     it('mostra o grupo com os quatro itens', async () => {
-        renderRouterAt('/gastos', { signedIn: true });
+        renderRouterAt('/spending', { signedIn: true });
 
         const nav: HTMLElement = await menuLinks();
 
@@ -107,7 +107,7 @@ describe('menu lateral do grupo Gastos', () => {
 
     it('mostra o contador de sem categoria com nome acessível', async () => {
         server.use(http.get('*/spending/transactions/uncategorized-count', () => HttpResponse.json({ count: 3 })));
-        renderRouterAt('/gastos', { signedIn: true });
+        renderRouterAt('/spending', { signedIn: true });
 
         const nav: HTMLElement = await menuLinks();
 
@@ -115,7 +115,7 @@ describe('menu lateral do grupo Gastos', () => {
     });
 
     it('não mostra o contador quando é zero', async () => {
-        renderRouterAt('/gastos', { signedIn: true });
+        renderRouterAt('/spending', { signedIn: true });
 
         const nav: HTMLElement = await menuLinks();
 
@@ -133,7 +133,7 @@ describe('menu lateral do grupo Gastos', () => {
             }),
             http.get('*/onboarding', () => HttpResponse.json(closedState({ sample: { active: true, available: true } })))
         );
-        renderRouterAt('/gastos', { signedIn: true });
+        renderRouterAt('/spending', { signedIn: true });
 
         const nav: HTMLElement = await menuLinks();
         await screen.findByText('Você está vendo dados de exemplo. Eles não são seus.');

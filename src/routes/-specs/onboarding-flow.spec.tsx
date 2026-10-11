@@ -79,7 +79,7 @@ describe('boas-vindas', () => {
 
         expect(await screen.findByText('Dados de exemplo carregados')).toBeInTheDocument();
         await waitFor(() => {
-            expect(router.state.location.pathname).toBe('/patrimonio');
+            expect(router.state.location.pathname).toBe('/portfolio');
         });
         expect(sample.calls()).toBe(1);
         expect(screen.queryByRole('link', { name: 'Continuar configuração' })).not.toBeInTheDocument();

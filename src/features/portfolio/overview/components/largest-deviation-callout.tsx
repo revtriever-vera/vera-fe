@@ -28,7 +28,7 @@ export function LargestDeviationCallout({ callout }: LargestDeviationCalloutProp
                 <Target aria-hidden="true" className="size-4 shrink-0" />
                 <span>{callout.status === DEVIATION_STATUS.above ? t('callout.above', values) : t('callout.below', values)}</span>
             </span>
-            <Link to="/patrimonio/aporte" className={buttonVariants({ size: 'sm', className: 'min-[480px]:ml-auto' })}>
+            <Link to="/portfolio/contribution" className={buttonVariants({ size: 'sm', className: 'min-[480px]:ml-auto' })}>
                 <Zap aria-hidden="true" className="size-3.5" />
                 {t('callout.action')}
             </Link>

@@ -3,20 +3,20 @@ import { describe, expect, it } from 'vitest';
 import { activeNavId, APP_NAV_ITEMS, type NavItem } from './app-nav';
 
 const ITEMS: readonly NavItem[] = [
-    { id: 'overview', to: '/patrimonio', labelKey: 'navPortfolioOverview', icon: PieChart },
-    { id: 'assets', to: '/patrimonio/ativos', labelKey: 'navPortfolioAssets', icon: PieChart }
+    { id: 'overview', to: '/portfolio', labelKey: 'navPortfolioOverview', icon: PieChart },
+    { id: 'assets', to: '/portfolio/assets', labelKey: 'navPortfolioAssets', icon: PieChart }
 ];
 
 describe('activeNavId', () => {
     it('picks the most specific item', () => {
-        expect(activeNavId('/patrimonio/ativos', ITEMS)).toBe('assets');
-        expect(activeNavId('/patrimonio/ativos/42', ITEMS)).toBe('assets');
-        expect(activeNavId('/patrimonio', ITEMS)).toBe('overview');
+        expect(activeNavId('/portfolio/assets', ITEMS)).toBe('assets');
+        expect(activeNavId('/portfolio/assets/42', ITEMS)).toBe('assets');
+        expect(activeNavId('/portfolio', ITEMS)).toBe('overview');
     });
 
     it('returns null outside the menu', () => {
         expect(activeNavId('/outra', ITEMS)).toBeNull();
-        expect(activeNavId('/patrimonioX', ITEMS)).toBeNull();
+        expect(activeNavId('/portfolioX', ITEMS)).toBeNull();
     });
 });
 
@@ -32,10 +32,10 @@ describe('grupo Gastos', () => {
 
     it('tem os quatro itens, na ordem do menu', () => {
         expect(spending.map((item: NavItem): string => item.to)).toEqual([
-            '/gastos',
-            '/gastos/transacoes',
-            '/gastos/cortes',
-            '/gastos/conexoes'
+            '/spending',
+            '/spending/transactions',
+            '/spending/cuts',
+            '/spending/connections'
         ]);
     });
 
@@ -46,9 +46,9 @@ describe('grupo Gastos', () => {
     });
 
     it('marca o item mais específico em cada rota de gastos e nenhum em Regras', () => {
-        expect(activeNavId('/gastos', APP_NAV_ITEMS)).toBe('spending-summary');
-        expect(activeNavId('/gastos/transacoes', APP_NAV_ITEMS)).toBe('spending-transactions');
-        expect(activeNavId('/gastos/conexoes', APP_NAV_ITEMS)).toBe('spending-connections');
-        expect(activeNavId('/gastos/regras', APP_NAV_ITEMS)).toBeNull();
+        expect(activeNavId('/spending', APP_NAV_ITEMS)).toBe('spending-summary');
+        expect(activeNavId('/spending/transactions', APP_NAV_ITEMS)).toBe('spending-transactions');
+        expect(activeNavId('/spending/connections', APP_NAV_ITEMS)).toBe('spending-connections');
+        expect(activeNavId('/spending/rules', APP_NAV_ITEMS)).toBeNull();
     });
 });

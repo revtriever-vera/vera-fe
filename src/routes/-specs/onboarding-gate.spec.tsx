@@ -22,17 +22,20 @@ describe('guarda do onboarding', () => {
         expect(screen.getByRole('main', { name: 'Configuração inicial' })).toBeInTheDocument();
     });
 
-    it.each(['/patrimonio', '/patrimonio/ativos', '/patrimonio/aporte'])('não desvia %s com o onboarding aberto', async (path: string) => {
-        serveState(onboardingState({ status: 'assets' }));
-        const router = renderRouterAt(path, { signedIn: true });
+    it.each(['/portfolio', '/portfolio/assets', '/portfolio/contribution'])(
+        'não desvia %s com o onboarding aberto',
+        async (path: string) => {
+            serveState(onboardingState({ status: 'assets' }));
+            const router = renderRouterAt(path, { signedIn: true });
 
-        await screen.findByRole('navigation', { name: 'Navegação principal' });
-        expect(router.state.location.pathname).toBe(path);
-    });
+            await screen.findByRole('navigation', { name: 'Navegação principal' });
+            expect(router.state.location.pathname).toBe(path);
+        }
+    );
 
     it('mostra o atalho Continuar configuração no menu enquanto aberto', async () => {
         serveState(onboardingState({ status: 'banks' }));
-        renderRouterAt('/patrimonio', { signedIn: true });
+        renderRouterAt('/portfolio', { signedIn: true });
 
         const link: HTMLElement = (await screen.findAllByRole('link', { name: 'Continuar configuração' }))[0] as HTMLElement;
         expect(link).toHaveAttribute('href', '/onboarding');

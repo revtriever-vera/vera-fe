@@ -15,13 +15,13 @@ export function SpendingEmptyState(): ReactElement {
             icon={<Plug className="size-6" />}
             actions={
                 <>
-                    <Link to="/gastos/conexoes" className={buttonVariants({ size: 'lg' })}>
+                    <Link to="/spending/connections" className={buttonVariants({ size: 'lg' })}>
                         <Plug className="size-4" aria-hidden="true" />
                         {t('emptyState.connect')}
                     </Link>
                     <Link
-                        to="/gastos/conexoes"
-                        search={{ importar: true }}
+                        to="/spending/connections"
+                        search={{ import: true }}
                         className={buttonVariants({ variant: 'secondary', size: 'lg' })}
                     >
                         {t('emptyState.import')}

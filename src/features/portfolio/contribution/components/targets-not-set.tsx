@@ -13,7 +13,7 @@ export function TargetsNotSet(): ReactElement {
             title={t('targetsNotSet.title')}
             description={t('targetsNotSet.description')}
             action={
-                <Link to="/patrimonio/carteira-alvo" className={buttonVariants()}>
+                <Link to="/portfolio/targets" className={buttonVariants()}>
                     {t('targetsNotSet.action')}
                 </Link>
             }

@@ -97,7 +97,7 @@ export function ClassTable({ rows, currency }: ClassTableProps): ReactElement {
             minWidthClass={MIN_WIDTH}
             rowClassName={(row: ClassRow): string | undefined => (row.dimmed ? DIMMED : undefined)}
             onRowActivate={(row: ClassRow): void => {
-                void navigate({ to: '/patrimonio/classes/$classId', params: { classId: row.classId } });
+                void navigate({ to: '/portfolio/classes/$classId', params: { classId: row.classId } });
             }}
         />
     );

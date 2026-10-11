@@ -6,11 +6,11 @@ import { mockAssetsApi } from '../../../test/helpers/assets-api';
 import { sampleHoldings } from '../../../test/fixtures/portfolio';
 import { renderRouterAt } from '../../../test/router';
 
-describe('/patrimonio/ativos: Adicionar ativo', () => {
+describe('/portfolio/assets: Adicionar ativo', () => {
     it('o botão abre o modal e fechar limpa a busca', async () => {
         mockAssetsApi({ holdings: sampleHoldings() });
         const user: UserEvent = userEvent.setup();
-        const router: AnyRouter = renderRouterAt('/patrimonio/ativos', { signedIn: true });
+        const router: AnyRouter = renderRouterAt('/portfolio/assets', { signedIn: true });
 
         await user.click(await screen.findByRole('button', { name: 'Adicionar ativo' }));
         expect(await screen.findByRole('dialog', { name: 'O que você quer adicionar?' })).toBeInTheDocument();
@@ -28,7 +28,7 @@ describe('/patrimonio/ativos: Adicionar ativo', () => {
     it('?add=true&classId= abre o modal já com a classe pré-selecionada', async () => {
         mockAssetsApi();
         const user: UserEvent = userEvent.setup();
-        renderRouterAt('/patrimonio/ativos?add=true&classId=class-fii', { signedIn: true });
+        renderRouterAt('/portfolio/assets?add=true&classId=class-fii', { signedIn: true });
 
         await user.click(await screen.findByRole('button', { name: /Renda fixa/ }));
 

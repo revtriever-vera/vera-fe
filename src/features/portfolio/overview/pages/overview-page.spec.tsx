@@ -9,7 +9,7 @@ import { server } from '../../../../../test/msw/server';
 import { renderRouterAt } from '../../../../../test/router';
 
 async function openOverview(): Promise<UserEvent> {
-    renderRouterAt('/patrimonio', { signedIn: true });
+    renderRouterAt('/portfolio', { signedIn: true });
     await screen.findByText('R$ 1.773.100,40');
     return userEvent.setup();
 }
@@ -36,7 +36,7 @@ describe('visão geral: conteúdo', () => {
         await openOverview();
 
         expect(screen.getByText('Maior desvio: Cripto, 6,7 pp acima da meta.')).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: 'Onde aportar' })).toHaveAttribute('href', '/patrimonio/aporte');
+        expect(screen.getByRole('link', { name: 'Onde aportar' })).toHaveAttribute('href', '/portfolio/contribution');
     });
 
     it('sem desvio fora da faixa não mostra o destaque', async () => {
@@ -104,7 +104,7 @@ describe('visão geral: tolerância fracionária', () => {
             http.post('*/auth/refresh', () => HttpResponse.json({ outcome: 'authenticated', accessToken: 'access-token-1' })),
             http.get('*/auth/me', () => HttpResponse.json(sessionIdentity({ locale: 'en' })))
         );
-        renderRouterAt('/patrimonio');
+        renderRouterAt('/portfolio');
 
         expect(await screen.findByText(/Tolerance range: ±6\.5 pp/)).toBeInTheDocument();
     });
@@ -199,7 +199,7 @@ describe('visão geral: aviso de qualidade', () => {
         expect(alert).toHaveTextContent('Renda fixa calculada por estimativa.');
         expect(alert).toHaveTextContent('1 título sem dado do índice.');
         expect(alert).toHaveTextContent('Sem câmbio disponível para parte dos valores.');
-        expect(within(alert).getByRole('link', { name: 'Ver meus ativos' })).toHaveAttribute('href', '/patrimonio/ativos');
+        expect(within(alert).getByRole('link', { name: 'Ver meus ativos' })).toHaveAttribute('href', '/portfolio/assets');
     });
 
     it('com um único contador mostra só aquele item', async () => {
@@ -224,17 +224,17 @@ describe('visão geral: aviso de qualidade', () => {
 describe('visão geral: estados', () => {
     it('carteira vazia mostra o estado vazio com o caminho para cadastrar', async () => {
         installOverviewApi({ overview: emptyOverview() });
-        renderRouterAt('/patrimonio', { signedIn: true });
+        renderRouterAt('/portfolio', { signedIn: true });
 
         expect(await screen.findByRole('heading', { name: 'Sua carteira ainda está vazia' })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: 'Cadastrar meu primeiro ativo' })).toHaveAttribute('href', '/patrimonio/comecar');
+        expect(screen.getByRole('link', { name: 'Cadastrar meu primeiro ativo' })).toHaveAttribute('href', '/portfolio/get-started');
         expect(screen.getByRole('radiogroup', { name: 'Moeda base' })).toBeInTheDocument();
         expect(screen.queryByRole('table')).not.toBeInTheDocument();
     });
 
     it('mostra o esqueleto enquanto carrega', async () => {
         installOverviewApi();
-        renderRouterAt('/patrimonio', { signedIn: true });
+        renderRouterAt('/portfolio', { signedIn: true });
 
         expect(await screen.findByRole('status', { name: '' })).toHaveTextContent('Carregando a visão geral');
         await screen.findByText('R$ 1.773.100,40');
@@ -242,7 +242,7 @@ describe('visão geral: estados', () => {
 
     it('erro 500 mostra o código da requisição e tenta de novo', async () => {
         const api: OverviewApi = installOverviewApi({ failures: 1 });
-        renderRouterAt('/patrimonio', { signedIn: true });
+        renderRouterAt('/portfolio', { signedIn: true });
 
         expect(await screen.findByText('Não foi possível carregar a visão geral.')).toBeInTheDocument();
         expect(screen.getByText(/req-123/)).toBeInTheDocument();
@@ -255,7 +255,7 @@ describe('visão geral: estados', () => {
 
     it('em inglês traduz os textos e formata o dinheiro', async () => {
         installOverviewApi();
-        renderRouterAt('/patrimonio', { signedIn: true });
+        renderRouterAt('/portfolio', { signedIn: true });
         server.use(http.get('*/auth/me', (): Response => HttpResponse.json(sessionIdentity({ locale: 'en' }))));
 
         expect(await screen.findByText('R$1,773,100.40')).toBeInTheDocument();

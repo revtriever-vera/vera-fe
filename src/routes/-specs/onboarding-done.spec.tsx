@@ -123,7 +123,7 @@ describe('Pronto', () => {
 
         expect(await screen.findByRole('navigation', { name: 'Navegação principal' })).toBeInTheDocument();
         await waitFor(() => {
-            expect(router.state.location.pathname).toBe('/patrimonio');
+            expect(router.state.location.pathname).toBe('/portfolio');
         });
         expect(finished).toBe(1);
         expect(track).toHaveBeenCalledWith('onboarding_finished');

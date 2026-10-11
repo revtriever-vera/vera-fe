@@ -6,7 +6,7 @@ const contributionSearchSchema = z.object({
     amount: z.number().optional().catch(undefined)
 });
 
-export const Route = createFileRoute('/_auth/_app/patrimonio/aporte')({
+export const Route = createFileRoute('/_auth/_app/portfolio/contribution')({
     validateSearch: contributionSearchSchema,
     component: ContributionPage
 });

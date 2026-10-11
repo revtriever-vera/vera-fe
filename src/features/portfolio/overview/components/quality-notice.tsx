@@ -32,7 +32,7 @@ export function QualityNotice({ quality }: QualityNoticeProps): ReactElement | n
                 </ul>
             }
             action={
-                <Link to="/patrimonio/ativos" className="underline-offset-2 hover:underline">
+                <Link to="/portfolio/assets" className="underline-offset-2 hover:underline">
                     {t('quality.action')}
                 </Link>
             }
