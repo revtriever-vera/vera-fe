@@ -7,6 +7,7 @@ interface ConfirmDialogProps {
     readonly title: string;
     readonly description: string;
     readonly confirmLabel: string;
+    readonly cancelLabel?: string;
     readonly destructive?: boolean;
     readonly pending?: boolean;
     readonly onConfirm: () => void;
@@ -17,6 +18,7 @@ export function ConfirmDialog({
     title,
     description,
     confirmLabel,
+    cancelLabel,
     destructive,
     pending,
     onConfirm,
@@ -31,7 +33,7 @@ export function ConfirmDialog({
             footer={
                 <>
                     <Button variant="ghost" onClick={onCancel}>
-                        {t.cancel}
+                        {cancelLabel ?? t.cancel}
                     </Button>
                     <Button variant={destructive === true ? 'danger' : 'primary'} disabled={pending === true} onClick={onConfirm}>
                         {pending === true ? t.pleaseWait : confirmLabel}
