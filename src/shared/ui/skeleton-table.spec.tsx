@@ -30,6 +30,6 @@ describe('SkeletonTable', () => {
 
         const cells: HTMLElement[] = Array.from(container.querySelectorAll<HTMLElement>('tbody td > *'));
         expect(cells).toHaveLength(6);
-        expect(cells[5].className).toBe(cells[0].className);
+        expect(cells[5]?.className).toBe(cells[0]?.className);
     });
 });
