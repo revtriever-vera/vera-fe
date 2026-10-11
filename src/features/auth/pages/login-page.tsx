@@ -5,14 +5,14 @@ import { LoginBox } from '../components/login-box';
 import { LoginHero } from '../components/login-hero';
 import { PoweredBy } from '../components/powered-by';
 
-export function LoginPage(): ReactElement {
+export function LoginPage({ redirectTo = '/' }: { readonly redirectTo?: string }): ReactElement {
     const { isRestoring, isAuthenticated } = useSession();
 
     if (isRestoring) {
         return <main className="min-h-dvh bg-surface" />;
     }
     if (isAuthenticated) {
-        return <Navigate to="/" replace />;
+        return <Navigate to={redirectTo} replace />;
     }
 
     return (
