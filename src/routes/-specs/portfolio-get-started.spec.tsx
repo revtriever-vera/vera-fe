@@ -20,6 +20,7 @@ describe('/portfolio/get-started', () => {
         await user.click(screen.getByRole('link', { name: 'Pular por enquanto' }));
 
         expect(router.state.location.pathname).toBe('/portfolio');
+        expect(await screen.findByRole('navigation', { name: 'Navegação principal' })).toBeInTheDocument();
     });
 
     it('com ativos: o rodapé vira Ver minha visão geral', async () => {

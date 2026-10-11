@@ -24,7 +24,7 @@ import { BanksStep } from './banks-step';
 
 const NOW: string = '2026-10-01T12:00:00.000Z';
 const CONNECTIONS: string = '/spending/connections';
-const IMPORT: string = '/spending/connections?import=true';
+const IMPORT: string = '/spending/connections';
 
 function renderStep(path: string, element: ReactElement): AnyRouter {
     const root: AnyRoute = createRootRoute();
@@ -204,7 +204,7 @@ describe('BanksStep', () => {
 
         const link: HTMLElement = await screen.findByRole('link', { name: /Importe um extrato do seu banco/ });
         expect(screen.getByText(/Prefere não conectar\?/)).toBeInTheDocument();
-        expect(link).toHaveAttribute('href', IMPORT);
+        expect(link).toHaveAttribute('href', '/spending/connections?import=true');
         await userEvent.click(link);
 
         await waitFor(() => {

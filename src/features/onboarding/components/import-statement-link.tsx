@@ -16,6 +16,7 @@ export function ImportStatementLink({ link }: { readonly link: string | null }):
             {t('importPrompt')}{' '}
             <Link
                 to={link}
+                search={{ import: true }}
                 className={LINK_CLASS}
                 onClick={(): void => {
                     track('onboarding_import_opened');
