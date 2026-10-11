@@ -1,4 +1,4 @@
-const BRACKET_COLOR = /\[(#[0-9a-fA-F]{3,8}|rgba?\(|hsla?\(|oklch\()/;
+const BRACKET_COLOR = /\[(?:[a-z-]+:)?(#[0-9a-fA-F]{3,8}|rgba?\(|hsla?\(|oklch\()/;
 const RAW_COLOR = /^(#[0-9a-fA-F]{3,8}|rgba?\(|hsla?\(|oklch\()/;
 const COLOR_PROPERTY = /^(color|background|backgroundColor|borderColor|borderTopColor|borderBottomColor|fill|stroke|outlineColor)$/;
 const CLASS_ATTRIBUTES = new Set(['className', 'class']);

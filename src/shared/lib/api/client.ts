@@ -85,17 +85,13 @@ apiClient.use(authMiddleware);
 
 export function unwrap<T>(result: { data?: T; error?: unknown; response: Response }): T {
     if (result.error !== undefined || !result.response.ok) {
-        throw reportedError(result.error, result.response.status);
+        throw ApiError.fromUnknown(result.error, result.response.status);
     }
     return result.data as T;
 }
 
-function reportedError(body: unknown, status: number): ApiError {
-    return ApiError.fromUnknown(body, status);
-}
-
 export function unwrapEmpty(result: { error?: unknown; response: Response }): void {
     if (result.error !== undefined || !result.response.ok) {
-        throw reportedError(result.error, result.response.status);
+        throw ApiError.fromUnknown(result.error, result.response.status);
     }
 }

@@ -12,7 +12,16 @@ function polyfillPointerCapture(): void {
     Element.prototype.releasePointerCapture = (): void => undefined;
 }
 
+function polyfillResizeObserver(): void {
+    globalThis.ResizeObserver = class {
+        observe(): void {}
+        unobserve(): void {}
+        disconnect(): void {}
+    };
+}
+
 beforeAll(() => {
+    polyfillResizeObserver();
     window.scrollTo = vi.fn();
     Element.prototype.scrollIntoView = vi.fn();
     polyfillPointerCapture();
