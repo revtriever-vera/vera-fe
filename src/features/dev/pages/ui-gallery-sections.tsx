@@ -2,6 +2,7 @@ import { useState, type ReactElement, type ReactNode } from 'react';
 import { Search } from 'lucide-react';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
 import { Alert } from '@/shared/ui/alert';
+import { BrandLogo } from '@/shared/ui/brand-logo';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
@@ -224,6 +225,7 @@ export function DataSection(): ReactElement {
 export function StructureSection(): ReactElement {
     return (
         <Section title="Estrutura e navegação">
+            <BrandLogo />
             <Card className="w-full max-w-sm p-4">
                 <p className="font-semibold">Patrimônio</p>
                 <Money amountMinor={240212550} currency="BRL" tone="positive" />

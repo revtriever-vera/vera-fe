@@ -45,6 +45,8 @@
     --color-caution-soft: color-mix(in oklab, #c2620d 12%, var(--color-surface));
     --color-critical-soft: color-mix(in oklab, var(--color-critical) 12%, var(--color-surface));
     --color-info-soft: color-mix(in oklab, var(--color-info) 12%, var(--color-surface));
+    --color-facebook: #1877f2;
+    --color-partner: #1a56db;
     --color-scrollbar: #e6c9d6;
     --color-scrollbar-hover: #d3aabd;
 }
@@ -108,6 +110,28 @@
             var(--color-canvas) 320px
         );
         background-repeat: no-repeat;
+    }
+
+    .login-photo-placeholder {
+        background: linear-gradient(160deg, var(--color-accent-soft), var(--color-accent) 55%, var(--color-accent-strong));
+    }
+
+    .login-photo-overlay {
+        background: linear-gradient(
+            180deg,
+            color-mix(in oklab, var(--color-accent) 55%, transparent) 0%,
+            color-mix(in oklab, var(--color-accent) 60%, transparent) 55%,
+            color-mix(in oklab, var(--color-accent-strong) 75%, transparent) 100%
+        );
+        mix-blend-mode: multiply;
+    }
+
+    .login-photo-overlay::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: color-mix(in oklab, var(--color-accent-soft) 24%, transparent);
+        mix-blend-mode: screen;
     }
 
     .surface-card {

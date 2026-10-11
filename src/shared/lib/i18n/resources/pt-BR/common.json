@@ -16,5 +16,6 @@
   "orClickToChoose": "ou clique para escolher",
   "fileRejected": "Arquivo recusado — confira o formato e o tamanho.",
   "requestId": "requestId: {{value}}",
-  "dismissAlert": "Fechar aviso"
+  "dismissAlert": "Fechar aviso",
+  "brandName": "vera"
 }

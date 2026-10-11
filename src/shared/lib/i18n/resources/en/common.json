@@ -16,5 +16,6 @@
   "orClickToChoose": "or click to choose",
   "fileRejected": "File rejected — check the format and size.",
   "requestId": "requestId: {{value}}",
-  "dismissAlert": "Dismiss alert"
+  "dismissAlert": "Dismiss alert",
+  "brandName": "vera"
 }
