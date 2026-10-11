@@ -137,6 +137,7 @@
     "invalidCredentials": "Pluggy did not accept these credentials. Check the Client ID and the Client Secret.",
     "itemNotFound": "That Item ID was not found in your Meu Pluggy account.",
     "providerUnavailable": "Pluggy is down right now. Try again in a moment.",
+    "providerDisabled": "This installation does not have the Pluggy integration turned on yet.",
     "syncInProgress": "An update is already running for that connection.",
     "secretOpenFailed": "Could not read the stored credentials. Register them again.",
     "secretSealerMismatch": "The stored credentials were created with another key. Register them again.",

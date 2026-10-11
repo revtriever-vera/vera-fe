@@ -1,1 +1,182 @@
-{}
+{
+  "page": {
+    "intro": "Seus extratos chegam pelo Open Finance usando a sua própria conta gratuita no Meu Pluggy, ou por arquivo exportado do banco.",
+    "loading": "Carregando as conexões",
+    "loadError": "Não foi possível carregar as conexões.",
+    "retry": "Tentar de novo"
+  },
+  "tutorial": {
+    "title": "Passo a passo do Meu Pluggy",
+    "intro": "Uns 10 a 15 minutos, uma vez só. Marque cada passo conforme for fazendo.",
+    "show": "Ver passo a passo",
+    "hide": "Ocultar passo a passo",
+    "done": "feito",
+    "doneStep": "Marcar o passo {{step}} como feito",
+    "newTab": "abre em outra aba",
+    "reference": "Referência oficial: <github/>. Dúvidas sobre a Pluggy: comunidade no Discord deles.",
+    "s1": {
+      "title": "Crie sua conta no Meu Pluggy",
+      "line1": "Cadastre-se com seu e-mail. É aqui que ficam suas conexões com os bancos e os consentimentos do Open Finance."
+    },
+    "s2": {
+      "title": "Conecte cada banco pelo Open Finance",
+      "line1": "Clique no botão principal de conexão e busque o seu banco.",
+      "line2": "Você é levado ao app ou site do banco para autorizar o compartilhamento. A senha do banco nunca passa pela Vera nem pela Pluggy.",
+      "line3": "Repita para cada banco e cartão (ex.: Nubank, Itaú)."
+    },
+    "s3": {
+      "title": "Crie a conta de desenvolvedor na Pluggy",
+      "line1": "O cadastro libera um período de teste de 15 dias. O acesso aos dados continua depois dele.",
+      "line2": "Na aplicação, inclua o <b>MeuPluggy</b> na lista de conectores.",
+      "line3": "Crie uma aplicação de desenvolvimento: ela mostra o <kbd>Client ID</kbd> e o <kbd>Client Secret</kbd>.",
+      "warn": "Faça os passos 3 a 5 dentro dos 15 dias de teste: depois disso a configuração fica somente leitura e não dá pra autorizar bancos novos."
+    },
+    "s4": {
+      "title": "Autorize o Meu Pluggy na aplicação",
+      "line1": "Na sua aplicação, clique em <kbd>Ir para Demo</kbd>.",
+      "line2": "Escolha o conector MeuPluggy e entre com a conta do passo 1 (autorização OAuth).",
+      "line3": "Autorize <b>uma vez por banco conectado</b>, não por conta."
+    },
+    "s5": {
+      "title": "Copie o Item ID de cada banco",
+      "line1": "Ainda na Demo, abra o menu <kbd>⋯</kbd> no canto superior direito e clique em <kbd>Copiar Item ID</kbd>.",
+      "line2": "Guarde um Item ID para cada banco autorizado."
+    },
+    "s6": {
+      "title": "Cole as credenciais aqui",
+      "line1": "Preencha o formulário de credenciais e clique em <b>Testar e conectar</b>. O Client Secret é cifrado e não aparece de novo."
+    }
+  },
+  "credentials": {
+    "title": "Suas credenciais",
+    "formIntro": "O Client ID e o Client Secret saem do passo 3; os Item IDs, do passo 5.",
+    "rotateIntro": "Cole o Client ID e o Client Secret da aplicação nova. Os bancos conectados continuam como estão.",
+    "addIntro": "Cole o Item ID de cada banco novo, como no passo 5.",
+    "clientId": "Client ID",
+    "clientIdHint": "Um código no formato 3f9a1c2e-…, que a Pluggy mostra na sua aplicação.",
+    "clientIdPlaceholder": "ex.: 3f9a1c2e-0000-0000-0000-000000000000",
+    "clientSecret": "Client Secret",
+    "clientSecretHint": "Fica cifrado no servidor e não volta a aparecer.",
+    "itemIds": "Item IDs",
+    "itemIdsHint": "Um por banco, separados por vírgula, espaço ou linha. No máximo {{max}} por vez.",
+    "itemIdsPlaceholder": "ex.: 8b2c…, 41de…",
+    "chipsLabel": "Item IDs reconhecidos",
+    "chipInvalid": "{{id}} (formato inválido)",
+    "chipValid": "{{id}}",
+    "submit": "Testar e conectar",
+    "testing": "Testando…",
+    "connecting": "Conectando bancos…",
+    "rotateSubmit": "Salvar nova credencial",
+    "addSubmit": "Conectar bancos",
+    "cancel": "Cancelar",
+    "fillExample": "Preencher exemplo",
+    "errors": {
+      "clientIdInvalid": "O Client ID é um código no formato 3f9a1c2e-…",
+      "clientSecretRequired": "Informe o Client Secret.",
+      "itemIdsRequired": "Cole ao menos um Item ID.",
+      "itemIdsInvalid": "Alguns itens não são Item IDs. Cada Item ID é um código como 8b2c1d3e-…; não cole o Client Secret aqui.",
+      "itemIdsTooMany": "Cole no máximo {{max}} Item IDs por vez.",
+      "invalidCredentials": "A Pluggy recusou essas credenciais. Confira o Client ID e o Client Secret da sua aplicação",
+      "providerUnavailableTitle": "A Pluggy não respondeu agora",
+      "providerUnavailableDetail": "Nada foi perdido. Tente de novo em instantes.",
+      "providerDisabledTitle": "Integração ainda não disponível nesta instalação",
+      "providerDisabledDetail": "Esta instalação da Vera ainda não está ligada à Pluggy. Enquanto isso, importe seus extratos por arquivo."
+    },
+    "results": {
+      "title": "Resultado por banco",
+      "connected": "Conectado: {{name}}",
+      "connectedUnknown": "Conectado",
+      "alreadyConnected": "Já estava conectado: {{name}}",
+      "alreadyConnectedUnknown": "Já estava conectado",
+      "notFound": "Não encontramos este Item ID. Confira se copiou da Demo da sua aplicação",
+      "limitReached": "Você chegou ao limite de bancos conectados",
+      "failed": "A Pluggy não respondeu, tente de novo",
+      "forItem": "Item ID {{hint}}"
+    },
+    "configured": {
+      "label": "Credencial do Meu Pluggy",
+      "verifiedAt": "verificada em {{date}}",
+      "neverVerified": "ainda não verificada",
+      "statusValid": "válida",
+      "statusInvalid": "inválida",
+      "testAgain": "Testar de novo",
+      "testingAgain": "Testando…",
+      "rotate": "Trocar credencial",
+      "addBanks": "Adicionar bancos",
+      "remove": "Remover credencial",
+      "invalidTitle": "Sua credencial do Meu Pluggy deixou de funcionar",
+      "invalidDetail": "As conexões estão pausadas até você trocar a credencial."
+    },
+    "removeDialog": {
+      "title": "Remover a credencial do Meu Pluggy?",
+      "description": "A Vera para de buscar seus gastos pelo Meu Pluggy. As transações já importadas continuam aqui.",
+      "purge": "Apagar também as transações que vieram do Meu Pluggy",
+      "confirm": "Remover credencial",
+      "confirmPurge": "Remover e apagar",
+      "cancel": "Cancelar"
+    },
+    "toasts": {
+      "saved": "Credencial salva",
+      "verified": "Credencial verificada",
+      "stillInvalid": "A Pluggy ainda recusa essa credencial",
+      "removed": "Credencial removida",
+      "removeFailed": "Não foi possível remover a credencial"
+    }
+  },
+  "banks": {
+    "title": "Bancos conectados",
+    "intro": "Bancos conectados pelo Meu Pluggy.",
+    "empty": "Nenhum banco conectado ainda.",
+    "emptyHint": "Cole os Item IDs no formulário de credenciais para conectar seus bancos.",
+    "unknownBank": "Banco",
+    "syncAll": "Sincronizar tudo",
+    "syncOne": "Sincronizar agora",
+    "syncing": "sincronizando…",
+    "stalled": "Ainda sincronizando, volte em alguns minutos.",
+    "updatedAt": "atualizado em {{date}}",
+    "updatedToday": "atualizado hoje, {{time}}",
+    "neverUpdated": "ainda não atualizado",
+    "lastRunFailed": "A última atualização falhou.",
+    "consentExpires": "o consentimento vence em {{date}}",
+    "accountLine": "{{name}} •••• {{last4}}",
+    "accountLineNoNumber": "{{name}}",
+    "remove": "Remover",
+    "status": {
+      "active": "ativo",
+      "needs_attention": "precisa de atenção",
+      "revoked": "acesso revogado",
+      "paused": "pausado"
+    },
+    "help": {
+      "reconnect": "Abra o Meu Pluggy e reconecte este banco.",
+      "confirm": "O banco pediu uma confirmação no Meu Pluggy.",
+      "reauthorize": "Autorize de novo na Demo da sua aplicação e cole o novo Item ID.",
+      "paused": "Troque a credencial para voltar a atualizar este banco.",
+      "step2": "Ver o passo 2",
+      "step4": "Ver o passo 4",
+      "rotate": "Trocar credencial"
+    },
+    "removeDialog": {
+      "title": "Remover {{bank}}?",
+      "description": "A Vera para de buscar os gastos deste banco. As transações já importadas continuam aqui.",
+      "purge": "Apagar também as transações deste banco",
+      "confirm": "Remover",
+      "confirmPurge": "Remover e apagar",
+      "cancel": "Cancelar"
+    },
+    "toasts": {
+      "syncQueued": "Atualização pedida",
+      "syncAllQueued_one": "{{count}} banco na fila para atualizar",
+      "syncAllQueued_other": "{{count}} bancos na fila para atualizar",
+      "syncAllNone": "Nenhum banco para atualizar agora",
+      "syncFailed": "Não foi possível pedir a atualização",
+      "removed": "Banco removido",
+      "removeFailed": "Não foi possível remover o banco",
+      "done": "Os bancos terminaram de atualizar"
+    }
+  },
+  "trust": {
+    "openSource": "O código é aberto: dá pra conferir o que é feito com as credenciais, ou rodar tudo no seu servidor.",
+    "privacy": "Sua senha do banco nunca passa pela Vera. O acesso é só de leitura."
+  }
+}

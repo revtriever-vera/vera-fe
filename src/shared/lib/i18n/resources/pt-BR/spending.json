@@ -137,6 +137,7 @@
     "invalidCredentials": "A Pluggy não aceitou essas credenciais. Confira o Client ID e o Client Secret.",
     "itemNotFound": "Esse Item ID não foi encontrado na sua conta do Meu Pluggy.",
     "providerUnavailable": "A Pluggy está fora do ar agora. Tente de novo em instantes.",
+    "providerDisabled": "Esta instalação ainda não tem a integração com a Pluggy ligada.",
     "syncInProgress": "Já existe uma atualização em andamento para essa conexão.",
     "secretOpenFailed": "Não foi possível ler a credencial guardada. Cadastre-a de novo.",
     "secretSealerMismatch": "A credencial guardada foi criada com outra chave. Cadastre-a de novo.",
