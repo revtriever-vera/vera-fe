@@ -1,51 +1,51 @@
 name: CI
 
 on:
-    pull_request:
-        branches: [main]
-    push:
-        branches: [main]
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
 
 concurrency:
-    group: ci-${{ github.ref }}
-    cancel-in-progress: true
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
-    contents: read
+  contents: read
 
 jobs:
-    verify:
-        runs-on: ubuntu-latest
-        timeout-minutes: 25
-        steps:
-            - uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: 22
-                  cache: npm
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
 
-            - run: npm ci
+      - run: npm ci
 
-            - name: Lint
-              run: npm run lint
+      - name: Lint
+        run: npm run lint
 
-            - name: Format check
-              run: npm run format:check
+      - name: Format check
+        run: npm run format:check
 
-            - name: Typecheck
-              run: npm run typecheck
+      - name: Typecheck
+        run: npm run typecheck
 
-            - name: Tests
-              run: npm run test:cov
+      - name: Tests
+        run: npm run test:cov
 
-            - name: Build
-              run: npm run build
+      - name: Build
+        run: npm run build
 
-            - name: Sonar
-              if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.SONAR_ENABLED == 'true'
-              uses: SonarSource/sonarqube-scan-action@v8
-              env:
-                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Sonar
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.SONAR_ENABLED == 'true'
+        uses: SonarSource/sonarqube-scan-action@v8
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

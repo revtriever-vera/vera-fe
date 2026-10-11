@@ -114,7 +114,15 @@ export default tseslint.config(
         }
     },
     {
-        files: ['src/**/*.schema.ts', 'src/**/*.schemas.ts', 'src/**/types.ts', 'src/**/*.types.ts', 'src/shared/config/*.ts', 'src/routes/**/*.tsx', 'src/main.tsx'],
+        files: [
+            'src/**/*.schema.ts',
+            'src/**/*.schemas.ts',
+            'src/**/types.ts',
+            'src/**/*.types.ts',
+            'src/shared/config/*.ts',
+            'src/routes/**/*.tsx',
+            'src/main.tsx'
+        ],
         rules: {
             '@typescript-eslint/typedef': [
                 'error',
