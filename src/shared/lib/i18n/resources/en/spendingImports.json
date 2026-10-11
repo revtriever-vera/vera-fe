@@ -71,7 +71,7 @@
   },
   "mapping": {
     "title": "How to read this CSV",
-    "description": "We do not recognize the format of this file. Tell us where the date, the description and the amount are.",
+    "intro": "We do not recognize the format of this file. Tell us where the date, the description and the amount are.",
     "hasHeader": "The first line is a header",
     "amountModeLabel": "How the amount appears",
     "single": "One amount column",

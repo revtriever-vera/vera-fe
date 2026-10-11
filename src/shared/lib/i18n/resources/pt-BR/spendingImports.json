@@ -71,7 +71,7 @@
   },
   "mapping": {
     "title": "Como ler este CSV",
-    "description": "Não reconhecemos o formato deste arquivo. Indique onde estão a data, a descrição e o valor.",
+    "intro": "Não reconhecemos o formato deste arquivo. Indique onde estão a data, a descrição e o valor.",
     "hasHeader": "A primeira linha é cabeçalho",
     "amountModeLabel": "Como o valor aparece",
     "single": "Uma coluna de valor",

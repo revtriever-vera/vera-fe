@@ -210,7 +210,7 @@ export function MappingForm({ columns, initial, busy, onSubmit }: MappingFormPro
                 <h3 id={titleId} className="text-sm font-semibold text-content">
                     {t('mapping.title')}
                 </h3>
-                <p className="text-sm text-content-muted">{t('mapping.description')}</p>
+                <p className="text-sm text-content-muted">{t('mapping.intro')}</p>
             </div>
             <CheckboxField form={form} name="hasHeader" label={t('mapping.hasHeader')} />
             <MappingFields control={form.control} columns={columns} />

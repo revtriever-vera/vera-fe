@@ -65,6 +65,9 @@ describe('ImportStatementModal: CSV genérico', () => {
 
         expect(await screen.findByRole('heading', { name: 'Como ler este CSV' })).toBeInTheDocument();
         expect(screen.getByText('3 linhas encontradas')).toBeInTheDocument();
+        expect(
+            screen.getByText('Não reconhecemos o formato deste arquivo. Indique onde estão a data, a descrição e o valor.')
+        ).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Importar 3 transações' })).toBeDisabled();
         await user.click(screen.getByRole('combobox', { name: 'Data' }));
         expect(await screen.findByRole('option', { name: 'Histórico' })).toBeInTheDocument();
