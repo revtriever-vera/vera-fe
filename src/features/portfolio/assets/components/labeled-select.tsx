@@ -13,15 +13,30 @@ export interface LabeledSelectProps {
 
 export function LabeledSelect({ label, placeholder, value, choices, error, hint, onChange }: LabeledSelectProps): ReactElement {
     const labelId: string = useId();
+    const messageId: string = useId();
+    const hasError: boolean = Boolean(error);
+    const hasHint: boolean = Boolean(hint) && !hasError;
     return (
         <div className="flex flex-col gap-1.5">
             <span id={labelId} className="text-sm font-medium text-content">
                 {label}
             </span>
-            <SelectMenu value={value} choices={choices} placeholder={placeholder} ariaLabelledBy={labelId} onChange={onChange} />
-            {hint && !error ? <p className="text-2xs text-content-subtle">{hint}</p> : null}
+            <SelectMenu
+                value={value}
+                choices={choices}
+                placeholder={placeholder}
+                ariaLabelledBy={labelId}
+                ariaDescribedBy={hasError || hasHint ? messageId : undefined}
+                invalid={hasError}
+                onChange={onChange}
+            />
+            {hasHint ? (
+                <p id={messageId} className="text-2xs text-content-subtle">
+                    {hint}
+                </p>
+            ) : null}
             {error ? (
-                <p role="alert" className="text-2xs text-critical">
+                <p id={messageId} role="alert" className="text-2xs text-critical">
                     {error}
                 </p>
             ) : null}

@@ -151,8 +151,16 @@ describe('AddAssetModal: renda variável', () => {
 
         expect(screen.getByRole('combobox', { name: 'Classe' })).toHaveTextContent('Escolha a classe');
         expect(screen.getByText('Não temos uma sugestão para este ativo. Escolha a classe em que ele entra.')).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: 'Adicionar à carteira' })).toBeDisabled();
-        await user.click(screen.getByRole('combobox', { name: 'Classe' }));
+        const classField: HTMLElement = screen.getByRole('combobox', { name: 'Classe' });
+        expect(screen.getByRole('button', { name: 'Adicionar à carteira' })).toBeEnabled();
+        await submitAdd(user);
+
+        const error: HTMLElement = await screen.findByText('Escolha a classe do ativo.');
+        expect(error).toHaveAttribute('role', 'alert');
+        expect(classField).toBeInvalid();
+        expect(classField).toHaveAccessibleDescription('Escolha a classe do ativo.');
+        expect(api.positionBodies).toEqual([]);
+        await user.click(classField);
         await user.click(await screen.findByRole('option', { name: 'Cripto' }));
         await submitAdd(user);
 

@@ -16,6 +16,8 @@ export interface SelectMenuProps {
     readonly choices: readonly SelectChoice[];
     readonly placeholder: string;
     readonly ariaLabelledBy?: string;
+    readonly ariaDescribedBy?: string;
+    readonly invalid?: boolean;
     readonly disabled?: boolean;
     readonly leading?: ReactNode;
     readonly className?: string;
@@ -56,11 +58,45 @@ function SelectMenuChoice({ choice, showCheck }: { readonly choice: SelectChoice
     );
 }
 
+function SelectMenuTrigger({
+    placeholder,
+    ariaLabelledBy,
+    ariaDescribedBy,
+    invalid,
+    leading,
+    className
+}: Pick<SelectMenuProps, 'placeholder' | 'ariaLabelledBy' | 'ariaDescribedBy' | 'invalid' | 'leading' | 'className'>): ReactElement {
+    return (
+        <Select.Trigger
+            className={cn(TRIGGER, 'disabled:opacity-60', className)}
+            aria-labelledby={ariaLabelledBy}
+            aria-describedby={ariaDescribedBy}
+            aria-invalid={invalid === true ? true : undefined}
+        >
+            <span className="flex min-w-0 items-center gap-2">
+                {leading === undefined ? null : (
+                    <span className="flex w-5 shrink-0 justify-center" aria-hidden>
+                        {leading}
+                    </span>
+                )}
+                <span className="truncate">
+                    <Select.Value placeholder={placeholder} />
+                </span>
+            </span>
+            <Select.Icon>
+                <ChevronDown className="h-4 w-4 text-content-subtle" aria-hidden />
+            </Select.Icon>
+        </Select.Trigger>
+    );
+}
+
 export function SelectMenu({
     value,
     choices,
     placeholder,
     ariaLabelledBy,
+    ariaDescribedBy,
+    invalid,
     disabled,
     leading,
     className,
@@ -69,21 +105,14 @@ export function SelectMenu({
 }: SelectMenuProps): ReactElement {
     return (
         <Select.Root value={value === '' ? undefined : value} disabled={disabled} onValueChange={onChange}>
-            <Select.Trigger className={cn(TRIGGER, 'disabled:opacity-60', className)} aria-labelledby={ariaLabelledBy}>
-                <span className="flex min-w-0 items-center gap-2">
-                    {leading === undefined ? null : (
-                        <span className="flex w-5 shrink-0 justify-center" aria-hidden>
-                            {leading}
-                        </span>
-                    )}
-                    <span className="truncate">
-                        <Select.Value placeholder={placeholder} />
-                    </span>
-                </span>
-                <Select.Icon>
-                    <ChevronDown className="h-4 w-4 text-content-subtle" aria-hidden />
-                </Select.Icon>
-            </Select.Trigger>
+            <SelectMenuTrigger
+                placeholder={placeholder}
+                ariaLabelledBy={ariaLabelledBy}
+                ariaDescribedBy={ariaDescribedBy}
+                invalid={invalid}
+                leading={leading}
+                className={className}
+            />
             <Select.Portal>
                 <Select.Content position="popper" sideOffset={4} className={CONTENT}>
                     <Select.Viewport className="max-h-[280px] p-1">

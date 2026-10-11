@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useForm, useWatch, type UseFormReturn } from 'react-hook-form';
+import { useForm, type UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import type { z } from 'zod';
@@ -125,11 +125,10 @@ export function usePositionForm({ classes, initialClassId, type, asset, onSaved,
         mode: 'onTouched',
         defaultValues: positionDefaults(classes, null, initialClassId)
     });
-    const values: PositionFormInput = useWatch({ control: form.control }) as PositionFormInput;
     const { submit, busy } = usePositionSubmit({ form, type, asset, classes, onSaved, onDuplicate, setAlertMessage });
     return {
         form,
-        canSubmit: asset !== null && schema.safeParse(values).success,
+        canSubmit: asset !== null,
         busy,
         alertMessage,
         submit,
