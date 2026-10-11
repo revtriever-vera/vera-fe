@@ -1,0 +1,20 @@
+{
+  "previous": "Previous",
+  "next": "Next",
+  "close": "Close",
+  "cancel": "Cancel",
+  "pleaseWait": "Please wait…",
+  "previousMonth": "Previous month",
+  "nextMonth": "Next month",
+  "openCalendarFor": "Open calendar for {{label}}",
+  "datePlaceholder": "mm/dd/yyyy",
+  "hidePassword": "Hide password",
+  "showPassword": "Show password",
+  "copied": "Copied",
+  "change": "Change",
+  "dropFileHere": "Drag the file here",
+  "orClickToChoose": "or click to choose",
+  "fileRejected": "File rejected — check the format and size.",
+  "requestId": "requestId: {{value}}",
+  "dismissAlert": "Dismiss alert"
+}

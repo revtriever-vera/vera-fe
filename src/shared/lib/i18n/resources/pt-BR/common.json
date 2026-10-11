@@ -1,0 +1,20 @@
+{
+  "previous": "Anterior",
+  "next": "Próxima",
+  "close": "Fechar",
+  "cancel": "Cancelar",
+  "pleaseWait": "Aguarde…",
+  "previousMonth": "Mês anterior",
+  "nextMonth": "Próximo mês",
+  "openCalendarFor": "Abrir calendário de {{label}}",
+  "datePlaceholder": "dd/mm/aaaa",
+  "hidePassword": "Ocultar senha",
+  "showPassword": "Mostrar senha",
+  "copied": "Copiado",
+  "change": "Trocar",
+  "dropFileHere": "Arraste o arquivo aqui",
+  "orClickToChoose": "ou clique para escolher",
+  "fileRejected": "Arquivo recusado — confira o formato e o tamanho.",
+  "requestId": "requestId: {{value}}",
+  "dismissAlert": "Fechar aviso"
+}

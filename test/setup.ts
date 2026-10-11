@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup, configure } from '@testing-library/react';
-import { afterAll, afterEach, beforeAll, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
+import { i18n } from '@/shared/lib/i18n';
 import { server } from './msw/server';
 
 configure({ asyncUtilTimeout: 5000 });
@@ -16,6 +17,10 @@ beforeAll(() => {
     Element.prototype.scrollIntoView = vi.fn();
     polyfillPointerCapture();
     server.listen({ onUnhandledRequest: 'error' });
+});
+
+beforeEach(async () => {
+    await i18n.changeLanguage('pt-BR');
 });
 
 afterEach(() => {
