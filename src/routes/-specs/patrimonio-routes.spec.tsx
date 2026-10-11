@@ -3,13 +3,7 @@ import { screen, within } from '@testing-library/react';
 import type { AnyRouter } from '@tanstack/react-router';
 import { renderRouterAt } from '../../../test/router';
 
-const ROUTES: readonly string[] = [
-    '/patrimonio',
-    '/patrimonio/ativos',
-    '/patrimonio/comecar',
-    '/patrimonio/classes/class-fii',
-    '/patrimonio/aporte'
-];
+const ROUTES: readonly string[] = ['/patrimonio/ativos', '/patrimonio/comecar', '/patrimonio/classes/class-fii', '/patrimonio/aporte'];
 
 describe('rotas de /patrimonio', () => {
     it.each(ROUTES)('%s abre dentro do layout com o título e a página em construção', async (path: string) => {

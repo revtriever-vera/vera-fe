@@ -406,3 +406,39 @@ export function sampleOverview(): Overview {
         quality: { missingQuotes: 0, staleQuotes: 0, estimatedFixedIncome: 3, indexDataMissing: 0, missingRates: 0 }
     });
 }
+
+export function overviewWithQuality(quality: Partial<Overview['quality']>): Overview {
+    const base: Overview = sampleOverview();
+    return { ...base, quality: { ...base.quality, ...quality } };
+}
+
+export function allWithinOverview(): Overview {
+    const base: Overview = sampleOverview();
+    const classes: OverviewClass[] = base.classes.map((item: OverviewClass): OverviewClass => ({
+        ...item,
+        targetBps: item.shareBps,
+        deviationBps: 0,
+        status: 'within',
+        gapMinor: 0
+    }));
+    return { ...base, classes, outsideCount: 0, largestDeviation: null };
+}
+
+export function usdOverview(): Overview {
+    const base: Overview = sampleOverview();
+    const rate: number = Number(SAMPLE_USD_RATE);
+    const convert = (minor: number): number => Math.round(minor / rate);
+    return {
+        ...base,
+        baseCurrency: 'USD',
+        totalMinor: convert(base.totalMinor),
+        dollarExposure: { ...base.dollarExposure, valueMinor: convert(base.dollarExposure.valueMinor) },
+        classes: base.classes.map((item: OverviewClass): OverviewClass => ({
+            ...item,
+            valueMinor: convert(item.valueMinor),
+            gapMinor: convert(item.gapMinor)
+        })),
+        largestDeviation:
+            base.largestDeviation === null ? null : { ...base.largestDeviation, gapMinor: convert(base.largestDeviation.gapMinor) }
+    };
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatPpBps, formatShareBps, formatTargetBps } from './format-bps';
+import { formatPpBps, formatPpMagnitudeBps, formatShareBps, formatTargetBps } from './format-bps';
 
 describe('formatShareBps', () => {
     it('formata em pt-BR com uma casa', () => {
@@ -41,5 +41,13 @@ describe('formatPpBps', () => {
 
     it('não mostra sinal no zero', () => {
         expect(formatPpBps(0, 'pt-BR')).toBe('0,0 pp');
+    });
+});
+
+describe('formatPpMagnitudeBps', () => {
+    it('mostra o desvio sem sinal', () => {
+        expect(formatPpMagnitudeBps(671, 'pt-BR')).toBe('6,7 pp');
+        expect(formatPpMagnitudeBps(-472, 'pt-BR')).toBe('4,7 pp');
+        expect(formatPpMagnitudeBps(-472, 'en')).toBe('4.7 pp');
     });
 });
