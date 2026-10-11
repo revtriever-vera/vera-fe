@@ -14,6 +14,7 @@ export interface NavItem {
     readonly icon: LucideIcon;
     readonly group?: NavGroup;
     readonly badge?: NavBadge;
+    readonly exact?: boolean;
 }
 
 export const APP_NAV_ITEMS: readonly NavItem[] = [
@@ -21,7 +22,7 @@ export const APP_NAV_ITEMS: readonly NavItem[] = [
     { id: 'portfolio-assets', to: '/patrimonio/ativos', labelKey: 'navPortfolioAssets', icon: Wallet, group: 'portfolio' },
     { id: 'portfolio-targets', to: '/patrimonio/carteira-alvo', labelKey: 'navPortfolioTargets', icon: Target, group: 'portfolio' },
     { id: 'portfolio-contribution', to: '/patrimonio/aporte', labelKey: 'navPortfolioContribution', icon: Zap, group: 'portfolio' },
-    { id: 'spending-summary', to: '/gastos', labelKey: 'navSpendingSummary', icon: Receipt, group: 'spending' },
+    { id: 'spending-summary', to: '/gastos', labelKey: 'navSpendingSummary', icon: Receipt, group: 'spending', exact: true },
     {
         id: 'spending-transactions',
         to: '/gastos/transacoes',
@@ -36,7 +37,7 @@ export const APP_NAV_ITEMS: readonly NavItem[] = [
 
 export function activeNavId(pathname: string, items: readonly NavItem[]): string | null {
     const matches: readonly NavItem[] = items.filter(
-        (item: NavItem): boolean => pathname === item.to || pathname.startsWith(`${item.to}/`)
+        (item: NavItem): boolean => pathname === item.to || (item.exact !== true && pathname.startsWith(`${item.to}/`))
     );
     const best: NavItem | undefined = [...matches].sort((a: NavItem, b: NavItem): number => b.to.length - a.to.length)[0];
     return best?.id ?? null;

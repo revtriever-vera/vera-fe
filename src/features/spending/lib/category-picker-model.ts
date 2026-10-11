@@ -80,5 +80,8 @@ export function nextIndex(current: number, step: 1 | -1, total: number): number 
     if (total === 0) {
         return -1;
     }
+    if (current < 0) {
+        return step === 1 ? 0 : total - 1;
+    }
     return (current + step + total) % total;
 }
