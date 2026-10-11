@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
-import { useEffect, useRef, type ReactElement, type ReactNode, type RefObject } from 'react';
+import { useEffect, useId, useRef, type ReactElement, type ReactNode, type RefObject } from 'react';
+import { cn } from '@/shared/lib/cn';
 import { type UiText, useUiText } from './ui-text';
 
 interface ModalProps {
@@ -9,6 +10,8 @@ interface ModalProps {
     readonly children: ReactNode;
     readonly footer: ReactNode;
     readonly size?: 'default' | 'wide';
+    readonly leading?: ReactNode;
+    readonly fullOnMobile?: boolean;
 }
 
 const FOCUSABLE: string =
@@ -51,21 +54,30 @@ function useInitialFocus(dialog: RefObject<HTMLDivElement | null>): void {
 const WIDTH: Readonly<Record<'default' | 'wide', string>> = { default: 'max-w-lg', wide: 'max-w-4xl' };
 
 function ModalHeader({
+    titleId,
     title,
     description,
+    leading,
     closeLabel,
     onClose
 }: {
+    readonly titleId: string;
     readonly title: string;
+    readonly leading: ReactNode;
     readonly description: string | undefined;
     readonly closeLabel: string;
     readonly onClose: () => void;
 }): ReactElement {
     return (
         <div className="flex items-start justify-between gap-4 px-5 pt-5 pb-2">
-            <div className="flex flex-col gap-1">
-                <h2 className="text-lg font-semibold tracking-tight text-content">{title}</h2>
-                {description ? <p className="text-sm text-content-muted">{description}</p> : null}
+            <div className="flex min-w-0 items-center gap-3">
+                {leading}
+                <div className="flex flex-col gap-1">
+                    <h2 id={titleId} className="text-lg font-semibold tracking-tight text-content">
+                        {title}
+                    </h2>
+                    {description ? <p className="text-sm text-content-muted">{description}</p> : null}
+                </div>
             </div>
             <button
                 type="button"
@@ -79,14 +91,10 @@ function ModalHeader({
     );
 }
 
-export function Modal({ title, description, onClose, children, footer, size = 'default' }: ModalProps): ReactElement {
-    const t: UiText = useUiText();
-    const dialog: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement | null>(null);
-    useInitialFocus(dialog);
-
+function useKeyboard(onClose: () => void, dialog: RefObject<HTMLDivElement | null>): void {
     useEffect((): (() => void) => {
         const onKey = (event: KeyboardEvent): void => {
-            if (event.key === 'Escape') {
+            if (event.key === 'Escape' && !event.defaultPrevented) {
                 onClose();
             }
             trapTab(event, dialog.current);
@@ -96,19 +104,51 @@ export function Modal({ title, description, onClose, children, footer, size = 'd
             window.removeEventListener('keydown', onKey);
         };
     }, [onClose, dialog]);
+}
+
+function panelClass(size: 'default' | 'wide', fullOnMobile: boolean): string {
+    return cn(
+        'relative flex w-full flex-col overflow-hidden border border-border bg-surface shadow-popover outline-none',
+        WIDTH[size],
+        fullOnMobile ? 'h-full rounded-none sm:h-auto sm:max-h-[90vh] sm:rounded-card' : 'max-h-[90vh] rounded-card'
+    );
+}
+
+export function Modal({
+    title,
+    description,
+    onClose,
+    children,
+    footer,
+    size = 'default',
+    leading,
+    fullOnMobile = false
+}: ModalProps): ReactElement {
+    const t: UiText = useUiText();
+    const titleId: string = useId();
+    const dialog: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement | null>(null);
+    useInitialFocus(dialog);
+    useKeyboard(onClose, dialog);
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-5">
+        <div className={cn('fixed inset-0 z-50 flex items-center justify-center', fullOnMobile ? 'p-0 sm:p-5' : 'p-5')}>
             <button type="button" aria-label={t.close} onClick={onClose} className="absolute inset-0 bg-black/50" />
             <div
                 ref={dialog}
                 role="dialog"
                 aria-modal="true"
                 tabIndex={-1}
-                aria-label={title}
-                className={`relative flex max-h-[90vh] w-full ${WIDTH[size]} flex-col overflow-hidden outline-none rounded-card border border-border bg-surface shadow-popover`}
+                aria-labelledby={titleId}
+                className={panelClass(size, fullOnMobile)}
             >
-                <ModalHeader title={title} description={description} closeLabel={t.close} onClose={onClose} />
+                <ModalHeader
+                    titleId={titleId}
+                    title={title}
+                    description={description}
+                    leading={leading}
+                    closeLabel={t.close}
+                    onClose={onClose}
+                />
                 <div className="flex-1 overflow-y-auto px-5 py-3">{children}</div>
                 <div className="flex justify-end gap-2 border-t border-border px-5 py-4">{footer}</div>
             </div>

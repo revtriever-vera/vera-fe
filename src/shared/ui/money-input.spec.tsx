@@ -1,5 +1,5 @@
 import { useState, type ReactElement } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi, type Mock } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { MoneyInput } from './money-input';
@@ -41,7 +41,7 @@ function Harness({
 describe('MoneyInput', () => {
     it('entrega o valor em unidades menores enquanto a pessoa digita', async () => {
         const user: UserEvent = userEvent.setup();
-        const onValue = vi.fn();
+        const onValue: Mock = vi.fn();
         render(<Harness initial={null} onValue={onValue} />);
 
         await user.type(screen.getByLabelText('Valor aplicado'), '50000');
@@ -64,7 +64,7 @@ describe('MoneyInput', () => {
 
     it('ignora letras e devolve nulo quando esvazia', async () => {
         const user: UserEvent = userEvent.setup();
-        const onValue = vi.fn();
+        const onValue: Mock = vi.fn();
         render(<Harness initial={100} onValue={onValue} />);
         const input: HTMLElement = screen.getByLabelText('Valor aplicado');
 

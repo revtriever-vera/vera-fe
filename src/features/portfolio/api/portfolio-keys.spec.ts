@@ -25,6 +25,10 @@ describe('portfolioKeys', () => {
         expect(portfolioKeys.fixedIncomePreview({ amountMinor: 100 })).toEqual(['portfolio', 'fixed-income-preview', { amountMinor: 100 }]);
     });
 
+    it('a posição carrega o id', () => {
+        expect(portfolioKeys.position('p-1')).toEqual(['portfolio', 'position', 'p-1']);
+    });
+
     it('as chaves de detalhe e de aporte ficam sob o prefixo geral da família', () => {
         expect(portfolioKeys.classDetail('c-1').slice(0, 2)).toEqual(portfolioKeys.classDetails());
         expect(portfolioKeys.contribution(1).slice(0, 2)).toEqual(portfolioKeys.contributions());

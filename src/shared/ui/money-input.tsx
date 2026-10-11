@@ -44,73 +44,87 @@ function useMoneyText(
     };
 }
 
-export function MoneyInput({
-    label,
-    value,
-    currency,
-    onChange,
-    onBlur,
-    name,
-    placeholder,
+function MessageLines({
+    id,
     error,
-    hint,
-    disabled,
-    ref
-}: MoneyInputProps): ReactElement {
+    hint
+}: {
+    readonly id: string;
+    readonly error: string | undefined;
+    readonly hint: ReactNode;
+}): ReactElement {
+    return (
+        <>
+            {hint && !error ? <p className="text-2xs text-content-subtle">{hint}</p> : null}
+            {error ? (
+                <p id={id} role="alert" className="text-2xs text-critical">
+                    {error}
+                </p>
+            ) : null}
+        </>
+    );
+}
+
+function boxClass(error: string | undefined, disabled: boolean | undefined): string {
+    return cn(
+        'flex h-10 items-center gap-2 rounded-control border border-border bg-surface px-3 text-sm text-content',
+        'focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20',
+        error && 'border-critical focus-within:border-critical focus-within:ring-critical/20',
+        disabled && 'opacity-60'
+    );
+}
+
+interface MoneyBoxProps extends Pick<MoneyInputProps, 'currency' | 'name' | 'placeholder' | 'disabled' | 'ref' | 'onChange' | 'onBlur'> {
+    readonly id: string;
+    readonly error: string | undefined;
+    readonly value: number | null;
+}
+
+function MoneyBox({ id, currency, name, placeholder, disabled, ref, error, value, onChange, onBlur }: MoneyBoxProps): ReactElement {
     const locale: SupportedLocale = useUiLocale();
-    const id: string = useId();
-    const errorId: string = `${id}-error`;
     const digits: number = fractionDigitsOf(currency, locale);
     const { text, setText, showFormatted } = useMoneyText(value, digits, locale);
+    return (
+        <div className={boxClass(error, disabled)}>
+            <span aria-hidden="true" className="text-content-subtle">
+                {currencySymbol(currency, locale)}
+            </span>
+            <input
+                id={id}
+                ref={ref}
+                name={name}
+                type="text"
+                inputMode="decimal"
+                autoComplete="off"
+                disabled={disabled}
+                placeholder={placeholder}
+                value={text}
+                aria-invalid={error ? true : undefined}
+                aria-describedby={error ? `${id}-error` : undefined}
+                className="numeric h-full min-w-0 flex-1 bg-transparent outline-none placeholder:text-content-subtle"
+                onChange={(event: ChangeEvent<HTMLInputElement>): void => {
+                    const next: string = sanitizeMoneyText(event.target.value);
+                    setText(next);
+                    onChange(parseMoneyText(next, digits));
+                }}
+                onBlur={(): void => {
+                    showFormatted();
+                    onBlur?.();
+                }}
+            />
+        </div>
+    );
+}
 
-    const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-        const next: string = sanitizeMoneyText(event.target.value);
-        setText(next);
-        onChange(parseMoneyText(next, digits));
-    };
-
+export function MoneyInput({ label, hint, error, ...box }: MoneyInputProps): ReactElement {
+    const id: string = useId();
     return (
         <div className="flex flex-col gap-1.5">
             <label htmlFor={id} className="text-sm font-medium text-content">
                 {label}
             </label>
-            <div
-                className={cn(
-                    'flex h-10 items-center gap-2 rounded-control border border-border bg-surface px-3 text-sm text-content',
-                    'focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20',
-                    error && 'border-critical focus-within:border-critical focus-within:ring-critical/20',
-                    disabled && 'opacity-60'
-                )}
-            >
-                <span aria-hidden="true" className="text-content-subtle">
-                    {currencySymbol(currency, locale)}
-                </span>
-                <input
-                    id={id}
-                    ref={ref}
-                    name={name}
-                    type="text"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    disabled={disabled}
-                    placeholder={placeholder}
-                    value={text}
-                    aria-invalid={error ? true : undefined}
-                    aria-describedby={error ? errorId : undefined}
-                    className="numeric h-full min-w-0 flex-1 bg-transparent outline-none placeholder:text-content-subtle"
-                    onChange={handleChange}
-                    onBlur={(): void => {
-                        showFormatted();
-                        onBlur?.();
-                    }}
-                />
-            </div>
-            {hint && !error ? <p className="text-2xs text-content-subtle">{hint}</p> : null}
-            {error ? (
-                <p id={errorId} role="alert" className="text-2xs text-critical">
-                    {error}
-                </p>
-            ) : null}
+            <MoneyBox id={id} error={error} {...box} />
+            <MessageLines id={`${id}-error`} error={error} hint={hint} />
         </div>
     );
 }
