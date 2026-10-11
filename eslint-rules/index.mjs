@@ -1,3 +1,5 @@
+import noFixedColor from './no-fixed-color.mjs';
+
 const DIRECTIVE =
     /^[\s/]*(eslint-disable|eslint-enable|eslint\s|global\s|globals\s|exported\s|prettier-ignore|@ts-expect-error|@ts-ignore|@ts-nocheck|<reference)/;
 
@@ -113,6 +115,7 @@ export default {
     rules: {
         'no-comments': noComments,
         'no-else': noElse,
-        'no-search-in-loop': noSearchInLoop
+        'no-search-in-loop': noSearchInLoop,
+        'no-fixed-color': noFixedColor.rules['no-fixed-color']
     }
 };

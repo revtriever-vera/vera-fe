@@ -37,6 +37,7 @@ export default tseslint.config(
             eqeqeq: ['error', 'always'],
             'no-console': 'error',
             'local/no-comments': 'error',
+            'local/no-fixed-color': 'error',
             'local/no-else': 'error',
             'local/no-search-in-loop': 'error',
             'no-lonely-if': 'error',
