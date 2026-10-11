@@ -3,6 +3,16 @@ import ptBRCommon from './pt-BR/common.json';
 import enCommon from './en/common.json';
 import ptBRAuth from './pt-BR/auth.json';
 import enAuth from './en/auth.json';
+import ptBRPortfolio from './pt-BR/portfolio.json';
+import enPortfolio from './en/portfolio.json';
+import ptBRPortfolioOverview from './pt-BR/portfolioOverview.json';
+import enPortfolioOverview from './en/portfolioOverview.json';
+import ptBRPortfolioAssets from './pt-BR/portfolioAssets.json';
+import enPortfolioAssets from './en/portfolioAssets.json';
+import ptBRPortfolioTargets from './pt-BR/portfolioTargets.json';
+import enPortfolioTargets from './en/portfolioTargets.json';
+import ptBRPortfolioContribution from './pt-BR/portfolioContribution.json';
+import enPortfolioContribution from './en/portfolioContribution.json';
 
 type TranslationNode = string | { readonly [key: string]: TranslationNode };
 
@@ -27,7 +37,12 @@ interface NamespaceFixture {
 
 const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'common', ptBR: ptBRCommon, en: enCommon },
-    { name: 'auth', ptBR: ptBRAuth, en: enAuth }
+    { name: 'auth', ptBR: ptBRAuth, en: enAuth },
+    { name: 'portfolio', ptBR: ptBRPortfolio, en: enPortfolio },
+    { name: 'portfolioOverview', ptBR: ptBRPortfolioOverview, en: enPortfolioOverview },
+    { name: 'portfolioAssets', ptBR: ptBRPortfolioAssets, en: enPortfolioAssets },
+    { name: 'portfolioTargets', ptBR: ptBRPortfolioTargets, en: enPortfolioTargets },
+    { name: 'portfolioContribution', ptBR: ptBRPortfolioContribution, en: enPortfolioContribution }
 ];
 
 describe('paridade de chaves entre os namespaces de tradução', () => {

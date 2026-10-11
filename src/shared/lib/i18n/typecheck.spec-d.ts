@@ -10,4 +10,16 @@ describe('tipagem das chaves de tradução', () => {
     it('rejeita uma chave inexistente do namespace common', () => {
         expectTypeOf<'chave-inexistente'>().not.toExtend<ParseKeys>();
     });
+
+    it('conhece os cinco namespaces do patrimônio', () => {
+        expectTypeOf<'layout.title'>().toExtend<ParseKeys<'portfolio'>>();
+        expectTypeOf<'title'>().toExtend<ParseKeys<'portfolioOverview'>>();
+        expectTypeOf<'title'>().toExtend<ParseKeys<'portfolioAssets'>>();
+        expectTypeOf<'title'>().toExtend<ParseKeys<'portfolioTargets'>>();
+        expectTypeOf<'title'>().toExtend<ParseKeys<'portfolioContribution'>>();
+    });
+
+    it('rejeita uma chave inexistente do namespace portfolio', () => {
+        expectTypeOf<'chave-inexistente'>().not.toExtend<ParseKeys<'portfolio'>>();
+    });
 });

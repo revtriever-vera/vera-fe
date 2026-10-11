@@ -4,14 +4,50 @@ import ptBRCommon from './resources/pt-BR/common.json';
 import enCommon from './resources/en/common.json';
 import ptBRAuth from './resources/pt-BR/auth.json';
 import enAuth from './resources/en/auth.json';
+import ptBRPortfolio from './resources/pt-BR/portfolio.json';
+import enPortfolio from './resources/en/portfolio.json';
+import ptBRPortfolioOverview from './resources/pt-BR/portfolioOverview.json';
+import enPortfolioOverview from './resources/en/portfolioOverview.json';
+import ptBRPortfolioAssets from './resources/pt-BR/portfolioAssets.json';
+import enPortfolioAssets from './resources/en/portfolioAssets.json';
+import ptBRPortfolioTargets from './resources/pt-BR/portfolioTargets.json';
+import enPortfolioTargets from './resources/en/portfolioTargets.json';
+import ptBRPortfolioContribution from './resources/pt-BR/portfolioContribution.json';
+import enPortfolioContribution from './resources/en/portfolioContribution.json';
 import { DEFAULT_LOCALE, resolveLocale, type SupportedLocale } from './resolve-locale';
 
 type CommonResource = typeof ptBRCommon;
 type AuthResource = typeof ptBRAuth;
 
-const resources: Record<SupportedLocale, { common: CommonResource; auth: AuthResource }> = {
-    'pt-BR': { common: ptBRCommon, auth: ptBRAuth },
-    en: { common: enCommon, auth: enAuth }
+type LocaleResources = {
+    readonly common: CommonResource;
+    readonly auth: AuthResource;
+    readonly portfolio: typeof ptBRPortfolio;
+    readonly portfolioOverview: typeof ptBRPortfolioOverview;
+    readonly portfolioAssets: typeof ptBRPortfolioAssets;
+    readonly portfolioTargets: typeof ptBRPortfolioTargets;
+    readonly portfolioContribution: typeof ptBRPortfolioContribution;
+};
+
+const resources: Record<SupportedLocale, LocaleResources> = {
+    'pt-BR': {
+        common: ptBRCommon,
+        auth: ptBRAuth,
+        portfolio: ptBRPortfolio,
+        portfolioOverview: ptBRPortfolioOverview,
+        portfolioAssets: ptBRPortfolioAssets,
+        portfolioTargets: ptBRPortfolioTargets,
+        portfolioContribution: ptBRPortfolioContribution
+    },
+    en: {
+        common: enCommon,
+        auth: enAuth,
+        portfolio: enPortfolio,
+        portfolioOverview: enPortfolioOverview,
+        portfolioAssets: enPortfolioAssets,
+        portfolioTargets: enPortfolioTargets,
+        portfolioContribution: enPortfolioContribution
+    }
 };
 
 function initialLocale(): SupportedLocale {
@@ -23,7 +59,7 @@ void i18next.use(initReactI18next).init({
     resources,
     lng: initialLocale(),
     fallbackLng: DEFAULT_LOCALE,
-    ns: ['common', 'auth'],
+    ns: ['common', 'auth', 'portfolio', 'portfolioOverview', 'portfolioAssets', 'portfolioTargets', 'portfolioContribution'],
     defaultNS: 'common',
     interpolation: { escapeValue: false },
     returnNull: false

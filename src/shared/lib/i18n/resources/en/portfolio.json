@@ -1,0 +1,127 @@
+{
+  "layout": {
+    "title": "Net worth",
+    "tabsLabel": "Net worth sections",
+    "tabs": {
+      "overview": "Overview",
+      "targets": "Target portfolio",
+      "contribution": "Smart contribution",
+      "assets": "My assets"
+    }
+  },
+  "underConstruction": {
+    "title": "Under construction",
+    "description": "This screen is still being prepared."
+  },
+  "classes": {
+    "customName": "Unnamed class",
+    "names": {
+      "rf_pos": "Floating-rate fixed income",
+      "rf_pre": "Fixed-rate fixed income",
+      "rf_ipca": "Inflation-linked fixed income",
+      "acoes_br": "Brazilian stocks",
+      "fii": "Real estate funds (FIIs)",
+      "acoes_eua": "US stocks",
+      "reits": "REITs",
+      "cripto": "Crypto"
+    },
+    "descriptions": {
+      "rf_pos": "CDI and Selic",
+      "rf_pre": "fixed rate, BR and US",
+      "rf_ipca": "inflation + rate",
+      "acoes_br": "B3",
+      "fii": "real estate funds",
+      "acoes_eua": "by exposure",
+      "reits": "US real estate",
+      "cripto": "digital currencies"
+    }
+  },
+  "status": {
+    "within": "within range",
+    "above": "{{pp}} above",
+    "below": "{{pp}} below",
+    "aboveLabel": "Above target",
+    "belowLabel": "Below target",
+    "withinLabel": "Within the tolerance range"
+  },
+  "sources": {
+    "brapi": "B3 via brapi",
+    "finnhub": "Finnhub",
+    "twelvedata": "Twelve Data",
+    "alphavantage": "Alpha Vantage",
+    "coingecko": "CoinGecko",
+    "tesouro_direto": "Tesouro Transparente",
+    "curve_cdi": "Estimated on the CDI curve",
+    "curve_pre": "Estimated on the fixed-rate curve",
+    "curve_ipca": "Estimated on the IPCA+ curve"
+  },
+  "types": {
+    "fixed_income": "Fixed income",
+    "tesouro": "Treasury Direct",
+    "acoes_br": "Brazilian stocks",
+    "fii": "Real estate funds",
+    "acoes_eua": "US stocks",
+    "reits": "REITs",
+    "cripto": "Crypto"
+  },
+  "units": {
+    "shares": "shares",
+    "unit": "units",
+    "bonds": "bonds"
+  },
+  "baseCurrency": {
+    "label": "Base currency",
+    "brl": "R$",
+    "usd": "US$",
+    "brlName": "Real",
+    "usdName": "Dollar",
+    "updateError": "We could not change the base currency."
+  },
+  "quality": {
+    "title": "Heads up on the data",
+    "missingQuotes_one": "{{count}} asset still has no quote.",
+    "missingQuotes_other": "{{count}} assets still have no quote.",
+    "staleQuotes_one": "{{count}} outdated quote.",
+    "staleQuotes_other": "{{count}} outdated quotes.",
+    "estimatedFixedIncome_one": "{{count}} fixed income bond estimated on the curve.",
+    "estimatedFixedIncome_other": "{{count}} fixed income bonds estimated on the curve.",
+    "indexDataMissing_one": "{{count}} bond without index data.",
+    "indexDataMissing_other": "{{count}} bonds without index data.",
+    "missingRates_one": "{{count}} value without an exchange rate.",
+    "missingRates_other": "{{count}} values without an exchange rate."
+  },
+  "dataSources": {
+    "title": "Where the data comes from",
+    "b3": "B3 stocks and real estate funds: quotes via brapi.",
+    "us": "US stocks and REITs: quotes via Finnhub.",
+    "crypto": "Cryptocurrencies: quotes via CoinGecko.",
+    "coingeckoLink": "Data provided by CoinGecko",
+    "exchange": "Exchange rate: PTAX from the Central Bank of Brazil.",
+    "treasury": "Treasury Direct: Tesouro Transparente.",
+    "series": "Fixed income: Central Bank series (CDI, Selic and IPCA).",
+    "estimate": "Fixed income values are estimates and may differ from your statement."
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again in a moment.",
+    "validationFailed": "Check the information provided and try again.",
+    "assetNotFound": "We could not find this asset in the catalog.",
+    "assetAlreadyInPortfolio": "This asset is already in your portfolio.",
+    "positionNotFound": "We could not find this position.",
+    "invalidQuantity": "The quantity is not valid for this asset.",
+    "classRequired": "Choose the asset class.",
+    "positionLimitReached": "You have reached the portfolio asset limit.",
+    "titleNotFound": "We could not find this fixed income bond.",
+    "appliedDateOutOfRange": "The investment date is outside the accepted period.",
+    "invalidTerms": "The bond terms are not valid.",
+    "classNotFound": "We could not find this class.",
+    "classNameTaken": "A class with this name already exists.",
+    "classNotEmpty": "This class still has assets. Move or merge them before deleting.",
+    "cannotMergeIntoSelf": "Choose a different class to merge into.",
+    "classLimitReached": "You have reached the class limit.",
+    "assignmentNotFound": "We could not find this asset's classification.",
+    "targetsMustSum100": "Targets must add up to exactly 100%.",
+    "targetsIncomplete": "Enter a target for every asset in the class.",
+    "contributionTargetsNotSet": "Set your target portfolio before simulating a contribution.",
+    "exchangeRateUnavailable": "Today's exchange rate is not available right now."
+  }
+}
