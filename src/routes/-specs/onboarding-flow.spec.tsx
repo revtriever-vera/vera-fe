@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { track } from '@/shared/lib/analytics';
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
@@ -51,6 +52,8 @@ describe('boas-vindas', () => {
             expect(router.state.location.pathname).toBe('/onboarding/assets');
         });
         expect(start.calls()).toBe(1);
+        expect(track).toHaveBeenCalledWith('onboarding_started');
+        expect(track).toHaveBeenCalledWith('onboarding_step_viewed', { step: 'welcome' });
         expect(await screen.findByRole('heading', { level: 1, name: 'Cadastre seus investimentos' })).toBeInTheDocument();
     });
 
@@ -137,6 +140,7 @@ describe('pular configuração', () => {
         expect(await screen.findByRole('navigation', { name: 'Navegação principal' })).toBeInTheDocument();
         expect(router.state.location.pathname).toBe('/');
         expect(dismiss.calls()).toBe(1);
+        expect(track).toHaveBeenCalledWith('onboarding_dismissed', { at: 'welcome' });
         expect(screen.queryByRole('link', { name: 'Continuar configuração' })).not.toBeInTheDocument();
     });
 

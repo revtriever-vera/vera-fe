@@ -1,3 +1,4 @@
+import { track } from '@/shared/lib/analytics';
 import { describe, expect, it } from 'vitest';
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
@@ -120,6 +121,7 @@ describe('carteira-alvo: edição e salvamento', () => {
             expect(saveButton()).toBeDisabled();
         });
         expect(screen.getByRole('textbox', { name: 'Meta de Ações EUA' })).toHaveValue('24');
+        expect(track).toHaveBeenCalledWith('portfolio_targets_saved');
     });
 
     it('422 mantém os valores digitados e mostra a soma recebida', async () => {
@@ -211,6 +213,7 @@ describe('carteira-alvo: meta moderada', () => {
 
         expect(await screen.findByText('Meta moderada restaurada')).toBeInTheDocument();
         expect(api.requests).toEqual([{ method: 'POST', path: '/allocation/targets/reset', body: null }]);
+        expect(track).toHaveBeenCalledWith('portfolio_targets_reset');
         expect(screen.getByRole('textbox', { name: 'Meta de Cripto' })).toHaveValue('5');
         expect(saveButton()).toBeDisabled();
     });
@@ -249,6 +252,7 @@ describe('carteira-alvo: faixa de tolerância', () => {
 
         expect(await screen.findByText('Tolerância de 8 pp salva')).toBeInTheDocument();
         expect(api.requests).toEqual([{ method: 'PUT', path: '/allocation/settings', body: { toleranceBps: 800 } }]);
+        expect(track).toHaveBeenCalledWith('portfolio_tolerance_changed');
     });
 
     it('o passo grava de meio em meio ponto', async () => {

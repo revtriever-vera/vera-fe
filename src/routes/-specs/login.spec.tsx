@@ -15,13 +15,16 @@ const mocks: {
     env: Record<string, string>;
     loadGoogle: Mock;
     loadFacebook: Mock;
+    track: Mock;
 } = vi.hoisted(() => ({
     env: { VITE_API_URL: 'http://localhost:3333' },
     loadGoogle: vi.fn(),
-    loadFacebook: vi.fn()
+    loadFacebook: vi.fn(),
+    track: vi.fn()
 }));
 
 vi.mock('@/shared/config/env', () => ({ env: mocks.env }));
+vi.mock('@/shared/lib/analytics', () => ({ track: mocks.track, resetAnalytics: vi.fn(), initAnalytics: vi.fn() }));
 vi.mock('@/features/auth/lib/google-identity', () => ({ loadGoogleIdentity: mocks.loadGoogle }));
 vi.mock('@/features/auth/lib/facebook-sdk', async (importOriginal: () => Promise<typeof import('@/features/auth/lib/facebook-sdk')>) => ({
     ...(await importOriginal()),
@@ -92,6 +95,7 @@ afterEach((): void => {
     tokenStore.set(null);
     mocks.loadGoogle.mockReset();
     mocks.loadFacebook.mockReset();
+    mocks.track.mockReset();
 });
 
 describe('login route providers', () => {
@@ -196,6 +200,9 @@ describe('login route sign-in flow', () => {
         });
         expect(tokenStore.get()).toBe('access-google');
         expect(authorizations).toEqual(['Bearer access-google']);
+        expect(mocks.track).toHaveBeenCalledWith('auth_screen_viewed');
+        expect(mocks.track).toHaveBeenCalledWith('auth_started', { provider: 'google' });
+        expect(mocks.track).toHaveBeenCalledWith('auth_authenticated', { provider: 'google', isNewAccount: true });
     });
 
     it('signs in with Facebook, stores the token, loads the profile and goes home', async () => {
@@ -216,6 +223,7 @@ describe('login route sign-in flow', () => {
             expect(router.state.location.pathname).toBe('/');
         });
         expect(tokenStore.get()).toBe('access-facebook');
+        expect(mocks.track).toHaveBeenCalledWith('auth_authenticated', { provider: 'facebook', isNewAccount: false });
     });
 
     it('shows no error when the person closes the Facebook popup', async () => {
@@ -337,6 +345,7 @@ describe('login route errors', () => {
 
         expect(await screen.findByRole('alert')).toHaveTextContent('Não conseguimos confirmar sua conta do Google. Tente entrar de novo.');
         expect(tokenStore.get()).toBeNull();
+        expect(mocks.track).toHaveBeenCalledWith('auth_failed', { provider: 'google', code: 'identity.invalid_google_token' });
     });
 
     it('clears the previous error when a new attempt starts', async () => {

@@ -2,6 +2,7 @@ import type { UseMutationResult } from '@tanstack/react-query';
 import { useSession } from '@/app/providers/session-provider';
 import type { SessionUser } from '@/app/providers/session-context';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
+import { track } from '@/shared/lib/analytics';
 import { i18n, useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { useUpdatePreferences } from '../api/use-update-preferences.mutation';
@@ -26,7 +27,10 @@ export function useLanguageChange(): LanguageChange {
         }
         void i18n.changeLanguage(next);
         update.mutate(next, {
-            onSuccess: replaceUser,
+            onSuccess: (user: SessionUser): void => {
+                track('language_changed', { locale: next });
+                replaceUser(user);
+            },
             onError: (error: Error): void => {
                 void i18n.changeLanguage(locale).then((): void => {
                     toast.show({ tone: 'critical', title: accountErrorMessage(i18n.getFixedT(locale, 'account'), error, 'language') });

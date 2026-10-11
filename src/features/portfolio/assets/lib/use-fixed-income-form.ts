@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import type { z } from 'zod';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
+import { track } from '@/shared/lib/analytics';
 import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { useClassLabel, type ClassLabel } from '../../lib/use-class-label';
@@ -94,6 +95,7 @@ function useTitleSubmit({ form, classes, onSaved, setAlertMessage }: SubmitParam
         setAlertMessage(null);
         try {
             await create.mutateAsync(body);
+            track('portfolio_asset_added', { type: 'fixed_income', source: 'fixed_income' });
             const chosen: AssetClassView | undefined = classes.find((item: AssetClassView): boolean => item.id === input.classId);
             const className: string = chosen === undefined ? '' : classLabel(chosen.systemKey, chosen.name);
             toast.show({ tone: 'positive', title: t('toasts.added', { name: input.name.trim(), className }) });

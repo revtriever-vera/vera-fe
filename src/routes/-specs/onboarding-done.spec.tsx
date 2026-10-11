@@ -1,3 +1,4 @@
+import { track } from '@/shared/lib/analytics';
 import { describe, expect, it } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -125,6 +126,8 @@ describe('Pronto', () => {
             expect(router.state.location.pathname).toBe('/patrimonio');
         });
         expect(finished).toBe(1);
+        expect(track).toHaveBeenCalledWith('onboarding_finished');
+        expect(track).toHaveBeenCalledWith('onboarding_step_viewed', { step: 'done' });
         expect(screen.queryByRole('link', { name: 'Continuar configuração' })).not.toBeInTheDocument();
     });
 

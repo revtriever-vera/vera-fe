@@ -1,3 +1,4 @@
+import { track } from '@/shared/lib/analytics';
 import { afterEach, describe, expect, it, vi, type MockInstance } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { screen, waitFor, within } from '@testing-library/react';
@@ -46,6 +47,7 @@ describe('/patrimonio/ativos: lista', () => {
 
         expect(await screen.findByText('HGLG11 agora está em Ações Brasil')).toBeInTheDocument();
         expect(api.reclassified).toEqual([{ path: 'position/hglg11', body: { classId: 'class-acoes-br' } }]);
+        expect(track).toHaveBeenCalledWith('portfolio_asset_reclassified');
     });
 
     it('edita a quantidade com Enter e recusa casas decimais demais', async () => {
@@ -121,6 +123,7 @@ describe('/patrimonio/ativos: lista', () => {
 
         expect(await screen.findByText('ITUB4 removido da carteira')).toBeInTheDocument();
         expect(api.deleted).toEqual(['position/itub4']);
+        expect(track).toHaveBeenCalledWith('portfolio_asset_removed');
     });
 
     it('remove um título de renda fixa pela rota de títulos', async () => {
@@ -153,6 +156,7 @@ describe('/patrimonio/ativos: planilha', () => {
 
         expect(await screen.findByText('Planilha baixada')).toBeInTheDocument();
         expect(api.exported).toEqual(['xlsx']);
+        expect(track).toHaveBeenCalledWith('portfolio_export_downloaded', { format: 'xlsx' });
         expect(create).toHaveBeenCalledTimes(1);
         expect(click).toHaveBeenCalledTimes(1);
         click.mockRestore();

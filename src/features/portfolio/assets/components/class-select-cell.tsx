@@ -3,6 +3,7 @@ import { useId, type ReactElement } from 'react';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
+import { track } from '@/shared/lib/analytics';
 import type { ApiError } from '@/shared/lib/api/api-error';
 import { SelectMenu, type SelectChoice } from '@/shared/ui/select-menu';
 import { portfolioErrorMessage } from '../../lib/portfolio-error-message';
@@ -34,6 +35,7 @@ function useReclassifyAction(holding: HoldingView, classes: readonly AssetClassV
             { subjectType: holding.kind, subjectId: holding.id, classId },
             {
                 onSuccess: (): void => {
+                    track('portfolio_asset_reclassified');
                     const chosen: AssetClassView | undefined = classes.find((item: AssetClassView): boolean => item.id === classId);
                     const className: string = chosen === undefined ? '' : classLabel(chosen.systemKey, chosen.name);
                     toast.show({

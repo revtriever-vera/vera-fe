@@ -4,6 +4,7 @@ import { useQueryClient, type QueryClient } from '@tanstack/react-query';
 import { restoreSession } from '@/features/auth/api/restore-session';
 import { revokeSession } from '@/features/auth/api/revoke-session';
 import { tokenStore } from '@/shared/lib/api/token-store';
+import { resetAnalytics, track } from '@/shared/lib/analytics';
 import type { SessionContext as SessionState, SessionUser } from './session-context';
 
 const SessionContext: Context<SessionState | null> = createContext<SessionState | null>(null);
@@ -54,9 +55,11 @@ function useSessionActions(setUser: (next: SessionUser | null) => void): Session
     const discardSession: SessionState['discardSession'] = useCallback((): void => {
         commit(null, null);
         queryClient.removeQueries();
+        resetAnalytics();
     }, [commit, queryClient]);
 
     const signOut: SessionState['signOut'] = useCallback((): void => {
+        track('auth_signed_out');
         void revokeSession();
         discardSession();
     }, [discardSession]);

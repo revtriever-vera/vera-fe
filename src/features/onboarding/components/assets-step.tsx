@@ -2,7 +2,9 @@ import type { ReactElement, ReactNode } from 'react';
 import { Globe, Plus, Target, Wallet, Zap } from 'lucide-react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { Card } from '@/shared/ui/card';
-import { useStepActions, type StepActions } from '../lib/use-step-actions';
+import { useAssetsStepActions } from '../lib/use-assets-step-actions';
+import type { StepActions } from '../lib/use-step-actions';
+import { useTrackStepViewed } from '../lib/use-track-step-viewed';
 import { StepFooter } from './step-footer';
 import { StepLayout } from './step-layout';
 import type { WhyItem } from './why-list';
@@ -50,7 +52,8 @@ function AssetsWorkArea({ typePicker, wallet, assetCount }: AssetsStepSlots): Re
 
 export function AssetsStep({ typePicker, wallet, assetCount }: AssetsStepSlots): ReactElement {
     const { t }: UseTranslationResponse<'onboarding', undefined> = useTranslation('onboarding');
-    const actions: StepActions = useStepActions('assets');
+    const actions: StepActions = useAssetsStepActions(assetCount);
+    useTrackStepViewed('assets');
     const why: readonly WhyItem[] = [
         { icon: Globe, title: t('assetsWhy1Title'), detail: t('assetsWhy1Detail') },
         { icon: Target, title: t('assetsWhy2Title'), detail: t('assetsWhy2Detail') },

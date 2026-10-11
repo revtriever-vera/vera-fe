@@ -1,3 +1,4 @@
+import { track } from '@/shared/lib/analytics';
 import { describe, expect, it } from 'vitest';
 import type { CatalogAsset } from '../types';
 import { screen, waitFor, within } from '@testing-library/react';
@@ -90,6 +91,7 @@ describe('AddAssetModal: renda variável', () => {
         });
         expect(await screen.findByText('ITUB4 adicionado em Ações Brasil')).toBeInTheDocument();
         expect(onOpenChange).toHaveBeenCalledWith(false);
+        expect(track).toHaveBeenCalledWith('portfolio_asset_added', { type: 'acoes_br', source: 'search' });
         await waitFor(() => {
             expect(holdingsCalls).toBeGreaterThan(1);
         });

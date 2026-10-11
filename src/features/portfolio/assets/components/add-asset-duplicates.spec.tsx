@@ -1,3 +1,4 @@
+import { track } from '@/shared/lib/analytics';
 import { describe, expect, it } from 'vitest';
 import type { CatalogAsset } from '../types';
 import type { HoldingsResponse } from '../../types';
@@ -96,5 +97,7 @@ describe('AddAssetModal: ativo que já está na carteira', () => {
         expect(screen.getByText('Esse ativo já estava na sua carteira. Ajuste a quantidade abaixo.')).toBeInTheDocument();
         expect(await screen.findByText('300')).toBeInTheDocument();
         expect(api.patchBodies).toEqual([]);
+        expect(track).toHaveBeenCalledWith('portfolio_duplicate_redirect');
+        expect(track).not.toHaveBeenCalledWith('portfolio_asset_added', expect.anything());
     });
 });

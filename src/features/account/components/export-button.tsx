@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
+import { track } from '@/shared/lib/analytics';
 import { Button } from '@/shared/ui/button';
 import { useExportData } from '../api/use-export-data.mutation';
 import { accountErrorMessage } from '../lib/account-error-message';
@@ -15,6 +16,7 @@ export function ExportButton({ variant = 'secondary' }: { readonly variant?: 'pr
         if (exportData.isPending) {
             return;
         }
+        track('account_export_requested');
         exportData.mutate(undefined, {
             onSuccess: (): void => {
                 toast.show({ tone: 'positive', title: t('exportDone') });

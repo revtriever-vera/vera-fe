@@ -3,6 +3,7 @@ import { useNavigate, type UseNavigateResult } from '@tanstack/react-router';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useSession } from '@/app/providers/session-provider';
 import type { SessionUser } from '@/app/providers/session-context';
+import { track } from '@/shared/lib/analytics';
 import { Alert } from '@/shared/ui/alert';
 import { Button } from '@/shared/ui/button';
 import { AccountSection } from './account-section';
@@ -15,6 +16,7 @@ export function DeleteAccountCard({ user }: { readonly user: SessionUser }): Rea
     const [open, setOpen] = useState<boolean>(false);
 
     const handleDeleted = (): void => {
+        track('account_deleted');
         discardSession();
         void navigate({ to: '/login', search: { deleted: '1' }, replace: true });
     };
@@ -30,6 +32,7 @@ export function DeleteAccountCard({ user }: { readonly user: SessionUser }): Rea
                         type="button"
                         variant="danger"
                         onClick={(): void => {
+                            track('account_delete_opened');
                             setOpen(true);
                         }}
                     >

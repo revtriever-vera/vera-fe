@@ -1,3 +1,4 @@
+import { resetAnalytics, track } from '@/shared/lib/analytics';
 import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest';
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
@@ -90,6 +91,7 @@ describe('account language', () => {
         });
         expect(i18n.language).toBe('en');
         expect(await screen.findByRole('combobox', { name: 'Interface language' })).toHaveTextContent('English');
+        expect(track).toHaveBeenCalledWith('language_changed', { locale: 'en' });
     });
 
     it('reverts the selector and shows an error when saving fails', async () => {
@@ -135,6 +137,7 @@ describe('account export', () => {
             expect(revokeUrl).toHaveBeenCalledWith('blob:export-1');
         });
         expect(await screen.findByText('Seus dados foram baixados.')).toBeInTheDocument();
+        expect(track).toHaveBeenCalledWith('account_export_requested');
     });
 
     it('falls back to the default name when the header is missing', async () => {
@@ -300,6 +303,9 @@ describe('account deletion', () => {
         expect(tokenStore.get()).toBeNull();
         expect(calls).toEqual([]);
         expect(screen.getByText('Sua conta foi excluída.')).toBeInTheDocument();
+        expect(track).toHaveBeenCalledWith('account_delete_opened');
+        expect(track).toHaveBeenCalledWith('account_deleted');
+        expect(resetAnalytics).toHaveBeenCalled();
     });
 
     it('shows the owner-only notice instead of the button for a member', async () => {

@@ -71,21 +71,26 @@ function useHeldPositions(): ReadonlyMap<string, string> {
     return useMemo((): ReadonlyMap<string, string> => heldPositions(holdings.data?.data ?? []), [holdings.data]);
 }
 
+function pickHandler(state: PositionFormState, flow: AddAssetFlow, held: ReadonlyMap<string, string>): (asset: CatalogAsset) => void {
+    return (asset: CatalogAsset): void => {
+        state.select(asset);
+        flow.pick(asset, held.get(asset.id) ?? null);
+    };
+}
+
 export function PositionStep({ type, flow, classes, initialClassId, onBack, onClose }: PositionStepProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const held: ReadonlyMap<string, string> = useHeldPositions();
     const state: PositionFormState = usePositionForm({
         classes,
         initialClassId,
+        type,
         asset: flow.picked,
         onSaved: onClose,
         onDuplicate: flow.editExisting
     });
     const group: CatalogGroup | null = ASSET_TYPE_SPECS[type].group;
-    const pick = (asset: CatalogAsset): void => {
-        state.select(asset);
-        flow.pick(asset, held.get(asset.id) ?? null);
-    };
+    const pick: (asset: CatalogAsset) => void = pickHandler(state, flow, held);
     return (
         <DetailsFrame
             type={type}

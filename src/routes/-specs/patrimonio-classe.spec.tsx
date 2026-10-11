@@ -1,3 +1,4 @@
+import { track } from '@/shared/lib/analytics';
 import { describe, expect, it } from 'vitest';
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
@@ -132,6 +133,7 @@ describe('classe: edição e salvamento', () => {
             expect(saveButton()).toBeDisabled();
         });
         expect(field('WEGE3')).toHaveValue('45');
+        expect(track).toHaveBeenCalledWith('portfolio_asset_targets_saved', { assetCount: 3 });
     });
 
     it('mostra quanto falta quando a soma fica abaixo de 100%', async () => {

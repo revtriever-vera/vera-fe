@@ -3,6 +3,7 @@ import type { UseFormReturn } from 'react-hook-form';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
+import { track } from '@/shared/lib/analytics';
 import type { ApiError } from '@/shared/lib/api/api-error';
 import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
@@ -58,6 +59,7 @@ function useSubmitTargets(
         try {
             const saved: ClassesResponse = await save.mutateAsync(toSaveBody(input));
             form.reset(toFormValues(saved.data));
+            track('portfolio_targets_saved');
             toast.show({ tone: 'positive', title: t('targets.saved') });
         } catch {
             return;

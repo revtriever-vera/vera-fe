@@ -3,6 +3,7 @@ import { useNavigate, useSearch, type UseNavigateResult } from '@tanstack/react-
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useLocale } from '@/shared/lib/i18n';
+import { track } from '@/shared/lib/analytics';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { useDebouncedValue } from '@/shared/lib/use-debounced-value';
 import { FailureAlert } from '@/shared/ui/failure-alert';
@@ -37,6 +38,14 @@ function useAmountInUrl(amountMinor: number | null, currency: BaseCurrency): voi
     }, [amount, search.amount, navigate]);
 }
 
+function useTrackCalculated(suggestion: ContributionSuggestion | undefined, currency: BaseCurrency): void {
+    useEffect((): void => {
+        if (suggestion !== undefined) {
+            track('portfolio_contribution_calculated', { classesFunded: suggestion.classes.length, currency });
+        }
+    }, [suggestion, currency]);
+}
+
 function ContributionBody({ currency }: { readonly currency: BaseCurrency }): ReactElement {
     const locale: SupportedLocale = useLocale();
     const search: { amount?: number } = useSearch({ from: '/_auth/_app/patrimonio/aporte' });
@@ -44,6 +53,7 @@ function ContributionBody({ currency }: { readonly currency: BaseCurrency }): Re
     const amountMinor: number | null = useDebouncedValue(draft, DEBOUNCE_MS);
     const query: UseQueryResult<ContributionSuggestion> = useContributionSuggestion(amountMinor);
     useAmountInUrl(amountMinor, currency);
+    useTrackCalculated(query.data, currency);
     return (
         <div className="flex flex-col gap-4">
             <AmountInput value={draft} currency={currency} onChange={setDraft} />

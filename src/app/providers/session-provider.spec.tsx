@@ -1,5 +1,5 @@
 import { StrictMode, type ReactElement } from 'react';
-import { afterEach, describe, expect, it, vi, type MockInstance } from 'vitest';
+import { afterEach, describe, expect, it, vi, type Mock, type MockInstance } from 'vitest';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -10,6 +10,10 @@ import { signedInHandlers } from '../../../test/msw/handlers/auth.handlers';
 import { server } from '../../../test/msw/server';
 import type { SessionUser } from './session-context';
 import { SessionProvider, useSession } from './session-provider';
+
+const analytics: { track: Mock; resetAnalytics: Mock } = vi.hoisted(() => ({ track: vi.fn(), resetAnalytics: vi.fn() }));
+
+vi.mock('@/shared/lib/analytics', () => analytics);
 
 function Probe(): ReactElement {
     const { user, isAuthenticated, isRestoring, signIn, signOut, discardSession, replaceUser } = useSession();
@@ -65,6 +69,8 @@ function renderProvider(client: QueryClient = new QueryClient(), strict: boolean
 }
 
 afterEach((): void => {
+    analytics.track.mockClear();
+    analytics.resetAnalytics.mockClear();
     tokenStore.set(null);
 });
 
@@ -161,6 +167,8 @@ describe('SessionProvider sign in and sign out', () => {
         expect(screen.getByText('anônima')).toBeInTheDocument();
         expect(tokenStore.get()).toBeNull();
         expect(client.getQueryData(['dados', 'maria'])).toBeUndefined();
+        expect(analytics.track).toHaveBeenCalledWith('auth_signed_out');
+        expect(analytics.resetAnalytics).toHaveBeenCalledOnce();
         await waitFor((): void => {
             expect(logouts).toEqual(['logout']);
         });
@@ -223,6 +231,8 @@ describe('SessionProvider discard and replace', () => {
         expect(screen.getByText('anônima')).toBeInTheDocument();
         expect(tokenStore.get()).toBeNull();
         expect(logouts).toEqual([]);
+        expect(analytics.track).not.toHaveBeenCalled();
+        expect(analytics.resetAnalytics).toHaveBeenCalledOnce();
     });
 
     it('replaces the user keeping the token', async () => {

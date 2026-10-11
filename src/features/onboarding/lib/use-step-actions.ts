@@ -1,4 +1,5 @@
 import { useNavigate, type UseNavigateResult } from '@tanstack/react-router';
+import { track } from '@/shared/lib/analytics';
 import { useCompleteStep } from '../api/use-complete-step.mutation';
 import { useSkipStep } from '../api/use-skip-step.mutation';
 import type { OnboardingStepKey } from '../types';
@@ -22,13 +23,19 @@ export function useStepActions(step: OnboardingStepKey): StepActions {
         complete: (): void => {
             void run(
                 async () => completeStep.mutateAsync(step),
-                async (state) => navigate({ to: nextStepRoute(state, step) })
+                async (state) => {
+                    track('onboarding_step_completed', { step });
+                    await navigate({ to: nextStepRoute(state, step) });
+                }
             );
         },
         skip: (): void => {
             void run(
                 async () => skipStep.mutateAsync(step),
-                async (state) => navigate({ to: nextStepRoute(state, step) })
+                async (state) => {
+                    track('onboarding_step_skipped', { step });
+                    await navigate({ to: nextStepRoute(state, step) });
+                }
             );
         },
         completing: completeStep.isPending,

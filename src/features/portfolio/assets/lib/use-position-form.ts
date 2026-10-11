@@ -4,11 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import type { z } from 'zod';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
+import { track } from '@/shared/lib/analytics';
 import { useClassLabel, type ClassLabel } from '../../lib/use-class-label';
 import type { AssetClassView } from '../../types';
 import type { UseMutationResult } from '@tanstack/react-query';
 import type { ApiError } from '@/shared/lib/api/api-error';
 import { useCreatePosition } from '../api/use-create-position.mutation';
+import type { AddAssetType } from './asset-types';
 import { createPositionSchema, type PositionFormInput } from '../schemas/position.schema';
 import type { CatalogAsset, CreatePositionBody, PositionView } from '../types';
 import { positionDefaults } from './position-defaults';
@@ -18,6 +20,7 @@ import { useFailureReporter } from './use-failure-reporter';
 export interface PositionFormParams {
     readonly classes: readonly AssetClassView[];
     readonly initialClassId: string | undefined;
+    readonly type: AddAssetType;
     readonly asset: CatalogAsset | null;
     readonly onSaved: () => void;
     readonly onDuplicate: (positionId: string) => void;
@@ -49,6 +52,7 @@ function classNameOf(classes: readonly AssetClassView[], classId: string, classL
 
 interface SubmitParams {
     readonly form: UseFormReturn<PositionFormInput>;
+    readonly type: AddAssetType;
     readonly asset: CatalogAsset | null;
     readonly classes: readonly AssetClassView[];
     readonly onSaved: () => void;
@@ -73,6 +77,7 @@ function usePositionFailure({
                 form.setError('classId', { type: 'server', message });
             },
             onDuplicate: (positionId: string): void => {
+                track('portfolio_duplicate_redirect');
                 toast.show({ tone: 'neutral', title: t('toasts.duplicate') });
                 onDuplicate(positionId);
             },
@@ -83,7 +88,7 @@ function usePositionFailure({
 }
 
 function usePositionSubmit(params: SubmitParams): { submit: () => Promise<void>; busy: boolean } {
-    const { form, asset, classes, onSaved, setAlertMessage }: SubmitParams = params;
+    const { form, type, asset, classes, onSaved, setAlertMessage }: SubmitParams = params;
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const toast: ToastApi = useToast();
     const classLabel: ClassLabel = useClassLabel();
@@ -96,6 +101,7 @@ function usePositionSubmit(params: SubmitParams): { submit: () => Promise<void>;
         setAlertMessage(null);
         try {
             await create.mutateAsync(toPositionBody(asset, input));
+            track('portfolio_asset_added', { type, source: 'search' });
             const className: string = classNameOf(classes, input.classId, classLabel);
             toast.show({ tone: 'positive', title: t('toasts.added', { name: asset.symbol, className }) });
             onSaved();
@@ -106,7 +112,7 @@ function usePositionSubmit(params: SubmitParams): { submit: () => Promise<void>;
     return { submit, busy: create.isPending };
 }
 
-export function usePositionForm({ classes, initialClassId, asset, onSaved, onDuplicate }: PositionFormParams): PositionFormState {
+export function usePositionForm({ classes, initialClassId, type, asset, onSaved, onDuplicate }: PositionFormParams): PositionFormState {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const [alertMessage, setAlertMessage] = useState<string | null>(null);
     const decimals: number = asset?.quantityDecimals ?? 0;
@@ -120,7 +126,7 @@ export function usePositionForm({ classes, initialClassId, asset, onSaved, onDup
         defaultValues: positionDefaults(classes, null, initialClassId)
     });
     const values: PositionFormInput = useWatch({ control: form.control }) as PositionFormInput;
-    const { submit, busy } = usePositionSubmit({ form, asset, classes, onSaved, onDuplicate, setAlertMessage });
+    const { submit, busy } = usePositionSubmit({ form, type, asset, classes, onSaved, onDuplicate, setAlertMessage });
     return {
         form,
         canSubmit: asset !== null && schema.safeParse(values).success,

@@ -1,5 +1,6 @@
-import { useMemo, type ReactElement, type ReactNode } from 'react';
+import { useCallback, useMemo, type ReactElement, type ReactNode } from 'react';
 import { useQueryClient, type Query, type QueryClient, type UseMutationResult } from '@tanstack/react-query';
+import { useRouterState } from '@tanstack/react-router';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { authKeys } from '@/features/auth/api/auth-keys';
 import { useClearSample } from '@/features/onboarding/api/use-clear-sample.mutation';
@@ -10,6 +11,7 @@ import { useOnboardingState } from '@/features/onboarding/api/use-onboarding-sta
 import { onboardingErrorMessage } from '@/features/onboarding/lib/onboarding-error-message';
 import type { OnboardingState } from '@/features/onboarding/types';
 import type { ApiError } from '@/shared/lib/api/api-error';
+import { track } from '@/shared/lib/analytics';
 import { SampleDataContext, type SampleDataControls } from '@/shared/lib/sample-data/sample-data-context';
 import { useToast, type ToastApi } from './toast-provider';
 
@@ -23,6 +25,17 @@ function isRefreshable(query: Query): boolean {
     return !(scope === onboardingKeys.all[0] && PRESERVED_ONBOARDING_SEGMENTS.includes(segment));
 }
 
+function trackCleared(): void {
+    track('sample_data_cleared');
+}
+
+function useTrackLoaded(): () => void {
+    const screen: string = useRouterState({ select: (router): string => router.matches.at(-1)?.routeId ?? 'unknown' });
+    return useCallback((): void => {
+        track('sample_data_loaded', { source: 'empty_state', screen });
+    }, [screen]);
+}
+
 export function SampleDataProvider({ children }: { readonly children: ReactNode }): ReactElement {
     const { t }: UseTranslationResponse<'common', undefined> = useTranslation();
     const { t: tOnboarding }: UseTranslationResponse<'onboarding', undefined> = useTranslation('onboarding');
@@ -32,10 +45,11 @@ export function SampleDataProvider({ children }: { readonly children: ReactNode 
     const state: OnboardingState | undefined = useOnboardingState().data;
     const loadMutation: UseMutationResult<OnboardingState, ApiError, void> = useLoadSample();
     const clearMutation: UseMutationResult<OnboardingState, ApiError, void> = useClearSample();
+    const trackLoaded: () => void = useTrackLoaded();
     const isLoading: boolean = loadMutation.isPending || clearMutation.isPending;
 
     const value: SampleDataControls = useMemo(() => {
-        async function run(action: () => Promise<OnboardingState>, successTitle: string): Promise<void> {
+        async function run(action: () => Promise<OnboardingState>, successTitle: string, onDone: () => void): Promise<void> {
             if (isLoading) {
                 return;
             }
@@ -43,6 +57,7 @@ export function SampleDataProvider({ children }: { readonly children: ReactNode 
                 cache.apply(await action());
                 await queryClient.invalidateQueries({ predicate: isRefreshable });
                 toast.show({ tone: 'positive', title: successTitle });
+                onDone();
             } catch (error) {
                 const failure: Error = error instanceof Error ? error : new Error('unknown');
                 toast.show({ tone: 'critical', title: onboardingErrorMessage(tOnboarding, failure) });
@@ -53,10 +68,10 @@ export function SampleDataProvider({ children }: { readonly children: ReactNode 
             available: state?.sample.available ?? false,
             active: state?.sample.active ?? false,
             isLoading,
-            load: async (): Promise<void> => run(async () => loadMutation.mutateAsync(), t('sampleLoaded')),
-            clear: async (): Promise<void> => run(async () => clearMutation.mutateAsync(), t('sampleCleared'))
+            load: async (): Promise<void> => run(async () => loadMutation.mutateAsync(), t('sampleLoaded'), trackLoaded),
+            clear: async (): Promise<void> => run(async () => clearMutation.mutateAsync(), t('sampleCleared'), trackCleared)
         };
-    }, [state, isLoading, cache, queryClient, toast, t, tOnboarding, loadMutation, clearMutation]);
+    }, [state, trackLoaded, isLoading, cache, queryClient, toast, t, tOnboarding, loadMutation, clearMutation]);
 
     return <SampleDataContext value={value}>{children}</SampleDataContext>;
 }

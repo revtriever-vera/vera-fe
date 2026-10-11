@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import { TriangleAlert } from 'lucide-react';
 import { Trans } from 'react-i18next';
+import { track } from '@/shared/lib/analytics';
 import { PLUGGY_HOSTS, PLUGGY_LINKS, type PluggyTarget } from '../lib/pluggy-links';
 
 const LINK_CLASS: string = 'font-semibold text-accent-strong underline underline-offset-2';
@@ -8,7 +9,15 @@ const KBD_CLASS: string = 'rounded-sm border border-border bg-surface-muted px-1
 
 function ExternalLink({ target, children }: { readonly target: PluggyTarget; readonly children: string }): ReactElement {
     return (
-        <a href={PLUGGY_LINKS[target]} target="_blank" rel="noopener noreferrer" className={LINK_CLASS}>
+        <a
+            href={PLUGGY_LINKS[target]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={LINK_CLASS}
+            onClick={(): void => {
+                track('onboarding_pluggy_link_clicked', { target });
+            }}
+        >
             {children}
         </a>
     );

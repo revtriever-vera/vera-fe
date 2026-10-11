@@ -3,10 +3,12 @@ import { Link } from '@tanstack/react-router';
 import { ArrowRight, KeyRound, List, Receipt, Scissors, ShieldCheck } from 'lucide-react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { cn } from '@/shared/lib/cn';
+import { track } from '@/shared/lib/analytics';
 import { buttonVariants } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { useOnboardingSummary } from '../api/use-onboarding-summary.query';
 import { useStepActions, type StepActions } from '../lib/use-step-actions';
+import { useTrackStepViewed } from '../lib/use-track-step-viewed';
 import { ONBOARDING_PATHS, type AreaSummary } from '../types';
 import { ConnectedBanksCard } from './connected-banks-card';
 import { PluggySteps } from './pluggy-steps';
@@ -40,7 +42,13 @@ function ConnectionsButton({ link }: { readonly link: string | null }): ReactEle
         );
     }
     return (
-        <Link to={link} className={className}>
+        <Link
+            to={link}
+            className={className}
+            onClick={(): void => {
+                track('onboarding_connections_opened');
+            }}
+        >
             {t('goToConnections')}
             <ArrowRight className="size-4" aria-hidden="true" />
         </Link>
@@ -68,6 +76,7 @@ function BanksBody({ connected }: { readonly connected: AreaSummary | null }): R
 export function BanksStep({ connectionsLink }: BanksStepSlots): ReactElement {
     const { t }: UseTranslationResponse<'onboarding', undefined> = useTranslation('onboarding');
     const actions: StepActions = useStepActions('banks');
+    useTrackStepViewed('banks');
     const summary: ReturnType<typeof useOnboardingSummary> = useOnboardingSummary();
     const connected: AreaSummary | null = summary.data?.banks ?? null;
     const hasBanks: boolean = connected !== null && connected.items > 0;

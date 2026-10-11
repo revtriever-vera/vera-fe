@@ -2,6 +2,7 @@ import { useState, type ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
+import { track } from '@/shared/lib/analytics';
 import type { ApiError } from '@/shared/lib/api/api-error';
 import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
@@ -43,6 +44,7 @@ function useToleranceControl(toleranceBps: number): ToleranceControl {
             { toleranceBps: next },
             {
                 onSuccess: (): void => {
+                    track('portfolio_tolerance_changed');
                     toast.show({ tone: 'positive', title: t('tolerance.saved', { tolerance }) });
                 },
                 onError: (error: Error): void => {
