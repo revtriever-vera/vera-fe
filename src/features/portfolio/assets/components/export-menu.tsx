@@ -35,7 +35,6 @@ export function ExportMenu(): ReactElement {
     }));
     return (
         <DropdownMenu
-            label={t('export.menuLabel')}
             items={items}
             trigger={
                 <Button variant="secondary" loading={exportPortfolio.isPending}>

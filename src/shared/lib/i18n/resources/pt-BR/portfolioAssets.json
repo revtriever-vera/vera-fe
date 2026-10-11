@@ -243,7 +243,6 @@
   "export": {
     "button": "Baixar planilha",
     "exporting": "Baixando…",
-    "menuLabel": "Formato da planilha",
     "xlsx": ".xlsx (Excel)",
     "csv": ".csv (texto)",
     "rateLimited": "Você baixou muitas planilhas em pouco tempo. Espere um minuto e tente de novo.",

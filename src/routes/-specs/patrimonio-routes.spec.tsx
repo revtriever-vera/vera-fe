@@ -4,7 +4,7 @@ import type { AnyRouter } from '@tanstack/react-router';
 import { installContributionApi } from '../../../test/helpers/contribution-api';
 import { renderRouterAt } from '../../../test/router';
 
-const ROUTES: readonly string[] = ['/patrimonio/ativos', '/patrimonio/comecar', '/patrimonio/classes/class-fii'];
+const ROUTES: readonly string[] = ['/patrimonio/comecar', '/patrimonio/classes/class-fii'];
 
 describe('rotas de /patrimonio', () => {
     it.each(ROUTES)('%s abre dentro do layout com o título e a página em construção', async (path: string) => {
@@ -38,20 +38,20 @@ describe('rotas de /patrimonio', () => {
 
         link.click();
 
-        await screen.findByRole('heading', { name: 'Em construção' });
+        await screen.findByRole('heading', { name: 'Meus ativos', level: 2 });
         expect(router.state.location.pathname).toBe('/patrimonio/ativos');
     });
 
     it('valida o parâmetro de busca de /patrimonio/ativos', async () => {
         const router: AnyRouter = renderRouterAt('/patrimonio/ativos?add=true&classId=x', { signedIn: true });
-        await screen.findByRole('heading', { name: 'Em construção' });
+        await screen.findByRole('heading', { name: 'Meus ativos', level: 2 });
 
         expect(router.state.location.search).toEqual({ add: true, classId: 'x' });
     });
 
     it('descarta um parâmetro inválido em /patrimonio/ativos sem lançar', async () => {
         const router: AnyRouter = renderRouterAt('/patrimonio/ativos?add=talvez', { signedIn: true });
-        await screen.findByRole('heading', { name: 'Em construção' });
+        await screen.findByRole('heading', { name: 'Meus ativos', level: 2 });
 
         expect(router.state.location.search).toEqual({});
     });

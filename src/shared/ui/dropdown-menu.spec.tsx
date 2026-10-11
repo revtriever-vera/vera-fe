@@ -9,7 +9,6 @@ describe('DropdownMenu', () => {
         const user: UserEvent = userEvent.setup();
         render(
             <DropdownMenu
-                label="Formato"
                 trigger={<button type="button">Abrir</button>}
                 items={[
                     { key: 'a', label: 'Primeiro', onSelect },
@@ -19,7 +18,7 @@ describe('DropdownMenu', () => {
         );
 
         await user.click(screen.getByRole('button', { name: 'Abrir' }));
-        expect(screen.getByRole('menu', { name: 'Formato' })).toBeInTheDocument();
+        expect(screen.getByRole('menu', { name: 'Abrir' })).toBeInTheDocument();
         await user.click(screen.getByRole('menuitem', { name: 'Primeiro' }));
 
         expect(onSelect).toHaveBeenCalledTimes(1);

@@ -243,7 +243,6 @@
   "export": {
     "button": "Download spreadsheet",
     "exporting": "Downloading…",
-    "menuLabel": "Spreadsheet format",
     "xlsx": ".xlsx (Excel)",
     "csv": ".csv (text)",
     "rateLimited": "You downloaded too many spreadsheets in a short time. Wait a minute and try again.",

@@ -3,11 +3,12 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import type { AnyRouter } from '@tanstack/react-router';
 import { mockAssetsApi } from '../../../test/helpers/assets-api';
+import { sampleHoldings } from '../../../test/fixtures/portfolio';
 import { renderRouterAt } from '../../../test/router';
 
 describe('/patrimonio/ativos: Adicionar ativo', () => {
     it('o botão abre o modal e fechar limpa a busca', async () => {
-        mockAssetsApi();
+        mockAssetsApi({ holdings: sampleHoldings() });
         const user: UserEvent = userEvent.setup();
         const router: AnyRouter = renderRouterAt('/patrimonio/ativos', { signedIn: true });
 
