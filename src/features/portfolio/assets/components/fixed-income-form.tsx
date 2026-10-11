@@ -28,6 +28,7 @@ export interface FixedIncomeFormProps {
     readonly today: string;
     readonly formId: string;
     readonly alertMessage: string | null;
+    readonly showClass?: boolean;
     readonly onSubmit: () => void;
     readonly onIndexerChange: (indexer: FixedIncomeIndexer) => void;
 }
@@ -243,6 +244,7 @@ export function FixedIncomeForm({
     today,
     formId,
     alertMessage,
+    showClass = true,
     onSubmit,
     onIndexerChange
 }: FixedIncomeFormProps): ReactElement {
@@ -265,7 +267,7 @@ export function FixedIncomeForm({
                 <AppliedAtField form={form} today={today} />
                 <MaturityField form={form} />
             </div>
-            <ClassField form={form} classes={classes} />
+            {showClass ? <ClassField form={form} classes={classes} /> : null}
             <p className="flex items-start gap-2 text-xs text-content-muted">
                 <Info className="mt-px size-4 shrink-0" aria-hidden="true" />
                 {t('fixedIncome.tesouroNotice')}

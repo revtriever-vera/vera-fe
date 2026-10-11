@@ -180,11 +180,90 @@
       "indexMissing": "We do not have the Central Bank series for this whole period yet. We show the amount invested until it is updated."
     }
   },
+  "description": "Manual entry. Stocks, funds and crypto update from market quotes; fixed income is calculated from its index. The class comes suggested and you can change it.",
+  "page": {
+    "tableLabel": "Your assets",
+    "listLabel": "List of your assets",
+    "loading": "Loading your assets",
+    "loadError": "We could not load your assets.",
+    "retry": "Try again",
+    "reclassifyNote": "When you change the class of an asset, its target inside the class goes back to zero."
+  },
+  "columns": {
+    "asset": "Asset",
+    "class": "Class",
+    "quantity": "Quantity",
+    "value": "Value",
+    "source": "Value source",
+    "actions": "Actions"
+  },
+  "titleChip": "security",
+  "valueUnavailable": "—",
+  "flags": {
+    "missing_quote": "no quote yet",
+    "stale": "quote from {{date}}",
+    "staleUnknown": "old quote",
+    "estimated": "estimated",
+    "matured": "matured",
+    "missing_rate": "no exchange rate"
+  },
+  "classCell": {
+    "label": "Class of {{symbol}}",
+    "none": "No class"
+  },
+  "quantity": {
+    "label": "Quantity of {{symbol}}",
+    "zeroHint": "With zero quantity the asset only receives contributions if it has a target."
+  },
+  "actions": {
+    "edit": "Edit {{name}}",
+    "remove": "Remove {{name}}"
+  },
+  "remove": {
+    "title": "Remove {{symbol}} from your portfolio?",
+    "description": "The targets linked to it are deleted and its value leaves your net worth.",
+    "confirm": "Remove"
+  },
+  "edit": {
+    "title": "Edit {{name}}",
+    "save": "Save changes",
+    "saving": "Saving…",
+    "loadFailed": "We could not open the security."
+  },
+  "detail": {
+    "title": "Security details",
+    "gross": "Gross value",
+    "accrued": "Accrued yield",
+    "tax": "Estimated tax",
+    "taxExempt": "Exempt",
+    "net": "Estimated net value",
+    "estimatedAsOf": "estimated on {{date}}",
+    "note": "The net value is only a reference: your net worth always adds up the gross value."
+  },
+  "export": {
+    "button": "Download spreadsheet",
+    "exporting": "Downloading…",
+    "xlsx": ".xlsx (Excel)",
+    "csv": ".csv (text)",
+    "rateLimited": "You downloaded too many spreadsheets in a short time. Wait a minute and try again.",
+    "failed": "We could not download the spreadsheet."
+  },
+  "empty": {
+    "title": "You have no assets yet",
+    "description": "Add your first asset or follow the step-by-step guide to build your portfolio.",
+    "guide": "Start with the step-by-step guide"
+  },
   "toasts": {
     "added": "{{name}} added to {{className}}",
     "updated": "{{symbol}} updated",
     "duplicate": "This asset was already in your portfolio. Adjust the quantity below.",
     "addFailed": "Could not add",
-    "updateFailed": "Could not update"
+    "updateFailed": "Could not update",
+    "reclassified": "{{symbol}} is now in {{className}}",
+    "reclassifiedDetail": "Its target inside the class went back to zero.",
+    "reclassifyFailed": "We could not change the class",
+    "removed": "{{symbol}} removed from your portfolio",
+    "removeFailed": "We could not remove it",
+    "exported": "Spreadsheet downloaded"
   }
 }

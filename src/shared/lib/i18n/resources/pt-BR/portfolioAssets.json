@@ -180,11 +180,90 @@
       "indexMissing": "Ainda não temos as séries do Banco Central para todo esse período. Mostramos o valor aplicado até a atualização."
     }
   },
+  "description": "Cadastro manual. Ações, fundos e cripto atualizam pela cotação; renda fixa é calculada pelo indexador. A classe vem sugerida e você pode trocar.",
+  "page": {
+    "tableLabel": "Seus ativos",
+    "listLabel": "Lista dos seus ativos",
+    "loading": "Carregando seus ativos",
+    "loadError": "Não foi possível carregar seus ativos.",
+    "retry": "Tentar de novo",
+    "reclassifyNote": "Ao trocar a classe de um ativo, a meta dele dentro da classe volta a zero."
+  },
+  "columns": {
+    "asset": "Ativo",
+    "class": "Classe",
+    "quantity": "Quantidade",
+    "value": "Valor",
+    "source": "Fonte do valor",
+    "actions": "Ações"
+  },
+  "titleChip": "título",
+  "valueUnavailable": "—",
+  "flags": {
+    "missing_quote": "sem cotação ainda",
+    "stale": "cotação de {{date}}",
+    "staleUnknown": "cotação antiga",
+    "estimated": "estimado",
+    "matured": "vencido",
+    "missing_rate": "sem câmbio"
+  },
+  "classCell": {
+    "label": "Classe de {{symbol}}",
+    "none": "Sem classe"
+  },
+  "quantity": {
+    "label": "Quantidade de {{symbol}}",
+    "zeroHint": "Com quantidade zero o ativo só recebe aporte se tiver meta."
+  },
+  "actions": {
+    "edit": "Editar {{name}}",
+    "remove": "Remover {{name}}"
+  },
+  "remove": {
+    "title": "Remover {{symbol}} da carteira?",
+    "description": "As metas ligadas a ele deixam de existir e o valor sai do patrimônio.",
+    "confirm": "Remover"
+  },
+  "edit": {
+    "title": "Editar {{name}}",
+    "save": "Salvar alterações",
+    "saving": "Salvando…",
+    "loadFailed": "Não foi possível abrir o título."
+  },
+  "detail": {
+    "title": "Detalhe do título",
+    "gross": "Valor bruto",
+    "accrued": "Rendimento acumulado",
+    "tax": "Imposto estimado",
+    "taxExempt": "Isento",
+    "net": "Líquido estimado",
+    "estimatedAsOf": "estimado em {{date}}",
+    "note": "O líquido é só uma referência: o patrimônio sempre soma o valor bruto."
+  },
+  "export": {
+    "button": "Baixar planilha",
+    "exporting": "Baixando…",
+    "xlsx": ".xlsx (Excel)",
+    "csv": ".csv (texto)",
+    "rateLimited": "Você baixou muitas planilhas em pouco tempo. Espere um minuto e tente de novo.",
+    "failed": "Não foi possível baixar a planilha."
+  },
+  "empty": {
+    "title": "Você ainda não tem ativos",
+    "description": "Adicione o primeiro ativo ou siga o passo a passo para montar sua carteira.",
+    "guide": "Começar pelo passo a passo"
+  },
   "toasts": {
     "added": "{{name}} adicionado em {{className}}",
     "updated": "{{symbol}} atualizado",
     "duplicate": "Esse ativo já estava na sua carteira. Ajuste a quantidade abaixo.",
     "addFailed": "Não foi possível adicionar",
-    "updateFailed": "Não foi possível atualizar"
+    "updateFailed": "Não foi possível atualizar",
+    "reclassified": "{{symbol}} agora está em {{className}}",
+    "reclassifiedDetail": "A meta dele dentro da classe voltou a zero.",
+    "reclassifyFailed": "Não foi possível trocar a classe",
+    "removed": "{{symbol}} removido da carteira",
+    "removeFailed": "Não foi possível remover",
+    "exported": "Planilha baixada"
   }
 }
