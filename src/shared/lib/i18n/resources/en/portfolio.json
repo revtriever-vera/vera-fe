@@ -20,9 +20,9 @@
       "rf_pre": "Fixed-rate fixed income",
       "rf_ipca": "Inflation-linked fixed income",
       "acoes_br": "Brazilian stocks",
-      "fii": "Real estate funds (FIIs)",
+      "fii": "Brazilian REITs (FIIs)",
       "acoes_eua": "US stocks",
-      "reits": "REITs",
+      "reits": "US REITs",
       "cripto": "Crypto"
     },
     "descriptions": {

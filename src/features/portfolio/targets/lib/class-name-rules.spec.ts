@@ -14,7 +14,7 @@ describe('takenClassNames', () => {
         const taken: readonly string[] = takenClassNames(defaultClasses().data, null);
 
         expect(taken).toContain('fiis');
-        expect(taken).toContain('real estate funds (fiis)');
+        expect(taken).toContain('brazilian reits (fiis)');
         expect(taken).toContain('ações eua');
         expect(taken).toContain('us stocks');
     });

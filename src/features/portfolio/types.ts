@@ -1,16 +1,17 @@
-import type { components, paths } from '@/shared/lib/api/schema';
+import type { PendingHoldingView, PendingHoldingsResponse, PendingOverview, PendingOverviewClass } from '@/shared/lib/api/pending-schema';
+import type { paths } from '@/shared/lib/api/schema';
 
-export type HoldingView = components['schemas']['HoldingView'];
-export type HoldingsResponse = components['schemas']['HoldingsResponse'];
-export type Overview = components['schemas']['Overview'];
-export type OverviewClass = components['schemas']['OverviewClass'];
+export type HoldingView = PendingHoldingView;
+export type HoldingsResponse = PendingHoldingsResponse;
+export type Overview = PendingOverview;
+export type OverviewClass = PendingOverviewClass;
 export type ClassesResponse = paths['/allocation/classes']['get']['responses']['200']['content']['application/json'];
 export type AssetClassView = ClassesResponse['data'][number];
 export type CreateClassInput = paths['/allocation/classes']['post']['requestBody']['content']['application/json'];
 export type UpdateClassBody = paths['/allocation/classes/{id}']['patch']['requestBody']['content']['application/json'];
 export type MergeClassesBody = paths['/allocation/classes/{id}/merge']['post']['requestBody']['content']['application/json'];
-export type PortfolioSettings = components['schemas']['PortfolioSettings'];
-export type UpdatePortfolioSettings = components['schemas']['UpdatePortfolioSettings'];
+export type PortfolioSettings = paths['/allocation/settings']['get']['responses']['200']['content']['application/json'];
+export type UpdatePortfolioSettings = paths['/allocation/settings']['put']['requestBody']['content']['application/json'];
 
 export type BaseCurrency = PortfolioSettings['baseCurrency'];
 export type DeviationStatus = OverviewClass['status'];
@@ -42,3 +43,5 @@ export const SYSTEM_CLASS_KEYS = {
 } as const;
 
 export type SystemClassKey = (typeof SYSTEM_CLASS_KEYS)[keyof typeof SYSTEM_CLASS_KEYS];
+
+export type SaveClassTargetsBody = paths['/allocation/targets/classes']['put']['requestBody']['content']['application/json'];
