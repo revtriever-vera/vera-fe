@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { useEffect, type ReactElement, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactElement, type ReactNode, type RefObject } from 'react';
 import { type UiText, useUiText } from './ui-text';
 
 interface ModalProps {
@@ -9,6 +9,43 @@ interface ModalProps {
     readonly children: ReactNode;
     readonly footer: ReactNode;
     readonly size?: 'default' | 'wide';
+}
+
+const FOCUSABLE: string =
+    'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+function focusableIn(container: HTMLElement): HTMLElement[] {
+    return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE));
+}
+
+function trapTab(event: KeyboardEvent, dialog: HTMLElement | null): void {
+    if (event.key !== 'Tab' || dialog === null) {
+        return;
+    }
+    const items: HTMLElement[] = focusableIn(dialog);
+    const first: HTMLElement | undefined = items[0];
+    const last: HTMLElement | undefined = items[items.length - 1];
+    const goingBack: boolean = event.shiftKey && (document.activeElement === first || document.activeElement === dialog);
+    const goingOut: boolean = !event.shiftKey && document.activeElement === last;
+    if (goingBack || goingOut) {
+        event.preventDefault();
+        (goingBack ? last : first)?.focus();
+    }
+}
+
+function useInitialFocus(dialog: RefObject<HTMLDivElement | null>): void {
+    useEffect((): (() => void) => {
+        const previous: Element | null = document.activeElement;
+        const node: HTMLDivElement | null = dialog.current;
+        if (node !== null && !node.contains(document.activeElement)) {
+            (focusableIn(node)[0] ?? node).focus();
+        }
+        return (): void => {
+            if (previous instanceof HTMLElement && previous.isConnected) {
+                previous.focus();
+            }
+        };
+    }, [dialog]);
 }
 
 const WIDTH: Readonly<Record<'default' | 'wide', string>> = { default: 'max-w-lg', wide: 'max-w-4xl' };
@@ -44,27 +81,32 @@ function ModalHeader({
 
 export function Modal({ title, description, onClose, children, footer, size = 'default' }: ModalProps): ReactElement {
     const t: UiText = useUiText();
+    const dialog: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement | null>(null);
+    useInitialFocus(dialog);
 
     useEffect((): (() => void) => {
         const onKey = (event: KeyboardEvent): void => {
             if (event.key === 'Escape') {
                 onClose();
             }
+            trapTab(event, dialog.current);
         };
         window.addEventListener('keydown', onKey);
         return (): void => {
             window.removeEventListener('keydown', onKey);
         };
-    }, [onClose]);
+    }, [onClose, dialog]);
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-5">
             <button type="button" aria-label={t.close} onClick={onClose} className="absolute inset-0 bg-black/50" />
             <div
+                ref={dialog}
                 role="dialog"
                 aria-modal="true"
+                tabIndex={-1}
                 aria-label={title}
-                className={`relative flex max-h-[90vh] w-full ${WIDTH[size]} flex-col overflow-hidden rounded-card border border-border bg-surface shadow-popover`}
+                className={`relative flex max-h-[90vh] w-full ${WIDTH[size]} flex-col overflow-hidden outline-none rounded-card border border-border bg-surface shadow-popover`}
             >
                 <ModalHeader title={title} description={description} closeLabel={t.close} onClose={onClose} />
                 <div className="flex-1 overflow-y-auto px-5 py-3">{children}</div>
