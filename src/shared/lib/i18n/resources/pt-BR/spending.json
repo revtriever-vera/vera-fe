@@ -159,5 +159,9 @@
     "exportTooLarge": "Há transações demais para exportar de uma vez. Escolha um período menor.",
     "transactionsLimitReached": "Você chegou ao limite de transações ou de contas.",
     "transactionNotFound": "Essa transação não existe mais."
+  },
+  "institution": {
+    "logoAlt": "Logo de {{name}}",
+    "unknown": "banco"
   }
 }

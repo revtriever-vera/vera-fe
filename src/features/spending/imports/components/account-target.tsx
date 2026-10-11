@@ -6,6 +6,7 @@ import type { z } from 'zod';
 import { Field } from '@/shared/ui/field';
 import { SegmentedControl, type SegmentedOption } from '@/shared/ui/segmented-control';
 import type { SelectChoice } from '@/shared/ui/select-menu';
+import { InstitutionAvatar } from '../../components/institution-avatar';
 import { SPENDING_CURRENCY, type AccountView, type ImportPreview } from '../../types';
 import type { ImportTarget } from '../lib/build-import-form-data';
 import {
@@ -49,7 +50,8 @@ function ExistingAccountField({ form, accounts, suggestion }: ExistingProps): Re
     const choices: readonly SelectChoice[] = accounts.map((account: AccountView): SelectChoice => ({
         value: account.id,
         label: account.name,
-        warning: null
+        warning: null,
+        icon: <InstitutionAvatar name={account.institutionName ?? account.name} logoUrl={account.institutionLogoUrl} size="sm" />
     }));
     return (
         <Controller

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { i18n } from '@/shared/lib/i18n';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import type { CategorySource } from '../types';
 import { CategorySourceBadge } from './category-source-badge';
@@ -14,6 +15,20 @@ describe('CategorySourceBadge', () => {
         render(<CategorySourceBadge source={source} />);
 
         expect(screen.getByRole('button', { name: text })).toBeInTheDocument();
+    });
+
+    it('explica a origem da Pluggy nos dois idiomas', async () => {
+        const user: UserEvent = userEvent.setup();
+        await i18n.changeLanguage('en');
+        render(<CategorySourceBadge source="provider" />);
+
+        await user.tab();
+
+        expect(screen.getByRole('button', { name: 'from Pluggy' })).toBeInTheDocument();
+        expect((await screen.findAllByRole('tooltip'))[0]).toHaveTextContent(
+            'This category came from Pluggy itself, which reads the bank.'
+        );
+        await i18n.changeLanguage('pt-BR');
     });
 
     it('não mostra nada quando não há categoria', () => {

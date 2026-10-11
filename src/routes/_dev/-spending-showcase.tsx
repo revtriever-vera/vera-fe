@@ -5,6 +5,7 @@ import { CategorySourceBadge } from '@/features/spending/components/category-sou
 import { CategoryTile } from '@/features/spending/components/category-tile';
 import { FlexibilityToggle } from '@/features/spending/components/flexibility-toggle';
 import { IncomeModeDialog } from '@/features/spending/components/income-mode-dialog';
+import { InstitutionAvatar } from '@/features/spending/components/institution-avatar';
 import { MonthSwitcher } from '@/features/spending/components/month-switcher';
 import { SignedAmount } from '@/features/spending/components/signed-amount';
 import { SpendingEmptyState } from '@/features/spending/components/spending-empty-state';
@@ -80,6 +81,21 @@ function Amounts(): ReactElement {
     );
 }
 
+const SAMPLE_LOGO: string =
+    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%238a05be'/%3E%3C/svg%3E";
+
+function Institutions(): ReactElement {
+    return (
+        <div className="flex items-center gap-3">
+            <InstitutionAvatar name="Nubank" logoUrl={SAMPLE_LOGO} />
+            <InstitutionAvatar name="Banco Inter" logoUrl={null} />
+            <InstitutionAvatar name="Itaú" logoUrl="about:blank#broken" />
+            <InstitutionAvatar name="Nubank" logoUrl={SAMPLE_LOGO} size="sm" />
+            <InstitutionAvatar name="Banco Inter" logoUrl={null} size="sm" />
+        </div>
+    );
+}
+
 export function SpendingShowcase(): ReactElement {
     const [month, setMonth] = useState<string>('2026-09');
     const [category, setCategory] = useState<string | null>(null);
@@ -89,6 +105,7 @@ export function SpendingShowcase(): ReactElement {
             <h2 className="text-lg font-bold">Gastos</h2>
             <Tiles />
             <Amounts />
+            <Institutions />
             <MonthSwitcher month={month} previousMonth="2026-08" nextMonth="2026-10" isPartial={month === '2026-10'} onChange={setMonth} />
             <div className="max-w-sm">
                 <CategoryPicker label="Categoria" value={category} onChange={setCategory} allowNone direction="out" />

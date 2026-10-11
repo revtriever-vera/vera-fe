@@ -10,7 +10,7 @@ import { sessionIdentity } from '../../../../../test/fixtures/auth';
 import { server } from '../../../../../test/msw/server';
 import { renderRouterAt } from '../../../../../test/router';
 import { openConnectionsPage } from '../../../../../test/helpers/open-connections';
-import { connectionView, validCredentials } from '../../../../../test/fixtures/spending';
+import { NUBANK_LOGO_URL, connectionView, validCredentials } from '../../../../../test/fixtures/spending';
 
 function withConnections(...connections: ConnectionView[]): ConnectionsApiOptions {
     return { credentials: validCredentials({ clientIdHint: '3f9a…c2e1' }), connections };
@@ -31,6 +31,21 @@ describe('ConnectionsPage: bancos conectados', () => {
         expect(within(row).getByText('Itaú Conta •••• 1098')).toBeInTheDocument();
         expect(within(row).getByText('ativo')).toBeInTheDocument();
         expect(within(row).getByText(/^atualizado hoje, /)).toBeInTheDocument();
+    });
+
+    it('mostra a logo do banco quando a Pluggy devolve e as iniciais quando não', async () => {
+        await openConnectionsPage(
+            withConnections(
+                connectionView({ institutionLogoUrl: NUBANK_LOGO_URL, connectorName: 'Nubank' }),
+                connectionView({ id: 'conn-other', connectorName: 'Banco Inter', institutionLogoUrl: null })
+            )
+        );
+
+        const nubank: HTMLElement = (await screen.findByText('Nubank', { selector: 'b' })).closest('li') as HTMLElement;
+        expect(within(nubank).getByRole('img', { name: 'Logo de Nubank' })).toHaveAttribute('src', NUBANK_LOGO_URL);
+        const inter: HTMLElement = screen.getByText('Banco Inter', { selector: 'b' }).closest('li') as HTMLElement;
+        expect(within(inter).queryByRole('img')).not.toBeInTheDocument();
+        expect(within(inter).getByText('BI')).toBeInTheDocument();
     });
 
     it('mostra a data completa quando a última atualização foi em outro dia', async () => {

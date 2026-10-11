@@ -6,7 +6,7 @@ import type { AnyRouter } from '@tanstack/react-router';
 import { track } from '@/shared/lib/analytics';
 import { i18n } from '@/shared/lib/i18n';
 import { sessionIdentity } from '../../../../../test/fixtures/auth';
-import { accountId, canonicalTransactions, emptyAccounts, transactionView } from '../../../../../test/fixtures/spending';
+import { NUBANK_LOGO_URL, accountId, canonicalTransactions, emptyAccounts, transactionView } from '../../../../../test/fixtures/spending';
 import { mockTransactionsApi, type TransactionsApi } from '../../../../../test/helpers/transactions-api';
 import { server } from '../../../../../test/msw/server';
 import { renderRouterAt } from '../../../../../test/router';
@@ -53,6 +53,18 @@ afterEach(async () => {
 });
 
 describe('/spending/transactions: lista', () => {
+    it('resolve a logo do banco pela conta da transação e cai nas iniciais sem logo', async () => {
+        mockTransactionsApi();
+        renderRouterAt(PATH, { signedIn: true });
+        await loaded();
+
+        const ifood: HTMLElement = rowOf('IFOOD *RESTAURANTE SABOR');
+        await waitFor(() => {
+            expect(within(ifood).getByRole('img', { name: 'Logo de Nubank' })).toHaveAttribute('src', NUBANK_LOGO_URL);
+        });
+        expect(within(rowOf('SALARIO EMPRESA X')).queryByRole('img')).not.toBeInTheDocument();
+    });
+
     it('mostra tile, categoria e origem de cada transação', async () => {
         mockTransactionsApi();
         renderRouterAt(PATH, { signedIn: true });

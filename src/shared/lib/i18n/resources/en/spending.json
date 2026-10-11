@@ -52,7 +52,7 @@
       "user": "you corrected",
       "rule": "by your rule",
       "dictionary": "by dictionary",
-      "provider": "by Pluggy",
+      "provider": "from Pluggy",
       "none": "uncategorized"
     },
     "tips": {
@@ -159,5 +159,9 @@
     "exportTooLarge": "There are too many transactions to export at once. Pick a shorter period.",
     "transactionsLimitReached": "You reached the limit of transactions or accounts.",
     "transactionNotFound": "That transaction no longer exists."
+  },
+  "institution": {
+    "logoAlt": "Logo of {{name}}",
+    "unknown": "the bank"
   }
 }
