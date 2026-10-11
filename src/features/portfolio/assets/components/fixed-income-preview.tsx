@@ -48,7 +48,7 @@ function summaryOf(
     const years: number = yearsBetween(body.appliedAt, result.matured ? body.maturityDate : result.asOf);
     const rate: number | null = annualizedBps(result.accruedBps, years);
     const yearsText: string = t('fixedIncome.preview.years', {
-        count: roundYears(years),
+        count: roundYears(years) > 1 ? 2 : 1,
         years: new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(roundYears(years))
     });
     const applied: string = formatCurrency(body.appliedMinor, body.currency ?? 'BRL', locale);

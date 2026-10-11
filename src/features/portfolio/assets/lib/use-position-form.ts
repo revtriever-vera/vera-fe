@@ -42,6 +42,11 @@ export function toPositionBody(asset: CatalogAsset, input: PositionFormInput): C
     };
 }
 
+function classNameOf(classes: readonly AssetClassView[], classId: string, classLabel: ClassLabel): string {
+    const chosen: AssetClassView | undefined = classes.find((item: AssetClassView): boolean => item.id === classId);
+    return chosen === undefined ? '' : classLabel(chosen.systemKey, chosen.name);
+}
+
 interface SubmitParams {
     readonly form: UseFormReturn<PositionFormInput>;
     readonly asset: CatalogAsset | null;
@@ -51,15 +56,14 @@ interface SubmitParams {
     readonly setAlertMessage: (message: string | null) => void;
 }
 
-function usePositionSubmit({ form, asset, classes, onSaved, onDuplicate, setAlertMessage }: SubmitParams): {
-    submit: () => Promise<void>;
-    busy: boolean;
-} {
+function usePositionFailure({
+    form,
+    onDuplicate,
+    setAlertMessage
+}: Pick<SubmitParams, 'form' | 'onDuplicate' | 'setAlertMessage'>): (error: Error) => void {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const toast: ToastApi = useToast();
-    const classLabel: ClassLabel = useClassLabel();
-    const create: UseMutationResult<PositionView, ApiError, CreatePositionBody> = useCreatePosition();
-    const report: (error: Error) => void = useFailureReporter(
+    return useFailureReporter(
         {
             onQuantity: (message: string): void => {
                 form.setError('quantity', { type: 'server', message });
@@ -68,11 +72,23 @@ function usePositionSubmit({ form, asset, classes, onSaved, onDuplicate, setAler
             onClass: (message: string): void => {
                 form.setError('classId', { type: 'server', message });
             },
-            onDuplicate,
+            onDuplicate: (positionId: string): void => {
+                toast.show({ tone: 'neutral', title: t('toasts.duplicate') });
+                onDuplicate(positionId);
+            },
             onAlert: setAlertMessage
         },
         t('toasts.addFailed')
     );
+}
+
+function usePositionSubmit(params: SubmitParams): { submit: () => Promise<void>; busy: boolean } {
+    const { form, asset, classes, onSaved, setAlertMessage }: SubmitParams = params;
+    const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
+    const toast: ToastApi = useToast();
+    const classLabel: ClassLabel = useClassLabel();
+    const create: UseMutationResult<PositionView, ApiError, CreatePositionBody> = useCreatePosition();
+    const report: (error: Error) => void = usePositionFailure(params);
     const submit: () => Promise<void> = form.handleSubmit(async (input: PositionFormInput): Promise<void> => {
         if (asset === null) {
             return;
@@ -80,8 +96,7 @@ function usePositionSubmit({ form, asset, classes, onSaved, onDuplicate, setAler
         setAlertMessage(null);
         try {
             await create.mutateAsync(toPositionBody(asset, input));
-            const chosen: AssetClassView | undefined = classes.find((item: AssetClassView): boolean => item.id === input.classId);
-            const className: string = chosen === undefined ? '' : classLabel(chosen.systemKey, chosen.name);
+            const className: string = classNameOf(classes, input.classId, classLabel);
             toast.show({ tone: 'positive', title: t('toasts.added', { name: asset.symbol, className }) });
             onSaved();
         } catch (error) {

@@ -15,9 +15,16 @@ export interface QuoteBook {
     readonly pending: ReadonlySet<string>;
     readonly exhausted: boolean;
     readonly isLoading: boolean;
+    readonly updatedAt: number;
 }
 
-const EMPTY_BOOK: QuoteBook = { quotes: new Map<string, Quote>(), pending: new Set<string>(), exhausted: false, isLoading: false };
+const EMPTY_BOOK: QuoteBook = {
+    quotes: new Map<string, Quote>(),
+    pending: new Set<string>(),
+    exhausted: false,
+    isLoading: false,
+    updatedAt: 0
+};
 
 type QuotesQuery = Query<QuotesResponse, Error, QuotesResponse, ReturnType<typeof portfolioKeys.quotes>>;
 
@@ -25,7 +32,7 @@ export function useQuotes(assetIds: readonly string[]): QuoteBook {
     const ids: readonly string[] = [...assetIds].sort();
     const queryClient: QueryClient = useQueryClient();
     const queryKey: ReturnType<typeof portfolioKeys.quotes> = portfolioKeys.quotes(ids);
-    const { data, isLoading } = useQuery({
+    const { data, isLoading, dataUpdatedAt } = useQuery({
         queryKey,
         queryFn: async ({ signal }): Promise<QuotesResponse> =>
             unwrap(await apiClient.GET('/market-data/quotes', { params: { query: { assetIds: ids.join(',') } }, signal })),
@@ -34,7 +41,7 @@ export function useQuotes(assetIds: readonly string[]): QuoteBook {
             quotePollInterval(query.state.dataUpdateCount, query.state.data?.pendingAssetIds.length ?? 0)
     });
     if (data === undefined) {
-        return { ...EMPTY_BOOK, isLoading };
+        return { ...EMPTY_BOOK, isLoading, updatedAt: dataUpdatedAt };
     }
     const state: QueryState<QuotesResponse> | undefined = queryClient.getQueryState<QuotesResponse>(queryKey);
     const pending: ReadonlySet<string> = new Set<string>(data.pendingAssetIds);
@@ -42,6 +49,7 @@ export function useQuotes(assetIds: readonly string[]): QuoteBook {
         quotes: new Map<string, Quote>(data.quotes.map((quote: Quote): [string, Quote] => [quote.assetId, quote])),
         pending,
         exhausted: pending.size > 0 && (state?.dataUpdateCount ?? 0) >= QUOTE_MAX_POLLS,
-        isLoading
+        isLoading,
+        updatedAt: dataUpdatedAt
     };
 }

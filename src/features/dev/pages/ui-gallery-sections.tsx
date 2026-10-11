@@ -20,6 +20,7 @@ import { IconTile } from '@/shared/ui/icon-tile';
 import { KpiTile } from '@/shared/ui/kpi';
 import { Modal } from '@/shared/ui/modal';
 import { Money } from '@/shared/ui/money';
+import { MoneyInput } from '@/shared/ui/money-input';
 import { Pager } from '@/shared/ui/pager';
 import { PillNav } from '@/shared/ui/pill-nav';
 import { SearchInput } from '@/shared/ui/search-input';
@@ -90,6 +91,7 @@ export function FormsSection(): ReactElement {
     const [query, setQuery] = useState<string>('');
     const [currency, setCurrency] = useState<string>('brl');
     const [date, setDate] = useState<string | null>('2026-10-11');
+    const [amount, setAmount] = useState<number | null>(5000000);
     return (
         <Section title="Formulários">
             <div className="flex w-full max-w-sm flex-col gap-3">
@@ -104,6 +106,7 @@ export function FormsSection(): ReactElement {
                     leading={<Search aria-hidden />}
                 />
                 <DateField label="Data" value={date} onChange={setDate} />
+                <MoneyInput label="Valor aplicado" value={amount} currency="BRL" onChange={setAmount} />
                 <CopyField value="vera-1234" copyLabel="Copiar código" />
                 <FileDrop
                     label="Extrato"

@@ -91,4 +91,44 @@ describe('Modal', () => {
 
         expect(confirm).toHaveFocus();
     });
+
+    it('ignora o Escape que outro componente já tratou', () => {
+        const onClose: Mock = vi.fn();
+        render(
+            <Modal title="Excluir ativo" onClose={onClose} footer={null}>
+                conteúdo
+            </Modal>
+        );
+        const event: KeyboardEvent = new KeyboardEvent('keydown', { key: 'Escape', cancelable: true });
+        event.preventDefault();
+
+        window.dispatchEvent(event);
+
+        expect(onClose).not.toHaveBeenCalled();
+    });
+
+    it('mostra o conteúdo à esquerda do título e liga o título ao diálogo', () => {
+        render(
+            <Modal title="Ações" leading={<button type="button">Voltar</button>} onClose={vi.fn()} footer={null}>
+                conteúdo
+            </Modal>
+        );
+
+        expect(screen.getByRole('dialog', { name: 'Ações' })).toContainElement(screen.getByRole('button', { name: 'Voltar' }));
+        expect(screen.getByRole('heading', { name: 'Ações' })).toHaveAttribute(
+            'id',
+            screen.getByRole('dialog').getAttribute('aria-labelledby')
+        );
+    });
+
+    it('ocupa a tela abaixo de 640 px quando pedido', () => {
+        render(
+            <Modal title="Ações" fullOnMobile onClose={vi.fn()} footer={null}>
+                conteúdo
+            </Modal>
+        );
+
+        expect(screen.getByRole('dialog')).toHaveClass('h-full', 'rounded-none', 'sm:rounded-card');
+        expect(screen.getByRole('dialog').parentElement).toHaveClass('p-0', 'sm:p-5');
+    });
 });
