@@ -446,9 +446,16 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Load sample data */
+        /**
+         * Load sample data
+         * @description Asks every module that registered sample data to seed it, all in one transaction. Areas that already hold real data are skipped. Closes the onboarding when it was still open.
+         */
         post: operations["OnboardingSampleController_load"];
-        delete?: never;
+        /**
+         * Remove sample data
+         * @description Removes only the rows marked as sample from every module. Safe to call with no sample data loaded.
+         */
+        delete: operations["OnboardingSampleController_clear"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3021,8 +3028,179 @@ export interface operations {
                     };
                 };
             };
-            /** @description Onboarding was finished (onboarding.already_closed) */
+            /** @description No module registered sample data (onboarding.sample_unavailable) */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Too many attempts (core.too_many_attempts) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description A module failed and everything was rolled back (onboarding.sample_failed) */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    OnboardingSampleController_clear: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Updated onboarding state */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Derived: `closed` once finished or dismissed, otherwise the first screen still open
+                         * @enum {string}
+                         */
+                        status: "welcome" | "assets" | "banks" | "summary" | "closed";
+                        /**
+                         * Format: date-time
+                         * @description When the person left the welcome screen, or null
+                         */
+                        startedAt: string | null;
+                        steps: {
+                            /** @description Assets step, optional */
+                            assets: {
+                                /**
+                                 * Format: date-time
+                                 * @description When the step was completed, or null
+                                 */
+                                doneAt: string | null;
+                                /**
+                                 * Format: date-time
+                                 * @description When the step was skipped, or null
+                                 */
+                                skippedAt: string | null;
+                            };
+                            /** @description Banks and spending step, optional */
+                            banks: {
+                                /**
+                                 * Format: date-time
+                                 * @description When the step was completed, or null
+                                 */
+                                doneAt: string | null;
+                                /**
+                                 * Format: date-time
+                                 * @description When the step was skipped, or null
+                                 */
+                                skippedAt: string | null;
+                            };
+                        };
+                        /**
+                         * Format: date-time
+                         * @description When the person went to the dashboard from the summary, or null
+                         */
+                        completedAt: string | null;
+                        /**
+                         * Format: date-time
+                         * @description When the person skipped the whole setup, or null
+                         */
+                        dismissedAt: string | null;
+                        sample: {
+                            /** @description True while sample data is loaded */
+                            active: boolean;
+                            /** @description True when a sample data provider is registered */
+                            available: boolean;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description A module failed and nothing was removed (onboarding.sample_failed) */
+            500: {
                 headers: {
                     [name: string]: unknown;
                 };
