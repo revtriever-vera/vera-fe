@@ -4,6 +4,7 @@ import type { ReactElement } from 'react';
 export interface TabItem {
     readonly to: string;
     readonly label: string;
+    readonly exact?: boolean;
 }
 
 interface TabNavProps {
@@ -18,7 +19,13 @@ export function TabNav({ label, tabs }: TabNavProps): ReactElement {
     return (
         <nav aria-label={label} className="flex gap-1 overflow-x-auto rounded-control border border-border bg-surface-muted p-1">
             {tabs.map((tab: TabItem): ReactElement => (
-                <Link key={tab.to} to={tab.to} className={TAB_CLASS} activeProps={{ className: TAB_ACTIVE_CLASS }}>
+                <Link
+                    key={tab.to}
+                    to={tab.to}
+                    className={TAB_CLASS}
+                    activeOptions={{ exact: tab.exact === true }}
+                    activeProps={{ className: TAB_ACTIVE_CLASS }}
+                >
                     {tab.label}
                 </Link>
             ))}

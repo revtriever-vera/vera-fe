@@ -1,5 +1,5 @@
 import { useState, type ReactElement, type ReactNode } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Wallet } from 'lucide-react';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
 import { Alert } from '@/shared/ui/alert';
 import { BrandLogo } from '@/shared/ui/brand-logo';
@@ -13,11 +13,14 @@ import { EmptyState } from '@/shared/ui/empty-state';
 import { FailureAlert } from '@/shared/ui/failure-alert';
 import { Field } from '@/shared/ui/field';
 import { FileDrop } from '@/shared/ui/file-drop';
+import { IconTile } from '@/shared/ui/icon-tile';
+import { KpiTile } from '@/shared/ui/kpi';
 import { Modal } from '@/shared/ui/modal';
 import { Money } from '@/shared/ui/money';
 import { Pager } from '@/shared/ui/pager';
 import { PillNav } from '@/shared/ui/pill-nav';
 import { SearchInput } from '@/shared/ui/search-input';
+import { SegmentedControl } from '@/shared/ui/segmented-control';
 import { SelectMenu, type SelectChoice } from '@/shared/ui/select-menu';
 import { SkeletonForm, SkeletonPanel } from '@/shared/ui/skeleton-form';
 import { SkeletonTable } from '@/shared/ui/skeleton-table';
@@ -25,7 +28,7 @@ import { StatusDot } from '@/shared/ui/status-dot';
 import { Stepper } from '@/shared/ui/stepper';
 import { Table, type TableColumn } from '@/shared/ui/table';
 import { TabNav } from '@/shared/ui/tab-nav';
-import { Balloon } from '@/shared/ui/tooltip';
+import { Balloon, RichBalloon } from '@/shared/ui/tooltip';
 
 interface HoldingRow {
     readonly id: string;
@@ -252,6 +255,47 @@ export function StructureSection(): ReactElement {
                 <SkeletonForm label="Carregando formulário" />
                 <SkeletonPanel label="Carregando painel" />
             </div>
+        </Section>
+    );
+}
+
+export function SelectionSection(): ReactElement {
+    const [currency, setCurrency] = useState<string>('BRL');
+    return (
+        <Section title="Seleção, destaque e balão rico">
+            <SegmentedControl
+                label="Moeda base"
+                options={[
+                    { value: 'BRL', label: 'R$' },
+                    { value: 'USD', label: 'US$' }
+                ]}
+                value={currency}
+                onChange={setCurrency}
+            />
+            <SegmentedControl
+                label="Moeda base desabilitada"
+                options={[
+                    { value: 'BRL', label: 'R$' },
+                    { value: 'USD', label: 'US$' }
+                ]}
+                value="BRL"
+                onChange={(): void => undefined}
+                disabled
+                busy
+            />
+            <RichBalloon
+                content={
+                    <span className="flex flex-col gap-0.5">
+                        <strong>Ações Brasil</strong>
+                        <span>15,0% da carteira, meta de 15%</span>
+                    </span>
+                }
+            >
+                <Button variant="secondary">Balão rico</Button>
+            </RichBalloon>
+            <IconTile icon={Wallet} tone="accent" />
+            <IconTile icon={Wallet} tone="positive" size="sm" />
+            <KpiTile label="Patrimônio" value="R$ 1.773.100,40" support="atualizado hoje" icon={Wallet} tone="accent" className="w-64" />
         </Section>
     );
 }

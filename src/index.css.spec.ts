@@ -21,9 +21,18 @@ const TOKENS: readonly string[] = [
     'info'
 ];
 
+const CLASS_TOKENS: readonly string[] = Array.from({ length: 12 }, (_: unknown, index: number): string => `class-${String(index + 1)}`);
+
 describe('index.css', () => {
     it.each(TOKENS)('define o token --color-%s', (token: string) => {
         expect(css).toMatch(new RegExp(`--color-${token}:`));
+    });
+
+    it.each(CLASS_TOKENS)('define o token --color-%s e o fundo suave dele', (token: string) => {
+        expect(css).toMatch(new RegExp(`--color-${token}:\\s*#[0-9a-f]{6};`));
+        expect(css).toMatch(
+            new RegExp(`--color-${token}-soft:\\s*color-mix\\(in srgb, var\\(--color-${token}\\) 15%, var\\(--color-surface\\)\\);`)
+        );
     });
 
     it('usa o rosa da Vera como cor base', () => {
