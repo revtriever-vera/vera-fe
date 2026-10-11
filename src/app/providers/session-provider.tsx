@@ -28,7 +28,7 @@ function useRestoredSession(setUser: (user: SessionUser | null) => void): boolea
     return isRestoring;
 }
 
-type SessionActions = Pick<SessionState, 'signIn' | 'signOut'>;
+type SessionActions = Pick<SessionState, 'signIn' | 'signOut' | 'discardSession' | 'replaceUser'>;
 
 function useSessionActions(setUser: (next: SessionUser | null) => void): SessionActions {
     const queryClient: QueryClient = useQueryClient();
@@ -51,13 +51,24 @@ function useSessionActions(setUser: (next: SessionUser | null) => void): Session
         [commit, queryClient]
     );
 
-    const signOut: SessionState['signOut'] = useCallback((): void => {
-        void revokeSession();
+    const discardSession: SessionState['discardSession'] = useCallback((): void => {
         commit(null, null);
         queryClient.removeQueries();
     }, [commit, queryClient]);
 
-    return { signIn, signOut };
+    const signOut: SessionState['signOut'] = useCallback((): void => {
+        void revokeSession();
+        discardSession();
+    }, [discardSession]);
+
+    const replaceUser: SessionState['replaceUser'] = useCallback(
+        (next: SessionUser): void => {
+            setUser(next);
+        },
+        [setUser]
+    );
+
+    return { signIn, signOut, discardSession, replaceUser };
 }
 
 export function SessionProvider({ children }: { readonly children: ReactNode }): ReactElement {
@@ -74,11 +85,11 @@ export function SessionProvider({ children }: { readonly children: ReactNode }):
         []
     );
 
-    const { signIn, signOut } = useSessionActions(setUser);
+    const { signIn, signOut, discardSession, replaceUser } = useSessionActions(setUser);
 
     const value: SessionState = useMemo<SessionState>(
-        (): SessionState => ({ user, isAuthenticated: user !== null, isRestoring, signIn, signOut }),
-        [user, isRestoring, signIn, signOut]
+        (): SessionState => ({ user, isAuthenticated: user !== null, isRestoring, signIn, signOut, discardSession, replaceUser }),
+        [user, isRestoring, signIn, signOut, discardSession, replaceUser]
     );
 
     return <SessionContext value={value}>{children}</SessionContext>;

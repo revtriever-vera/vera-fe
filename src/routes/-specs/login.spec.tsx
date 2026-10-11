@@ -420,3 +420,24 @@ describe('login route with a session', () => {
         expect(await screen.findByRole('heading', { name: 'Entrar' })).toBeInTheDocument();
     });
 });
+
+describe('login route account deleted notice', () => {
+    it('shows the notice once and removes the parameter from the address', async () => {
+        connectProviders();
+        const router: AnyRouter = renderRouterAt('/login?deleted=1&redirect=%2Fpatrimonio');
+
+        expect(await screen.findByText('Sua conta foi excluída.')).toBeInTheDocument();
+        await waitFor((): void => {
+            expect(router.state.location.search).toEqual({ redirect: '/patrimonio' });
+        });
+        expect(screen.getByText('Sua conta foi excluída.')).toBeInTheDocument();
+    });
+
+    it('does not show the notice without the parameter', async () => {
+        connectProviders();
+
+        await openLogin();
+
+        expect(screen.queryByText('Sua conta foi excluída.')).not.toBeInTheDocument();
+    });
+});

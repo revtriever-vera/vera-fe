@@ -1,9 +1,11 @@
 import { http, HttpResponse, type RequestHandler } from 'msw';
+import { accountHandlers } from './handlers/account.handlers';
 import { authHandlers } from './handlers/auth.handlers';
 import { portfolioHandlers } from './handlers/portfolio.handlers';
 
 export const handlers: RequestHandler[] = [
     http.get('*/health', () => HttpResponse.json({ status: 'ok' })),
     ...authHandlers,
+    ...accountHandlers,
     ...portfolioHandlers()
 ];

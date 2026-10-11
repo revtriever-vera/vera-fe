@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthAppRouteImport } from './routes/_auth/_app'
 import { Route as DevUiRouteImport } from './routes/_dev/ui'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/_app/index'
+import { Route as AuthAppAccountRouteImport } from './routes/_auth/_app/account'
 import { Route as AuthAppPatrimonioRouteImport } from './routes/_auth/_app/patrimonio'
 import { Route as AuthAppPatrimonioIndexRouteImport } from './routes/_auth/_app/patrimonio.index'
 import { Route as AuthAppPatrimonioAporteRouteImport } from './routes/_auth/_app/patrimonio.aporte'
@@ -43,6 +44,11 @@ const DevUiRoute = DevUiRouteImport.update({
 const AuthAppIndexRoute = AuthAppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AuthAppRoute,
+} as any)
+const AuthAppAccountRoute = AuthAppAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => AuthAppRoute,
 } as any)
 const AuthAppPatrimonioRoute = AuthAppPatrimonioRouteImport.update({
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthAppIndexRoute
   '/login': typeof LoginRoute
   '/ui': typeof DevUiRoute
+  '/account': typeof AuthAppAccountRoute
   '/patrimonio': typeof AuthAppPatrimonioRouteWithChildren
   '/patrimonio/aporte': typeof AuthAppPatrimonioAporteRoute
   '/patrimonio/ativos': typeof AuthAppPatrimonioAtivosRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/': typeof AuthAppIndexRoute
   '/login': typeof LoginRoute
   '/ui': typeof DevUiRoute
+  '/account': typeof AuthAppAccountRoute
   '/patrimonio/aporte': typeof AuthAppPatrimonioAporteRoute
   '/patrimonio/ativos': typeof AuthAppPatrimonioAtivosRoute
   '/patrimonio/carteira-alvo': typeof AuthAppPatrimonioCarteiraAlvoRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_auth/_app': typeof AuthAppRouteWithChildren
   '/_dev/ui': typeof DevUiRoute
+  '/_auth/_app/account': typeof AuthAppAccountRoute
   '/_auth/_app/patrimonio': typeof AuthAppPatrimonioRouteWithChildren
   '/_auth/_app/': typeof AuthAppIndexRoute
   '/_auth/_app/patrimonio/aporte': typeof AuthAppPatrimonioAporteRoute
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/ui'
+    | '/account'
     | '/patrimonio'
     | '/patrimonio/aporte'
     | '/patrimonio/ativos'
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/ui'
+    | '/account'
     | '/patrimonio/aporte'
     | '/patrimonio/ativos'
     | '/patrimonio/carteira-alvo'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/_auth/_app'
     | '/_dev/ui'
+    | '/_auth/_app/account'
     | '/_auth/_app/patrimonio'
     | '/_auth/_app/'
     | '/_auth/_app/patrimonio/aporte'
@@ -203,6 +215,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof AuthAppIndexRouteImport
+      parentRoute: typeof AuthAppRoute
+    }
+    '/_auth/_app/account': {
+      id: '/_auth/_app/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthAppAccountRouteImport
       parentRoute: typeof AuthAppRoute
     }
     '/_auth/_app/patrimonio': {
@@ -279,11 +298,13 @@ const AuthAppPatrimonioRouteWithChildren =
   AuthAppPatrimonioRoute._addFileChildren(AuthAppPatrimonioRouteChildren)
 
 interface AuthAppRouteChildren {
+  AuthAppAccountRoute: typeof AuthAppAccountRoute
   AuthAppPatrimonioRoute: typeof AuthAppPatrimonioRouteWithChildren
   AuthAppIndexRoute: typeof AuthAppIndexRoute
 }
 
 const AuthAppRouteChildren: AuthAppRouteChildren = {
+  AuthAppAccountRoute: AuthAppAccountRoute,
   AuthAppPatrimonioRoute: AuthAppPatrimonioRouteWithChildren,
   AuthAppIndexRoute: AuthAppIndexRoute,
 }
