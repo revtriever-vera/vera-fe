@@ -4,7 +4,7 @@ import { formatCurrency } from '@/shared/lib/format/currency';
 import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { RichBalloon } from '@/shared/ui/tooltip';
-import { Gauge } from '../../components/gauge';
+import { Gauge } from '../../overview/components/gauge';
 import { formatShareBps, formatTargetBps } from '../../lib/format-bps';
 import type { BaseCurrency, ClassColorKey } from '../../types';
 import type { ClassDetailAsset } from '../types';
