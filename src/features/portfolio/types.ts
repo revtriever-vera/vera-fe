@@ -1,10 +1,9 @@
-import type { PendingHoldingView, PendingHoldingsResponse, PendingOverview, PendingOverviewClass } from '@/shared/lib/api/pending-schema';
 import type { paths } from '@/shared/lib/api/schema';
 
-export type HoldingView = PendingHoldingView;
-export type HoldingsResponse = PendingHoldingsResponse;
-export type Overview = PendingOverview;
-export type OverviewClass = PendingOverviewClass;
+export type HoldingsResponse = paths['/portfolio/holdings']['get']['responses']['200']['content']['application/json'];
+export type HoldingView = HoldingsResponse['data'][number];
+export type Overview = paths['/portfolio/overview']['get']['responses']['200']['content']['application/json'];
+export type OverviewClass = Overview['classes'][number];
 export type ClassesResponse = paths['/allocation/classes']['get']['responses']['200']['content']['application/json'];
 export type AssetClassView = ClassesResponse['data'][number];
 export type CreateClassInput = paths['/allocation/classes']['post']['requestBody']['content']['application/json'];

@@ -344,6 +344,7 @@ function overviewClass(assetClassView: AssetClassView, valueMinor: number, count
         classId: assetClassView.id,
         systemKey: assetClassView.systemKey,
         name: assetClassView.name,
+        displayName: assetClassView.name ?? assetClassView.systemKey ?? '',
         colorKey: assetClassView.colorKey,
         valueMinor,
         shareBps,
