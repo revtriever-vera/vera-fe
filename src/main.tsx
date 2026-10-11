@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { QueryProvider } from '@/app/providers/query-provider';
+import { ToastProvider } from '@/app/providers/toast-provider';
 import { routeTree } from './routeTree.gen';
 import './index.css';
 
@@ -22,7 +23,9 @@ if (!rootElement) {
 createRoot(rootElement).render(
     <StrictMode>
         <QueryProvider>
-            <RouterProvider router={router} />
+            <ToastProvider>
+                <RouterProvider router={router} />
+            </ToastProvider>
         </QueryProvider>
     </StrictMode>
 );
