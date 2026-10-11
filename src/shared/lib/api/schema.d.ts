@@ -996,6 +996,130 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/spending/transactions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the transactions of the company
+         * @description Newest first (date, then id). Without `month`, `from` and `to` it lists the current month in the time zone of the company. `totals` cover the whole query, not only the page.
+         */
+        get: operations["TransactionsController_listTransactions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/transactions/uncategorized-count": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Count the outgoing transactions without category
+         * @description Counts all time, example data excluded. Feeds the counter of the menu.
+         */
+        get: operations["TransactionsController_uncategorizedCount"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/transactions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Recategorize a transaction
+         * @description A category chosen here is final: no sync and no rule overwrites it. `categoryId: null` goes back to the automatic categorization. With `rule` it also creates or updates the rule "always to this category" and applies it to the past, all in one database transaction; `recategorized` counts the other transactions that changed.
+         */
+        patch: operations["TransactionsController_recategorize"];
+        trace?: never;
+    };
+    "/spending/accounts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the financial accounts of the company
+         * @description Accounts from bank connections and from imported statements, oldest first.
+         */
+        get: operations["AccountsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/accounts/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete an account created from files
+         * @description Soft deletes the account, its transactions and its imports. Accounts that come from a bank connection are removed together with the connection.
+         */
+        delete: operations["AccountsController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Rename a financial account
+         * @description Works for accounts from a bank connection and for accounts from files.
+         */
+        patch: operations["AccountsController_rename"];
+        trace?: never;
+    };
+    "/spending/transactions/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Download the transactions as a spreadsheet
+         * @description One row per transaction of the filter, oldest first: date, description, payee, signed amount (negative is money out), currency, category, where the category comes from, account, institution and source. The filters are the ones of the list; without a date filter the current month is exported. Headers, default category names and the csv separators follow the locale of the session (pt-BR: ";" and decimal comma, dates dd/MM/yyyy; en: "," and decimal point, dates yyyy-MM-dd). Amount and date are numbers and dates in the xlsx, never text; text that starts with a formula character is prefixed with an apostrophe. At most 50,000 rows per file.
+         */
+        get: operations["TransactionsExportController_export"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -8556,6 +8680,977 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    TransactionsController_listTransactions: {
+        parameters: {
+            query?: {
+                /** @description Calendar month, YYYY-MM. Exclusive with `from` and `to`. Defaults to the current month */
+                month?: string;
+                /** @description First day of the range, YYYY-MM-DD. Requires `to`; the range holds at most 400 days */
+                from?: string;
+                /** @description Last day of the range, YYYY-MM-DD. Requires `from` */
+                to?: string;
+                /** @description Only transactions of this financial account */
+                accountId?: string;
+                /** @description Only transactions of this category. Not accepted with `uncategorized=true` */
+                categoryId?: string;
+                /** @description `true` lists only the transactions without category */
+                uncategorized?: "true" | "false";
+                /** @description `in` lists positive amounts, `out` negative amounts */
+                direction?: "in" | "out";
+                /** @description Text search, 2 to 60 characters, in the normalized description and in the payee name */
+                q?: string;
+                /** @description Page number, starting at 1 */
+                page?: number;
+                /** @description Items per page, 1 to 200 (default 50) */
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page of transactions with the totals of the query */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Transactions of the page, newest first */
+                        data: {
+                            /**
+                             * Format: uuid
+                             * @description Transaction id
+                             */
+                            id: string;
+                            /**
+                             * Format: uuid
+                             * @description Financial account id
+                             */
+                            accountId: string;
+                            /** @description Name of the financial account */
+                            accountName: string;
+                            /** @description Calendar date the bank reports, YYYY-MM-DD; has no time zone */
+                            date: string;
+                            /** @description Signed amount in the smallest unit of the currency; negative is money out */
+                            amountMinor: number;
+                            /** @description Currency of the account, ISO 4217 */
+                            currency: string;
+                            /** @description Description as the bank reported it */
+                            description: string;
+                            /** @description Payee or payer name when the source reports it; never the document */
+                            counterpartyName: string | null;
+                            /**
+                             * Format: uuid
+                             * @description Category of the transaction; null when it has none
+                             */
+                            categoryId: string | null;
+                            /**
+                             * @description How the category was chosen; `user` is never overwritten by a sync or a rule
+                             * @enum {string}
+                             */
+                            categorySource: "user" | "rule" | "dictionary" | "provider" | "none";
+                            /**
+                             * Format: uuid
+                             * @description Rule that categorized the transaction, when categorySource is `rule`
+                             */
+                            ruleId: string | null;
+                            /**
+                             * @description Where the transaction came from
+                             * @enum {string}
+                             */
+                            source: "pluggy" | "ofx" | "csv" | "sample";
+                            /** @description Installment of a purchase paid in parts; null otherwise */
+                            installment: {
+                                number: number;
+                                total: number;
+                            } | null;
+                            /** @description True for example data created during onboarding */
+                            isSample: boolean;
+                        }[];
+                        pagination: {
+                            page: number;
+                            pageSize: number;
+                            totalRecords: number;
+                            totalPages: number;
+                        };
+                        totals: {
+                            /** @description Sum of the positive amounts of the whole query, not only of the page */
+                            inMinor: number;
+                            /** @description Sum of the negative amounts of the whole query (a negative number), not only of the page */
+                            outMinor: number;
+                            /** @description Number of transactions of the whole query */
+                            count: number;
+                        };
+                    };
+                };
+            };
+            /** @description Invalid query or payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    TransactionsController_uncategorizedCount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Number of uncategorized outgoing transactions */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Outgoing transactions without category, of all time, example data excluded */
+                        count: number;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    TransactionsController_recategorize: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Transaction id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: uuid
+                     * @description Category chosen by the user; null goes back to the automatic categorization
+                     */
+                    categoryId: string | null;
+                    /** @description Also create the rule "always to this category" and apply it to the past in the same database transaction */
+                    rule?: {
+                        /**
+                         * @description `counterparty` matches the same payee, `description` the same description
+                         * @enum {string}
+                         */
+                        scope: "counterparty" | "description";
+                    } | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Transaction updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        transaction: {
+                            /**
+                             * Format: uuid
+                             * @description Transaction id
+                             */
+                            id: string;
+                            /**
+                             * Format: uuid
+                             * @description Financial account id
+                             */
+                            accountId: string;
+                            /** @description Name of the financial account */
+                            accountName: string;
+                            /** @description Calendar date the bank reports, YYYY-MM-DD; has no time zone */
+                            date: string;
+                            /** @description Signed amount in the smallest unit of the currency; negative is money out */
+                            amountMinor: number;
+                            /** @description Currency of the account, ISO 4217 */
+                            currency: string;
+                            /** @description Description as the bank reported it */
+                            description: string;
+                            /** @description Payee or payer name when the source reports it; never the document */
+                            counterpartyName: string | null;
+                            /**
+                             * Format: uuid
+                             * @description Category of the transaction; null when it has none
+                             */
+                            categoryId: string | null;
+                            /**
+                             * @description How the category was chosen; `user` is never overwritten by a sync or a rule
+                             * @enum {string}
+                             */
+                            categorySource: "user" | "rule" | "dictionary" | "provider" | "none";
+                            /**
+                             * Format: uuid
+                             * @description Rule that categorized the transaction, when categorySource is `rule`
+                             */
+                            ruleId: string | null;
+                            /**
+                             * @description Where the transaction came from
+                             * @enum {string}
+                             */
+                            source: "pluggy" | "ofx" | "csv" | "sample";
+                            /** @description Installment of a purchase paid in parts; null otherwise */
+                            installment: {
+                                number: number;
+                                total: number;
+                            } | null;
+                            /** @description True for example data created during onboarding */
+                            isSample: boolean;
+                        };
+                        /** @description The rule created or updated; null when the request asked for none */
+                        rule: {
+                            /**
+                             * Format: uuid
+                             * @description Rule id
+                             */
+                            id: string;
+                            /**
+                             * @description Kind of match of the rule
+                             * @enum {string}
+                             */
+                            matchType: "counterparty" | "description" | "contains";
+                            /** @description Text shown to the user, e.g. the payee name; never the document */
+                            label: string;
+                            /**
+                             * @description Direction the rule applies to
+                             * @enum {string}
+                             */
+                            appliesTo: "out" | "in" | "any";
+                            /**
+                             * Format: uuid
+                             * @description Category the rule assigns
+                             */
+                            categoryId: string;
+                            /**
+                             * Format: date-time
+                             * @description Creation instant, ISO 8601 UTC
+                             */
+                            createdAt: string;
+                            /**
+                             * Format: date-time
+                             * @description Last change instant, ISO 8601 UTC
+                             */
+                            updatedAt: string;
+                        } | null;
+                        /** @description Other transactions whose category changed because of the rule */
+                        recategorized: number;
+                    };
+                };
+            };
+            /** @description Invalid query or payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The transaction or the category does not exist in this company (transactions.transaction_not_found, categories.category_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Income category on an outgoing transaction (transactions.category_kind_mismatch) or a rule that cannot be created from this transaction (categories.invalid_rule), including the 500 rules limit (categories.limit_reached) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AccountsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Financial accounts */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Financial accounts of the company, oldest first */
+                        accounts: {
+                            /**
+                             * Format: uuid
+                             * @description Financial account id
+                             */
+                            id: string;
+                            /** @description Name of the account */
+                            name: string;
+                            /**
+                             * @description Kind of account
+                             * @enum {string}
+                             */
+                            kind: "checking" | "savings" | "credit_card" | "other";
+                            /** @description Name of the bank or institution */
+                            institutionName: string | null;
+                            /** @description Last four digits of the account or card number; the full number is never stored */
+                            numberLast4: string | null;
+                            /** @description Currency of the account, ISO 4217 */
+                            currency: string;
+                            /**
+                             * @description `pluggy` accounts come from a bank connection; `file` accounts come from imported statements
+                             * @enum {string}
+                             */
+                            source: "pluggy" | "file";
+                            /** @description Number of transactions of the account */
+                            transactionCount: number;
+                            /** @description Date of the newest transaction, YYYY-MM-DD */
+                            lastTransactionDate: string | null;
+                            /** @description True for example data created during onboarding */
+                            isSample: boolean;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AccountsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Financial account id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Account deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The financial account does not exist in this company (transactions.account_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The account comes from a bank connection (transactions.account_managed_by_connection) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AccountsController_rename: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Financial account id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description New name of the account, 1 to 60 characters without control characters */
+                    name: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Account renamed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Financial account id
+                         */
+                        id: string;
+                        /** @description Name of the account */
+                        name: string;
+                        /**
+                         * @description Kind of account
+                         * @enum {string}
+                         */
+                        kind: "checking" | "savings" | "credit_card" | "other";
+                        /** @description Name of the bank or institution */
+                        institutionName: string | null;
+                        /** @description Last four digits of the account or card number; the full number is never stored */
+                        numberLast4: string | null;
+                        /** @description Currency of the account, ISO 4217 */
+                        currency: string;
+                        /**
+                         * @description `pluggy` accounts come from a bank connection; `file` accounts come from imported statements
+                         * @enum {string}
+                         */
+                        source: "pluggy" | "file";
+                        /** @description Number of transactions of the account */
+                        transactionCount: number;
+                        /** @description Date of the newest transaction, YYYY-MM-DD */
+                        lastTransactionDate: string | null;
+                        /** @description True for example data created during onboarding */
+                        isSample: boolean;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The financial account does not exist in this company (transactions.account_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    TransactionsExportController_export: {
+        parameters: {
+            query: {
+                /** @description File format: xlsx for a spreadsheet with numeric and date cells, csv for UTF-8 text with BOM */
+                format: "xlsx" | "csv";
+                /** @description Calendar month, YYYY-MM. Exclusive with `from` and `to`. Defaults to the current month in the company time zone */
+                month?: string;
+                /** @description First day of the range, YYYY-MM-DD. Requires `to`; the range holds at most 400 days */
+                from?: string;
+                /** @description Last day of the range, YYYY-MM-DD. Requires `from` */
+                to?: string;
+                /** @description Only transactions of this financial account */
+                accountId?: string;
+                /** @description Only transactions of this category. Not accepted with `uncategorized=true` */
+                categoryId?: string;
+                /** @description `true` exports only the transactions without category */
+                uncategorized?: "true" | "false";
+                /** @description `in` exports positive amounts, `out` negative amounts */
+                direction?: "in" | "out";
+                /** @description Text search, 2 to 60 characters, in the normalized description and in the payee name */
+                q?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The file as an attachment named vera-transacoes-YYYY-MM-DD.xlsx or .csv (date in the company timezone) */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": string;
+                    "text/csv; charset=utf-8": string;
+                };
+            };
+            /** @description Invalid query: format is not xlsx or csv, or the range is unordered or longer than 400 days (zod details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    "text/csv": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    "text/csv": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The accountId does not belong to the company (transactions.account_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    "text/csv": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The filter matches more than 50,000 transactions; meta.rows has the count. Choose a shorter period */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    "text/csv": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 10 exports in a minute for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    "text/csv": {
                         /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */

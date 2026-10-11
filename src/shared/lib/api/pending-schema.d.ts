@@ -69,82 +69,6 @@ export interface PendingPageInfo {
     totalPages: number;
 }
 
-export interface PendingTransactionView {
-    id: string;
-    accountId: string;
-    accountName: string;
-    date: string;
-    amountMinor: number;
-    currency: string;
-    description: string;
-    counterpartyName: string | null;
-    categoryId: string | null;
-    categorySource: 'user' | 'rule' | 'dictionary' | 'provider' | 'none';
-    ruleId: string | null;
-    source: 'pluggy' | 'ofx' | 'csv' | 'sample';
-    installment: {
-        number: number;
-        total: number;
-    } | null;
-    isSample: boolean;
-}
-
-export interface PendingTransactionsQuery {
-    month?: string;
-    from?: string;
-    to?: string;
-    accountId?: string;
-    categoryId?: string;
-    uncategorized?: boolean;
-    direction?: 'in' | 'out';
-    q?: string;
-    page?: number;
-    pageSize?: number;
-}
-
-export interface PendingTransactionsResponse {
-    data: PendingTransactionView[];
-    pagination: PendingPageInfo;
-    totals: {
-        inMinor: number;
-        outMinor: number;
-        count: number;
-    };
-}
-
-export interface PendingUncategorizedCount {
-    count: number;
-}
-
-export interface PendingRecategorizeBody {
-    categoryId: string | null;
-    rule?: {
-        scope: 'counterparty' | 'description';
-    } | null;
-}
-
-export interface PendingRecategorizeResult extends PendingRecategorized {
-    transaction: PendingTransactionView;
-    rule: PendingRuleView | null;
-}
-
-export interface PendingAccountView {
-    id: string;
-    name: string;
-    kind: 'checking' | 'savings' | 'credit_card' | 'other';
-    institutionName: string | null;
-    numberLast4: string | null;
-    currency: string;
-    source: 'pluggy' | 'file';
-    transactionCount: number;
-    lastTransactionDate: string | null;
-    isSample: boolean;
-}
-
-export interface PendingAccountsResponse {
-    accounts: PendingAccountView[];
-}
-
 export interface PendingCutSuggestion {
     categoryId: string;
     systemKey: string | null;
@@ -329,34 +253,6 @@ export interface PendingIdPath {
     id: string;
 }
 
-export interface PendingTransactionsPath extends PendingPathItem {
-    get: PendingOperation<PendingTransactionsQuery, PendingNoPath, never, { 200: PendingJson<PendingTransactionsResponse> }>;
-}
-
-export interface PendingUncategorizedCountPath extends PendingPathItem {
-    get: PendingOperation<never, PendingNoPath, never, { 200: PendingJson<PendingUncategorizedCount> }>;
-}
-
-export interface PendingTransactionPath extends PendingPathItem {
-    parameters: { query?: never; header?: never; path: PendingIdPath; cookie?: never };
-    patch: PendingOperation<
-        never,
-        PendingIdPath,
-        PendingJsonBody<PendingRecategorizeBody>,
-        { 200: PendingJson<PendingRecategorizeResult> }
-    >;
-}
-
-export interface PendingAccountsPath extends PendingPathItem {
-    get: PendingOperation<never, PendingNoPath, never, { 200: PendingJson<PendingAccountsResponse> }>;
-}
-
-export interface PendingAccountPath extends PendingPathItem {
-    parameters: { query?: never; header?: never; path: PendingIdPath; cookie?: never };
-    patch: PendingOperation<never, PendingIdPath, PendingJsonBody<{ name: string }>, { 200: PendingJson<PendingAccountView> }>;
-    delete: PendingOperation<never, PendingIdPath, never, { 204: PendingNoContent }>;
-}
-
 export interface PendingCutsPath extends PendingPathItem {
     get: PendingOperation<{ month?: string; goalBps?: number }, PendingNoPath, never, { 200: PendingJson<PendingCutsResponse> }>;
 }
@@ -410,11 +306,6 @@ export interface PendingImportPath extends PendingPathItem {
 }
 
 export interface PendingPaths {
-    '/spending/transactions': PendingTransactionsPath;
-    '/spending/transactions/uncategorized-count': PendingUncategorizedCountPath;
-    '/spending/transactions/{id}': PendingTransactionPath;
-    '/spending/accounts': PendingAccountsPath;
-    '/spending/accounts/{id}': PendingAccountPath;
     '/spending/cuts': PendingCutsPath;
     '/spending/connections/credentials': PendingCredentialsPath;
     '/spending/connections/credentials/test': PendingCredentialsTestPath;
