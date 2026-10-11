@@ -56,6 +56,13 @@ export type ImportsResponse = Json<ApiPaths['/spending/imports']['get']>;
 export type ImportView = ImportsResponse['data'][number];
 export type ImportFormat = ImportView['format'];
 export type ImportPreview = Json<ApiPaths['/spending/imports/preview']['post']>;
+export type ImportCreated = Json<ApiPaths['/spending/imports']['post']>;
+export type ImportRejection = ImportCreated['rejections'][number];
+export type ImportRejectionReason = ImportRejection['reason'];
+export type ImportStatus = ImportView['status'];
+export type ImportRemoved = Json<ApiPaths['/spending/imports/{id}']['delete']>;
+export type ImportsQuery = NonNullable<ApiPaths['/spending/imports']['get']['parameters']['query']>;
+export type AccountKind = AccountView['kind'];
 
 export type CategoryTone = 'flexible' | 'fixed' | 'uncategorized' | 'income' | 'transfer';
 
