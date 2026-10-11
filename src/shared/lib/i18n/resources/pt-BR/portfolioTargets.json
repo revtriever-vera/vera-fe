@@ -1,5 +1,69 @@
 {
   "title": "Carteira-alvo",
+  "subtitle": "Quanto do patrimônio você quer em cada classe.",
+  "targets": {
+    "title": "Metas por classe",
+    "description": "Ajuste os percentuais; a visão geral recalcula depois que você salvar.",
+    "listLabel": "Metas por classe",
+    "columns": {
+      "class": "Classe",
+      "today": "Hoje",
+      "target": "Meta"
+    },
+    "noValue": "—",
+    "emptyHint": "Cadastre seus ativos para comparar.",
+    "assetsLink": "Ativos",
+    "assetsLinkLabel": "Ver os ativos de {{name}}",
+    "targetLabel": "Meta de {{name}}",
+    "decrease": "Diminuir {{name}}",
+    "increase": "Aumentar {{name}}",
+    "total": "Total: {{total}}",
+    "totalMissing": "Total: {{total}} (faltam {{pp}} pp)",
+    "totalExcess": "Total: {{total}} (tire {{pp}} pp)",
+    "save": "Salvar metas",
+    "saving": "Salvando",
+    "discard": "Descartar alterações",
+    "reset": "Restaurar meta moderada",
+    "saved": "Metas salvas",
+    "saveFailed": "Não foi possível salvar as metas",
+    "sumReceived": "A soma recebida foi {{sum}}.",
+    "loading": "Carregando a carteira-alvo",
+    "loadError": "Não foi possível carregar a carteira-alvo.",
+    "retry": "Tentar de novo",
+    "errors": {
+      "invalid": "Informe um valor entre 0% e 100%.",
+      "sumMustBe100": "As metas precisam somar exatamente 100%."
+    }
+  },
+  "tolerance": {
+    "title": "Faixa de tolerância",
+    "description": "Abaixo desse desvio, a classe aparece como \"na faixa\" e não gera alerta.",
+    "inputLabel": "Tolerância em pontos percentuais",
+    "decrease": "Diminuir tolerância",
+    "increase": "Aumentar tolerância",
+    "unit": "pontos percentuais",
+    "example": "Com meta de {{target}} e tolerância de {{tolerance}} pp, a classe fica na faixa entre {{lower}} e {{upper}}.",
+    "invalid": "Use um valor entre 0 e 20 pp.",
+    "saved": "Tolerância de {{tolerance}} pp salva",
+    "saveFailed": "Não foi possível salvar a tolerância"
+  },
+  "manage": {
+    "title": "Classes editáveis",
+    "description": "Junte FIIs e REITs em Imóveis, crie Previdência ou renomeie qualquer classe.",
+    "open": "Gerenciar classes"
+  },
+  "reset": {
+    "title": "Restaurar a meta moderada?",
+    "description": "As metas das classes voltam para o padrão moderado: Renda fixa pós 20%, pré 8%, IPCA+ 12%, Ações Brasil 15%, FIIs 7%, Ações EUA 25%, REITs 8% e Cripto 5%. Suas metas por ativo não mudam. Classes criadas por você ficam em 0%.",
+    "confirm": "Restaurar meta",
+    "success": "Meta moderada restaurada",
+    "failed": "Não foi possível restaurar a meta"
+  },
+  "unsaved": {
+    "title": "Metas não salvas",
+    "description": "Você tem metas não salvas. Sair e descartar?",
+    "leave": "Sair e descartar"
+  },
   "classes": {
     "title": "Gerenciar classes",
     "description": "Crie, renomeie e junte classes. As metas acompanham as mudanças.",

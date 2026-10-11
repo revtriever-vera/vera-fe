@@ -1,5 +1,69 @@
 {
   "title": "Target portfolio",
+  "subtitle": "How much of your net worth you want in each class.",
+  "targets": {
+    "title": "Targets by class",
+    "description": "Adjust the percentages; the overview recalculates after you save.",
+    "listLabel": "Targets by class",
+    "columns": {
+      "class": "Class",
+      "today": "Today",
+      "target": "Target"
+    },
+    "noValue": "—",
+    "emptyHint": "Add your assets to compare.",
+    "assetsLink": "Assets",
+    "assetsLinkLabel": "See the assets in {{name}}",
+    "targetLabel": "Target for {{name}}",
+    "decrease": "Decrease {{name}}",
+    "increase": "Increase {{name}}",
+    "total": "Total: {{total}}",
+    "totalMissing": "Total: {{total}} ({{pp}} pp short)",
+    "totalExcess": "Total: {{total}} (remove {{pp}} pp)",
+    "save": "Save targets",
+    "saving": "Saving",
+    "discard": "Discard changes",
+    "reset": "Restore moderate targets",
+    "saved": "Targets saved",
+    "saveFailed": "We could not save the targets",
+    "sumReceived": "The sum received was {{sum}}.",
+    "loading": "Loading the target portfolio",
+    "loadError": "We could not load the target portfolio.",
+    "retry": "Try again",
+    "errors": {
+      "invalid": "Enter a value between 0% and 100%.",
+      "sumMustBe100": "Targets must add up to exactly 100%."
+    }
+  },
+  "tolerance": {
+    "title": "Tolerance range",
+    "description": "Below this deviation, the class shows as \"within range\" and raises no alert.",
+    "inputLabel": "Tolerance in percentage points",
+    "decrease": "Decrease tolerance",
+    "increase": "Increase tolerance",
+    "unit": "percentage points",
+    "example": "With a target of {{target}} and a tolerance of {{tolerance}} pp, the class stays within range between {{lower}} and {{upper}}.",
+    "invalid": "Use a value between 0 and 20 pp.",
+    "saved": "Tolerance of {{tolerance}} pp saved",
+    "saveFailed": "We could not save the tolerance"
+  },
+  "manage": {
+    "title": "Editable classes",
+    "description": "Merge Brazilian and US REITs into Real estate, create Pension or rename any class.",
+    "open": "Manage classes"
+  },
+  "reset": {
+    "title": "Restore the moderate targets?",
+    "description": "Class targets go back to the moderate default: Floating-rate fixed income 20%, fixed-rate 8%, inflation-linked 12%, Brazilian stocks 15%, Brazilian REITs (FIIs) 7%, US stocks 25%, US REITs 8% and Crypto 5%. Your per-asset targets do not change. Classes you created go to 0%.",
+    "confirm": "Restore targets",
+    "success": "Moderate targets restored",
+    "failed": "We could not restore the targets"
+  },
+  "unsaved": {
+    "title": "Unsaved targets",
+    "description": "You have unsaved targets. Leave and discard them?",
+    "leave": "Leave and discard"
+  },
   "classes": {
     "title": "Manage classes",
     "description": "Create, rename and merge classes. Targets follow the changes.",
