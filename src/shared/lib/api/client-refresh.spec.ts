@@ -66,4 +66,27 @@ describe('apiClient session renewal', () => {
         expect(results).toHaveLength(5);
         expect(refreshes).toBe(1);
     });
+
+    it.each(['/auth/google', '/auth/facebook'])(
+        'does not try to renew the session when %s answers 401',
+        async (path: string): Promise<void> => {
+            let refreshes: number = 0;
+            server.use(
+                http.post('*/auth/refresh', (): Response => {
+                    refreshes += 1;
+                    return HttpResponse.json({ accessToken: FRESH_TOKEN });
+                }),
+                http.post(`*${path}`, (): Response => new HttpResponse(null, { status: 401 }))
+            );
+
+            const response: Response = (
+                path === '/auth/google'
+                    ? await apiClient.POST('/auth/google', { body: { idToken: 'credential-1' } })
+                    : await apiClient.POST('/auth/facebook', { body: { accessToken: 'credential-1' } })
+            ).response;
+
+            expect(response.status).toBe(401);
+            expect(refreshes).toBe(0);
+        }
+    );
 });
