@@ -30,12 +30,6 @@ describe('rotas de /spending', () => {
         expect(await markedTabs()).toEqual([active]);
     });
 
-    it('mostra a tela em construção enquanto o card da página não existe', async () => {
-        renderRouterAt('/spending/connections', { signedIn: true });
-
-        expect(await screen.findAllByRole('heading', { name: 'Esta tela está em construção' })).not.toHaveLength(0);
-    });
-
     it('as abas navegam entre as telas', async () => {
         const user: UserEvent = userEvent.setup();
         const router: AnyRouter = renderRouterAt('/spending', { signedIn: true });
@@ -52,7 +46,7 @@ describe('rotas de /spending', () => {
     it('a página de Conexões monta o cartão de importação', async () => {
         renderRouterAt('/spending/connections', { signedIn: true });
 
-        expect(await screen.findByRole('heading', { name: 'Esta tela está em construção' })).toBeInTheDocument();
+        expect(await screen.findByRole('region', { name: 'Suas credenciais' })).toBeInTheDocument();
         expect(await screen.findByRole('heading', { name: 'Importar arquivo' })).toBeInTheDocument();
     });
 

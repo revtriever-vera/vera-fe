@@ -29,7 +29,7 @@ describe('tipagem das chaves de tradução', () => {
         expectTypeOf<'header.cuts'>().toExtend<ParseKeys<'spendingSummary'>>();
         expectTypeOf<'title'>().toExtend<ParseKeys<'spendingTransactions'>>();
         expectTypeOf<'goal.title'>().toExtend<ParseKeys<'spendingCuts'>>();
-        expectTypeOf<ParseKeys<'spendingConnections'>>().toBeNever();
+        expectTypeOf<'tutorial.title'>().toExtend<ParseKeys<'spendingConnections'>>();
         expectTypeOf<'modal.title'>().toExtend<ParseKeys<'spendingImports'>>();
         expectTypeOf<'rules.title'>().toExtend<ParseKeys<'spendingRules'>>();
     });

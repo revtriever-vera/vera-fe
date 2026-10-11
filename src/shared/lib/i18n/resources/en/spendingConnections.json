@@ -1,1 +1,182 @@
-{}
+{
+  "page": {
+    "intro": "Your statements arrive through Open Finance using your own free Meu Pluggy account, or from a file exported by your bank.",
+    "loading": "Loading connections",
+    "loadError": "Could not load the connections.",
+    "retry": "Try again"
+  },
+  "tutorial": {
+    "title": "Meu Pluggy step by step",
+    "intro": "About 10 to 15 minutes, just once. Check each step as you go.",
+    "show": "Show the steps",
+    "hide": "Hide the steps",
+    "done": "done",
+    "doneStep": "Mark step {{step}} as done",
+    "newTab": "opens in a new tab",
+    "reference": "Official reference: <github/>. Questions about Pluggy: ask their Discord community.",
+    "s1": {
+      "title": "Create your Meu Pluggy account",
+      "line1": "Sign up with your e-mail. This is where your bank connections and Open Finance consents live."
+    },
+    "s2": {
+      "title": "Connect each bank through Open Finance",
+      "line1": "Click the main connect button and search for your bank.",
+      "line2": "You are taken to the bank's app or site to authorize the sharing. Your bank password never goes through Vera or Pluggy.",
+      "line3": "Repeat for each bank and card (e.g. Nubank, Itaú)."
+    },
+    "s3": {
+      "title": "Create the developer account on Pluggy",
+      "line1": "Signing up starts a 15-day trial. Access to your data goes on after it.",
+      "line2": "In the application, add <b>MeuPluggy</b> to the list of connectors.",
+      "line3": "Create a development application: it shows the <kbd>Client ID</kbd> and the <kbd>Client Secret</kbd>.",
+      "warn": "Do steps 3 to 5 within the 15-day trial: after that the setup becomes read-only and you cannot authorize new banks."
+    },
+    "s4": {
+      "title": "Authorize Meu Pluggy in the application",
+      "line1": "In your application, click <kbd>Go to Demo</kbd>.",
+      "line2": "Pick the MeuPluggy connector and sign in with the account from step 1 (OAuth authorization).",
+      "line3": "Authorize <b>once per connected bank</b>, not per account."
+    },
+    "s5": {
+      "title": "Copy the Item ID of each bank",
+      "line1": "Still in the Demo, open the <kbd>⋯</kbd> menu in the top right corner and click <kbd>Copy Item ID</kbd>.",
+      "line2": "Keep one Item ID for each authorized bank."
+    },
+    "s6": {
+      "title": "Paste the credentials here",
+      "line1": "Fill in the credentials form and click <b>Test and connect</b>. The Client Secret is encrypted and never shown again."
+    }
+  },
+  "credentials": {
+    "title": "Your credentials",
+    "formIntro": "The Client ID and Client Secret come from step 3; the Item IDs, from step 5.",
+    "rotateIntro": "Paste the Client ID and Client Secret of the new application. Connected banks stay as they are.",
+    "addIntro": "Paste the Item ID of each new bank, as in step 5.",
+    "clientId": "Client ID",
+    "clientIdHint": "A code like 3f9a1c2e-…, shown by Pluggy in your application.",
+    "clientIdPlaceholder": "e.g. 3f9a1c2e-0000-0000-0000-000000000000",
+    "clientSecret": "Client Secret",
+    "clientSecretHint": "It is stored encrypted on the server and never shown again.",
+    "itemIds": "Item IDs",
+    "itemIdsHint": "One per bank, separated by comma, space or new line. At most {{max}} at a time.",
+    "itemIdsPlaceholder": "e.g. 8b2c…, 41de…",
+    "chipsLabel": "Recognized Item IDs",
+    "chipInvalid": "{{id}} (invalid format)",
+    "chipValid": "{{id}}",
+    "submit": "Test and connect",
+    "testing": "Testing…",
+    "connecting": "Connecting banks…",
+    "rotateSubmit": "Save new credentials",
+    "addSubmit": "Connect banks",
+    "cancel": "Cancel",
+    "fillExample": "Fill in an example",
+    "errors": {
+      "clientIdInvalid": "The Client ID is a code like 3f9a1c2e-…",
+      "clientSecretRequired": "Enter the Client Secret.",
+      "itemIdsRequired": "Paste at least one Item ID.",
+      "itemIdsInvalid": "Some entries are not Item IDs. An Item ID is a code like 8b2c1d3e-…; do not paste the Client Secret here.",
+      "itemIdsTooMany": "Paste at most {{max}} Item IDs at a time.",
+      "invalidCredentials": "Pluggy refused these credentials. Check the Client ID and the Client Secret of your application",
+      "providerUnavailableTitle": "Pluggy did not answer just now",
+      "providerUnavailableDetail": "Nothing was lost. Try again in a moment.",
+      "providerDisabledTitle": "Integration not available on this installation yet",
+      "providerDisabledDetail": "This Vera installation is not connected to Pluggy yet. Meanwhile, import your statements from a file."
+    },
+    "results": {
+      "title": "Result per bank",
+      "connected": "Connected: {{name}}",
+      "connectedUnknown": "Connected",
+      "alreadyConnected": "Was already connected: {{name}}",
+      "alreadyConnectedUnknown": "Was already connected",
+      "notFound": "We could not find this Item ID. Check that you copied it from your application's Demo",
+      "limitReached": "You reached the limit of connected banks",
+      "failed": "Pluggy did not answer, try again",
+      "forItem": "Item ID {{hint}}"
+    },
+    "configured": {
+      "label": "Meu Pluggy credentials",
+      "verifiedAt": "verified on {{date}}",
+      "neverVerified": "not verified yet",
+      "statusValid": "valid",
+      "statusInvalid": "invalid",
+      "testAgain": "Test again",
+      "testingAgain": "Testing…",
+      "rotate": "Replace credentials",
+      "addBanks": "Add banks",
+      "remove": "Remove credentials",
+      "invalidTitle": "Your Meu Pluggy credentials stopped working",
+      "invalidDetail": "Connections are paused until you replace the credentials."
+    },
+    "removeDialog": {
+      "title": "Remove the Meu Pluggy credentials?",
+      "description": "Vera stops fetching your spending through Meu Pluggy. Transactions already imported stay here.",
+      "purge": "Also delete the transactions that came from Meu Pluggy",
+      "confirm": "Remove credentials",
+      "confirmPurge": "Remove and delete",
+      "cancel": "Cancel"
+    },
+    "toasts": {
+      "saved": "Credentials saved",
+      "verified": "Credentials verified",
+      "stillInvalid": "Pluggy still refuses these credentials",
+      "removed": "Credentials removed",
+      "removeFailed": "Could not remove the credentials"
+    }
+  },
+  "banks": {
+    "title": "Connected banks",
+    "intro": "Banks connected through Meu Pluggy.",
+    "empty": "No bank connected yet.",
+    "emptyHint": "Paste the Item IDs in the credentials form to connect your banks.",
+    "unknownBank": "Bank",
+    "syncAll": "Sync everything",
+    "syncOne": "Sync now",
+    "syncing": "syncing…",
+    "stalled": "Still syncing, check back in a few minutes.",
+    "updatedAt": "updated on {{date}}",
+    "updatedToday": "updated today, {{time}}",
+    "neverUpdated": "not updated yet",
+    "lastRunFailed": "The last update failed.",
+    "consentExpires": "consent expires on {{date}}",
+    "accountLine": "{{name}} •••• {{last4}}",
+    "accountLineNoNumber": "{{name}}",
+    "remove": "Remove",
+    "status": {
+      "active": "active",
+      "needs_attention": "needs attention",
+      "revoked": "access revoked",
+      "paused": "paused"
+    },
+    "help": {
+      "reconnect": "Open Meu Pluggy and reconnect this bank.",
+      "confirm": "The bank asked for a confirmation in Meu Pluggy.",
+      "reauthorize": "Authorize again in your application's Demo and paste the new Item ID.",
+      "paused": "Replace the credentials to update this bank again.",
+      "step2": "See step 2",
+      "step4": "See step 4",
+      "rotate": "Replace credentials"
+    },
+    "removeDialog": {
+      "title": "Remove {{bank}}?",
+      "description": "Vera stops fetching spending from this bank. Transactions already imported stay here.",
+      "purge": "Also delete the transactions of this bank",
+      "confirm": "Remove",
+      "confirmPurge": "Remove and delete",
+      "cancel": "Cancel"
+    },
+    "toasts": {
+      "syncQueued": "Update requested",
+      "syncAllQueued_one": "{{count}} bank queued to update",
+      "syncAllQueued_other": "{{count}} banks queued to update",
+      "syncAllNone": "No bank to update right now",
+      "syncFailed": "Could not request the update",
+      "removed": "Bank removed",
+      "removeFailed": "Could not remove the bank",
+      "done": "The banks finished updating"
+    }
+  },
+  "trust": {
+    "openSource": "The code is open: you can check what is done with the credentials, or run everything on your own server.",
+    "privacy": "Your bank password never goes through Vera. Access is read-only."
+  }
+}

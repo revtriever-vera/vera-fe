@@ -20,6 +20,7 @@ const EPIC_CODES: readonly string[] = [
     'connections.invalid_credentials',
     'connections.item_not_found',
     'connections.provider_unavailable',
+    'connections.provider_disabled',
     'connections.sync_in_progress',
     'core.secret_open_failed',
     'core.secret_sealer_mismatch',

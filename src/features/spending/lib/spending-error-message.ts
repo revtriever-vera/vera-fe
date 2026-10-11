@@ -18,6 +18,7 @@ export type SpendingErrorKey =
     | 'errors.invalidCredentials'
     | 'errors.itemNotFound'
     | 'errors.providerUnavailable'
+    | 'errors.providerDisabled'
     | 'errors.syncInProgress'
     | 'errors.secretOpenFailed'
     | 'errors.secretSealerMismatch'
@@ -54,6 +55,7 @@ export const SPENDING_ERROR_KEYS: Readonly<Record<string, SpendingErrorKey>> = {
     'connections.invalid_credentials': 'errors.invalidCredentials',
     'connections.item_not_found': 'errors.itemNotFound',
     'connections.provider_unavailable': 'errors.providerUnavailable',
+    'connections.provider_disabled': 'errors.providerDisabled',
     'connections.sync_in_progress': 'errors.syncInProgress',
     'core.secret_open_failed': 'errors.secretOpenFailed',
     'core.secret_sealer_mismatch': 'errors.secretSealerMismatch',
