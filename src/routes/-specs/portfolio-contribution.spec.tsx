@@ -10,7 +10,7 @@ import { installContributionApi, type ContributionApi } from '../../../test/help
 import { server } from '../../../test/msw/server';
 import { renderRouterAt } from '../../../test/router';
 
-const PATH: string = '/patrimonio/aporte?amount=10000';
+const PATH: string = '/portfolio/contribution?amount=10000';
 
 function openScreen(path: string = PATH): { api: ContributionApi; user: UserEvent; router: AnyRouter } {
     const api: ContributionApi = installContributionApi();
@@ -66,7 +66,7 @@ describe('aporte: sugestão', () => {
     });
 
     it('sem URL abre com 10.000 e grava o valor na URL', async () => {
-        const { api, router } = openScreen('/patrimonio/aporte');
+        const { api, router } = openScreen('/portfolio/contribution');
 
         expect(await screen.findByRole('textbox', { name: 'Quanto você vai aportar (R$)' })).toHaveValue('10.000,00');
         await waitFor(() => {
@@ -122,7 +122,7 @@ describe('aporte: valor', () => {
     });
 
     it('amount=0 na URL abre vazio', async () => {
-        const { api } = openScreen('/patrimonio/aporte?amount=0');
+        const { api } = openScreen('/portfolio/contribution?amount=0');
 
         expect(await screen.findByText('Informe um valor para ver a sugestão.')).toBeInTheDocument();
         expect(api.amounts).toEqual([]);
@@ -152,7 +152,7 @@ describe('aporte: avisos e estados', () => {
         renderRouterAt(PATH, { signedIn: true });
 
         expect(await screen.findByText('Defina sua carteira-alvo primeiro')).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: 'Definir carteira-alvo' })).toHaveAttribute('href', '/patrimonio/carteira-alvo');
+        expect(screen.getByRole('link', { name: 'Definir carteira-alvo' })).toHaveAttribute('href', '/portfolio/targets');
     });
 
     it('metas que não somam 100% mostram o alerta', async () => {
@@ -160,7 +160,7 @@ describe('aporte: avisos e estados', () => {
         renderRouterAt(PATH, { signedIn: true });
 
         expect(await screen.findByText('As metas das classes não somam 100%')).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: 'Ajustar metas' })).toHaveAttribute('href', '/patrimonio/carteira-alvo');
+        expect(screen.getByRole('link', { name: 'Ajustar metas' })).toHaveAttribute('href', '/portfolio/targets');
     });
 
     it('classe sem ativos mostra a orientação e o link; ativo sem preço mostra o aviso', async () => {
@@ -182,7 +182,7 @@ describe('aporte: avisos e estados', () => {
         renderRouterAt(PATH, { signedIn: true });
 
         expect(await screen.findByText(/Nenhum ativo nesta classe\./)).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: 'Ver a classe Cripto' })).toHaveAttribute('href', '/patrimonio/classes/class-cripto');
+        expect(screen.getByRole('link', { name: 'Ver a classe Cripto' })).toHaveAttribute('href', '/portfolio/classes/class-cripto');
         expect(screen.getByText('preço indisponível')).toBeInTheDocument();
     });
 
@@ -197,7 +197,7 @@ describe('aporte: avisos e estados', () => {
         renderRouterAt(PATH, { signedIn: true });
 
         expect(await screen.findByText('Cadastre ativos para direcionar este valor')).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: 'Cadastrar ativos' })).toHaveAttribute('href', '/patrimonio/comecar');
+        expect(screen.getByRole('link', { name: 'Cadastrar ativos' })).toHaveAttribute('href', '/portfolio/get-started');
     });
 
     it('429 mostra a mensagem própria e tenta de novo', async () => {

@@ -27,7 +27,7 @@ function NoAssets({ item, portfolioEmpty }: { readonly item: ContributionClass; 
         return (
             <div className="flex flex-col items-start gap-1 pt-3 text-sm text-content-muted">
                 <p>{t('emptyPortfolio.message')}</p>
-                <Link to="/patrimonio/comecar" className={LINK_CLASS}>
+                <Link to="/portfolio/get-started" className={LINK_CLASS}>
                     {t('emptyPortfolio.link')}
                 </Link>
             </div>
@@ -36,7 +36,7 @@ function NoAssets({ item, portfolioEmpty }: { readonly item: ContributionClass; 
     return (
         <div className="flex flex-col items-start gap-1 pt-3 text-sm text-content-muted">
             <p>{t('noAssets.message')}</p>
-            <Link to="/patrimonio/classes/$classId" params={{ classId: item.classId }} className={LINK_CLASS}>
+            <Link to="/portfolio/classes/$classId" params={{ classId: item.classId }} className={LINK_CLASS}>
                 {t('noAssets.link', { name: label(item.systemKey, item.name) })}
             </Link>
         </div>

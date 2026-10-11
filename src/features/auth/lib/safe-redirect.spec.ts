@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { safeRedirect } from './safe-redirect';
 
 describe('safeRedirect', () => {
-    it.each(['/ativos', '/patrimonio/ativos?x=1#topo', '/'])('accepts the internal path %s', (value: string) => {
+    it.each(['/ativos', '/portfolio/assets?x=1#topo', '/'])('accepts the internal path %s', (value: string) => {
         expect(safeRedirect(value)).toBe(value);
     });
 

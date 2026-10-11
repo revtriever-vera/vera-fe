@@ -50,7 +50,7 @@ function AssetsEmpty({ onAdd }: { readonly onAdd: () => void }): ReactElement {
                         <Plus className="size-4" aria-hidden="true" />
                         {t('addButton')}
                     </Button>
-                    <Link to="/patrimonio/comecar" className={buttonVariants({ variant: 'secondary' })}>
+                    <Link to="/portfolio/get-started" className={buttonVariants({ variant: 'secondary' })}>
                         {t('empty.guide')}
                     </Link>
                 </>
@@ -110,12 +110,12 @@ function AssetsHeader({ empty, onAdd }: { readonly empty: boolean; readonly onAd
 }
 
 export function AssetsPage(): ReactElement {
-    const search: { add?: boolean; classId?: string } = useSearch({ from: '/_auth/_app/patrimonio/ativos' });
+    const search: { add?: boolean; classId?: string } = useSearch({ from: '/_auth/_app/portfolio/assets' });
     const navigate: UseNavigateResult<string> = useNavigate();
     const holdings: UseQueryResult<HoldingsResponse> = useHoldings();
     const classes: UseQueryResult<ClassesResponse> = useClasses();
     const setOpen = (open: boolean): void => {
-        void navigate({ to: '/patrimonio/ativos', search: open ? { add: true, classId: search.classId } : {}, replace: true });
+        void navigate({ to: '/portfolio/assets', search: open ? { add: true, classId: search.classId } : {}, replace: true });
     };
     const openModal = (): void => {
         setOpen(true);

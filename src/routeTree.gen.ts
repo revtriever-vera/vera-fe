@@ -16,23 +16,23 @@ import { Route as AuthOnboardingRouteImport } from './routes/_auth/onboarding'
 import { Route as DevUiRouteImport } from './routes/_dev/ui'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/_app/index'
 import { Route as AuthAppAccountRouteImport } from './routes/_auth/_app/account'
-import { Route as AuthAppGastosRouteImport } from './routes/_auth/_app/gastos'
-import { Route as AuthAppPatrimonioRouteImport } from './routes/_auth/_app/patrimonio'
+import { Route as AuthAppPortfolioRouteImport } from './routes/_auth/_app/portfolio'
+import { Route as AuthAppSpendingRouteImport } from './routes/_auth/_app/spending'
 import { Route as AuthOnboardingIndexRouteImport } from './routes/_auth/onboarding/index'
 import { Route as AuthOnboardingAssetsRouteImport } from './routes/_auth/onboarding/assets'
 import { Route as AuthOnboardingBanksRouteImport } from './routes/_auth/onboarding/banks'
 import { Route as AuthOnboardingDoneRouteImport } from './routes/_auth/onboarding/done'
-import { Route as AuthAppGastosIndexRouteImport } from './routes/_auth/_app/gastos.index'
-import { Route as AuthAppGastosConexoesRouteImport } from './routes/_auth/_app/gastos.conexoes'
-import { Route as AuthAppGastosCortesRouteImport } from './routes/_auth/_app/gastos.cortes'
-import { Route as AuthAppGastosRegrasRouteImport } from './routes/_auth/_app/gastos.regras'
-import { Route as AuthAppGastosTransacoesRouteImport } from './routes/_auth/_app/gastos.transacoes'
-import { Route as AuthAppPatrimonioIndexRouteImport } from './routes/_auth/_app/patrimonio.index'
-import { Route as AuthAppPatrimonioAporteRouteImport } from './routes/_auth/_app/patrimonio.aporte'
-import { Route as AuthAppPatrimonioAtivosRouteImport } from './routes/_auth/_app/patrimonio.ativos'
-import { Route as AuthAppPatrimonioCarteiraAlvoRouteImport } from './routes/_auth/_app/patrimonio.carteira-alvo'
-import { Route as AuthAppPatrimonioComecarRouteImport } from './routes/_auth/_app/patrimonio.comecar'
-import { Route as AuthAppPatrimonioClassesClassIdRouteImport } from './routes/_auth/_app/patrimonio.classes.$classId'
+import { Route as AuthAppPortfolioIndexRouteImport } from './routes/_auth/_app/portfolio.index'
+import { Route as AuthAppPortfolioAssetsRouteImport } from './routes/_auth/_app/portfolio.assets'
+import { Route as AuthAppPortfolioContributionRouteImport } from './routes/_auth/_app/portfolio.contribution'
+import { Route as AuthAppPortfolioGetStartedRouteImport } from './routes/_auth/_app/portfolio.get-started'
+import { Route as AuthAppPortfolioTargetsRouteImport } from './routes/_auth/_app/portfolio.targets'
+import { Route as AuthAppSpendingIndexRouteImport } from './routes/_auth/_app/spending.index'
+import { Route as AuthAppSpendingConnectionsRouteImport } from './routes/_auth/_app/spending.connections'
+import { Route as AuthAppSpendingCutsRouteImport } from './routes/_auth/_app/spending.cuts'
+import { Route as AuthAppSpendingRulesRouteImport } from './routes/_auth/_app/spending.rules'
+import { Route as AuthAppSpendingTransactionsRouteImport } from './routes/_auth/_app/spending.transactions'
+import { Route as AuthAppPortfolioClassesClassIdRouteImport } from './routes/_auth/_app/portfolio.classes.$classId'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
@@ -67,14 +67,14 @@ const AuthAppAccountRoute = AuthAppAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AuthAppRoute,
 } as any)
-const AuthAppGastosRoute = AuthAppGastosRouteImport.update({
-  id: '/gastos',
-  path: '/gastos',
+const AuthAppPortfolioRoute = AuthAppPortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
   getParentRoute: () => AuthAppRoute,
 } as any)
-const AuthAppPatrimonioRoute = AuthAppPatrimonioRouteImport.update({
-  id: '/patrimonio',
-  path: '/patrimonio',
+const AuthAppSpendingRoute = AuthAppSpendingRouteImport.update({
+  id: '/spending',
+  path: '/spending',
   getParentRoute: () => AuthAppRoute,
 } as any)
 const AuthOnboardingIndexRoute = AuthOnboardingIndexRouteImport.update({
@@ -97,63 +97,65 @@ const AuthOnboardingDoneRoute = AuthOnboardingDoneRouteImport.update({
   path: '/done',
   getParentRoute: () => AuthOnboardingRoute,
 } as any)
-const AuthAppGastosIndexRoute = AuthAppGastosIndexRouteImport.update({
+const AuthAppPortfolioIndexRoute = AuthAppPortfolioIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AuthAppGastosRoute,
+  getParentRoute: () => AuthAppPortfolioRoute,
 } as any)
-const AuthAppGastosConexoesRoute = AuthAppGastosConexoesRouteImport.update({
-  id: '/conexoes',
-  path: '/conexoes',
-  getParentRoute: () => AuthAppGastosRoute,
+const AuthAppPortfolioAssetsRoute = AuthAppPortfolioAssetsRouteImport.update({
+  id: '/assets',
+  path: '/assets',
+  getParentRoute: () => AuthAppPortfolioRoute,
 } as any)
-const AuthAppGastosCortesRoute = AuthAppGastosCortesRouteImport.update({
-  id: '/cortes',
-  path: '/cortes',
-  getParentRoute: () => AuthAppGastosRoute,
+const AuthAppPortfolioContributionRoute =
+  AuthAppPortfolioContributionRouteImport.update({
+    id: '/contribution',
+    path: '/contribution',
+    getParentRoute: () => AuthAppPortfolioRoute,
+  } as any)
+const AuthAppPortfolioGetStartedRoute =
+  AuthAppPortfolioGetStartedRouteImport.update({
+    id: '/get-started',
+    path: '/get-started',
+    getParentRoute: () => AuthAppPortfolioRoute,
+  } as any)
+const AuthAppPortfolioTargetsRoute = AuthAppPortfolioTargetsRouteImport.update({
+  id: '/targets',
+  path: '/targets',
+  getParentRoute: () => AuthAppPortfolioRoute,
 } as any)
-const AuthAppGastosRegrasRoute = AuthAppGastosRegrasRouteImport.update({
-  id: '/regras',
-  path: '/regras',
-  getParentRoute: () => AuthAppGastosRoute,
-} as any)
-const AuthAppGastosTransacoesRoute = AuthAppGastosTransacoesRouteImport.update({
-  id: '/transacoes',
-  path: '/transacoes',
-  getParentRoute: () => AuthAppGastosRoute,
-} as any)
-const AuthAppPatrimonioIndexRoute = AuthAppPatrimonioIndexRouteImport.update({
+const AuthAppSpendingIndexRoute = AuthAppSpendingIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AuthAppPatrimonioRoute,
+  getParentRoute: () => AuthAppSpendingRoute,
 } as any)
-const AuthAppPatrimonioAporteRoute = AuthAppPatrimonioAporteRouteImport.update({
-  id: '/aporte',
-  path: '/aporte',
-  getParentRoute: () => AuthAppPatrimonioRoute,
-} as any)
-const AuthAppPatrimonioAtivosRoute = AuthAppPatrimonioAtivosRouteImport.update({
-  id: '/ativos',
-  path: '/ativos',
-  getParentRoute: () => AuthAppPatrimonioRoute,
-} as any)
-const AuthAppPatrimonioCarteiraAlvoRoute =
-  AuthAppPatrimonioCarteiraAlvoRouteImport.update({
-    id: '/carteira-alvo',
-    path: '/carteira-alvo',
-    getParentRoute: () => AuthAppPatrimonioRoute,
+const AuthAppSpendingConnectionsRoute =
+  AuthAppSpendingConnectionsRouteImport.update({
+    id: '/connections',
+    path: '/connections',
+    getParentRoute: () => AuthAppSpendingRoute,
   } as any)
-const AuthAppPatrimonioComecarRoute =
-  AuthAppPatrimonioComecarRouteImport.update({
-    id: '/comecar',
-    path: '/comecar',
-    getParentRoute: () => AuthAppPatrimonioRoute,
+const AuthAppSpendingCutsRoute = AuthAppSpendingCutsRouteImport.update({
+  id: '/cuts',
+  path: '/cuts',
+  getParentRoute: () => AuthAppSpendingRoute,
+} as any)
+const AuthAppSpendingRulesRoute = AuthAppSpendingRulesRouteImport.update({
+  id: '/rules',
+  path: '/rules',
+  getParentRoute: () => AuthAppSpendingRoute,
+} as any)
+const AuthAppSpendingTransactionsRoute =
+  AuthAppSpendingTransactionsRouteImport.update({
+    id: '/transactions',
+    path: '/transactions',
+    getParentRoute: () => AuthAppSpendingRoute,
   } as any)
-const AuthAppPatrimonioClassesClassIdRoute =
-  AuthAppPatrimonioClassesClassIdRouteImport.update({
+const AuthAppPortfolioClassesClassIdRoute =
+  AuthAppPortfolioClassesClassIdRouteImport.update({
     id: '/classes/$classId',
     path: '/classes/$classId',
-    getParentRoute: () => AuthAppPatrimonioRoute,
+    getParentRoute: () => AuthAppPortfolioRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -162,23 +164,23 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof AuthOnboardingRouteWithChildren
   '/ui': typeof DevUiRoute
   '/account': typeof AuthAppAccountRoute
-  '/gastos': typeof AuthAppGastosRouteWithChildren
-  '/patrimonio': typeof AuthAppPatrimonioRouteWithChildren
+  '/portfolio': typeof AuthAppPortfolioRouteWithChildren
+  '/spending': typeof AuthAppSpendingRouteWithChildren
   '/onboarding/assets': typeof AuthOnboardingAssetsRoute
   '/onboarding/banks': typeof AuthOnboardingBanksRoute
   '/onboarding/done': typeof AuthOnboardingDoneRoute
   '/onboarding/': typeof AuthOnboardingIndexRoute
-  '/gastos/conexoes': typeof AuthAppGastosConexoesRoute
-  '/gastos/cortes': typeof AuthAppGastosCortesRoute
-  '/gastos/regras': typeof AuthAppGastosRegrasRoute
-  '/gastos/transacoes': typeof AuthAppGastosTransacoesRoute
-  '/patrimonio/aporte': typeof AuthAppPatrimonioAporteRoute
-  '/patrimonio/ativos': typeof AuthAppPatrimonioAtivosRoute
-  '/patrimonio/carteira-alvo': typeof AuthAppPatrimonioCarteiraAlvoRoute
-  '/patrimonio/comecar': typeof AuthAppPatrimonioComecarRoute
-  '/gastos/': typeof AuthAppGastosIndexRoute
-  '/patrimonio/': typeof AuthAppPatrimonioIndexRoute
-  '/patrimonio/classes/$classId': typeof AuthAppPatrimonioClassesClassIdRoute
+  '/portfolio/assets': typeof AuthAppPortfolioAssetsRoute
+  '/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
+  '/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
+  '/portfolio/targets': typeof AuthAppPortfolioTargetsRoute
+  '/spending/connections': typeof AuthAppSpendingConnectionsRoute
+  '/spending/cuts': typeof AuthAppSpendingCutsRoute
+  '/spending/rules': typeof AuthAppSpendingRulesRoute
+  '/spending/transactions': typeof AuthAppSpendingTransactionsRoute
+  '/portfolio/': typeof AuthAppPortfolioIndexRoute
+  '/spending/': typeof AuthAppSpendingIndexRoute
+  '/portfolio/classes/$classId': typeof AuthAppPortfolioClassesClassIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AuthAppIndexRoute
@@ -189,17 +191,17 @@ export interface FileRoutesByTo {
   '/onboarding/banks': typeof AuthOnboardingBanksRoute
   '/onboarding/done': typeof AuthOnboardingDoneRoute
   '/onboarding': typeof AuthOnboardingIndexRoute
-  '/gastos/conexoes': typeof AuthAppGastosConexoesRoute
-  '/gastos/cortes': typeof AuthAppGastosCortesRoute
-  '/gastos/regras': typeof AuthAppGastosRegrasRoute
-  '/gastos/transacoes': typeof AuthAppGastosTransacoesRoute
-  '/patrimonio/aporte': typeof AuthAppPatrimonioAporteRoute
-  '/patrimonio/ativos': typeof AuthAppPatrimonioAtivosRoute
-  '/patrimonio/carteira-alvo': typeof AuthAppPatrimonioCarteiraAlvoRoute
-  '/patrimonio/comecar': typeof AuthAppPatrimonioComecarRoute
-  '/gastos': typeof AuthAppGastosIndexRoute
-  '/patrimonio': typeof AuthAppPatrimonioIndexRoute
-  '/patrimonio/classes/$classId': typeof AuthAppPatrimonioClassesClassIdRoute
+  '/portfolio/assets': typeof AuthAppPortfolioAssetsRoute
+  '/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
+  '/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
+  '/portfolio/targets': typeof AuthAppPortfolioTargetsRoute
+  '/spending/connections': typeof AuthAppSpendingConnectionsRoute
+  '/spending/cuts': typeof AuthAppSpendingCutsRoute
+  '/spending/rules': typeof AuthAppSpendingRulesRoute
+  '/spending/transactions': typeof AuthAppSpendingTransactionsRoute
+  '/portfolio': typeof AuthAppPortfolioIndexRoute
+  '/spending': typeof AuthAppSpendingIndexRoute
+  '/portfolio/classes/$classId': typeof AuthAppPortfolioClassesClassIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -209,24 +211,24 @@ export interface FileRoutesById {
   '/_auth/onboarding': typeof AuthOnboardingRouteWithChildren
   '/_dev/ui': typeof DevUiRoute
   '/_auth/_app/account': typeof AuthAppAccountRoute
-  '/_auth/_app/gastos': typeof AuthAppGastosRouteWithChildren
-  '/_auth/_app/patrimonio': typeof AuthAppPatrimonioRouteWithChildren
+  '/_auth/_app/portfolio': typeof AuthAppPortfolioRouteWithChildren
+  '/_auth/_app/spending': typeof AuthAppSpendingRouteWithChildren
   '/_auth/onboarding/assets': typeof AuthOnboardingAssetsRoute
   '/_auth/onboarding/banks': typeof AuthOnboardingBanksRoute
   '/_auth/onboarding/done': typeof AuthOnboardingDoneRoute
   '/_auth/_app/': typeof AuthAppIndexRoute
   '/_auth/onboarding/': typeof AuthOnboardingIndexRoute
-  '/_auth/_app/gastos/conexoes': typeof AuthAppGastosConexoesRoute
-  '/_auth/_app/gastos/cortes': typeof AuthAppGastosCortesRoute
-  '/_auth/_app/gastos/regras': typeof AuthAppGastosRegrasRoute
-  '/_auth/_app/gastos/transacoes': typeof AuthAppGastosTransacoesRoute
-  '/_auth/_app/patrimonio/aporte': typeof AuthAppPatrimonioAporteRoute
-  '/_auth/_app/patrimonio/ativos': typeof AuthAppPatrimonioAtivosRoute
-  '/_auth/_app/patrimonio/carteira-alvo': typeof AuthAppPatrimonioCarteiraAlvoRoute
-  '/_auth/_app/patrimonio/comecar': typeof AuthAppPatrimonioComecarRoute
-  '/_auth/_app/gastos/': typeof AuthAppGastosIndexRoute
-  '/_auth/_app/patrimonio/': typeof AuthAppPatrimonioIndexRoute
-  '/_auth/_app/patrimonio/classes/$classId': typeof AuthAppPatrimonioClassesClassIdRoute
+  '/_auth/_app/portfolio/assets': typeof AuthAppPortfolioAssetsRoute
+  '/_auth/_app/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
+  '/_auth/_app/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
+  '/_auth/_app/portfolio/targets': typeof AuthAppPortfolioTargetsRoute
+  '/_auth/_app/spending/connections': typeof AuthAppSpendingConnectionsRoute
+  '/_auth/_app/spending/cuts': typeof AuthAppSpendingCutsRoute
+  '/_auth/_app/spending/rules': typeof AuthAppSpendingRulesRoute
+  '/_auth/_app/spending/transactions': typeof AuthAppSpendingTransactionsRoute
+  '/_auth/_app/portfolio/': typeof AuthAppPortfolioIndexRoute
+  '/_auth/_app/spending/': typeof AuthAppSpendingIndexRoute
+  '/_auth/_app/portfolio/classes/$classId': typeof AuthAppPortfolioClassesClassIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -236,23 +238,23 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/ui'
     | '/account'
-    | '/gastos'
-    | '/patrimonio'
+    | '/portfolio'
+    | '/spending'
     | '/onboarding/assets'
     | '/onboarding/banks'
     | '/onboarding/done'
     | '/onboarding/'
-    | '/gastos/conexoes'
-    | '/gastos/cortes'
-    | '/gastos/regras'
-    | '/gastos/transacoes'
-    | '/patrimonio/aporte'
-    | '/patrimonio/ativos'
-    | '/patrimonio/carteira-alvo'
-    | '/patrimonio/comecar'
-    | '/gastos/'
-    | '/patrimonio/'
-    | '/patrimonio/classes/$classId'
+    | '/portfolio/assets'
+    | '/portfolio/contribution'
+    | '/portfolio/get-started'
+    | '/portfolio/targets'
+    | '/spending/connections'
+    | '/spending/cuts'
+    | '/spending/rules'
+    | '/spending/transactions'
+    | '/portfolio/'
+    | '/spending/'
+    | '/portfolio/classes/$classId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -263,17 +265,17 @@ export interface FileRouteTypes {
     | '/onboarding/banks'
     | '/onboarding/done'
     | '/onboarding'
-    | '/gastos/conexoes'
-    | '/gastos/cortes'
-    | '/gastos/regras'
-    | '/gastos/transacoes'
-    | '/patrimonio/aporte'
-    | '/patrimonio/ativos'
-    | '/patrimonio/carteira-alvo'
-    | '/patrimonio/comecar'
-    | '/gastos'
-    | '/patrimonio'
-    | '/patrimonio/classes/$classId'
+    | '/portfolio/assets'
+    | '/portfolio/contribution'
+    | '/portfolio/get-started'
+    | '/portfolio/targets'
+    | '/spending/connections'
+    | '/spending/cuts'
+    | '/spending/rules'
+    | '/spending/transactions'
+    | '/portfolio'
+    | '/spending'
+    | '/portfolio/classes/$classId'
   id:
     | '__root__'
     | '/_auth'
@@ -282,24 +284,24 @@ export interface FileRouteTypes {
     | '/_auth/onboarding'
     | '/_dev/ui'
     | '/_auth/_app/account'
-    | '/_auth/_app/gastos'
-    | '/_auth/_app/patrimonio'
+    | '/_auth/_app/portfolio'
+    | '/_auth/_app/spending'
     | '/_auth/onboarding/assets'
     | '/_auth/onboarding/banks'
     | '/_auth/onboarding/done'
     | '/_auth/_app/'
     | '/_auth/onboarding/'
-    | '/_auth/_app/gastos/conexoes'
-    | '/_auth/_app/gastos/cortes'
-    | '/_auth/_app/gastos/regras'
-    | '/_auth/_app/gastos/transacoes'
-    | '/_auth/_app/patrimonio/aporte'
-    | '/_auth/_app/patrimonio/ativos'
-    | '/_auth/_app/patrimonio/carteira-alvo'
-    | '/_auth/_app/patrimonio/comecar'
-    | '/_auth/_app/gastos/'
-    | '/_auth/_app/patrimonio/'
-    | '/_auth/_app/patrimonio/classes/$classId'
+    | '/_auth/_app/portfolio/assets'
+    | '/_auth/_app/portfolio/contribution'
+    | '/_auth/_app/portfolio/get-started'
+    | '/_auth/_app/portfolio/targets'
+    | '/_auth/_app/spending/connections'
+    | '/_auth/_app/spending/cuts'
+    | '/_auth/_app/spending/rules'
+    | '/_auth/_app/spending/transactions'
+    | '/_auth/_app/portfolio/'
+    | '/_auth/_app/spending/'
+    | '/_auth/_app/portfolio/classes/$classId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -359,18 +361,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAppAccountRouteImport
       parentRoute: typeof AuthAppRoute
     }
-    '/_auth/_app/gastos': {
-      id: '/_auth/_app/gastos'
-      path: '/gastos'
-      fullPath: '/gastos'
-      preLoaderRoute: typeof AuthAppGastosRouteImport
+    '/_auth/_app/portfolio': {
+      id: '/_auth/_app/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof AuthAppPortfolioRouteImport
       parentRoute: typeof AuthAppRoute
     }
-    '/_auth/_app/patrimonio': {
-      id: '/_auth/_app/patrimonio'
-      path: '/patrimonio'
-      fullPath: '/patrimonio'
-      preLoaderRoute: typeof AuthAppPatrimonioRouteImport
+    '/_auth/_app/spending': {
+      id: '/_auth/_app/spending'
+      path: '/spending'
+      fullPath: '/spending'
+      preLoaderRoute: typeof AuthAppSpendingRouteImport
       parentRoute: typeof AuthAppRoute
     }
     '/_auth/onboarding/': {
@@ -401,138 +403,138 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthOnboardingDoneRouteImport
       parentRoute: typeof AuthOnboardingRoute
     }
-    '/_auth/_app/gastos/': {
-      id: '/_auth/_app/gastos/'
+    '/_auth/_app/portfolio/': {
+      id: '/_auth/_app/portfolio/'
       path: '/'
-      fullPath: '/gastos/'
-      preLoaderRoute: typeof AuthAppGastosIndexRouteImport
-      parentRoute: typeof AuthAppGastosRoute
+      fullPath: '/portfolio/'
+      preLoaderRoute: typeof AuthAppPortfolioIndexRouteImport
+      parentRoute: typeof AuthAppPortfolioRoute
     }
-    '/_auth/_app/gastos/conexoes': {
-      id: '/_auth/_app/gastos/conexoes'
-      path: '/conexoes'
-      fullPath: '/gastos/conexoes'
-      preLoaderRoute: typeof AuthAppGastosConexoesRouteImport
-      parentRoute: typeof AuthAppGastosRoute
+    '/_auth/_app/portfolio/assets': {
+      id: '/_auth/_app/portfolio/assets'
+      path: '/assets'
+      fullPath: '/portfolio/assets'
+      preLoaderRoute: typeof AuthAppPortfolioAssetsRouteImport
+      parentRoute: typeof AuthAppPortfolioRoute
     }
-    '/_auth/_app/gastos/cortes': {
-      id: '/_auth/_app/gastos/cortes'
-      path: '/cortes'
-      fullPath: '/gastos/cortes'
-      preLoaderRoute: typeof AuthAppGastosCortesRouteImport
-      parentRoute: typeof AuthAppGastosRoute
+    '/_auth/_app/portfolio/contribution': {
+      id: '/_auth/_app/portfolio/contribution'
+      path: '/contribution'
+      fullPath: '/portfolio/contribution'
+      preLoaderRoute: typeof AuthAppPortfolioContributionRouteImport
+      parentRoute: typeof AuthAppPortfolioRoute
     }
-    '/_auth/_app/gastos/regras': {
-      id: '/_auth/_app/gastos/regras'
-      path: '/regras'
-      fullPath: '/gastos/regras'
-      preLoaderRoute: typeof AuthAppGastosRegrasRouteImport
-      parentRoute: typeof AuthAppGastosRoute
+    '/_auth/_app/portfolio/get-started': {
+      id: '/_auth/_app/portfolio/get-started'
+      path: '/get-started'
+      fullPath: '/portfolio/get-started'
+      preLoaderRoute: typeof AuthAppPortfolioGetStartedRouteImport
+      parentRoute: typeof AuthAppPortfolioRoute
     }
-    '/_auth/_app/gastos/transacoes': {
-      id: '/_auth/_app/gastos/transacoes'
-      path: '/transacoes'
-      fullPath: '/gastos/transacoes'
-      preLoaderRoute: typeof AuthAppGastosTransacoesRouteImport
-      parentRoute: typeof AuthAppGastosRoute
+    '/_auth/_app/portfolio/targets': {
+      id: '/_auth/_app/portfolio/targets'
+      path: '/targets'
+      fullPath: '/portfolio/targets'
+      preLoaderRoute: typeof AuthAppPortfolioTargetsRouteImport
+      parentRoute: typeof AuthAppPortfolioRoute
     }
-    '/_auth/_app/patrimonio/': {
-      id: '/_auth/_app/patrimonio/'
+    '/_auth/_app/spending/': {
+      id: '/_auth/_app/spending/'
       path: '/'
-      fullPath: '/patrimonio/'
-      preLoaderRoute: typeof AuthAppPatrimonioIndexRouteImport
-      parentRoute: typeof AuthAppPatrimonioRoute
+      fullPath: '/spending/'
+      preLoaderRoute: typeof AuthAppSpendingIndexRouteImport
+      parentRoute: typeof AuthAppSpendingRoute
     }
-    '/_auth/_app/patrimonio/aporte': {
-      id: '/_auth/_app/patrimonio/aporte'
-      path: '/aporte'
-      fullPath: '/patrimonio/aporte'
-      preLoaderRoute: typeof AuthAppPatrimonioAporteRouteImport
-      parentRoute: typeof AuthAppPatrimonioRoute
+    '/_auth/_app/spending/connections': {
+      id: '/_auth/_app/spending/connections'
+      path: '/connections'
+      fullPath: '/spending/connections'
+      preLoaderRoute: typeof AuthAppSpendingConnectionsRouteImport
+      parentRoute: typeof AuthAppSpendingRoute
     }
-    '/_auth/_app/patrimonio/ativos': {
-      id: '/_auth/_app/patrimonio/ativos'
-      path: '/ativos'
-      fullPath: '/patrimonio/ativos'
-      preLoaderRoute: typeof AuthAppPatrimonioAtivosRouteImport
-      parentRoute: typeof AuthAppPatrimonioRoute
+    '/_auth/_app/spending/cuts': {
+      id: '/_auth/_app/spending/cuts'
+      path: '/cuts'
+      fullPath: '/spending/cuts'
+      preLoaderRoute: typeof AuthAppSpendingCutsRouteImport
+      parentRoute: typeof AuthAppSpendingRoute
     }
-    '/_auth/_app/patrimonio/carteira-alvo': {
-      id: '/_auth/_app/patrimonio/carteira-alvo'
-      path: '/carteira-alvo'
-      fullPath: '/patrimonio/carteira-alvo'
-      preLoaderRoute: typeof AuthAppPatrimonioCarteiraAlvoRouteImport
-      parentRoute: typeof AuthAppPatrimonioRoute
+    '/_auth/_app/spending/rules': {
+      id: '/_auth/_app/spending/rules'
+      path: '/rules'
+      fullPath: '/spending/rules'
+      preLoaderRoute: typeof AuthAppSpendingRulesRouteImport
+      parentRoute: typeof AuthAppSpendingRoute
     }
-    '/_auth/_app/patrimonio/comecar': {
-      id: '/_auth/_app/patrimonio/comecar'
-      path: '/comecar'
-      fullPath: '/patrimonio/comecar'
-      preLoaderRoute: typeof AuthAppPatrimonioComecarRouteImport
-      parentRoute: typeof AuthAppPatrimonioRoute
+    '/_auth/_app/spending/transactions': {
+      id: '/_auth/_app/spending/transactions'
+      path: '/transactions'
+      fullPath: '/spending/transactions'
+      preLoaderRoute: typeof AuthAppSpendingTransactionsRouteImport
+      parentRoute: typeof AuthAppSpendingRoute
     }
-    '/_auth/_app/patrimonio/classes/$classId': {
-      id: '/_auth/_app/patrimonio/classes/$classId'
+    '/_auth/_app/portfolio/classes/$classId': {
+      id: '/_auth/_app/portfolio/classes/$classId'
       path: '/classes/$classId'
-      fullPath: '/patrimonio/classes/$classId'
-      preLoaderRoute: typeof AuthAppPatrimonioClassesClassIdRouteImport
-      parentRoute: typeof AuthAppPatrimonioRoute
+      fullPath: '/portfolio/classes/$classId'
+      preLoaderRoute: typeof AuthAppPortfolioClassesClassIdRouteImport
+      parentRoute: typeof AuthAppPortfolioRoute
     }
   }
 }
 
-interface AuthAppGastosRouteChildren {
-  AuthAppGastosConexoesRoute: typeof AuthAppGastosConexoesRoute
-  AuthAppGastosCortesRoute: typeof AuthAppGastosCortesRoute
-  AuthAppGastosRegrasRoute: typeof AuthAppGastosRegrasRoute
-  AuthAppGastosTransacoesRoute: typeof AuthAppGastosTransacoesRoute
-  AuthAppGastosIndexRoute: typeof AuthAppGastosIndexRoute
+interface AuthAppPortfolioRouteChildren {
+  AuthAppPortfolioAssetsRoute: typeof AuthAppPortfolioAssetsRoute
+  AuthAppPortfolioContributionRoute: typeof AuthAppPortfolioContributionRoute
+  AuthAppPortfolioGetStartedRoute: typeof AuthAppPortfolioGetStartedRoute
+  AuthAppPortfolioTargetsRoute: typeof AuthAppPortfolioTargetsRoute
+  AuthAppPortfolioIndexRoute: typeof AuthAppPortfolioIndexRoute
+  AuthAppPortfolioClassesClassIdRoute: typeof AuthAppPortfolioClassesClassIdRoute
 }
 
-const AuthAppGastosRouteChildren: AuthAppGastosRouteChildren = {
-  AuthAppGastosConexoesRoute: AuthAppGastosConexoesRoute,
-  AuthAppGastosCortesRoute: AuthAppGastosCortesRoute,
-  AuthAppGastosRegrasRoute: AuthAppGastosRegrasRoute,
-  AuthAppGastosTransacoesRoute: AuthAppGastosTransacoesRoute,
-  AuthAppGastosIndexRoute: AuthAppGastosIndexRoute,
+const AuthAppPortfolioRouteChildren: AuthAppPortfolioRouteChildren = {
+  AuthAppPortfolioAssetsRoute: AuthAppPortfolioAssetsRoute,
+  AuthAppPortfolioContributionRoute: AuthAppPortfolioContributionRoute,
+  AuthAppPortfolioGetStartedRoute: AuthAppPortfolioGetStartedRoute,
+  AuthAppPortfolioTargetsRoute: AuthAppPortfolioTargetsRoute,
+  AuthAppPortfolioIndexRoute: AuthAppPortfolioIndexRoute,
+  AuthAppPortfolioClassesClassIdRoute: AuthAppPortfolioClassesClassIdRoute,
 }
 
-const AuthAppGastosRouteWithChildren = AuthAppGastosRoute._addFileChildren(
-  AuthAppGastosRouteChildren,
+const AuthAppPortfolioRouteWithChildren =
+  AuthAppPortfolioRoute._addFileChildren(AuthAppPortfolioRouteChildren)
+
+interface AuthAppSpendingRouteChildren {
+  AuthAppSpendingConnectionsRoute: typeof AuthAppSpendingConnectionsRoute
+  AuthAppSpendingCutsRoute: typeof AuthAppSpendingCutsRoute
+  AuthAppSpendingRulesRoute: typeof AuthAppSpendingRulesRoute
+  AuthAppSpendingTransactionsRoute: typeof AuthAppSpendingTransactionsRoute
+  AuthAppSpendingIndexRoute: typeof AuthAppSpendingIndexRoute
+}
+
+const AuthAppSpendingRouteChildren: AuthAppSpendingRouteChildren = {
+  AuthAppSpendingConnectionsRoute: AuthAppSpendingConnectionsRoute,
+  AuthAppSpendingCutsRoute: AuthAppSpendingCutsRoute,
+  AuthAppSpendingRulesRoute: AuthAppSpendingRulesRoute,
+  AuthAppSpendingTransactionsRoute: AuthAppSpendingTransactionsRoute,
+  AuthAppSpendingIndexRoute: AuthAppSpendingIndexRoute,
+}
+
+const AuthAppSpendingRouteWithChildren = AuthAppSpendingRoute._addFileChildren(
+  AuthAppSpendingRouteChildren,
 )
-
-interface AuthAppPatrimonioRouteChildren {
-  AuthAppPatrimonioAporteRoute: typeof AuthAppPatrimonioAporteRoute
-  AuthAppPatrimonioAtivosRoute: typeof AuthAppPatrimonioAtivosRoute
-  AuthAppPatrimonioCarteiraAlvoRoute: typeof AuthAppPatrimonioCarteiraAlvoRoute
-  AuthAppPatrimonioComecarRoute: typeof AuthAppPatrimonioComecarRoute
-  AuthAppPatrimonioIndexRoute: typeof AuthAppPatrimonioIndexRoute
-  AuthAppPatrimonioClassesClassIdRoute: typeof AuthAppPatrimonioClassesClassIdRoute
-}
-
-const AuthAppPatrimonioRouteChildren: AuthAppPatrimonioRouteChildren = {
-  AuthAppPatrimonioAporteRoute: AuthAppPatrimonioAporteRoute,
-  AuthAppPatrimonioAtivosRoute: AuthAppPatrimonioAtivosRoute,
-  AuthAppPatrimonioCarteiraAlvoRoute: AuthAppPatrimonioCarteiraAlvoRoute,
-  AuthAppPatrimonioComecarRoute: AuthAppPatrimonioComecarRoute,
-  AuthAppPatrimonioIndexRoute: AuthAppPatrimonioIndexRoute,
-  AuthAppPatrimonioClassesClassIdRoute: AuthAppPatrimonioClassesClassIdRoute,
-}
-
-const AuthAppPatrimonioRouteWithChildren =
-  AuthAppPatrimonioRoute._addFileChildren(AuthAppPatrimonioRouteChildren)
 
 interface AuthAppRouteChildren {
   AuthAppAccountRoute: typeof AuthAppAccountRoute
-  AuthAppGastosRoute: typeof AuthAppGastosRouteWithChildren
-  AuthAppPatrimonioRoute: typeof AuthAppPatrimonioRouteWithChildren
+  AuthAppPortfolioRoute: typeof AuthAppPortfolioRouteWithChildren
+  AuthAppSpendingRoute: typeof AuthAppSpendingRouteWithChildren
   AuthAppIndexRoute: typeof AuthAppIndexRoute
 }
 
 const AuthAppRouteChildren: AuthAppRouteChildren = {
   AuthAppAccountRoute: AuthAppAccountRoute,
-  AuthAppGastosRoute: AuthAppGastosRouteWithChildren,
-  AuthAppPatrimonioRoute: AuthAppPatrimonioRouteWithChildren,
+  AuthAppPortfolioRoute: AuthAppPortfolioRouteWithChildren,
+  AuthAppSpendingRoute: AuthAppSpendingRouteWithChildren,
   AuthAppIndexRoute: AuthAppIndexRoute,
 }
 

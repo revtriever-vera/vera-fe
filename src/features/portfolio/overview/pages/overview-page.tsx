@@ -68,7 +68,7 @@ function OverviewEmpty(): ReactElement {
             title={t('empty.title')}
             description={t('empty.description')}
             action={
-                <Link to="/patrimonio/comecar" className={buttonVariants()}>
+                <Link to="/portfolio/get-started" className={buttonVariants()}>
                     <Plus aria-hidden="true" className="size-4" />
                     {t('empty.action')}
                 </Link>

@@ -3,11 +3,11 @@ import { layoutSearchSchema, monthSearchSchema, transactionsSearchSchema } from 
 
 describe('layoutSearchSchema', () => {
     it('aceita importar como booleano', () => {
-        expect(layoutSearchSchema.parse({ importar: true })).toEqual({ importar: true });
+        expect(layoutSearchSchema.parse({ import: true })).toEqual({ import: true });
     });
 
     it('descarta um valor inválido sem lançar', () => {
-        expect(layoutSearchSchema.parse({ importar: 'talvez' })).toEqual({});
+        expect(layoutSearchSchema.parse({ import: 'talvez' })).toEqual({});
     });
 });
 

@@ -9,7 +9,7 @@ import { sessionIdentity } from '../../../test/fixtures/auth';
 import { server } from '../../../test/msw/server';
 import { renderRouterAt } from '../../../test/router';
 
-const PATH: string = '/patrimonio/carteira-alvo';
+const PATH: string = '/portfolio/targets';
 const TARGETS: readonly string[] = ['20', '8', '12', '15', '7', '25', '8', '5'];
 const TODAY: readonly string[] = ['20,8%', '11,6%', '7,3%', '12,4%', '6,6%', '20,9%', '8,7%', '11,7%'];
 
@@ -41,7 +41,7 @@ describe('carteira-alvo: leitura', () => {
     it('cada classe leva aos ativos da classe', async () => {
         await openScreen();
 
-        expect(screen.getByRole('link', { name: 'Ver os ativos de Cripto' })).toHaveAttribute('href', '/patrimonio/classes/class-cripto');
+        expect(screen.getByRole('link', { name: 'Ver os ativos de Cripto' })).toHaveAttribute('href', '/portfolio/classes/class-cripto');
     });
 
     it('carteira sem ativos mantém as metas editáveis e mostra a dica', async () => {
@@ -167,7 +167,7 @@ describe('carteira-alvo: alterações não salvas', () => {
         const { user, router } = await openScreen();
         await user.click(screen.getByRole('button', { name: 'Aumentar Cripto' }));
 
-        void router.navigate({ to: '/patrimonio/aporte' });
+        void router.navigate({ to: '/portfolio/contribution' });
         const dialog: HTMLElement = await screen.findByRole('dialog', { name: 'Metas não salvas' });
         expect(dialog).toHaveTextContent('Você tem metas não salvas. Sair e descartar?');
         expect(router.state.location.pathname).toBe(PATH);
@@ -175,22 +175,22 @@ describe('carteira-alvo: alterações não salvas', () => {
         await user.click(within(dialog).getByRole('button', { name: 'Cancelar' }));
         expect(screen.getByRole('textbox', { name: 'Meta de Cripto' })).toHaveValue('6');
 
-        void router.navigate({ to: '/patrimonio/aporte' });
+        void router.navigate({ to: '/portfolio/contribution' });
         await user.click(
             within(await screen.findByRole('dialog', { name: 'Metas não salvas' })).getByRole('button', { name: 'Sair e descartar' })
         );
         await waitFor(() => {
-            expect(router.state.location.pathname).toBe('/patrimonio/aporte');
+            expect(router.state.location.pathname).toBe('/portfolio/contribution');
         });
     });
 
     it('sem alteração navega sem perguntar', async () => {
         const { router } = await openScreen();
 
-        void router.navigate({ to: '/patrimonio/aporte' });
+        void router.navigate({ to: '/portfolio/contribution' });
 
         await waitFor(() => {
-            expect(router.state.location.pathname).toBe('/patrimonio/aporte');
+            expect(router.state.location.pathname).toBe('/portfolio/contribution');
         });
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });

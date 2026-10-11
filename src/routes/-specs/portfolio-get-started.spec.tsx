@@ -9,24 +9,24 @@ import { holding } from '../../../test/fixtures/portfolio';
 import { mockWalletApi } from '../../../test/helpers/wallet-api';
 import { renderRouterAt } from '../../../test/router';
 
-describe('/patrimonio/comecar', () => {
+describe('/portfolio/get-started', () => {
     it('vazia: mostra a etapa e o rodapé Pular por enquanto, que leva à visão geral', async () => {
         mockWalletApi([]);
         const user: UserEvent = userEvent.setup();
-        const router: AnyRouter = renderRouterAt('/patrimonio/comecar', { signedIn: true });
+        const router: AnyRouter = renderRouterAt('/portfolio/get-started', { signedIn: true });
 
         expect(await screen.findByRole('heading', { name: 'Cadastre seus investimentos' })).toBeInTheDocument();
         expect(await screen.findByRole('heading', { name: 'Sua carteira (0)' })).toBeInTheDocument();
         await user.click(screen.getByRole('link', { name: 'Pular por enquanto' }));
 
-        expect(router.state.location.pathname).toBe('/patrimonio');
+        expect(router.state.location.pathname).toBe('/portfolio');
     });
 
     it('com ativos: o rodapé vira Ver minha visão geral', async () => {
         mockWalletApi([holding()]);
-        renderRouterAt('/patrimonio/comecar', { signedIn: true });
+        renderRouterAt('/portfolio/get-started', { signedIn: true });
 
-        expect(await screen.findByRole('link', { name: 'Ver minha visão geral' })).toHaveAttribute('href', '/patrimonio');
+        expect(await screen.findByRole('link', { name: 'Ver minha visão geral' })).toHaveAttribute('href', '/portfolio');
         expect(screen.queryByRole('link', { name: 'Pular por enquanto' })).toBeNull();
     });
 });

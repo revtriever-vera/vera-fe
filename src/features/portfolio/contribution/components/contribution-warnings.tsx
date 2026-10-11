@@ -19,7 +19,7 @@ export function ContributionWarnings({ warnings }: ContributionWarningsProps): R
             title={t('warnings.classTargetsNot100.title')}
             detail={t('warnings.classTargetsNot100.detail')}
             action={
-                <Link to="/patrimonio/carteira-alvo" className="underline-offset-2 hover:underline">
+                <Link to="/portfolio/targets" className="underline-offset-2 hover:underline">
                     {t('warnings.classTargetsNot100.action')}
                 </Link>
             }

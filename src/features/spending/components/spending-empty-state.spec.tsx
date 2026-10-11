@@ -8,8 +8,8 @@ describe('SpendingEmptyState', () => {
         renderInRouter(<SpendingEmptyState />, { sample: sampleControls() });
 
         expect(await screen.findByRole('heading', { name: 'Nenhum gasto por aqui ainda' })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: 'Conectar bancos' })).toHaveAttribute('href', '/gastos/conexoes');
-        expect(screen.getByRole('link', { name: 'Importar extrato' })).toHaveAttribute('href', '/gastos/conexoes?importar=true');
+        expect(screen.getByRole('link', { name: 'Conectar bancos' })).toHaveAttribute('href', '/spending/connections');
+        expect(screen.getByRole('link', { name: 'Importar extrato' })).toHaveAttribute('href', '/spending/connections?import=true');
         expect(screen.getByRole('button', { name: 'Explorar com dados de exemplo' })).toBeInTheDocument();
     });
 

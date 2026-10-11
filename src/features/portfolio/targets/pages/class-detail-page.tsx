@@ -47,7 +47,7 @@ function NotFound(): ReactElement {
             title={t('classDetail.notFound.title')}
             description={t('classDetail.notFound.description')}
             action={
-                <Link to="/patrimonio" className="text-sm font-semibold text-accent-strong underline-offset-2 hover:underline">
+                <Link to="/portfolio" className="text-sm font-semibold text-accent-strong underline-offset-2 hover:underline">
                     {t('classDetail.notFound.action')}
                 </Link>
             }
@@ -96,7 +96,7 @@ function DetailContent({ detail }: { readonly detail: ClassDetail }): ReactEleme
 }
 
 export function ClassDetailPage(): ReactElement {
-    const { classId }: { classId: string } = useParams({ from: '/_auth/_app/patrimonio/classes/$classId' });
+    const { classId }: { classId: string } = useParams({ from: '/_auth/_app/portfolio/classes/$classId' });
     const query: UseQueryResult<ClassDetail> = useClassDetail(classId);
     if (query.error instanceof ApiError && query.error.problem.type === CLASS_NOT_FOUND) {
         return <NotFound />;

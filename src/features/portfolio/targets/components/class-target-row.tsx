@@ -78,7 +78,7 @@ export function ClassTargetRow({ index, assetClass, today, control }: ClassTarge
             </span>
             <TargetStepper index={index} control={control} name={name} />
             <Link
-                to="/patrimonio/classes/$classId"
+                to="/portfolio/classes/$classId"
                 params={{ classId: assetClass.id }}
                 aria-label={t('targets.assetsLinkLabel', { name })}
                 className="col-span-2 justify-self-start text-sm font-semibold text-accent-strong underline-offset-2 hover:underline md:col-span-1 md:justify-self-end"

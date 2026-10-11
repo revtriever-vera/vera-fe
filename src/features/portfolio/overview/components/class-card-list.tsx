@@ -22,7 +22,7 @@ export function ClassCardList({ rows }: ClassCardListProps): ReactElement {
             {rows.map((row: ClassRow): ReactElement => (
                 <li key={row.classId}>
                     <Link
-                        to="/patrimonio/classes/$classId"
+                        to="/portfolio/classes/$classId"
                         params={{ classId: row.classId }}
                         className={cn('surface-card flex items-center gap-3 p-3', row.dimmed && 'opacity-60')}
                     >

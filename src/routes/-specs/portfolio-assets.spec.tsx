@@ -11,7 +11,7 @@ import { sessionIdentity } from '../../../test/fixtures/auth';
 import { server } from '../../../test/msw/server';
 import { renderRouterAt } from '../../../test/router';
 
-const PATH: string = '/patrimonio/ativos';
+const PATH: string = '/portfolio/assets';
 
 async function loaded(symbol: string = 'ITUB4'): Promise<void> {
     await screen.findByLabelText(`Quantidade de ${symbol}`);
@@ -22,7 +22,7 @@ afterEach(async () => {
     await i18n.changeLanguage('pt-BR');
 });
 
-describe('/patrimonio/ativos: lista', () => {
+describe('/portfolio/assets: lista', () => {
     it('mostra as 19 linhas, fontes traduzidas e o chip de título', async () => {
         mockHoldingsApi();
         renderRouterAt(PATH, { signedIn: true });
@@ -141,7 +141,7 @@ describe('/patrimonio/ativos: lista', () => {
     });
 });
 
-describe('/patrimonio/ativos: planilha', () => {
+describe('/portfolio/assets: planilha', () => {
     it('baixa o .xlsx com o nome do cabeçalho', async () => {
         const api: HoldingsApi = mockHoldingsApi();
         const user: UserEvent = userEvent.setup();
@@ -175,7 +175,7 @@ describe('/patrimonio/ativos: planilha', () => {
     });
 });
 
-describe('/patrimonio/ativos: sinalizações e estados', () => {
+describe('/portfolio/assets: sinalizações e estados', () => {
     it('sinaliza sem cotação, cotação velha, estimado e vencido', async () => {
         mockHoldingsApi({
             holdings: {
@@ -222,7 +222,7 @@ describe('/patrimonio/ativos: sinalizações e estados', () => {
 
         expect(await screen.findByText('Você ainda não tem ativos')).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Adicionar ativo' })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: 'Começar pelo passo a passo' })).toHaveAttribute('href', '/patrimonio/comecar');
+        expect(screen.getByRole('link', { name: 'Começar pelo passo a passo' })).toHaveAttribute('href', '/portfolio/get-started');
     });
 
     it('erro 500 mostra o alerta com a retentativa', async () => {

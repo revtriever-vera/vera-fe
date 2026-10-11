@@ -7,9 +7,9 @@ export interface OnboardingDestinations {
 }
 
 export const ONBOARDING_DESTINATIONS: OnboardingDestinations = {
-    overview: '/patrimonio',
-    assets: '/patrimonio/ativos',
+    overview: '/portfolio',
+    assets: '/portfolio/assets',
     connections: '/',
-    target: '/patrimonio/carteira-alvo',
+    target: '/portfolio/targets',
     spending: '/'
 };

@@ -28,6 +28,6 @@ describe('nextStepRoute', () => {
 describe('resolveConnectionsLink', () => {
     it('trata a raiz como destino ausente e repassa os demais', () => {
         expect(resolveConnectionsLink('/')).toBeNull();
-        expect(resolveConnectionsLink('/gastos/conexoes')).toBe('/gastos/conexoes');
+        expect(resolveConnectionsLink('/spending/connections')).toBe('/spending/connections');
     });
 });

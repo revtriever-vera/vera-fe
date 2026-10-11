@@ -21,12 +21,12 @@ import { signedInHandlers } from '../../../test/msw/handlers/auth.handlers';
 import type { NavItem } from './app-nav';
 import { AppShell } from './app-shell';
 
-const ASSETS_PATH: string = '/patrimonio/ativos';
+const ASSETS_PATH: string = '/portfolio/assets';
 
 const BADGE_ITEMS: readonly NavItem[] = [
     {
         id: 'transactions',
-        to: '/patrimonio',
+        to: '/portfolio',
         labelKey: 'navSpendingTransactions',
         icon: List,
         group: 'spending',
@@ -35,8 +35,8 @@ const BADGE_ITEMS: readonly NavItem[] = [
 ];
 
 const ITEMS: readonly NavItem[] = [
-    { id: 'overview', to: '/patrimonio', labelKey: 'navPortfolioOverview', icon: PieChart, group: 'portfolio' },
-    { id: 'assets', to: '/patrimonio/ativos', labelKey: 'navPortfolioAssets', icon: Wallet, group: 'portfolio' },
+    { id: 'overview', to: '/portfolio', labelKey: 'navPortfolioOverview', icon: PieChart, group: 'portfolio' },
+    { id: 'assets', to: '/portfolio/assets', labelKey: 'navPortfolioAssets', icon: Wallet, group: 'portfolio' },
     { id: 'extra', to: '/extra', labelKey: 'navGroupSettings', icon: Wallet }
 ];
 
@@ -53,7 +53,7 @@ function renderShell(items: readonly NavItem[], path: string, withSlot: boolean 
             </AppShell>
         )
     });
-    const pages: AnyRoute[] = ['patrimonio', 'patrimonio/ativos', 'patrimonio/ativos/42', 'extra'].map((page: string) =>
+    const pages: AnyRoute[] = ['portfolio', 'portfolio/assets', 'portfolio/assets/42', 'extra'].map((page: string) =>
         createRoute({ getParentRoute: () => shell, path: `/${page}`, component: () => <main>{`pagina ${page}`}</main> })
     );
     const router: AnyRouter = createRouter({
@@ -72,7 +72,7 @@ function renderShell(items: readonly NavItem[], path: string, withSlot: boolean 
 
 describe('AppShell', () => {
     it('renders the items, groups them and marks the active one', async () => {
-        renderShell(ITEMS, '/patrimonio/ativos');
+        renderShell(ITEMS, '/portfolio/assets');
 
         const nav: HTMLElement = await screen.findByRole('navigation', { name: 'Navegação principal' });
 
@@ -83,7 +83,7 @@ describe('AppShell', () => {
     });
 
     it('keeps the parent item of a nested page as the only active one', async () => {
-        renderShell(ITEMS, '/patrimonio/ativos/42');
+        renderShell(ITEMS, '/portfolio/assets/42');
 
         const nav: HTMLElement = await screen.findByRole('navigation', { name: 'Navegação principal' });
 
@@ -92,13 +92,13 @@ describe('AppShell', () => {
     });
 
     it('renders the top slot when received', async () => {
-        renderShell(ITEMS, '/patrimonio', true);
+        renderShell(ITEMS, '/portfolio', true);
 
         expect(await screen.findByText('Continuar configuração')).toBeInTheDocument();
     });
 
     it('renders only the brand and the user box without items', async () => {
-        renderShell([], '/patrimonio');
+        renderShell([], '/portfolio');
 
         const nav: HTMLElement = await screen.findByRole('navigation', { name: 'Navegação principal' });
 
@@ -109,7 +109,7 @@ describe('AppShell', () => {
 
     it('opens the menu as a drawer, closes it with Escape and when navigating', async () => {
         const user: UserEvent = userEvent.setup();
-        const router: AnyRouter = renderShell(ITEMS, '/patrimonio');
+        const router: AnyRouter = renderShell(ITEMS, '/portfolio');
 
         await user.click(await screen.findByRole('button', { name: 'Abrir menu' }));
         const dialog: HTMLElement = screen.getByRole('dialog', { name: 'Navegação principal' });
@@ -123,12 +123,12 @@ describe('AppShell', () => {
         await user.click(screen.getByRole('button', { name: 'Abrir menu' }));
         await user.click(within(screen.getByRole('dialog')).getByRole('link', { name: 'Meus ativos' }));
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-        expect(router.state.location.pathname).toBe('/patrimonio/ativos');
+        expect(router.state.location.pathname).toBe('/portfolio/assets');
     });
 
     it('closes the drawer from the overlay and from the close button', async () => {
         const user: UserEvent = userEvent.setup();
-        renderShell(ITEMS, '/patrimonio');
+        renderShell(ITEMS, '/portfolio');
 
         await user.click(await screen.findByRole('button', { name: 'Abrir menu' }));
         await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Fechar menu' }));
@@ -144,7 +144,7 @@ describe('AppShell', () => {
 
     it('keeps the focus inside the drawer', async () => {
         const user: UserEvent = userEvent.setup();
-        renderShell(ITEMS, '/patrimonio');
+        renderShell(ITEMS, '/portfolio');
         await user.click(await screen.findByRole('button', { name: 'Abrir menu' }));
         const dialog: HTMLElement = screen.getByRole('dialog');
         const focusables: HTMLElement[] = Array.from(dialog.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')).filter(
@@ -164,7 +164,7 @@ describe('AppShell', () => {
     it('shows the uncategorized count in the menu and in the top bar button', async () => {
         const user: UserEvent = userEvent.setup();
         server.use(http.get('*/spending/transactions/uncategorized-count', () => HttpResponse.json({ count: 3 })));
-        renderShell(BADGE_ITEMS, '/patrimonio');
+        renderShell(BADGE_ITEMS, '/portfolio');
 
         const nav: HTMLElement = await screen.findByRole('navigation', { name: 'Navegação principal' });
         expect(await within(nav).findByRole('link', { name: /3 transações sem categoria/ })).toBeInTheDocument();
@@ -175,7 +175,7 @@ describe('AppShell', () => {
 
     it('uses the singular when there is one uncategorized transaction', async () => {
         server.use(http.get('*/spending/transactions/uncategorized-count', () => HttpResponse.json({ count: 1 })));
-        renderShell(BADGE_ITEMS, '/patrimonio');
+        renderShell(BADGE_ITEMS, '/portfolio');
 
         expect(await screen.findByRole('button', { name: 'Abrir menu, 1 transação sem categoria' })).toBeInTheDocument();
     });
@@ -188,7 +188,7 @@ describe('AppShell', () => {
                 return HttpResponse.json({ count: 3 });
             })
         );
-        renderShell(ITEMS, '/patrimonio');
+        renderShell(ITEMS, '/portfolio');
 
         await screen.findByRole('navigation', { name: 'Navegação principal' });
 

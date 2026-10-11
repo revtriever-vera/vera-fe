@@ -21,7 +21,7 @@ vi.mock('@/shared/lib/analytics', () => ({ track: tracked }));
 vi.mock('@tanstack/react-router', async (importOriginal) => ({
     ...(await importOriginal<typeof import('@tanstack/react-router')>()),
     useRouterState: ({ select }: { select: (state: { matches: { routeId: string }[] }) => string }): string =>
-        select({ matches: [{ routeId: '/_auth/_app/patrimonio/ativos' }] })
+        select({ matches: [{ routeId: '/_auth/_app/portfolio/assets' }] })
 }));
 
 interface Counters {
@@ -120,7 +120,7 @@ describe('SampleDataProvider', () => {
         expect(counters.assets).toHaveBeenCalledTimes(2);
         expect(counters.session).toHaveBeenCalledTimes(1);
         expect(client.getQueryState(onboardingKeys.state())?.isInvalidated).toBe(false);
-        expect(tracked).toHaveBeenCalledWith('sample_data_loaded', { source: 'empty_state', screen: '/_auth/_app/patrimonio/ativos' });
+        expect(tracked).toHaveBeenCalledWith('sample_data_loaded', { source: 'empty_state', screen: '/_auth/_app/portfolio/assets' });
     });
 
     it('limpa o exemplo depois da confirmação e volta ao estado vazio', async () => {

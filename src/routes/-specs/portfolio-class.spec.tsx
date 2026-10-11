@@ -11,7 +11,7 @@ import { installClassDetailApi, type ClassDetailApi, type ClassDetailApiOptions 
 import { server } from '../../../test/msw/server';
 import { renderRouterAt } from '../../../test/router';
 
-const PATH: string = '/patrimonio/classes/class-acoes-br';
+const PATH: string = '/portfolio/classes/class-acoes-br';
 
 interface Screen {
     readonly api: ClassDetailApi;
@@ -58,7 +58,7 @@ describe('classe: leitura', () => {
         expect(screen.getByText('Soma das metas: 100%')).toBeInTheDocument();
         expect(saveButton()).toBeDisabled();
         const header: HTMLElement = screen.getByRole('heading', { name: 'Ações Brasil' }).closest('header') as HTMLElement;
-        expect(within(header).getByRole('link', { name: 'Visão geral' })).toHaveAttribute('href', '/patrimonio');
+        expect(within(header).getByRole('link', { name: 'Visão geral' })).toHaveAttribute('href', '/portfolio');
     });
 
     it('o tooltip do medidor mostra Na classe, Meta e a situação', async () => {
@@ -268,7 +268,7 @@ describe('classe: divisão igual efetiva, zero e vazio', () => {
         renderRouterAt(PATH, { signedIn: true });
 
         expect(await screen.findByText('Classe não encontrada')).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: 'Voltar para a visão geral' })).toHaveAttribute('href', '/patrimonio');
+        expect(screen.getByRole('link', { name: 'Voltar para a visão geral' })).toHaveAttribute('href', '/portfolio');
     });
 
     it('erro de carregamento oferece tentar de novo', async () => {
@@ -300,19 +300,19 @@ describe('classe: adicionar ativo e navegação', () => {
         const { user, router } = await openScreen();
         await typeTarget(user, 'WEGE3', '45');
 
-        void router.navigate({ to: '/patrimonio/aporte' });
+        void router.navigate({ to: '/portfolio/contribution' });
         const dialog: HTMLElement = await screen.findByRole('dialog', { name: 'Metas não salvas' });
         expect(router.state.location.pathname).toBe(PATH);
 
         await user.click(within(dialog).getByRole('button', { name: 'Cancelar' }));
         expect(field('WEGE3')).toHaveValue('45');
 
-        void router.navigate({ to: '/patrimonio/aporte' });
+        void router.navigate({ to: '/portfolio/contribution' });
         await user.click(
             within(await screen.findByRole('dialog', { name: 'Metas não salvas' })).getByRole('button', { name: 'Sair e descartar' })
         );
         await waitFor(() => {
-            expect(router.state.location.pathname).toBe('/patrimonio/aporte');
+            expect(router.state.location.pathname).toBe('/portfolio/contribution');
         });
     });
 });
