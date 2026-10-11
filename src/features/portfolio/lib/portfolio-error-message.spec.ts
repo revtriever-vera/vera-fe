@@ -17,6 +17,7 @@ const EPIC_CODES: readonly string[] = [
     'allocation.class_not_found',
     'allocation.class_name_taken',
     'allocation.class_not_empty',
+    'allocation.system_class_not_deletable',
     'allocation.cannot_merge_into_self',
     'allocation.class_limit_reached',
     'allocation.assignment_not_found',

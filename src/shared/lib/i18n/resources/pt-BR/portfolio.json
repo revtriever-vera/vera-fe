@@ -116,6 +116,7 @@
     "classNotFound": "Não encontramos essa classe.",
     "classNameTaken": "Já existe uma classe com esse nome.",
     "classNotEmpty": "Essa classe ainda tem ativos. Mova ou junte antes de excluir.",
+    "systemClassNotDeletable": "Classes padrão não podem ser excluídas. Junte em outra.",
     "cannotMergeIntoSelf": "Escolha outra classe para juntar.",
     "classLimitReached": "Você chegou ao limite de classes.",
     "assignmentNotFound": "Não encontramos a classificação desse ativo.",

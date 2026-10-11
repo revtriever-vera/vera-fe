@@ -11,8 +11,80 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["AllocationClassesController_list"];
+        /**
+         * List the asset classes of the company
+         * @description Returns the classes ordered by sortOrder. The first read creates the eight default classes with a moderate initial target that sums to 100%. Default classes carry a null name until the user renames them: the client shows the translated name.
+         */
+        get: operations["AssetClassesController_list"];
         put?: never;
+        /**
+         * Create an asset class
+         * @description Creates a class with target 0. Without colorKey it takes the lowest color not yet in use. The company holds at most 30 classes.
+         */
+        post: operations["AssetClassesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/allocation/classes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete an empty asset class
+         * @description Only a class created by the user and with no assets can be deleted; use merge otherwise. The target of the deleted class leaves the sum, which may stop being 100%.
+         */
+        delete: operations["AssetClassesController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Rename or recolor an asset class
+         * @description Changes name and/or color. A null name restores the translated default name and is only valid on a default class. Names are unique ignoring case, also against the default names of default classes that were not renamed.
+         */
+        patch: operations["AssetClassesController_update"];
+        trace?: never;
+    };
+    "/allocation/classes/{id}/merge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Merge an asset class into another
+         * @description Atomically moves the assets of the class into the destination, adds the targets, recomposes the in-class targets of the assets by the weighted average of both class targets, hands the default keys to the destination and removes the origin.
+         */
+        post: operations["AssetClassesController_merge"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/allocation/assignments/{subjectType}/{subjectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Change the class of an asset
+         * @description Moves a position or fixed income security to another class. Only an existing assignment is updated: the assignment is born with the asset. Changing the class resets the in-class target of the asset to 0; sending the current class changes nothing.
+         */
+        put: operations["ClassAssignmentsController_reassign"];
         post?: never;
         delete?: never;
         options?: never;
@@ -209,18 +281,6 @@ export interface components {
             requestId: string | null;
             meta?: Record<string, unknown>;
         };
-        AssetClassView: {
-            id: string;
-            systemKey: string | null;
-            aliasKeys: string[];
-            name: string | null;
-            colorKey: string;
-            targetBps: number;
-            sortOrder: number;
-        };
-        ClassesResponse: {
-            data: components["schemas"]["AssetClassView"][];
-        };
         PortfolioSettings: {
             /** @enum {string} */
             baseCurrency: "BRL" | "USD";
@@ -324,7 +384,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    AllocationClassesController_list: {
+    AssetClassesController_list: {
         parameters: {
             query?: never;
             header?: never;
@@ -333,12 +393,766 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Classes of the company */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ClassesResponse"];
+                    "application/json": {
+                        /** @description Classes of the company ordered by `sortOrder` */
+                        data: {
+                            /**
+                             * Format: uuid
+                             * @description Class id
+                             */
+                            id: string;
+                            /** @description Key of a default class; null for a class created by the user. Immutable */
+                            systemKey: string | null;
+                            /** @description Default keys absorbed by merges; with `systemKey` they tell which class answers to a catalog suggestion */
+                            aliasKeys: string[];
+                            /** @description Name chosen by the user; null on a default class means "show the translated default name" */
+                            name: string | null;
+                            /** @description Palette color key, `c1` to `c12` */
+                            colorKey: string;
+                            /** @description Target weight of the class in basis points (10000 = 100%) */
+                            targetBps: number;
+                            /** @description Position of the class in the listing */
+                            sortOrder: number;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AssetClassesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Class name, trimmed, 1 to 40 characters without control characters; unique per company ignoring case */
+                    name: string;
+                    /**
+                     * @description Palette color key, `c1` to `c12` (design tokens `class-1` to `class-12`)
+                     * @enum {string}
+                     */
+                    colorKey?: "c1" | "c2" | "c3" | "c4" | "c5" | "c6" | "c7" | "c8" | "c9" | "c10" | "c11" | "c12";
+                };
+            };
+        };
+        responses: {
+            /** @description Class created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Class id
+                         */
+                        id: string;
+                        /** @description Key of a default class; null for a class created by the user. Immutable */
+                        systemKey: string | null;
+                        /** @description Default keys absorbed by merges; with `systemKey` they tell which class answers to a catalog suggestion */
+                        aliasKeys: string[];
+                        /** @description Name chosen by the user; null on a default class means "show the translated default name" */
+                        name: string | null;
+                        /** @description Palette color key, `c1` to `c12` */
+                        colorKey: string;
+                        /** @description Target weight of the class in basis points (10000 = 100%) */
+                        targetBps: number;
+                        /** @description Position of the class in the listing */
+                        sortOrder: number;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Another class already uses this name (allocation.class_name_taken) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The company reached 30 classes (allocation.class_limit_reached) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AssetClassesController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Class id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Class deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The class does not exist in this company (allocation.class_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The class still has assets (allocation.class_not_empty) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Default classes cannot be deleted (allocation.system_class_not_deletable) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AssetClassesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Class id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Class name, trimmed, 1 to 40 characters without control characters; unique per company ignoring case */
+                    name?: string | null;
+                    /**
+                     * @description Palette color key, `c1` to `c12` (design tokens `class-1` to `class-12`)
+                     * @enum {string}
+                     */
+                    colorKey?: "c1" | "c2" | "c3" | "c4" | "c5" | "c6" | "c7" | "c8" | "c9" | "c10" | "c11" | "c12";
+                };
+            };
+        };
+        responses: {
+            /** @description Class updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Class id
+                         */
+                        id: string;
+                        /** @description Key of a default class; null for a class created by the user. Immutable */
+                        systemKey: string | null;
+                        /** @description Default keys absorbed by merges; with `systemKey` they tell which class answers to a catalog suggestion */
+                        aliasKeys: string[];
+                        /** @description Name chosen by the user; null on a default class means "show the translated default name" */
+                        name: string | null;
+                        /** @description Palette color key, `c1` to `c12` */
+                        colorKey: string;
+                        /** @description Target weight of the class in basis points (10000 = 100%) */
+                        targetBps: number;
+                        /** @description Position of the class in the listing */
+                        sortOrder: number;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The class does not exist in this company (allocation.class_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Another class already uses this name (allocation.class_name_taken) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Null name on a class created by the user (allocation.class_name_required) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AssetClassesController_merge: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Class id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: uuid
+                     * @description Class that receives the assets, the target and the default keys of this class
+                     */
+                    intoClassId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Destination class after the merge */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Class id
+                         */
+                        id: string;
+                        /** @description Key of a default class; null for a class created by the user. Immutable */
+                        systemKey: string | null;
+                        /** @description Default keys absorbed by merges; with `systemKey` they tell which class answers to a catalog suggestion */
+                        aliasKeys: string[];
+                        /** @description Name chosen by the user; null on a default class means "show the translated default name" */
+                        name: string | null;
+                        /** @description Palette color key, `c1` to `c12` */
+                        colorKey: string;
+                        /** @description Target weight of the class in basis points (10000 = 100%) */
+                        targetBps: number;
+                        /** @description Position of the class in the listing */
+                        sortOrder: number;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The class does not exist in this company (allocation.class_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Origin and destination are the same class (allocation.cannot_merge_into_self) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    ClassAssignmentsController_reassign: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Id of the position or of the fixed income security */
+                subjectId: unknown;
+                /** @description Kind of asset */
+                subjectType: "position" | "fixed_income";
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: uuid
+                     * @description Class the asset moves to
+                     */
+                    classId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Assignment after the change */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Kind of asset
+                         * @enum {string}
+                         */
+                        subjectType: "position" | "fixed_income";
+                        /**
+                         * Format: uuid
+                         * @description Id of the position or of the fixed income security
+                         */
+                        subjectId: string;
+                        /**
+                         * Format: uuid
+                         * @description Class the asset belongs to
+                         */
+                        classId: string;
+                        /** @description Target weight of the asset inside its class in basis points; reset to 0 when the class changes */
+                        targetInClassBps: number;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The class (allocation.class_not_found) or the assignment of the asset (allocation.assignment_not_found) does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
                 };
             };
         };

@@ -1,5 +1,6 @@
 import { describe, expect, it, vi, type Mock } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { Modal } from './modal';
 
 describe('Modal', () => {
@@ -54,5 +55,40 @@ describe('Modal', () => {
         );
 
         expect(screen.getByRole('dialog')).toHaveClass('max-w-4xl');
+    });
+
+    it('leva o foco para o primeiro controle ao abrir e devolve ao fechar', () => {
+        const trigger: HTMLButtonElement = document.createElement('button');
+        document.body.appendChild(trigger);
+        trigger.focus();
+        const { unmount } = render(
+            <Modal title="Excluir ativo" onClose={vi.fn()} footer={<button type="button">Confirmar</button>}>
+                <input aria-label="Nome" />
+            </Modal>
+        );
+
+        expect(screen.getByRole('dialog')).toContainElement(document.activeElement as HTMLElement);
+        unmount();
+
+        expect(trigger).toHaveFocus();
+        trigger.remove();
+    });
+
+    it('mantém o Tab dentro do diálogo nos dois sentidos', async () => {
+        const user: UserEvent = userEvent.setup();
+        render(
+            <Modal title="Excluir ativo" onClose={vi.fn()} footer={<button type="button">Confirmar</button>}>
+                <input aria-label="Nome" />
+            </Modal>
+        );
+        const confirm: HTMLElement = screen.getByRole('button', { name: 'Confirmar' });
+        confirm.focus();
+        await user.tab();
+
+        expect(screen.getByRole('dialog')).toContainElement(document.activeElement as HTMLElement);
+        expect(document.activeElement).not.toBe(confirm);
+        await user.tab({ shift: true });
+
+        expect(confirm).toHaveFocus();
     });
 });

@@ -16,6 +16,7 @@ export type PortfolioErrorKey =
     | 'errors.classNotFound'
     | 'errors.classNameTaken'
     | 'errors.classNotEmpty'
+    | 'errors.systemClassNotDeletable'
     | 'errors.cannotMergeIntoSelf'
     | 'errors.classLimitReached'
     | 'errors.assignmentNotFound'
@@ -38,6 +39,7 @@ export const PORTFOLIO_ERROR_KEYS: Readonly<Record<string, PortfolioErrorKey>> =
     'allocation.class_not_found': 'errors.classNotFound',
     'allocation.class_name_taken': 'errors.classNameTaken',
     'allocation.class_not_empty': 'errors.classNotEmpty',
+    'allocation.system_class_not_deletable': 'errors.systemClassNotDeletable',
     'allocation.cannot_merge_into_self': 'errors.cannotMergeIntoSelf',
     'allocation.class_limit_reached': 'errors.classLimitReached',
     'allocation.assignment_not_found': 'errors.assignmentNotFound',

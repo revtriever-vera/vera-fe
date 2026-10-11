@@ -116,6 +116,7 @@
     "classNotFound": "We could not find this class.",
     "classNameTaken": "A class with this name already exists.",
     "classNotEmpty": "This class still has assets. Move or merge them before deleting.",
+    "systemClassNotDeletable": "Default classes cannot be deleted. Merge it into another.",
     "cannotMergeIntoSelf": "Choose a different class to merge into.",
     "classLimitReached": "You have reached the class limit.",
     "assignmentNotFound": "We could not find this asset's classification.",
