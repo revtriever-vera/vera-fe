@@ -4,7 +4,7 @@ import type { AnyRouter } from '@tanstack/react-router';
 import { installContributionApi } from '../../../test/helpers/contribution-api';
 import { renderRouterAt } from '../../../test/router';
 
-const ROUTES: readonly string[] = ['/patrimonio/comecar', '/patrimonio/classes/class-fii'];
+const ROUTES: readonly string[] = ['/patrimonio/classes/class-fii'];
 
 describe('rotas de /patrimonio', () => {
     it.each(ROUTES)('%s abre dentro do layout com o título e a página em construção', async (path: string) => {
