@@ -265,5 +265,37 @@
     "removed": "{{symbol}} removido da carteira",
     "removeFailed": "Não foi possível remover",
     "exported": "Planilha baixada"
+  },
+  "step": {
+    "title": "Cadastre seus investimentos",
+    "lead": "Informe o que você tem e onde. A Vera soma tudo, em reais ou em dólar, e compara com a carteira que você considera ideal.",
+    "whyHeading": "Por que essa etapa existe",
+    "why1Title": "Ver tudo somado",
+    "why1Detail": "Brasil, EUA e cripto numa moeda só, separados por tipo: renda fixa, ações, FIIs, REITs, cripto.",
+    "why2Title": "Comparar com a sua meta",
+    "why2Detail": "Ex.: \"você tem 18% em ações dos EUA e queria 25%\". Sem saber o que você tem, não há o que comparar.",
+    "why3Title": "Saber onde aportar",
+    "why3Detail": "O aporte inteligente divide cada novo aporte para aproximar a carteira da meta, sem vender nada.",
+    "noteTitle": "Por que o cadastro é manual?",
+    "noteText": "Não existe forma gratuita e confiável de puxar posições de todas as corretoras, bancos de fora e exchanges. Você informa só a quantidade; os valores se atualizam sozinhos todo dia pela cotação ou pelo indexador.",
+    "cardTitle": "Adicione seus ativos",
+    "cardDetail": "Escolha um tipo de investimento. Comece pelos maiores; dá pra completar depois em \"Meus ativos\".",
+    "seeOverview": "Ver minha visão geral",
+    "skip": "Pular por enquanto"
+  },
+  "wallet": {
+    "heading": "Sua carteira ({{count}})",
+    "total": "Total",
+    "empty": "Nenhum ativo ainda. Escolha um tipo ao lado.",
+    "listLabel": "Ativos da carteira",
+    "remove": "Remover {{symbol}}",
+    "noQuote": "Sem cotação",
+    "noRate": "Sem câmbio",
+    "units": {
+      "shares": "cotas",
+      "units": "un.",
+      "bonds": "títulos"
+    },
+    "loadFailed": "Não foi possível carregar a carteira."
   }
 }

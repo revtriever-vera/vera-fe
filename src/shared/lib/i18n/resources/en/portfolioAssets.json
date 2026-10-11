@@ -265,5 +265,37 @@
     "removed": "{{symbol}} removed from your portfolio",
     "removeFailed": "We could not remove it",
     "exported": "Spreadsheet downloaded"
+  },
+  "step": {
+    "title": "Add your investments",
+    "lead": "Tell us what you own and where. Vera adds it all up, in reais or dollars, and compares it with the portfolio you consider ideal.",
+    "whyHeading": "Why this step exists",
+    "why1Title": "See everything added up",
+    "why1Detail": "Brazil, US and crypto in a single currency, split by type: fixed income, stocks, REITs, crypto.",
+    "why2Title": "Compare with your target",
+    "why2Detail": "E.g. \"you hold 18% in US stocks and wanted 25%\". Without knowing what you own, there is nothing to compare.",
+    "why3Title": "Know where to invest next",
+    "why3Detail": "Smart contribution splits each new deposit to bring the portfolio closer to the target, without selling anything.",
+    "noteTitle": "Why is it manual?",
+    "noteText": "There is no free, reliable way to pull positions from every broker, foreign bank and exchange. You only enter the quantity; values update on their own every day from market quotes or the index.",
+    "cardTitle": "Add your assets",
+    "cardDetail": "Pick an investment type. Start with the biggest ones; you can finish later in \"My assets\".",
+    "seeOverview": "See my overview",
+    "skip": "Skip for now"
+  },
+  "wallet": {
+    "heading": "Your portfolio ({{count}})",
+    "total": "Total",
+    "empty": "No assets yet. Pick a type next to this list.",
+    "listLabel": "Portfolio assets",
+    "remove": "Remove {{symbol}}",
+    "noQuote": "No quote",
+    "noRate": "No exchange rate",
+    "units": {
+      "shares": "shares",
+      "units": "units",
+      "bonds": "bonds"
+    },
+    "loadFailed": "Could not load the portfolio."
   }
 }
