@@ -33,5 +33,12 @@
   "navPortfolioOverview": "Visão geral",
   "navPortfolioAssets": "Meus ativos",
   "navPortfolioTargets": "Carteira-alvo",
-  "navPortfolioContribution": "Aporte inteligente"
+  "navPortfolioContribution": "Aporte inteligente",
+  "sampleExplore": "Explorar com dados de exemplo",
+  "sampleBannerText": "Você está vendo dados de exemplo. Eles não são seus.",
+  "sampleClear": "Limpar dados de exemplo",
+  "sampleConfirmTitle": "Remover os dados de exemplo?",
+  "sampleConfirmBody": "Os dados que você cadastrou não são afetados.",
+  "sampleLoaded": "Dados de exemplo carregados",
+  "sampleCleared": "Dados de exemplo removidos"
 }
