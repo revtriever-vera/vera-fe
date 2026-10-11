@@ -380,7 +380,7 @@ export function canonicalTransactions(): TransactionsResponse {
         .reduce((sum: number, item: TransactionView): number => sum + item.amountMinor, 0);
     const outMinor: number = data
         .filter((item: TransactionView): boolean => item.amountMinor < 0)
-        .reduce((sum: number, item: TransactionView): number => sum - item.amountMinor, 0);
+        .reduce((sum: number, item: TransactionView): number => sum + item.amountMinor, 0);
     return {
         data,
         pagination: { page: 1, pageSize: 50, totalRecords: data.length, totalPages: 1 },
