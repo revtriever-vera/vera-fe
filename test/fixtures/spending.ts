@@ -11,6 +11,7 @@ import type {
     CutSuggestion,
     CutsResponse,
     IconKey,
+    ImportCreated,
     ImportPreview,
     ImportView,
     ImportsResponse,
@@ -746,4 +747,24 @@ export function importView(overrides: Partial<ImportView> = {}): ImportView {
 
 export function emptyImports(): ImportsResponse {
     return { data: [], pagination: { page: 1, pageSize: 20, totalRecords: 0, totalPages: 0 } };
+}
+
+export function genericCsvPreview(overrides: Partial<ImportPreview> = {}): ImportPreview {
+    return ofxPreview({
+        detectedFormat: 'csv_generic',
+        format: 'csv_generic',
+        fileName: 'extrato-banco.csv',
+        rows: 3,
+        periodStart: null,
+        periodEnd: null,
+        sample: [],
+        columns: ['Data', 'Histórico', 'Débito', 'Crédito', 'Valor'],
+        accountHint: null,
+        suggestedAccountId: null,
+        ...overrides
+    });
+}
+
+export function importCreated(overrides: Partial<ImportCreated> = {}): ImportCreated {
+    return { ...importView(), rejections: [], ...overrides };
 }

@@ -1,1 +1,163 @@
-{}
+{
+  "modal": {
+    "title": "Importar extrato",
+    "description": "Envie o arquivo do seu banco, confira a prévia e importe."
+  },
+  "card": {
+    "title": "Importar arquivo",
+    "description": "Funciona com qualquer banco: OFX ou CSV do seu banco (inclusive da fatura do cartão).",
+    "button": "Importar arquivo"
+  },
+  "formats": {
+    "ofx": "OFX",
+    "csv_nubank_card": "CSV Nubank cartão",
+    "csv_nubank_account": "CSV Nubank conta",
+    "csv_generic": "CSV genérico"
+  },
+  "file": {
+    "label": "Arquivo do extrato",
+    "hint": "OFX ou CSV do seu banco, até 5 MB",
+    "tooLarge": "O arquivo passa de 5 MB",
+    "invalidType": "Use um arquivo .ofx, .csv ou .txt",
+    "reading": "Lendo o arquivo"
+  },
+  "preview": {
+    "summary_zero": "Nenhuma transação encontrada",
+    "summary_one": "{{count}} transação · {{period}}",
+    "summary_other": "{{count}} transações · {{period}}",
+    "period": "de {{start}} a {{end}}",
+    "noPeriod": "sem período",
+    "genericFound_one": "{{count}} linha encontrada",
+    "genericFound_other": "{{count}} linhas encontradas",
+    "mappingPending": "Indique as colunas abaixo e atualize a prévia para ver as transações.",
+    "alreadyImported": "Você já importou este arquivo em {{date}}. As transações repetidas serão ignoradas.",
+    "rejected_one": "{{count}} linha não pôde ser lida ({{details}})",
+    "rejected_other": "{{count}} linhas não puderam ser lidas ({{details}})",
+    "rejectionGroup_one": "linha {{lines}}: {{reason}}",
+    "rejectionGroup_other": "linhas {{lines}}: {{reason}}",
+    "reasons": {
+      "invalid_date": "data inválida",
+      "invalid_amount": "valor inválido",
+      "zero_amount": "valor zerado",
+      "empty_description": "sem descrição"
+    },
+    "sampleLabel": "Amostra das primeiras transações",
+    "columns": {
+      "date": "Data",
+      "description": "Descrição",
+      "amount": "Valor"
+    }
+  },
+  "target": {
+    "title": "Conta de destino",
+    "modeLabel": "Onde guardar as transações",
+    "existing": "Conta existente",
+    "new": "Nova conta",
+    "accountLabel": "Conta",
+    "accountPlaceholder": "Escolha a conta",
+    "suggestion": "Sugerimos {{account}}",
+    "suggestionWithLast4": "Sugerimos {{account}} (final {{last4}})",
+    "nameLabel": "Nome da conta",
+    "namePlaceholder": "Ex.: Nubank Cartão",
+    "kindLabel": "Tipo da conta",
+    "institutionLabel": "Instituição (opcional)",
+    "pluggyHint": "Importar na mesma conta que já vem pelo Meu Pluggy não duplica: a Vera ignora o que já existe.",
+    "errors": {
+      "accountRequired": "Escolha a conta de destino",
+      "nameRequired": "Dê um nome para a conta",
+      "nameTooLong": "O nome pode ter até 60 caracteres",
+      "institutionTooLong": "A instituição pode ter até 60 caracteres"
+    }
+  },
+  "mapping": {
+    "title": "Como ler este CSV",
+    "intro": "Não reconhecemos o formato deste arquivo. Indique onde estão a data, a descrição e o valor.",
+    "hasHeader": "A primeira linha é cabeçalho",
+    "amountModeLabel": "Como o valor aparece",
+    "single": "Uma coluna de valor",
+    "split": "Débito e crédito separados",
+    "date": "Data",
+    "description": "Descrição",
+    "amount": "Valor",
+    "debit": "Débito",
+    "credit": "Crédito",
+    "columnPlaceholder": "Escolha a coluna",
+    "dateFormat": "Formato da data",
+    "dateFormats": {
+      "dd/MM/yyyy": "dd/MM/aaaa",
+      "yyyy-MM-dd": "aaaa-MM-dd",
+      "MM/dd/yyyy": "MM/dd/aaaa",
+      "dd/MM/yy": "dd/MM/aa"
+    },
+    "decimalSeparator": "Separador decimal",
+    "comma": "Vírgula",
+    "dot": "Ponto",
+    "invertSign": "Inverter sinal (o banco mostra gasto como positivo)",
+    "submit": "Atualizar prévia",
+    "submitting": "Atualizando",
+    "errors": {
+      "columnRequired": "Escolha a coluna",
+      "columnRepeated": "Esta coluna já está em uso em outro campo"
+    }
+  },
+  "actions": {
+    "cancel": "Cancelar",
+    "import_zero": "Importar",
+    "import_one": "Importar {{count}} transação",
+    "import_other": "Importar {{count}} transações",
+    "importing": "Importando",
+    "importAnother": "Importar outro",
+    "viewTransactions": "Ver transações"
+  },
+  "result": {
+    "title": "Importação concluída",
+    "inserted_zero": "Nenhuma transação nova",
+    "inserted_one": "{{count}} nova transação",
+    "inserted_other": "{{count}} novas transações",
+    "duplicates_zero": "Nenhuma transação repetida",
+    "duplicates_one": "{{count}} já estava na Vera e foi ignorada",
+    "duplicates_other": "{{count}} já estavam na Vera e foram ignoradas",
+    "duplicatesWhy": "Mesmo arquivo importado antes ou transações já trazidas pelo Meu Pluggy.",
+    "rejected_zero": "Nenhuma linha rejeitada",
+    "rejected_one": "{{count}} linha rejeitada",
+    "rejected_other": "{{count}} linhas rejeitadas"
+  },
+  "history": {
+    "label": "Extratos importados",
+    "empty": "Nenhum extrato importado ainda.",
+    "loadFailed": "Não foi possível carregar os extratos importados.",
+    "summary": "{{inserted}} · {{duplicates}}",
+    "inserted_zero": "{{count}} novas",
+    "inserted_one": "{{count}} nova",
+    "inserted_other": "{{count}} novas",
+    "duplicates_zero": "{{count}} ignoradas",
+    "duplicates_one": "{{count}} ignorada",
+    "duplicates_other": "{{count}} ignoradas",
+    "status": {
+      "processing": "em andamento",
+      "completed": "concluído",
+      "undone": "desfeito",
+      "failed": "falhou"
+    }
+  },
+  "undo": {
+    "button": "Desfazer",
+    "buttonFor": "Desfazer a importação de {{file}}",
+    "title": "Desfazer esta importação?",
+    "description_zero": "Nenhuma transação veio só deste arquivo. Transações que também vieram pelo Meu Pluggy continuam.",
+    "description_one": "A transação que veio deste arquivo sai da Vera. Transações que também vieram pelo Meu Pluggy continuam.",
+    "description_other": "As {{count}} transações que vieram deste arquivo saem da Vera. Transações que também vieram pelo Meu Pluggy continuam.",
+    "confirm": "Desfazer importação"
+  },
+  "toasts": {
+    "previewFailed": "Não foi possível ler o arquivo",
+    "importFailed": "Não foi possível importar o arquivo",
+    "undoFailed": "Não foi possível desfazer a importação",
+    "undone_zero": "Nenhuma transação removida",
+    "undone_one": "{{count}} transação removida",
+    "undone_other": "{{count}} transações removidas"
+  },
+  "errors": {
+    "currencyMismatch": "Este extrato está em {{statement}} e a conta é em {{account}}."
+  }
+}

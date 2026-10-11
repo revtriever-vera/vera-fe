@@ -796,6 +796,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/portfolio/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Download the portfolio as a spreadsheet
+         * @description One row per holding: asset, name, class, quantity, value in the base currency and where the value comes from, in the same order and from the same snapshot as the holdings list. Headers, class names and the csv separators follow the locale of the session (pt-BR: ";" and decimal comma; en: "," and decimal point). Quantity and value are numbers, never text; text that starts with a formula character is prefixed with an apostrophe. Fixed income has no quantity.
+         */
+        get: operations["PortfolioExportController_export"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/portfolio/contributions/suggest": {
         parameters: {
             query?: never;
@@ -816,7 +836,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/portfolio/export": {
+    "/spending/imports/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Preview a bank statement without saving anything
+         * @description Detects the format (OFX 1.x or 2.x, Nubank card or account CSV, or a generic CSV), reads the file and returns the period, a sample, the rows it could not read and the account of the company that matches the file. Nothing is stored: the file is read in memory and discarded, and the confirmed import sends the same file again. A generic CSV sent without `mapping` returns only `columns` and the number of data lines, so the client can ask for the mapping.
+         */
+        post: operations["ImportsController_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/imports": {
         parameters: {
             query?: never;
             header?: never;
@@ -824,13 +864,37 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Download the portfolio as a spreadsheet
-         * @description One row per holding: asset, name, class, quantity, value in the base currency and where the value comes from, in the same order and from the same snapshot as the holdings list. Headers, class names and the csv separators follow the locale of the session (pt-BR: ";" and decimal comma; en: "," and decimal point). Quantity and value are numbers, never text; text that starts with a formula character is prefixed with an apostrophe. Fixed income has no quantity.
+         * List the imports of the company
+         * @description Newest first. The sample rows and the file content are not part of the list.
          */
-        get: operations["PortfolioExportController_export"];
+        get: operations["ImportsController_listImports"];
+        put?: never;
+        /**
+         * Import a bank statement
+         * @description Saves the transactions of the file in an existing account (`accountId`) or in a new one (`newAccountName` and `newAccountKind`). The same transaction already saved from this file, from another file or from the bank connection (same account, same amount, one day apart) counts in `duplicates` and is not created again, so importing the same file twice adds nothing. The import is one batch that `DELETE /spending/imports/{id}` undoes; if it fails midway, nothing is kept.
+         */
+        post: operations["ImportsController_commit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/imports/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
         put?: never;
         post?: never;
-        delete?: never;
+        /**
+         * Undo an import
+         * @description Removes the transactions this import created. A transaction that came from the bank connection stays: it only loses the link with the rows of the file it had absorbed. Undoing an import already undone removes nothing.
+         */
+        delete: operations["ImportsController_undo"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1148,7 +1212,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1172,7 +1236,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1196,7 +1260,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1220,7 +1284,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1302,7 +1366,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1326,7 +1390,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1350,7 +1414,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1374,7 +1438,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1398,7 +1462,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1422,7 +1486,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1495,7 +1559,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1593,7 +1657,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1684,7 +1748,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1708,7 +1772,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1800,7 +1864,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1824,7 +1888,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1848,7 +1912,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1893,7 +1957,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1917,7 +1981,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1941,7 +2005,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1965,7 +2029,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -1989,7 +2053,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2054,7 +2118,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2128,7 +2192,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2152,7 +2216,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2176,7 +2240,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2200,7 +2264,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2245,7 +2309,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2269,7 +2333,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2293,7 +2357,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2317,7 +2381,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2394,7 +2458,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2418,7 +2482,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2442,7 +2506,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2466,7 +2530,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2490,7 +2554,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2565,7 +2629,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2589,7 +2653,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2613,7 +2677,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2637,7 +2701,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2714,7 +2778,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2738,7 +2802,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2762,7 +2826,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2842,7 +2906,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2866,7 +2930,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2890,7 +2954,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -2914,7 +2978,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3002,7 +3066,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3026,7 +3090,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3050,7 +3114,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3074,7 +3138,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3139,7 +3203,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3191,7 +3255,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3255,7 +3319,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3279,7 +3343,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3378,7 +3442,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3462,7 +3526,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3561,7 +3625,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3585,7 +3649,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3686,7 +3750,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3710,7 +3774,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3734,7 +3798,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3835,7 +3899,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3859,7 +3923,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3883,7 +3947,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -3982,7 +4046,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4006,7 +4070,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4105,7 +4169,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4129,7 +4193,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4228,7 +4292,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4252,7 +4316,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4276,7 +4340,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4300,7 +4364,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4399,7 +4463,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4423,7 +4487,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4515,7 +4579,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4539,7 +4603,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4563,7 +4627,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4648,7 +4712,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4672,7 +4736,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4828,7 +4892,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4852,7 +4916,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4876,7 +4940,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -4900,7 +4964,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5024,7 +5088,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5048,7 +5112,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5093,7 +5157,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5117,7 +5181,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5271,7 +5335,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5295,7 +5359,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5319,7 +5383,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5343,7 +5407,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5450,7 +5514,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5474,7 +5538,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5498,7 +5562,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5522,7 +5586,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5615,7 +5679,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5639,7 +5703,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5663,7 +5727,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5687,7 +5751,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5711,7 +5775,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5788,7 +5852,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5812,7 +5876,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5857,7 +5921,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5881,7 +5945,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5967,7 +6031,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -5991,7 +6055,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6015,7 +6079,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6039,7 +6103,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6107,7 +6171,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6131,7 +6195,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6155,7 +6219,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6211,7 +6275,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6235,7 +6299,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6259,7 +6323,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6384,7 +6448,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6523,7 +6587,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6653,7 +6717,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6677,7 +6741,151 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PortfolioExportController_export: {
+        parameters: {
+            query: {
+                /** @description File format: xlsx for a spreadsheet with numeric cells, csv for UTF-8 text with BOM */
+                format: "xlsx" | "csv";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The file as an attachment named vera-carteira-YYYY-MM-DD.xlsx or .csv (date in the company timezone) */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": string;
+                    "text/csv; charset=utf-8": string;
+                };
+            };
+            /** @description Invalid query: format is not xlsx or csv (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    "text/csv": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    "text/csv": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 10 exports in a minute for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    "text/csv": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6812,7 +7020,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6836,7 +7044,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6860,7 +7068,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6884,7 +7092,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6903,52 +7111,110 @@ export interface operations {
             };
         };
     };
-    PortfolioExportController_export: {
+    ImportsController_preview: {
         parameters: {
-            query: {
-                /** @description File format: xlsx for a spreadsheet with numeric cells, csv for UTF-8 text with BOM */
-                format: "xlsx" | "csv";
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description The statement file, up to 5 MB
+                     */
+                    file: string;
+                    /**
+                     * @description Forces the format instead of the detected one
+                     * @enum {string}
+                     */
+                    format?: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
+                    /** @description Column mapping of a generic CSV, as JSON text: { hasHeader, dateColumn, descriptionColumn, amountColumn | debitColumn + creditColumn, dateFormat, decimalSeparator, invertSign, delimiter? } */
+                    mapping?: string;
+                };
+            };
+        };
         responses: {
-            /** @description The file as an attachment named vera-carteira-YYYY-MM-DD.xlsx or .csv (date in the company timezone) */
+            /** @description What the file holds and what would happen */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": string;
-                    "text/csv; charset=utf-8": string;
+                    "application/json": {
+                        /**
+                         * @description Format detected from the content
+                         * @enum {string}
+                         */
+                        detectedFormat: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
+                        /**
+                         * @description Format used to read the file; the forced one when the request sent `format`
+                         * @enum {string}
+                         */
+                        format: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
+                        /** @description Base name of the uploaded file, up to 120 characters */
+                        fileName: string;
+                        /** @description Valid rows; for a generic CSV sent without mapping, the data lines found */
+                        rows: number;
+                        /** @description Rows that could not be read */
+                        rejected: number;
+                        /** @description Up to 20 examples of rejected rows */
+                        rejections: {
+                            /** @description Line of the file where the row starts, counted from 1 */
+                            line: number;
+                            /**
+                             * @description Why the row was rejected; the content of the line is never returned
+                             * @enum {string}
+                             */
+                            reason: "invalid_date" | "invalid_amount" | "zero_amount" | "empty_description";
+                        }[];
+                        /** @description Oldest transaction date, YYYY-MM-DD */
+                        periodStart: string | null;
+                        /** @description Newest transaction date, YYYY-MM-DD */
+                        periodEnd: string | null;
+                        /** @description Currency declared by the file (OFX only); a CSV takes the currency of the account */
+                        currency: string | null;
+                        /** @description First rows of the file, up to 10 */
+                        sample: {
+                            /** @description Transaction date, YYYY-MM-DD */
+                            date: string;
+                            /** @description Description of the transaction, up to 200 characters */
+                            description: string;
+                            /** @description Signed amount in minor units; negative is an outflow */
+                            amountMinor: number;
+                        }[];
+                        /** @description Generic CSV only: the header cells, or "Coluna 1..n" without header */
+                        columns: string[] | null;
+                        /** @description What the file says about its account; null when it says nothing */
+                        accountHint: {
+                            /** @description Institution found in the file */
+                            institution: string | null;
+                            /** @description Last four digits of the account or card number found in the file */
+                            numberLast4: string | null;
+                        } | null;
+                        /**
+                         * Format: uuid
+                         * @description The only account of the company that matches the hint; null on a tie or no match
+                         */
+                        suggestedAccountId: string | null;
+                        /**
+                         * Format: date-time
+                         * @description When the exact same file was imported before; it only warns, it does not block
+                         */
+                        alreadyImportedAt: string | null;
+                    };
                 };
             };
-            /** @description Invalid query: format is not xlsx or csv (zod validation details in meta.errors) */
+            /** @description Invalid fields, missing file or invalid mapping (zod validation details in meta.errors) */
             400: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    "text/csv": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -6971,24 +7237,8 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                    "text/csv": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -7005,14 +7255,14 @@ export interface operations {
                     };
                 };
             };
-            /** @description More than 10 exports in a minute for the company */
-            429: {
+            /** @description The file is larger than 5 MB (imports.file_too_large) */
+            413: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;
@@ -7027,8 +7277,485 @@ export interface operations {
                             [key: string]: unknown;
                         };
                     };
-                    "text/csv": {
-                        /** @description Stable machine-readable error code (e.g. stores.connection_not_found) */
+                };
+            };
+            /** @description Not a statement (imports.unsupported_format), no valid rows or broken structure (imports.invalid_file, meta.reason), more than 10,000 rows (imports.too_many_rows) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 60 previews in an hour for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    ImportsController_listImports: {
+        parameters: {
+            query?: {
+                /** @description Page number, starting at 1 */
+                page?: number;
+                /** @description Items per page, 1 to 200 (default 50) */
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page of imports */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Imports of the page, newest first */
+                        data: {
+                            /**
+                             * Format: uuid
+                             * @description Import id
+                             */
+                            id: string;
+                            /**
+                             * Format: uuid
+                             * @description Financial account that received the rows
+                             */
+                            accountId: string;
+                            /** @description Name of that account */
+                            accountName: string;
+                            /**
+                             * @description Format of the file
+                             * @enum {string}
+                             */
+                            format: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
+                            /** @description Base name of the uploaded file */
+                            fileName: string;
+                            /** @description Valid rows of the file */
+                            rows: number;
+                            /** @description Rows that became new transactions */
+                            inserted: number;
+                            /** @description Rows that were already there, from this file, another file or the bank connection */
+                            duplicates: number;
+                            /** @description Rows that could not be read */
+                            rejected: number;
+                            /** @description Oldest transaction date, YYYY-MM-DD */
+                            periodStart: string | null;
+                            /** @description Newest transaction date, YYYY-MM-DD */
+                            periodEnd: string | null;
+                            /**
+                             * @description `undone` imports had their rows removed; `failed` ones were rolled back
+                             * @enum {string}
+                             */
+                            status: "processing" | "completed" | "undone" | "failed";
+                            /**
+                             * Format: date-time
+                             * @description Creation instant, ISO 8601 UTC
+                             */
+                            createdAt: string;
+                        }[];
+                        pagination: {
+                            page: number;
+                            pageSize: number;
+                            totalRecords: number;
+                            totalPages: number;
+                        };
+                    };
+                };
+            };
+            /** @description Invalid fields, missing file or invalid mapping (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    ImportsController_commit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description The statement file, up to 5 MB
+                     */
+                    file: string;
+                    /**
+                     * @description Format of the file; send the one the preview returned
+                     * @enum {string}
+                     */
+                    format: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
+                    /** @description Column mapping of a generic CSV, as JSON text: { hasHeader, dateColumn, descriptionColumn, amountColumn | debitColumn + creditColumn, dateFormat, decimalSeparator, invertSign, delimiter? } */
+                    mapping?: string;
+                    /**
+                     * Format: uuid
+                     * @description Existing financial account of the company that receives the transactions
+                     */
+                    accountId?: string;
+                    /** @description Name of a new account to create; exclusive with accountId */
+                    newAccountName?: string;
+                    /**
+                     * @description Kind of the new account; required with newAccountName
+                     * @enum {string}
+                     */
+                    newAccountKind?: "checking" | "savings" | "credit_card" | "other";
+                    /** @description Institution of the new account; defaults to the one found in the file */
+                    newAccountInstitution?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description The import with its counters and up to 20 examples of rejected rows */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Import id
+                         */
+                        id: string;
+                        /**
+                         * Format: uuid
+                         * @description Financial account that received the rows
+                         */
+                        accountId: string;
+                        /** @description Name of that account */
+                        accountName: string;
+                        /**
+                         * @description Format of the file
+                         * @enum {string}
+                         */
+                        format: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
+                        /** @description Base name of the uploaded file */
+                        fileName: string;
+                        /** @description Valid rows of the file */
+                        rows: number;
+                        /** @description Rows that became new transactions */
+                        inserted: number;
+                        /** @description Rows that were already there, from this file, another file or the bank connection */
+                        duplicates: number;
+                        /** @description Rows that could not be read */
+                        rejected: number;
+                        /** @description Oldest transaction date, YYYY-MM-DD */
+                        periodStart: string | null;
+                        /** @description Newest transaction date, YYYY-MM-DD */
+                        periodEnd: string | null;
+                        /**
+                         * @description `undone` imports had their rows removed; `failed` ones were rolled back
+                         * @enum {string}
+                         */
+                        status: "processing" | "completed" | "undone" | "failed";
+                        /**
+                         * Format: date-time
+                         * @description Creation instant, ISO 8601 UTC
+                         */
+                        createdAt: string;
+                        /** @description Up to 20 examples of rejected rows */
+                        rejections: {
+                            /** @description Line of the file where the row starts, counted from 1 */
+                            line: number;
+                            /**
+                             * @description Why the row was rejected; the content of the line is never returned
+                             * @enum {string}
+                             */
+                            reason: "invalid_date" | "invalid_amount" | "zero_amount" | "empty_description";
+                        }[];
+                    };
+                };
+            };
+            /** @description Invalid fields, missing file or invalid mapping (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The account does not exist in this company (transactions.account_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The file is larger than 5 MB (imports.file_too_large) */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Same errors as the preview, plus a generic CSV without mapping (imports.mapping_required), a file currency that differs from the account (imports.currency_mismatch) and the transaction limit (transactions.limit_reached) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 20 imports in an hour for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    ImportsController_undo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Import id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description How many transactions were removed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Transactions removed from the account; rows absorbed by the bank connection stay */
+                        removed: number;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The import does not exist in this company (imports.import_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
                         title: string;

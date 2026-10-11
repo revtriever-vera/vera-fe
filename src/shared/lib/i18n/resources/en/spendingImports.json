@@ -1,1 +1,163 @@
-{}
+{
+  "modal": {
+    "title": "Import statement",
+    "description": "Upload the file from your bank, check the preview and import."
+  },
+  "card": {
+    "title": "Import a file",
+    "description": "Works with any bank: OFX or CSV from your bank (including credit card statements).",
+    "button": "Import a file"
+  },
+  "formats": {
+    "ofx": "OFX",
+    "csv_nubank_card": "Nubank card CSV",
+    "csv_nubank_account": "Nubank account CSV",
+    "csv_generic": "Generic CSV"
+  },
+  "file": {
+    "label": "Statement file",
+    "hint": "OFX or CSV from your bank, up to 5 MB",
+    "tooLarge": "The file is over 5 MB",
+    "invalidType": "Use a .ofx, .csv or .txt file",
+    "reading": "Reading the file"
+  },
+  "preview": {
+    "summary_zero": "No transactions found",
+    "summary_one": "{{count}} transaction · {{period}}",
+    "summary_other": "{{count}} transactions · {{period}}",
+    "period": "from {{start}} to {{end}}",
+    "noPeriod": "no period",
+    "genericFound_one": "{{count}} line found",
+    "genericFound_other": "{{count}} lines found",
+    "mappingPending": "Pick the columns below and refresh the preview to see the transactions.",
+    "alreadyImported": "You already imported this file on {{date}}. Repeated transactions will be ignored.",
+    "rejected_one": "{{count}} line could not be read ({{details}})",
+    "rejected_other": "{{count}} lines could not be read ({{details}})",
+    "rejectionGroup_one": "line {{lines}}: {{reason}}",
+    "rejectionGroup_other": "lines {{lines}}: {{reason}}",
+    "reasons": {
+      "invalid_date": "invalid date",
+      "invalid_amount": "invalid amount",
+      "zero_amount": "zero amount",
+      "empty_description": "no description"
+    },
+    "sampleLabel": "Sample of the first transactions",
+    "columns": {
+      "date": "Date",
+      "description": "Description",
+      "amount": "Amount"
+    }
+  },
+  "target": {
+    "title": "Destination account",
+    "modeLabel": "Where to keep the transactions",
+    "existing": "Existing account",
+    "new": "New account",
+    "accountLabel": "Account",
+    "accountPlaceholder": "Choose the account",
+    "suggestion": "We suggest {{account}}",
+    "suggestionWithLast4": "We suggest {{account}} (ending {{last4}})",
+    "nameLabel": "Account name",
+    "namePlaceholder": "E.g. Nubank Card",
+    "kindLabel": "Account type",
+    "institutionLabel": "Institution (optional)",
+    "pluggyHint": "Importing into the account that already comes through Meu Pluggy does not duplicate: Vera ignores what already exists.",
+    "errors": {
+      "accountRequired": "Choose the destination account",
+      "nameRequired": "Give the account a name",
+      "nameTooLong": "The name can have up to 60 characters",
+      "institutionTooLong": "The institution can have up to 60 characters"
+    }
+  },
+  "mapping": {
+    "title": "How to read this CSV",
+    "intro": "We do not recognize the format of this file. Tell us where the date, the description and the amount are.",
+    "hasHeader": "The first line is a header",
+    "amountModeLabel": "How the amount appears",
+    "single": "One amount column",
+    "split": "Separate debit and credit",
+    "date": "Date",
+    "description": "Description",
+    "amount": "Amount",
+    "debit": "Debit",
+    "credit": "Credit",
+    "columnPlaceholder": "Choose the column",
+    "dateFormat": "Date format",
+    "dateFormats": {
+      "dd/MM/yyyy": "dd/MM/yyyy",
+      "yyyy-MM-dd": "yyyy-MM-dd",
+      "MM/dd/yyyy": "MM/dd/yyyy",
+      "dd/MM/yy": "dd/MM/yy"
+    },
+    "decimalSeparator": "Decimal separator",
+    "comma": "Comma",
+    "dot": "Dot",
+    "invertSign": "Invert sign (the bank shows spending as positive)",
+    "submit": "Refresh preview",
+    "submitting": "Refreshing",
+    "errors": {
+      "columnRequired": "Choose the column",
+      "columnRepeated": "This column is already used in another field"
+    }
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "import_zero": "Import",
+    "import_one": "Import {{count}} transaction",
+    "import_other": "Import {{count}} transactions",
+    "importing": "Importing",
+    "importAnother": "Import another",
+    "viewTransactions": "View transactions"
+  },
+  "result": {
+    "title": "Import finished",
+    "inserted_zero": "No new transactions",
+    "inserted_one": "{{count}} new transaction",
+    "inserted_other": "{{count}} new transactions",
+    "duplicates_zero": "No repeated transactions",
+    "duplicates_one": "{{count}} was already in Vera and was ignored",
+    "duplicates_other": "{{count}} were already in Vera and were ignored",
+    "duplicatesWhy": "Same file imported before or transactions already brought by Meu Pluggy.",
+    "rejected_zero": "No rejected lines",
+    "rejected_one": "{{count}} rejected line",
+    "rejected_other": "{{count}} rejected lines"
+  },
+  "history": {
+    "label": "Imported statements",
+    "empty": "No statements imported yet.",
+    "loadFailed": "Could not load the imported statements.",
+    "summary": "{{inserted}} · {{duplicates}}",
+    "inserted_zero": "{{count}} new",
+    "inserted_one": "{{count}} new",
+    "inserted_other": "{{count}} new",
+    "duplicates_zero": "{{count}} ignored",
+    "duplicates_one": "{{count}} ignored",
+    "duplicates_other": "{{count}} ignored",
+    "status": {
+      "processing": "in progress",
+      "completed": "completed",
+      "undone": "undone",
+      "failed": "failed"
+    }
+  },
+  "undo": {
+    "button": "Undo",
+    "buttonFor": "Undo the import of {{file}}",
+    "title": "Undo this import?",
+    "description_zero": "No transaction came only from this file. Transactions that also came through Meu Pluggy stay.",
+    "description_one": "The transaction that came from this file leaves Vera. Transactions that also came through Meu Pluggy stay.",
+    "description_other": "The {{count}} transactions that came from this file leave Vera. Transactions that also came through Meu Pluggy stay.",
+    "confirm": "Undo import"
+  },
+  "toasts": {
+    "previewFailed": "Could not read the file",
+    "importFailed": "Could not import the file",
+    "undoFailed": "Could not undo the import",
+    "undone_zero": "No transactions removed",
+    "undone_one": "{{count}} transaction removed",
+    "undone_other": "{{count}} transactions removed"
+  },
+  "errors": {
+    "currencyMismatch": "This statement is in {{statement}} and the account is in {{account}}."
+  }
+}
