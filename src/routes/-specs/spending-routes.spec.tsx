@@ -52,7 +52,8 @@ describe('rotas de /spending', () => {
     it('a página de Conexões monta o cartão de importação', async () => {
         renderRouterAt('/spending/connections', { signedIn: true });
 
-        expect(await screen.findAllByRole('heading', { name: 'Esta tela está em construção' })).toHaveLength(2);
+        expect(await screen.findByRole('heading', { name: 'Esta tela está em construção' })).toBeInTheDocument();
+        expect(await screen.findByRole('heading', { name: 'Importar arquivo' })).toBeInTheDocument();
     });
 
     it('lê o mês no resumo e nos cortes', async () => {

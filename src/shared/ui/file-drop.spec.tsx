@@ -40,6 +40,29 @@ describe('FileDrop', () => {
         });
     });
 
+    it('usa a mensagem de recusa de quem chama, com os códigos do erro', async () => {
+        const message: Mock<(codes: readonly string[]) => string> = vi.fn((codes: readonly string[]): string =>
+            codes.includes('file-too-large') ? 'Grande demais' : 'Tipo errado'
+        );
+        render(
+            <FileDrop
+                label="Arquivo"
+                hint="PNG"
+                accept={ACCEPT}
+                maxSizeBytes={4}
+                fileName={null}
+                onPicked={vi.fn()}
+                onClear={vi.fn()}
+                rejectionMessage={message}
+            />
+        );
+        const big: File = new File(['png-bytes-too-long'], 'logo.png', { type: 'image/png' });
+        fireEvent.change(screen.getByLabelText('Arquivo'), { target: { files: [big] } });
+
+        expect(await screen.findByRole('alert')).toHaveTextContent('Grande demais');
+        expect(message).toHaveBeenCalledWith(['file-too-large']);
+    });
+
     it('shows the picked state with the clear action', () => {
         const onClear: Mock = vi.fn();
         render(
