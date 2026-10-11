@@ -66,6 +66,22 @@ describe('spendingErrorMessage', () => {
         expect(spendingErrorMessage(en, problem('categories.rule_conflict'))).toBe('A rule just like this one already exists.');
     });
 
+    it('item não encontrado orienta a reautorizar ao sincronizar e fala do Item ID ao conectar', () => {
+        const error: ApiError = problem('connections.item_not_found');
+        expect(spendingErrorMessage(ptBR, error)).toBe('Esse Item ID não foi encontrado na sua conta do Meu Pluggy.');
+        expect(spendingErrorMessage(ptBR, error, 'connect')).toBe('Esse Item ID não foi encontrado na sua conta do Meu Pluggy.');
+        expect(spendingErrorMessage(ptBR, error, 'sync')).toContain('Autorize de novo');
+        expect(spendingErrorMessage(en, error)).toBe('That Item ID was not found in your Meu Pluggy account.');
+        expect(spendingErrorMessage(en, error, 'sync')).toContain('Authorize again');
+    });
+
+    it('no contexto de sincronização, outros códigos seguem a mesma mensagem', () => {
+        expect(spendingErrorMessage(ptBR, problem('connections.sync_unavailable'), 'sync')).toBe(
+            spendingErrorMessage(ptBR, problem('connections.sync_unavailable'))
+        );
+        expect(spendingErrorMessage(ptBR, null, 'sync')).toBe(ptBR('errors.generic'));
+    });
+
     it('cai no genérico com código desconhecido', () => {
         expect(spendingErrorMessage(ptBR, problem('outro.codigo'))).toBe(ptBR('errors.generic'));
     });

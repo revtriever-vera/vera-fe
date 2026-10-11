@@ -1,3 +1,5 @@
+import type { ReactElement } from 'react';
+import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { describe, expect, it, vi, type MockInstance } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
@@ -6,6 +8,7 @@ import * as analytics from '@/shared/lib/analytics';
 import { server } from '../../../../test/msw/server';
 import { renderWithProviders } from '../../../../test/render';
 import { categoryView, systemCategory } from '../../../../test/fixtures/spending';
+import { spendingKeys } from '../api/spending-keys';
 import { FlexibilityToggle } from './flexibility-toggle';
 
 vi.mock('@/shared/lib/analytics', async (importOriginal) => ({
@@ -67,12 +70,82 @@ describe('FlexibilityToggle', () => {
         await user.click(screen.getByRole('button', { name: 'Natureza de Moradia: fixo' }));
 
         await waitFor(() => {
-            expect(screen.getByRole('button', { name: 'Natureza de Moradia: fixo' })).toBeDisabled();
+            expect(screen.getByRole('button', { name: 'Natureza de Moradia: fixo' })).toHaveAttribute('aria-disabled', 'true');
         });
         release();
         await waitFor(() => {
-            expect(screen.getByRole('button', { name: 'Natureza de Moradia: fixo' })).toBeEnabled();
+            expect(screen.getByRole('button', { name: 'Natureza de Moradia: fixo' })).toHaveAttribute('aria-disabled', 'false');
         });
+    });
+
+    it('mantém o foco no mesmo controle depois do PATCH e do refetch, e o próximo Enter funciona', async () => {
+        const user: UserEvent = userEvent.setup();
+        let current: string = 'flexible';
+        const bodies: unknown[] = [];
+        server.use(
+            http.patch('*/spending/categories/:id', async ({ request }) => {
+                const body: { flexibility: string } = (await request.json()) as { flexibility: string };
+                bodies.push(body);
+                current = body.flexibility;
+                return HttpResponse.json({ ...systemCategory('leisure'), flexibility: current });
+            })
+        );
+        function Harness(): ReactElement {
+            const query: UseQueryResult<string> = useQuery({
+                queryKey: spendingKeys.categories(),
+                queryFn: (): Promise<string> => Promise.resolve(current)
+            });
+            const flexibility: 'flexible' | 'fixed' = query.data === 'fixed' ? 'fixed' : 'flexible';
+            return <FlexibilityToggle category={{ ...systemCategory('leisure'), flexibility }} />;
+        }
+        renderWithProviders(<Harness />);
+
+        const toggle: HTMLElement = await screen.findByRole('button', { name: 'Natureza de Lazer: flexível' });
+        await user.tab();
+        expect(toggle).toHaveFocus();
+        await user.keyboard('{Enter}');
+
+        await waitFor(() => {
+            expect(bodies).toHaveLength(1);
+        });
+        const after: HTMLElement = await screen.findByRole('button', { name: 'Natureza de Lazer: fixo' });
+        await waitFor(() => {
+            expect(after).toHaveAttribute('aria-disabled', 'false');
+        });
+        expect(after).toHaveFocus();
+        await user.keyboard('{Enter}');
+        await waitFor(() => {
+            expect(bodies).toEqual([{ flexibility: 'fixed' }, { flexibility: 'flexible' }]);
+        });
+    });
+
+    it('ignora o clique enquanto grava', async () => {
+        const user: UserEvent = userEvent.setup();
+        let release: () => void = (): void => undefined;
+        const gate: Promise<void> = new Promise<void>((resolve): void => {
+            release = resolve;
+        });
+        let calls: number = 0;
+        server.use(
+            http.patch('*/spending/categories/:id', async () => {
+                calls += 1;
+                await gate;
+                return HttpResponse.json({ ...systemCategory('housing'), flexibility: 'flexible' });
+            })
+        );
+        renderWithProviders(<FlexibilityToggle category={systemCategory('housing')} />);
+
+        const toggle: HTMLElement = screen.getByRole('button', { name: 'Natureza de Moradia: fixo' });
+        await user.click(toggle);
+        await waitFor(() => {
+            expect(toggle).toHaveAttribute('aria-disabled', 'true');
+        });
+        await user.click(toggle);
+        release();
+        await waitFor(() => {
+            expect(toggle).toHaveAttribute('aria-disabled', 'false');
+        });
+        expect(calls).toBe(1);
     });
 
     it('mostra o aviso crítico quando a gravação falha', async () => {

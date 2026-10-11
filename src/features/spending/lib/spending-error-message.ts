@@ -17,6 +17,7 @@ export type SpendingErrorKey =
     | 'errors.credentialsMissing'
     | 'errors.invalidCredentials'
     | 'errors.itemNotFound'
+    | 'errors.itemNotFoundOnSync'
     | 'errors.providerUnavailable'
     | 'errors.providerDisabled'
     | 'errors.syncInProgress'
@@ -79,7 +80,17 @@ export const SPENDING_ERROR_KEYS: Readonly<Record<string, SpendingErrorKey>> = {
     'transactions.transaction_not_found': 'errors.transactionNotFound'
 };
 
-export function spendingErrorMessage(t: TFunction<'spending'>, error: Error | null): string {
-    const key: SpendingErrorKey | undefined = error instanceof ApiError ? SPENDING_ERROR_KEYS[error.problem.type] : undefined;
+export type SpendingErrorContext = 'connect' | 'sync';
+
+export const SPENDING_SYNC_ERROR_KEYS: Readonly<Record<string, SpendingErrorKey>> = {
+    'connections.item_not_found': 'errors.itemNotFoundOnSync'
+};
+
+export function spendingErrorMessage(t: TFunction<'spending'>, error: Error | null, context: SpendingErrorContext = 'connect'): string {
+    if (!(error instanceof ApiError)) {
+        return t('errors.generic');
+    }
+    const key: SpendingErrorKey | undefined =
+        (context === 'sync' ? SPENDING_SYNC_ERROR_KEYS[error.problem.type] : undefined) ?? SPENDING_ERROR_KEYS[error.problem.type];
     return t(key ?? 'errors.generic');
 }
