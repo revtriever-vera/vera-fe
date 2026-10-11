@@ -26,7 +26,7 @@ describe('tipagem das chaves de tradução', () => {
     it('conhece os sete namespaces dos gastos', () => {
         expectTypeOf<'layout.title'>().toExtend<ParseKeys<'spending'>>();
         expectTypeOf<'categories.names.housing'>().toExtend<ParseKeys<'spending'>>();
-        expectTypeOf<ParseKeys<'spendingSummary'>>().toBeNever();
+        expectTypeOf<'header.cuts'>().toExtend<ParseKeys<'spendingSummary'>>();
         expectTypeOf<ParseKeys<'spendingTransactions'>>().toBeNever();
         expectTypeOf<ParseKeys<'spendingCuts'>>().toBeNever();
         expectTypeOf<ParseKeys<'spendingConnections'>>().toBeNever();

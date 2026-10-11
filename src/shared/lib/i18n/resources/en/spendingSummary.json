@@ -1,1 +1,71 @@
-{}
+{
+  "header": {
+    "saved": "You saved {{rate}} of your income. Your goal is {{goal}}.",
+    "overspent": "You spent {{amount}} more than you earned.",
+    "noIncome": "No income recorded this month.",
+    "cuts": "See where to cut",
+    "partialNote": "The numbers change until the month closes"
+  },
+  "kpis": {
+    "label": "Month indicators",
+    "income": "Income",
+    "expenses": "Spending",
+    "saved": "Saved",
+    "goal": "Goal",
+    "incomeFromTransactions": "from transactions",
+    "incomeDeclared": "fixed amount",
+    "incomeChange": "change",
+    "incomeChangeLabel": "Change the income source"
+  },
+  "bars": {
+    "title": "Where the money went",
+    "hint": "The dark mark is your average over the last {{months}} months. Click \"fixed\" or \"flexible\" to change the type; only flexible categories count toward the cut suggestion.",
+    "delta": "{{delta}} vs average",
+    "new": "new",
+    "categorize": "categorize",
+    "categorizeLabel": "Categorize the uncategorized transactions",
+    "trackLabel": "{{name}}: {{spent}}",
+    "trackLabelAverage": "{{name}}: {{spent}}, average of {{average}}",
+    "uncategorizedTrackLabel": "Uncategorized: {{spent}}"
+  },
+  "tooltip": {
+    "spent": "Spent this month: {{value}}",
+    "average": "Average: {{value}}",
+    "averageMonths_one": "average of {{count}} month",
+    "averageMonths_other": "average of {{count}} months",
+    "noAverage": "No average yet",
+    "delta": "Change: {{delta}}",
+    "transactions_one": "{{count}} transaction",
+    "transactions_other": "{{count}} transactions",
+    "viewTransactions": "view transactions"
+  },
+  "legend": {
+    "label": "Chart legend",
+    "flexible": "flexible",
+    "fixed": "fixed",
+    "uncategorized": "uncategorized",
+    "average": "average"
+  },
+  "list": {
+    "label": "Spending by category, as text",
+    "item": "{{name}} ({{kind}}): {{spent}}, average of {{average}}, change of {{delta}}.",
+    "itemNew": "{{name}} ({{kind}}): {{spent}}, new category, no average.",
+    "itemPlain": "{{name}} ({{kind}}): {{spent}}.",
+    "uncategorized": "Uncategorized: {{spent}}.",
+    "transactions": "view transactions for {{name}}",
+    "uncategorizedTransactions": "categorize the uncategorized transactions"
+  },
+  "notes": {
+    "fixed": "Fixed spending adds up to {{fixed}} ({{share}} of income). The rest is where you can make changes.",
+    "fixedNoIncome": "Fixed spending adds up to {{fixed}}. The rest is where you can make changes.",
+    "transfers": "{{amount}} in transfers between your accounts, card bill payments and investments is not counted as spending.",
+    "excludedCurrency_one": "{{count}} transaction in another currency was left out of the summary.",
+    "excludedCurrency_other": "{{count}} transactions in another currency were left out of the summary.",
+    "incomeMissing": "We could not find your income this month. If your salary lands in a bank that is not connected, enter a fixed amount.",
+    "incomeMissingAction": "Enter income",
+    "uncategorizedInflow": "{{amount}} in uncategorized inflows does not count as income. Categorize it in Transactions."
+  },
+  "loading": "Loading the month summary",
+  "loadError": "Could not load the month summary.",
+  "retry": "Try again"
+}

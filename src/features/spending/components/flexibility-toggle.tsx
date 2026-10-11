@@ -10,8 +10,10 @@ import { spendingErrorMessage } from '../lib/spending-error-message';
 import { useCategoryLabel, type CategoryLabel } from '../lib/use-category-label';
 import { CATEGORY_KIND, FLEXIBILITY, type CategoryFlexibility, type CategoryView } from '../types';
 
+export type FlexibilityTarget = Pick<CategoryView, 'id' | 'kind' | 'flexibility' | 'systemKey' | 'name'>;
+
 export interface FlexibilityToggleProps {
-    readonly category: CategoryView;
+    readonly category: FlexibilityTarget;
     readonly size?: 'sm' | 'md';
 }
 
@@ -25,7 +27,7 @@ interface FlexibilityChange {
     readonly toggle: () => void;
 }
 
-function useFlexibilityChange(category: CategoryView): FlexibilityChange {
+function useFlexibilityChange(category: FlexibilityTarget): FlexibilityChange {
     const { t }: UseTranslationResponse<'spending', undefined> = useTranslation('spending');
     const toast: ToastApi = useToast();
     const update: UseMutationResult<CategoryView, ApiError, UpdateCategoryFlexibilityInput> = useUpdateCategoryFlexibility();

@@ -9,12 +9,13 @@ export interface KpiTileProps {
     readonly support?: ReactNode;
     readonly icon?: LucideIcon;
     readonly tone?: IconTileTone;
+    readonly focus?: boolean;
     readonly className?: string;
 }
 
-export function KpiTile({ label, value, support, icon, tone = 'neutral', className }: KpiTileProps): ReactElement {
+export function KpiTile({ label, value, support, icon, tone = 'neutral', focus = false, className }: KpiTileProps): ReactElement {
     return (
-        <div className={cn('surface-card flex flex-col gap-3 p-4', className)}>
+        <div className={cn('surface-card flex flex-col gap-3 p-4', focus && 'ring-2 ring-accent', className)}>
             <div className="flex items-center justify-between gap-2">
                 <span className="text-sm font-medium text-content-muted">{label}</span>
                 {icon === undefined ? null : <IconTile icon={icon} tone={tone} size="sm" />}

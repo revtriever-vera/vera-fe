@@ -1,1 +1,71 @@
-{}
+{
+  "header": {
+    "saved": "Você guardou {{rate}} da renda. Sua meta é {{goal}}.",
+    "overspent": "Você gastou {{amount}} a mais do que ganhou.",
+    "noIncome": "Sem renda registrada neste mês.",
+    "cuts": "Ver onde cortar",
+    "partialNote": "Os números mudam até o mês fechar"
+  },
+  "kpis": {
+    "label": "Indicadores do mês",
+    "income": "Renda",
+    "expenses": "Gastos",
+    "saved": "Guardado",
+    "goal": "Meta",
+    "incomeFromTransactions": "das transações",
+    "incomeDeclared": "valor fixo",
+    "incomeChange": "alterar",
+    "incomeChangeLabel": "Alterar a origem da renda"
+  },
+  "bars": {
+    "title": "Para onde foi o dinheiro",
+    "hint": "A marca escura é a sua média dos últimos {{months}} meses. Clique em \"fixo\" ou \"flexível\" para mudar o tipo; só os flexíveis entram na sugestão de corte.",
+    "delta": "{{delta}} vs média",
+    "new": "novo",
+    "categorize": "categorizar",
+    "categorizeLabel": "Categorizar as transações sem categoria",
+    "trackLabel": "{{name}}: {{spent}}",
+    "trackLabelAverage": "{{name}}: {{spent}}, média de {{average}}",
+    "uncategorizedTrackLabel": "Sem categoria: {{spent}}"
+  },
+  "tooltip": {
+    "spent": "Gasto no mês: {{value}}",
+    "average": "Média: {{value}}",
+    "averageMonths_one": "média de {{count}} mês",
+    "averageMonths_other": "média de {{count}} meses",
+    "noAverage": "Sem média ainda",
+    "delta": "Variação: {{delta}}",
+    "transactions_one": "{{count}} transação",
+    "transactions_other": "{{count}} transações",
+    "viewTransactions": "ver transações"
+  },
+  "legend": {
+    "label": "Legenda do gráfico",
+    "flexible": "flexível",
+    "fixed": "fixo",
+    "uncategorized": "sem categoria",
+    "average": "média"
+  },
+  "list": {
+    "label": "Gastos por categoria, em texto",
+    "item": "{{name}} ({{kind}}): {{spent}}, média de {{average}}, variação de {{delta}}.",
+    "itemNew": "{{name}} ({{kind}}): {{spent}}, categoria nova, sem média.",
+    "itemPlain": "{{name}} ({{kind}}): {{spent}}.",
+    "uncategorized": "Sem categoria: {{spent}}.",
+    "transactions": "ver transações de {{name}}",
+    "uncategorizedTransactions": "categorizar as transações sem categoria"
+  },
+  "notes": {
+    "fixed": "Gastos fixos somam {{fixed}} ({{share}} da renda). O resto é onde dá pra mexer.",
+    "fixedNoIncome": "Gastos fixos somam {{fixed}}. O resto é onde dá pra mexer.",
+    "transfers": "{{amount}} em transferências entre suas contas, pagamento de fatura e investimentos não entram como gasto.",
+    "excludedCurrency_one": "{{count}} transação em outra moeda ficou de fora do resumo.",
+    "excludedCurrency_other": "{{count}} transações em outra moeda ficaram de fora do resumo.",
+    "incomeMissing": "Não encontramos sua renda neste mês. Se o salário cai num banco que não está conectado, informe um valor fixo.",
+    "incomeMissingAction": "Informar renda",
+    "uncategorizedInflow": "{{amount}} em entradas sem categoria não contam como renda. Categorize em Transações."
+  },
+  "loading": "Carregando o resumo do mês",
+  "loadError": "Não foi possível carregar o resumo do mês.",
+  "retry": "Tentar de novo"
+}
