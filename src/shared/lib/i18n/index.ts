@@ -2,13 +2,16 @@ import i18next, { type i18n as I18nInstance } from 'i18next';
 import { initReactI18next, useTranslation, type UseTranslationResponse } from 'react-i18next';
 import ptBRCommon from './resources/pt-BR/common.json';
 import enCommon from './resources/en/common.json';
+import ptBRAuth from './resources/pt-BR/auth.json';
+import enAuth from './resources/en/auth.json';
 import { DEFAULT_LOCALE, resolveLocale, type SupportedLocale } from './resolve-locale';
 
 type CommonResource = typeof ptBRCommon;
+type AuthResource = typeof ptBRAuth;
 
-const resources: Record<SupportedLocale, { common: CommonResource }> = {
-    'pt-BR': { common: ptBRCommon },
-    en: { common: enCommon }
+const resources: Record<SupportedLocale, { common: CommonResource; auth: AuthResource }> = {
+    'pt-BR': { common: ptBRCommon, auth: ptBRAuth },
+    en: { common: enCommon, auth: enAuth }
 };
 
 function initialLocale(): SupportedLocale {
@@ -20,7 +23,7 @@ void i18next.use(initReactI18next).init({
     resources,
     lng: initialLocale(),
     fallbackLng: DEFAULT_LOCALE,
-    ns: ['common'],
+    ns: ['common', 'auth'],
     defaultNS: 'common',
     interpolation: { escapeValue: false },
     returnNull: false

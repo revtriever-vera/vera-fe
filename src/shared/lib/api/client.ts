@@ -6,7 +6,7 @@ import type { paths } from './schema';
 
 const REFRESH_PATH: string = '/auth/refresh';
 
-const OWN_CREDENTIAL_PATHS: readonly string[] = [REFRESH_PATH, '/auth/logout'];
+const OWN_CREDENTIAL_PATHS: readonly string[] = [REFRESH_PATH, '/auth/logout', '/auth/google', '/auth/facebook'];
 
 function carriesOwnCredential(url: string): boolean {
     return OWN_CREDENTIAL_PATHS.some((path: string): boolean => url.endsWith(path));
