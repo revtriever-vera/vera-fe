@@ -56,7 +56,7 @@ export function WalletItem({ holding, assetClass, baseCurrency, onRemove }: Wall
             />
             <span className="flex min-w-0 flex-1 flex-col">
                 <span className="truncate text-sm font-semibold text-content">{holding.symbol}</span>
-                <span className="truncate text-xs text-content-muted">{detail}</span>
+                <span className="text-xs text-content-muted">{detail}</span>
             </span>
             <span className="flex shrink-0 flex-col items-end gap-0.5 text-sm font-semibold text-content">
                 {hasValue(holding) ? (

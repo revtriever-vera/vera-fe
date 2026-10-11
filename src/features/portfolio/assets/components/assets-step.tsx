@@ -40,7 +40,7 @@ export function AssetsStep({ eyebrow, footer }: AssetsStepProps): ReactElement {
     const why: readonly WhyItem[] = useWhyItems();
     const state: AssetsStepState = useStepState();
     return (
-        <div className="grid items-start gap-8 min-[861px]:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+        <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-8 min-[861px]:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
             <div>
                 {eyebrow === undefined ? null : (
                     <span className="text-xs font-bold tracking-[0.07em] text-accent-strong uppercase">{eyebrow}</span>
@@ -61,7 +61,7 @@ export function AssetsStep({ eyebrow, footer }: AssetsStepProps): ReactElement {
                     {t('step.cardTitle')}
                 </h2>
                 <p className="mt-1 mb-4 text-sm text-content-muted">{t('step.cardDetail')}</p>
-                <div className="grid items-start gap-4 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+                <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-4 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
                     <AssetPicker className="sm:grid-cols-1" />
                     <aside className="rounded-control border border-border bg-surface-muted p-3">
                         <WalletPanel />
