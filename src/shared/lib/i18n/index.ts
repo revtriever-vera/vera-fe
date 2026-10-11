@@ -4,6 +4,8 @@ import ptBRCommon from './resources/pt-BR/common.json';
 import enCommon from './resources/en/common.json';
 import ptBRAuth from './resources/pt-BR/auth.json';
 import enAuth from './resources/en/auth.json';
+import ptBRAccount from './resources/pt-BR/account.json';
+import enAccount from './resources/en/account.json';
 import ptBRPortfolio from './resources/pt-BR/portfolio.json';
 import enPortfolio from './resources/en/portfolio.json';
 import ptBRPortfolioOverview from './resources/pt-BR/portfolioOverview.json';
@@ -22,6 +24,7 @@ type AuthResource = typeof ptBRAuth;
 type LocaleResources = {
     readonly common: CommonResource;
     readonly auth: AuthResource;
+    readonly account: typeof ptBRAccount;
     readonly portfolio: typeof ptBRPortfolio;
     readonly portfolioOverview: typeof ptBRPortfolioOverview;
     readonly portfolioAssets: typeof ptBRPortfolioAssets;
@@ -33,6 +36,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
     'pt-BR': {
         common: ptBRCommon,
         auth: ptBRAuth,
+        account: ptBRAccount,
         portfolio: ptBRPortfolio,
         portfolioOverview: ptBRPortfolioOverview,
         portfolioAssets: ptBRPortfolioAssets,
@@ -42,6 +46,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
     en: {
         common: enCommon,
         auth: enAuth,
+        account: enAccount,
         portfolio: enPortfolio,
         portfolioOverview: enPortfolioOverview,
         portfolioAssets: enPortfolioAssets,
@@ -59,7 +64,7 @@ void i18next.use(initReactI18next).init({
     resources,
     lng: initialLocale(),
     fallbackLng: DEFAULT_LOCALE,
-    ns: ['common', 'auth', 'portfolio', 'portfolioOverview', 'portfolioAssets', 'portfolioTargets', 'portfolioContribution'],
+    ns: ['common', 'auth', 'account', 'portfolio', 'portfolioOverview', 'portfolioAssets', 'portfolioTargets', 'portfolioContribution'],
     defaultNS: 'common',
     interpolation: { escapeValue: false },
     returnNull: false
