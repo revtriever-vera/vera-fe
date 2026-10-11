@@ -35,6 +35,63 @@
       "sumMustBe100": "As metas precisam somar exatamente 100%."
     }
   },
+  "classDetail": {
+    "back": "Visão geral",
+    "subtitle": "{{value}} · {{share}} do patrimônio, meta de {{target}}. Defina quanto cada ativo deve pesar dentro da classe.",
+    "loading": "Carregando a classe",
+    "loadError": "Não foi possível carregar a classe.",
+    "retry": "Tentar de novo",
+    "notFound": {
+      "title": "Classe não encontrada",
+      "description": "Esta classe não existe ou foi excluída.",
+      "action": "Voltar para a visão geral"
+    },
+    "listLabel": "Ativos da classe",
+    "columns": {
+      "asset": "Ativo",
+      "value": "Valor",
+      "inClass": "Na classe",
+      "gauge": "Atual vs meta",
+      "target": "Meta na classe",
+      "status": "Situação"
+    },
+    "noValue": "—",
+    "targetLabel": "Meta de {{symbol}} na classe",
+    "decrease": "Diminuir meta de {{symbol}}",
+    "increase": "Aumentar meta de {{symbol}}",
+    "gaugeLabel": "Atual vs meta de {{symbol}}",
+    "zeroQuantity": "quantidade 0",
+    "missingQuote": "sem cotação",
+    "tooltip": {
+      "current": "Na classe: {{share}} · {{value}}",
+      "target": "Meta: {{target}}",
+      "missing": "Faltam {{amount}}",
+      "excess": "Sobram {{amount}}",
+      "within": "Dentro da faixa de tolerância",
+      "unavailable": "Sem cotação para calcular o desvio"
+    },
+    "total": "Soma das metas: {{total}}",
+    "totalMissing": "Soma das metas: {{total}} (faltam {{pp}} pp)",
+    "totalExcess": "Soma das metas: {{total}} (tire {{pp}} pp)",
+    "totalAutomatic": "Soma das metas: {{total}} (divisão igual automática)",
+    "equalSplit": "Dividir igualmente",
+    "automaticSplit": "Usar divisão igual automática",
+    "equalSplitHint": "Divisão igual até você definir as suas",
+    "sumWarning": "As metas desta classe não somam 100%. Ajuste e salve.",
+    "save": "Salvar metas",
+    "saving": "Salvando",
+    "discard": "Descartar alterações",
+    "saved": "Metas dos ativos salvas",
+    "saveFailed": "Não foi possível salvar as metas dos ativos",
+    "addAsset": "Adicionar ativo à classe",
+    "emptyTitle": "Nenhum ativo nesta classe ainda.",
+    "emptyAction": "Adicionar ativo",
+    "zeroNote": "Quer incluir um ativo que ainda não tem? Adicione com quantidade zero e dê uma meta a ele: o aporte inteligente passa a direcionar dinheiro para ele.",
+    "errors": {
+      "invalid": "Informe um valor entre 0% e 100%.",
+      "sumMustBe100": "As metas precisam somar 100% ou ficar todas em zero."
+    }
+  },
   "tolerance": {
     "title": "Faixa de tolerância",
     "description": "Abaixo desse desvio, a classe aparece como \"na faixa\" e não gera alerta.",

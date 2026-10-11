@@ -35,6 +35,63 @@
       "sumMustBe100": "Targets must add up to exactly 100%."
     }
   },
+  "classDetail": {
+    "back": "Overview",
+    "subtitle": "{{value}} · {{share}} of your net worth, target of {{target}}. Set how much each asset should weigh inside the class.",
+    "loading": "Loading the class",
+    "loadError": "Could not load the class.",
+    "retry": "Try again",
+    "notFound": {
+      "title": "Class not found",
+      "description": "This class does not exist or was deleted.",
+      "action": "Back to the overview"
+    },
+    "listLabel": "Assets of the class",
+    "columns": {
+      "asset": "Asset",
+      "value": "Value",
+      "inClass": "In class",
+      "gauge": "Current vs target",
+      "target": "Target in class",
+      "status": "Status"
+    },
+    "noValue": "—",
+    "targetLabel": "Target of {{symbol}} in the class",
+    "decrease": "Decrease target of {{symbol}}",
+    "increase": "Increase target of {{symbol}}",
+    "gaugeLabel": "Current vs target of {{symbol}}",
+    "zeroQuantity": "quantity 0",
+    "missingQuote": "no quote",
+    "tooltip": {
+      "current": "In class: {{share}} · {{value}}",
+      "target": "Target: {{target}}",
+      "missing": "{{amount}} short",
+      "excess": "{{amount}} over",
+      "within": "Within the tolerance band",
+      "unavailable": "No quote to compute the deviation"
+    },
+    "total": "Targets sum: {{total}}",
+    "totalMissing": "Targets sum: {{total}} ({{pp}} pp short)",
+    "totalExcess": "Targets sum: {{total}} (remove {{pp}} pp)",
+    "totalAutomatic": "Targets sum: {{total}} (automatic equal split)",
+    "equalSplit": "Split equally",
+    "automaticSplit": "Use automatic equal split",
+    "equalSplitHint": "Equal split until you set your own",
+    "sumWarning": "The targets of this class do not add up to 100%. Adjust and save.",
+    "save": "Save targets",
+    "saving": "Saving",
+    "discard": "Discard changes",
+    "saved": "Asset targets saved",
+    "saveFailed": "Could not save the asset targets",
+    "addAsset": "Add asset to the class",
+    "emptyTitle": "No assets in this class yet.",
+    "emptyAction": "Add asset",
+    "zeroNote": "Want to include an asset you do not own yet? Add it with quantity zero and give it a target: the smart contribution will start directing money to it.",
+    "errors": {
+      "invalid": "Enter a value between 0% and 100%.",
+      "sumMustBe100": "Targets must add up to 100% or all be zero."
+    }
+  },
   "tolerance": {
     "title": "Tolerance range",
     "description": "Below this deviation, the class shows as \"within range\" and raises no alert.",
