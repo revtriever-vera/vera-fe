@@ -1,11 +1,14 @@
-import type { components } from '@/shared/lib/api/schema';
+import type { components, paths } from '@/shared/lib/api/schema';
 
 export type HoldingView = components['schemas']['HoldingView'];
 export type HoldingsResponse = components['schemas']['HoldingsResponse'];
 export type Overview = components['schemas']['Overview'];
 export type OverviewClass = components['schemas']['OverviewClass'];
-export type AssetClassView = components['schemas']['AssetClassView'];
-export type ClassesResponse = components['schemas']['ClassesResponse'];
+export type ClassesResponse = paths['/allocation/classes']['get']['responses']['200']['content']['application/json'];
+export type AssetClassView = ClassesResponse['data'][number];
+export type CreateClassInput = paths['/allocation/classes']['post']['requestBody']['content']['application/json'];
+export type UpdateClassBody = paths['/allocation/classes/{id}']['patch']['requestBody']['content']['application/json'];
+export type MergeClassesBody = paths['/allocation/classes/{id}/merge']['post']['requestBody']['content']['application/json'];
 export type PortfolioSettings = components['schemas']['PortfolioSettings'];
 export type UpdatePortfolioSettings = components['schemas']['UpdatePortfolioSettings'];
 
