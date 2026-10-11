@@ -231,13 +231,13 @@ describe('progresso', () => {
         expect(within(list).getByText('Gastos')).toHaveClass('line-through');
     });
 
-    it('as etapas reservadas levam de uma à outra até o Pronto', async () => {
+    it('pular as duas etapas leva de uma à outra até o Pronto', async () => {
         serveState(onboardingState({ status: 'assets' }));
         const router: AnyRouter = renderRouterAt('/onboarding/assets', { signedIn: true });
 
-        await userEvent.click(await screen.findByRole('link', { name: 'Continuar' }));
+        await userEvent.click(await screen.findByRole('button', { name: 'Pular por enquanto' }));
         expect(await screen.findByRole('heading', { level: 1, name: 'Conecte seus bancos' })).toBeInTheDocument();
-        await userEvent.click(screen.getByRole('link', { name: 'Continuar' }));
+        await userEvent.click(screen.getByRole('button', { name: 'Pular por enquanto' }));
 
         await waitFor(() => {
             expect(router.state.location.pathname).toBe('/onboarding/done');

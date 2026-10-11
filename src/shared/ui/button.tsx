@@ -9,7 +9,7 @@ type ButtonVariantProps = {
     block?: boolean | null;
 } & ClassProp;
 
-const buttonVariants: (props?: ButtonVariantProps) => string = cva(
+export const buttonVariants: (props?: ButtonVariantProps) => string = cva(
     'inline-flex items-center justify-center gap-2 rounded-control font-semibold shadow-control transition-colors disabled:pointer-events-none disabled:opacity-50',
     {
         variants: {
