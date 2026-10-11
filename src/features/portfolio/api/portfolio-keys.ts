@@ -20,6 +20,7 @@ export const portfolioKeys: {
     exchangeRate: (currency: string) => readonly ['portfolio', 'exchange-rate', string];
     fixedIncomePreview: (input: FixedIncomePreviewInput) => readonly ['portfolio', 'fixed-income-preview', FixedIncomePreviewInput];
     position: (id: string) => readonly ['portfolio', 'position', string];
+    fixedIncomeTitle: (id: string) => readonly ['portfolio', 'fixed-income-title', string];
     contributions: () => readonly ['portfolio', 'contribution'];
     contribution: (amount: number) => readonly ['portfolio', 'contribution', number];
 } = {
@@ -38,6 +39,8 @@ export const portfolioKeys: {
     fixedIncomePreview: (input: FixedIncomePreviewInput): readonly ['portfolio', 'fixed-income-preview', FixedIncomePreviewInput] =>
         [...portfolioKeys.all, 'fixed-income-preview', input] as const,
     position: (id: string): readonly ['portfolio', 'position', string] => [...portfolioKeys.all, 'position', id] as const,
+    fixedIncomeTitle: (id: string): readonly ['portfolio', 'fixed-income-title', string] =>
+        [...portfolioKeys.all, 'fixed-income-title', id] as const,
     contributions: (): readonly ['portfolio', 'contribution'] => [...portfolioKeys.all, 'contribution'] as const,
     contribution: (amount: number): readonly ['portfolio', 'contribution', number] => [...portfolioKeys.contributions(), amount] as const
 };

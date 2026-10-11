@@ -44,3 +44,7 @@ export const SYSTEM_CLASS_KEYS = {
 export type SystemClassKey = (typeof SYSTEM_CLASS_KEYS)[keyof typeof SYSTEM_CLASS_KEYS];
 
 export type SaveClassTargetsBody = paths['/allocation/targets/classes']['put']['requestBody']['content']['application/json'];
+
+export type Assignment =
+    paths['/allocation/assignments/{subjectType}/{subjectId}']['put']['responses']['200']['content']['application/json'];
+export type AssignmentSubjectType = Assignment['subjectType'];
