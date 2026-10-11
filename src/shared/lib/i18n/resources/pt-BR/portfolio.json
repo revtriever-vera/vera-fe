@@ -1,0 +1,127 @@
+{
+  "layout": {
+    "title": "Patrimônio",
+    "tabsLabel": "Seções do patrimônio",
+    "tabs": {
+      "overview": "Visão geral",
+      "targets": "Carteira-alvo",
+      "contribution": "Aporte inteligente",
+      "assets": "Meus ativos"
+    }
+  },
+  "underConstruction": {
+    "title": "Em construção",
+    "description": "Esta tela ainda está sendo preparada."
+  },
+  "classes": {
+    "customName": "Classe sem nome",
+    "names": {
+      "rf_pos": "Renda fixa pós",
+      "rf_pre": "Renda fixa pré",
+      "rf_ipca": "Renda fixa IPCA+",
+      "acoes_br": "Ações Brasil",
+      "fii": "FIIs",
+      "acoes_eua": "Ações EUA",
+      "reits": "REITs",
+      "cripto": "Cripto"
+    },
+    "descriptions": {
+      "rf_pos": "CDI e Selic",
+      "rf_pre": "taxa fixa, BR e EUA",
+      "rf_ipca": "inflação + taxa",
+      "acoes_br": "B3",
+      "fii": "fundos imobiliários",
+      "acoes_eua": "por exposição",
+      "reits": "imóveis nos EUA",
+      "cripto": "moedas digitais"
+    }
+  },
+  "status": {
+    "within": "na faixa",
+    "above": "{{pp}} acima",
+    "below": "{{pp}} abaixo",
+    "aboveLabel": "Acima da meta",
+    "belowLabel": "Abaixo da meta",
+    "withinLabel": "Dentro da faixa de tolerância"
+  },
+  "sources": {
+    "brapi": "B3 via brapi",
+    "finnhub": "Finnhub",
+    "twelvedata": "Twelve Data",
+    "alphavantage": "Alpha Vantage",
+    "coingecko": "CoinGecko",
+    "tesouro_direto": "Tesouro Transparente",
+    "curve_cdi": "Estimado na curva do CDI",
+    "curve_pre": "Estimado na curva pré-fixada",
+    "curve_ipca": "Estimado na curva do IPCA+"
+  },
+  "types": {
+    "fixed_income": "Renda fixa",
+    "tesouro": "Tesouro Direto",
+    "acoes_br": "Ações Brasil",
+    "fii": "FIIs",
+    "acoes_eua": "Ações EUA",
+    "reits": "REITs",
+    "cripto": "Cripto"
+  },
+  "units": {
+    "shares": "cotas",
+    "unit": "un.",
+    "bonds": "títulos"
+  },
+  "baseCurrency": {
+    "label": "Moeda base",
+    "brl": "R$",
+    "usd": "US$",
+    "brlName": "Real",
+    "usdName": "Dólar",
+    "updateError": "Não foi possível trocar a moeda base."
+  },
+  "quality": {
+    "title": "Atenção aos dados",
+    "missingQuotes_one": "{{count}} ativo ainda sem cotação.",
+    "missingQuotes_other": "{{count}} ativos ainda sem cotação.",
+    "staleQuotes_one": "{{count}} cotação desatualizada.",
+    "staleQuotes_other": "{{count}} cotações desatualizadas.",
+    "estimatedFixedIncome_one": "{{count}} título de renda fixa estimado na curva.",
+    "estimatedFixedIncome_other": "{{count}} títulos de renda fixa estimados na curva.",
+    "indexDataMissing_one": "{{count}} título sem dado do índice.",
+    "indexDataMissing_other": "{{count}} títulos sem dado do índice.",
+    "missingRates_one": "{{count}} valor sem câmbio disponível.",
+    "missingRates_other": "{{count}} valores sem câmbio disponível."
+  },
+  "dataSources": {
+    "title": "De onde vêm os dados",
+    "b3": "Ações e FIIs da B3: cotações via brapi.",
+    "us": "Ações e REITs dos EUA: cotações via Finnhub.",
+    "crypto": "Criptomoedas: cotações via CoinGecko.",
+    "coingeckoLink": "Dados fornecidos pela CoinGecko",
+    "exchange": "Câmbio: PTAX do Banco Central.",
+    "treasury": "Tesouro Direto: Tesouro Transparente.",
+    "series": "Renda fixa: séries do Banco Central (CDI, Selic e IPCA).",
+    "estimate": "Valores de renda fixa são estimativas e podem diferir do extrato."
+  },
+  "errors": {
+    "generic": "Algo deu errado. Tente de novo em instantes.",
+    "validationFailed": "Confira os dados informados e tente de novo.",
+    "assetNotFound": "Não encontramos esse ativo no catálogo.",
+    "assetAlreadyInPortfolio": "Esse ativo já está na sua carteira.",
+    "positionNotFound": "Não encontramos essa posição.",
+    "invalidQuantity": "A quantidade informada não é válida para esse ativo.",
+    "classRequired": "Escolha a classe do ativo.",
+    "positionLimitReached": "Você chegou ao limite de ativos da carteira.",
+    "titleNotFound": "Não encontramos esse título de renda fixa.",
+    "appliedDateOutOfRange": "A data da aplicação está fora do período aceito.",
+    "invalidTerms": "As condições do título não são válidas.",
+    "classNotFound": "Não encontramos essa classe.",
+    "classNameTaken": "Já existe uma classe com esse nome.",
+    "classNotEmpty": "Essa classe ainda tem ativos. Mova ou junte antes de excluir.",
+    "cannotMergeIntoSelf": "Escolha outra classe para juntar.",
+    "classLimitReached": "Você chegou ao limite de classes.",
+    "assignmentNotFound": "Não encontramos a classificação desse ativo.",
+    "targetsMustSum100": "As metas precisam somar exatamente 100%.",
+    "targetsIncomplete": "Informe a meta de todos os ativos da classe.",
+    "contributionTargetsNotSet": "Defina a carteira-alvo antes de simular um aporte.",
+    "exchangeRateUnavailable": "O câmbio do dia não está disponível agora."
+  }
+}

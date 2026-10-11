@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
-import { Balloon } from './tooltip';
+import { Balloon, RichBalloon } from './tooltip';
 
 describe('Balloon', () => {
     it('mostra o texto ao focar o gatilho e o esconde ao sair', async () => {
@@ -34,5 +34,49 @@ describe('Balloon', () => {
 
         expect(balloon).toHaveClass('balloon-in');
         expect(balloon).not.toHaveClass('animate-in');
+    });
+});
+
+describe('RichBalloon', () => {
+    it('abre em hover com o conteúdo rico', async () => {
+        const user: UserEvent = userEvent.setup();
+        render(
+            <RichBalloon content={<strong>Detalhe da classe</strong>}>
+                <button type="button">Classe</button>
+            </RichBalloon>
+        );
+
+        await user.hover(screen.getByRole('button', { name: 'Classe' }));
+
+        expect(await screen.findByRole('tooltip')).toHaveTextContent('Detalhe da classe');
+        expect(screen.getAllByText('Detalhe da classe').length).toBeGreaterThan(0);
+    });
+
+    it('abre ao focar e fecha com Esc', async () => {
+        const user: UserEvent = userEvent.setup();
+        render(
+            <RichBalloon content="Mais detalhes">
+                <button type="button">Classe</button>
+            </RichBalloon>
+        );
+
+        await user.tab();
+        expect(await screen.findByRole('tooltip')).toBeInTheDocument();
+
+        await user.keyboard('{Escape}');
+        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    });
+
+    it('abre ao tocar e continua aberto depois do toque', async () => {
+        render(
+            <RichBalloon content="Mais detalhes">
+                <button type="button">Classe</button>
+            </RichBalloon>
+        );
+
+        fireEvent.pointerDown(screen.getByRole('button', { name: 'Classe' }), { pointerType: 'touch' });
+        fireEvent.click(screen.getByRole('button', { name: 'Classe' }));
+
+        expect(await screen.findByRole('tooltip')).toBeInTheDocument();
     });
 });

@@ -105,3 +105,29 @@ describe('contraste dos tokens de texto', () => {
         expect(token('caution-soft')).toContain('#c2620d');
     });
 });
+
+const PROTOTYPE_CLASS_TOKENS: readonly string[] = Array.from(
+    { length: 8 },
+    (_: unknown, index: number): string => `class-${String(index + 1)}`
+);
+const USER_CLASS_TOKENS: readonly string[] = Array.from({ length: 4 }, (_: unknown, index: number): string => `class-${String(index + 9)}`);
+const GRAPHIC_MIN: number = 3;
+const PROTOTYPE_GRAPHIC_MIN: number = 2;
+
+describe('contraste dos tokens de classe de ativo', () => {
+    it.each(USER_CLASS_TOKENS)('%s tem 3:1 contra a superfície', (name: string) => {
+        expect(ratio(hexToRgb(token(name)), SURFACE)).toBeGreaterThanOrEqual(GRAPHIC_MIN);
+    });
+
+    it.each(PROTOTYPE_CLASS_TOKENS)(
+        '%s, cor do protótipo, é distinguível da superfície (acompanha sempre ícone e texto)',
+        (name: string) => {
+            expect(ratio(hexToRgb(token(name)), SURFACE)).toBeGreaterThanOrEqual(PROTOTYPE_GRAPHIC_MIN);
+        }
+    );
+
+    it('as doze cores são todas diferentes', () => {
+        const values: string[] = [...PROTOTYPE_CLASS_TOKENS, ...USER_CLASS_TOKENS].map((name: string): string => token(name));
+        expect(new Set(values).size).toBe(12);
+    });
+});

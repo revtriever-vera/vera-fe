@@ -49,6 +49,30 @@
     --color-partner: #1a56db;
     --color-scrollbar: #e6c9d6;
     --color-scrollbar-hover: #d3aabd;
+    --color-class-1: #5868d6;
+    --color-class-2: #8b78e3;
+    --color-class-3: #b45bd0;
+    --color-class-4: #e0407b;
+    --color-class-5: #ef8657;
+    --color-class-6: #22968a;
+    --color-class-7: #e6a92c;
+    --color-class-8: #6d3a5f;
+    --color-class-9: #2f7fb8;
+    --color-class-10: #7a8f1f;
+    --color-class-11: #b5532f;
+    --color-class-12: #5f6f7a;
+    --color-class-1-soft: color-mix(in srgb, var(--color-class-1) 15%, var(--color-surface));
+    --color-class-2-soft: color-mix(in srgb, var(--color-class-2) 15%, var(--color-surface));
+    --color-class-3-soft: color-mix(in srgb, var(--color-class-3) 15%, var(--color-surface));
+    --color-class-4-soft: color-mix(in srgb, var(--color-class-4) 15%, var(--color-surface));
+    --color-class-5-soft: color-mix(in srgb, var(--color-class-5) 15%, var(--color-surface));
+    --color-class-6-soft: color-mix(in srgb, var(--color-class-6) 15%, var(--color-surface));
+    --color-class-7-soft: color-mix(in srgb, var(--color-class-7) 15%, var(--color-surface));
+    --color-class-8-soft: color-mix(in srgb, var(--color-class-8) 15%, var(--color-surface));
+    --color-class-9-soft: color-mix(in srgb, var(--color-class-9) 15%, var(--color-surface));
+    --color-class-10-soft: color-mix(in srgb, var(--color-class-10) 15%, var(--color-surface));
+    --color-class-11-soft: color-mix(in srgb, var(--color-class-11) 15%, var(--color-surface));
+    --color-class-12-soft: color-mix(in srgb, var(--color-class-12) 15%, var(--color-surface));
 }
 
 @layer base {

@@ -4,6 +4,70 @@
  */
 
 export interface paths {
+    "/allocation/classes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AllocationClassesController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/allocation/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AllocationSettingsController_get"];
+        put: operations["AllocationSettingsController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/portfolio/holdings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PortfolioController_holdings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/portfolio/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PortfolioController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -145,6 +209,112 @@ export interface components {
             requestId: string | null;
             meta?: Record<string, unknown>;
         };
+        AssetClassView: {
+            id: string;
+            systemKey: string | null;
+            aliasKeys: string[];
+            name: string | null;
+            colorKey: string;
+            targetBps: number;
+            sortOrder: number;
+        };
+        ClassesResponse: {
+            data: components["schemas"]["AssetClassView"][];
+        };
+        PortfolioSettings: {
+            /** @enum {string} */
+            baseCurrency: "BRL" | "USD";
+            toleranceBps: number;
+        };
+        UpdatePortfolioSettings: {
+            /** @enum {string} */
+            baseCurrency?: "BRL" | "USD";
+            toleranceBps?: number;
+        };
+        HoldingView: {
+            /** @enum {string} */
+            kind: "position" | "fixed_income";
+            id: string;
+            assetId: string | null;
+            symbol: string;
+            name: string;
+            /** @enum {string|null} */
+            market: "B3" | "US" | "CRYPTO" | "TESOURO" | null;
+            /** @enum {string} */
+            typeGroup: "fixed_income" | "tesouro" | "acoes_br" | "fii" | "acoes_eua" | "reits" | "cripto";
+            classId: string;
+            quantity: string | null;
+            quantityDecimals: number | null;
+            unitPrice: string | null;
+            priceCurrency: string | null;
+            nativeValueMinor: number;
+            /** @enum {string} */
+            nativeCurrency: "BRL" | "USD";
+            valueMinor: number;
+            /** @enum {string} */
+            valueSource: "brapi" | "finnhub" | "twelvedata" | "alphavantage" | "coingecko" | "tesouro_direto" | "curve_cdi" | "curve_pre" | "curve_ipca";
+            priceDate: string | null;
+            dollarExposure: boolean;
+            missingQuote: boolean;
+            stale: boolean;
+            estimated: boolean;
+            matured: boolean;
+            missingRate: boolean;
+        };
+        HoldingsResponse: {
+            /** @enum {string} */
+            baseCurrency: "BRL" | "USD";
+            asOf: string;
+            data: components["schemas"]["HoldingView"][];
+        };
+        OverviewClass: {
+            classId: string;
+            systemKey: string | null;
+            name: string | null;
+            colorKey: string;
+            valueMinor: number;
+            shareBps: number;
+            targetBps: number;
+            deviationBps: number;
+            /** @enum {string} */
+            status: "within" | "above" | "below";
+            gapMinor: number;
+            holdingsCount: number;
+        };
+        Overview: {
+            /** @enum {string} */
+            baseCurrency: "BRL" | "USD";
+            asOf: string;
+            toleranceBps: number;
+            empty: boolean;
+            totalMinor: number;
+            unclassifiedMinor: number;
+            dollarExposure: {
+                valueMinor: number;
+                shareBps: number;
+            };
+            usdRate: {
+                brlPerUnit: string;
+                date: string;
+                source: string;
+            } | null;
+            classes: components["schemas"]["OverviewClass"][];
+            outsideCount: number;
+            largestDeviation: {
+                classId: string;
+                deviationBps: number;
+                gapMinor: number;
+                /** @enum {string} */
+                status: "within" | "above" | "below";
+            } | null;
+            quality: {
+                missingQuotes: number;
+                staleQuotes: number;
+                estimatedFixedIncome: number;
+                indexDataMissing: number;
+                missingRates: number;
+            };
+        };
     };
     responses: never;
     parameters: never;
@@ -154,6 +324,105 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    AllocationClassesController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ClassesResponse"];
+                };
+            };
+        };
+    };
+    AllocationSettingsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioSettings"];
+                };
+            };
+        };
+    };
+    AllocationSettingsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePortfolioSettings"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioSettings"];
+                };
+            };
+        };
+    };
+    PortfolioController_holdings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HoldingsResponse"];
+                };
+            };
+        };
+    };
+    PortfolioController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Overview"];
+                };
+            };
+        };
+    };
     HealthController_check: {
         parameters: {
             query?: never;
