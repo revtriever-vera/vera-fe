@@ -1,3 +1,76 @@
 {
-  "title": "Carteira-alvo"
+  "title": "Carteira-alvo",
+  "classes": {
+    "title": "Gerenciar classes",
+    "description": "Crie, renomeie e junte classes. As metas acompanham as mudanças.",
+    "close": "Fechar",
+    "loading": "Carregando classes",
+    "loadError": "Não foi possível carregar as classes.",
+    "retry": "Tentar de novo",
+    "listLabel": "Classes da carteira",
+    "holdingsCount_zero": "Nenhum ativo",
+    "holdingsCount_one": "{{count}} ativo",
+    "holdingsCount_other": "{{count}} ativos",
+    "target": "Meta {{value}}",
+    "new": "Nova classe",
+    "limitReached": "Você chegou ao limite de 30 classes.",
+    "targetSumWarning": "A soma das metas deixou de ser 100%. Ajuste na carteira-alvo.",
+    "targetSumAction": "Fechar e ajustar metas",
+    "actions": {
+      "menu": "Ações de {{name}}",
+      "rename": "Renomear {{name}}",
+      "merge": "Juntar {{name}} em outra",
+      "delete": "Excluir {{name}}",
+      "deleteBlockedHoldings": "Esta classe tem ativos. Junte em outra para esvaziá-la.",
+      "deleteBlockedSystem": "Esta é uma classe padrão e não pode ser excluída. Junte em outra."
+    },
+    "form": {
+      "createTitle": "Nova classe",
+      "renameTitle": "Renomear {{name}}",
+      "nameLabel": "Nome da classe",
+      "nameHint": "Ex.: Previdência, Imóveis, Reserva de emergência.",
+      "colorLabel": "Cor",
+      "colorOption": "Cor {{number}}",
+      "newTargetNotice": "A nova classe começa com meta de 0%. Defina a meta na carteira-alvo.",
+      "restoreName": "Restaurar nome padrão",
+      "create": "Criar classe",
+      "save": "Salvar",
+      "saving": "Salvando",
+      "cancel": "Cancelar",
+      "errors": {
+        "nameRequired": "Dê um nome à classe.",
+        "nameTooLong": "Use até 40 caracteres.",
+        "nameTaken": "Já existe uma classe com esse nome."
+      }
+    },
+    "merge": {
+      "title": "Juntar {{name}} em outra classe",
+      "destinationLabel": "Juntar em",
+      "destinationPlaceholder": "Escolha a classe de destino",
+      "continue": "Continuar",
+      "cancel": "Cancelar",
+      "confirmTitle": "Juntar {{source}} em {{destination}}?",
+      "confirmDescription_zero": "{{source}} não tem ativos. As metas das duas classes se somam ({{sourceTarget}} + {{destinationTarget}} = {{sum}}) e {{source}} deixa de existir. Nada é vendido.",
+      "confirmDescription_one": "O ativo de {{source}} passa para {{destination}}, as metas das duas classes se somam ({{sourceTarget}} + {{destinationTarget}} = {{sum}}) e {{source}} deixa de existir. Nada é vendido.",
+      "confirmDescription_other": "Os {{count}} ativos de {{source}} passam para {{destination}}, as metas das duas classes se somam ({{sourceTarget}} + {{destinationTarget}} = {{sum}}) e {{source}} deixa de existir. Nada é vendido.",
+      "confirm": "Juntar classes"
+    },
+    "delete": {
+      "title": "Excluir a classe {{name}}?",
+      "description": "Ela está vazia.",
+      "descriptionWithTarget": "Ela está vazia, mas tem meta de {{target}}. A soma das metas deixará de ser 100%.",
+      "confirm": "Excluir"
+    },
+    "toasts": {
+      "created": "Classe {{name}} criada",
+      "renamed": "Classe renomeada para {{name}}",
+      "updated": "Classe {{name}} atualizada",
+      "restored": "Nome padrão restaurado",
+      "merged": "{{source}} juntada em {{destination}}",
+      "deleted": "Classe {{name}} excluída",
+      "saveFailed": "Não foi possível salvar a classe",
+      "mergeFailed": "Não foi possível juntar as classes",
+      "deleteFailed": "Não foi possível excluir a classe"
+    }
+  }
 }

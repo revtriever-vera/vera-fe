@@ -1,3 +1,76 @@
 {
-  "title": "Target portfolio"
+  "title": "Target portfolio",
+  "classes": {
+    "title": "Manage classes",
+    "description": "Create, rename and merge classes. Targets follow the changes.",
+    "close": "Close",
+    "loading": "Loading classes",
+    "loadError": "We could not load the classes.",
+    "retry": "Try again",
+    "listLabel": "Portfolio classes",
+    "holdingsCount_zero": "No assets",
+    "holdingsCount_one": "{{count}} asset",
+    "holdingsCount_other": "{{count}} assets",
+    "target": "Target {{value}}",
+    "new": "New class",
+    "limitReached": "You reached the limit of 30 classes.",
+    "targetSumWarning": "The targets no longer add up to 100%. Adjust them in the target portfolio.",
+    "targetSumAction": "Close and adjust targets",
+    "actions": {
+      "menu": "Actions for {{name}}",
+      "rename": "Rename {{name}}",
+      "merge": "Merge {{name}} into another",
+      "delete": "Delete {{name}}",
+      "deleteBlockedHoldings": "This class has assets. Merge it into another to empty it.",
+      "deleteBlockedSystem": "This is a default class and cannot be deleted. Merge it into another."
+    },
+    "form": {
+      "createTitle": "New class",
+      "renameTitle": "Rename {{name}}",
+      "nameLabel": "Class name",
+      "nameHint": "E.g.: Pension, Real estate, Emergency fund.",
+      "colorLabel": "Color",
+      "colorOption": "Color {{number}}",
+      "newTargetNotice": "The new class starts with a 0% target. Set the target in the target portfolio.",
+      "restoreName": "Restore default name",
+      "create": "Create class",
+      "save": "Save",
+      "saving": "Saving",
+      "cancel": "Cancel",
+      "errors": {
+        "nameRequired": "Give the class a name.",
+        "nameTooLong": "Use up to 40 characters.",
+        "nameTaken": "A class with this name already exists."
+      }
+    },
+    "merge": {
+      "title": "Merge {{name}} into another class",
+      "destinationLabel": "Merge into",
+      "destinationPlaceholder": "Choose the destination class",
+      "continue": "Continue",
+      "cancel": "Cancel",
+      "confirmTitle": "Merge {{source}} into {{destination}}?",
+      "confirmDescription_zero": "{{source}} has no assets. The targets of both classes add up ({{sourceTarget}} + {{destinationTarget}} = {{sum}}) and {{source}} ceases to exist. Nothing is sold.",
+      "confirmDescription_one": "The asset in {{source}} moves to {{destination}}, the targets of both classes add up ({{sourceTarget}} + {{destinationTarget}} = {{sum}}) and {{source}} ceases to exist. Nothing is sold.",
+      "confirmDescription_other": "The {{count}} assets in {{source}} move to {{destination}}, the targets of both classes add up ({{sourceTarget}} + {{destinationTarget}} = {{sum}}) and {{source}} ceases to exist. Nothing is sold.",
+      "confirm": "Merge classes"
+    },
+    "delete": {
+      "title": "Delete the class {{name}}?",
+      "description": "It is empty.",
+      "descriptionWithTarget": "It is empty but has a target of {{target}}. The targets will no longer add up to 100%.",
+      "confirm": "Delete"
+    },
+    "toasts": {
+      "created": "Class {{name}} created",
+      "renamed": "Class renamed to {{name}}",
+      "updated": "Class {{name}} updated",
+      "restored": "Default name restored",
+      "merged": "{{source}} merged into {{destination}}",
+      "deleted": "Class {{name}} deleted",
+      "saveFailed": "We could not save the class",
+      "mergeFailed": "We could not merge the classes",
+      "deleteFailed": "We could not delete the class"
+    }
+  }
 }
