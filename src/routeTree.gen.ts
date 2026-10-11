@@ -11,7 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as PatrimonioRouteImport } from './routes/patrimonio'
 import { Route as DevUiRouteImport } from './routes/_dev/ui'
+import { Route as PatrimonioIndexRouteImport } from './routes/patrimonio.index'
+import { Route as PatrimonioAporteRouteImport } from './routes/patrimonio.aporte'
+import { Route as PatrimonioAtivosRouteImport } from './routes/patrimonio.ativos'
+import { Route as PatrimonioCarteiraAlvoRouteImport } from './routes/patrimonio.carteira-alvo'
+import { Route as PatrimonioComecarRouteImport } from './routes/patrimonio.comecar'
+import { Route as PatrimonioClassesClassIdRouteImport } from './routes/patrimonio.classes.$classId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,39 +30,126 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PatrimonioRoute = PatrimonioRouteImport.update({
+  id: '/patrimonio',
+  path: '/patrimonio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DevUiRoute = DevUiRouteImport.update({
   id: '/_dev/ui',
   path: '/ui',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PatrimonioIndexRoute = PatrimonioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PatrimonioRoute,
+} as any)
+const PatrimonioAporteRoute = PatrimonioAporteRouteImport.update({
+  id: '/aporte',
+  path: '/aporte',
+  getParentRoute: () => PatrimonioRoute,
+} as any)
+const PatrimonioAtivosRoute = PatrimonioAtivosRouteImport.update({
+  id: '/ativos',
+  path: '/ativos',
+  getParentRoute: () => PatrimonioRoute,
+} as any)
+const PatrimonioCarteiraAlvoRoute = PatrimonioCarteiraAlvoRouteImport.update({
+  id: '/carteira-alvo',
+  path: '/carteira-alvo',
+  getParentRoute: () => PatrimonioRoute,
+} as any)
+const PatrimonioComecarRoute = PatrimonioComecarRouteImport.update({
+  id: '/comecar',
+  path: '/comecar',
+  getParentRoute: () => PatrimonioRoute,
+} as any)
+const PatrimonioClassesClassIdRoute =
+  PatrimonioClassesClassIdRouteImport.update({
+    id: '/classes/$classId',
+    path: '/classes/$classId',
+    getParentRoute: () => PatrimonioRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/patrimonio': typeof PatrimonioRouteWithChildren
   '/ui': typeof DevUiRoute
+  '/patrimonio/aporte': typeof PatrimonioAporteRoute
+  '/patrimonio/ativos': typeof PatrimonioAtivosRoute
+  '/patrimonio/carteira-alvo': typeof PatrimonioCarteiraAlvoRoute
+  '/patrimonio/comecar': typeof PatrimonioComecarRoute
+  '/patrimonio/': typeof PatrimonioIndexRoute
+  '/patrimonio/classes/$classId': typeof PatrimonioClassesClassIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/ui': typeof DevUiRoute
+  '/patrimonio/aporte': typeof PatrimonioAporteRoute
+  '/patrimonio/ativos': typeof PatrimonioAtivosRoute
+  '/patrimonio/carteira-alvo': typeof PatrimonioCarteiraAlvoRoute
+  '/patrimonio/comecar': typeof PatrimonioComecarRoute
+  '/patrimonio': typeof PatrimonioIndexRoute
+  '/patrimonio/classes/$classId': typeof PatrimonioClassesClassIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/patrimonio': typeof PatrimonioRouteWithChildren
   '/_dev/ui': typeof DevUiRoute
+  '/patrimonio/aporte': typeof PatrimonioAporteRoute
+  '/patrimonio/ativos': typeof PatrimonioAtivosRoute
+  '/patrimonio/carteira-alvo': typeof PatrimonioCarteiraAlvoRoute
+  '/patrimonio/comecar': typeof PatrimonioComecarRoute
+  '/patrimonio/': typeof PatrimonioIndexRoute
+  '/patrimonio/classes/$classId': typeof PatrimonioClassesClassIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/ui'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/patrimonio'
+    | '/ui'
+    | '/patrimonio/aporte'
+    | '/patrimonio/ativos'
+    | '/patrimonio/carteira-alvo'
+    | '/patrimonio/comecar'
+    | '/patrimonio/'
+    | '/patrimonio/classes/$classId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/ui'
-  id: '__root__' | '/' | '/login' | '/_dev/ui'
+  to:
+    | '/'
+    | '/login'
+    | '/ui'
+    | '/patrimonio/aporte'
+    | '/patrimonio/ativos'
+    | '/patrimonio/carteira-alvo'
+    | '/patrimonio/comecar'
+    | '/patrimonio'
+    | '/patrimonio/classes/$classId'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/patrimonio'
+    | '/_dev/ui'
+    | '/patrimonio/aporte'
+    | '/patrimonio/ativos'
+    | '/patrimonio/carteira-alvo'
+    | '/patrimonio/comecar'
+    | '/patrimonio/'
+    | '/patrimonio/classes/$classId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
+  PatrimonioRoute: typeof PatrimonioRouteWithChildren
   DevUiRoute: typeof DevUiRoute
 }
 
@@ -75,6 +169,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/patrimonio': {
+      id: '/patrimonio'
+      path: '/patrimonio'
+      fullPath: '/patrimonio'
+      preLoaderRoute: typeof PatrimonioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_dev/ui': {
       id: '/_dev/ui'
       path: '/ui'
@@ -82,12 +183,77 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevUiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/patrimonio/': {
+      id: '/patrimonio/'
+      path: '/'
+      fullPath: '/patrimonio/'
+      preLoaderRoute: typeof PatrimonioIndexRouteImport
+      parentRoute: typeof PatrimonioRoute
+    }
+    '/patrimonio/aporte': {
+      id: '/patrimonio/aporte'
+      path: '/aporte'
+      fullPath: '/patrimonio/aporte'
+      preLoaderRoute: typeof PatrimonioAporteRouteImport
+      parentRoute: typeof PatrimonioRoute
+    }
+    '/patrimonio/ativos': {
+      id: '/patrimonio/ativos'
+      path: '/ativos'
+      fullPath: '/patrimonio/ativos'
+      preLoaderRoute: typeof PatrimonioAtivosRouteImport
+      parentRoute: typeof PatrimonioRoute
+    }
+    '/patrimonio/carteira-alvo': {
+      id: '/patrimonio/carteira-alvo'
+      path: '/carteira-alvo'
+      fullPath: '/patrimonio/carteira-alvo'
+      preLoaderRoute: typeof PatrimonioCarteiraAlvoRouteImport
+      parentRoute: typeof PatrimonioRoute
+    }
+    '/patrimonio/comecar': {
+      id: '/patrimonio/comecar'
+      path: '/comecar'
+      fullPath: '/patrimonio/comecar'
+      preLoaderRoute: typeof PatrimonioComecarRouteImport
+      parentRoute: typeof PatrimonioRoute
+    }
+    '/patrimonio/classes/$classId': {
+      id: '/patrimonio/classes/$classId'
+      path: '/classes/$classId'
+      fullPath: '/patrimonio/classes/$classId'
+      preLoaderRoute: typeof PatrimonioClassesClassIdRouteImport
+      parentRoute: typeof PatrimonioRoute
+    }
   }
 }
+
+interface PatrimonioRouteChildren {
+  PatrimonioAporteRoute: typeof PatrimonioAporteRoute
+  PatrimonioAtivosRoute: typeof PatrimonioAtivosRoute
+  PatrimonioCarteiraAlvoRoute: typeof PatrimonioCarteiraAlvoRoute
+  PatrimonioComecarRoute: typeof PatrimonioComecarRoute
+  PatrimonioIndexRoute: typeof PatrimonioIndexRoute
+  PatrimonioClassesClassIdRoute: typeof PatrimonioClassesClassIdRoute
+}
+
+const PatrimonioRouteChildren: PatrimonioRouteChildren = {
+  PatrimonioAporteRoute: PatrimonioAporteRoute,
+  PatrimonioAtivosRoute: PatrimonioAtivosRoute,
+  PatrimonioCarteiraAlvoRoute: PatrimonioCarteiraAlvoRoute,
+  PatrimonioComecarRoute: PatrimonioComecarRoute,
+  PatrimonioIndexRoute: PatrimonioIndexRoute,
+  PatrimonioClassesClassIdRoute: PatrimonioClassesClassIdRoute,
+}
+
+const PatrimonioRouteWithChildren = PatrimonioRoute._addFileChildren(
+  PatrimonioRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
+  PatrimonioRoute: PatrimonioRouteWithChildren,
   DevUiRoute: DevUiRoute,
 }
 export const routeTree = rootRouteImport

@@ -1,0 +1,77 @@
+import { describe, expect, it } from 'vitest';
+import { screen } from '@testing-library/react';
+import type { AnyRouter } from '@tanstack/react-router';
+import { renderRouterAt } from '../../../test/router';
+
+const ROUTES: readonly string[] = [
+    '/patrimonio',
+    '/patrimonio/ativos',
+    '/patrimonio/comecar',
+    '/patrimonio/carteira-alvo',
+    '/patrimonio/classes/class-fii',
+    '/patrimonio/aporte'
+];
+
+describe('rotas de /patrimonio', () => {
+    it.each(ROUTES)('%s abre dentro do layout com o título e a página em construção', async (path: string) => {
+        renderRouterAt(path);
+
+        expect(await screen.findByRole('heading', { name: 'Patrimônio', level: 1 })).toBeInTheDocument();
+        expect(await screen.findByRole('heading', { name: 'Em construção' })).toBeInTheDocument();
+    });
+
+    it.each([
+        ['/patrimonio', 'Visão geral'],
+        ['/patrimonio/carteira-alvo', 'Carteira-alvo'],
+        ['/patrimonio/aporte', 'Aporte inteligente'],
+        ['/patrimonio/ativos', 'Meus ativos']
+    ])('em %s só a aba %s fica marcada', async (path: string, active: string) => {
+        renderRouterAt(path);
+
+        const tabs: HTMLElement = await screen.findByRole('navigation', { name: 'Seções do patrimônio' });
+        const links: HTMLElement[] = Array.from(tabs.querySelectorAll('a'));
+        const marked: string[] = links
+            .filter((link: HTMLElement): boolean => link.classList.contains('bg-surface'))
+            .map((link: HTMLElement): string => link.textContent ?? '');
+
+        expect(marked).toEqual([active]);
+    });
+
+    it('as abas navegam entre as telas', async () => {
+        const router: AnyRouter = renderRouterAt('/patrimonio');
+        const link: HTMLElement = await screen.findByRole('link', { name: 'Meus ativos' });
+
+        link.click();
+
+        await screen.findByRole('heading', { name: 'Em construção' });
+        expect(router.state.location.pathname).toBe('/patrimonio/ativos');
+    });
+
+    it('valida o parâmetro de busca de /patrimonio/ativos', async () => {
+        const router: AnyRouter = renderRouterAt('/patrimonio/ativos?add=true&classId=x');
+        await screen.findByRole('heading', { name: 'Em construção' });
+
+        expect(router.state.location.search).toEqual({ add: true, classId: 'x' });
+    });
+
+    it('descarta um parâmetro inválido em /patrimonio/ativos sem lançar', async () => {
+        const router: AnyRouter = renderRouterAt('/patrimonio/ativos?add=talvez');
+        await screen.findByRole('heading', { name: 'Em construção' });
+
+        expect(router.state.location.search).toEqual({});
+    });
+
+    it('lê o valor do aporte como número', async () => {
+        const router: AnyRouter = renderRouterAt('/patrimonio/aporte?amount=1500');
+        await screen.findByRole('heading', { name: 'Em construção' });
+
+        expect(router.state.location.search).toEqual({ amount: 1500 });
+    });
+
+    it('degrada /patrimonio/aporte?amount=abc sem lançar', async () => {
+        const router: AnyRouter = renderRouterAt('/patrimonio/aporte?amount=abc');
+        await screen.findByRole('heading', { name: 'Em construção' });
+
+        expect(router.state.location.search).toEqual({});
+    });
+});
