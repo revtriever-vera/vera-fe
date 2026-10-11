@@ -41,7 +41,7 @@ function AssetsRow({ area }: { readonly area: AreaSummary }): ReactElement {
     return <SummaryRow done icon={Wallet} title={title} detail={t('assetsDoneDetail')} />;
 }
 
-function banksDetail(
+export function banksDetail(
     t: (key: 'banksConnections' | 'banksImports', options: { count: number }) => string,
     area: AreaSummary
 ): string | null {

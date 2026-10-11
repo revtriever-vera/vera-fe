@@ -8,6 +8,28 @@ export function onboardingHandlers(): RequestHandler[] {
         http.post('*/onboarding/start', () =>
             HttpResponse.json(onboardingState({ status: 'assets', startedAt: '2026-10-01T12:00:00.000Z' }))
         ),
+        http.post('*/onboarding/steps/:step/complete', ({ params }) =>
+            HttpResponse.json(
+                onboardingState({
+                    status: params['step'] === 'assets' ? 'banks' : 'summary',
+                    steps: {
+                        assets: { doneAt: params['step'] === 'assets' ? '2026-10-01T12:00:00.000Z' : null, skippedAt: null },
+                        banks: { doneAt: params['step'] === 'banks' ? '2026-10-01T12:00:00.000Z' : null, skippedAt: null }
+                    }
+                })
+            )
+        ),
+        http.post('*/onboarding/steps/:step/skip', ({ params }) =>
+            HttpResponse.json(
+                onboardingState({
+                    status: params['step'] === 'assets' ? 'banks' : 'summary',
+                    steps: {
+                        assets: { doneAt: null, skippedAt: params['step'] === 'assets' ? '2026-10-01T12:00:00.000Z' : null },
+                        banks: { doneAt: null, skippedAt: params['step'] === 'banks' ? '2026-10-01T12:00:00.000Z' : null }
+                    }
+                })
+            )
+        ),
         http.post('*/onboarding/dismiss', () => HttpResponse.json(closedState())),
         http.post('*/onboarding/finish', () =>
             HttpResponse.json(closedState({ dismissedAt: null, completedAt: '2026-10-01T12:00:00.000Z' }))
