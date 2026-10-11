@@ -49,7 +49,8 @@ export interface PendingHoldingView {
     nativeValueMinor: number;
     nativeCurrency: 'BRL' | 'USD';
     valueMinor: number;
-    valueSource: 'brapi' | 'finnhub' | 'twelvedata' | 'alphavantage' | 'coingecko' | 'tesouro_direto' | 'curve_cdi' | 'curve_pre' | 'curve_ipca';
+    valueSource:
+        'brapi' | 'finnhub' | 'twelvedata' | 'alphavantage' | 'coingecko' | 'tesouro_direto' | 'curve_cdi' | 'curve_pre' | 'curve_ipca';
     priceDate: string | null;
     dollarExposure: boolean;
     missingQuote: boolean;
