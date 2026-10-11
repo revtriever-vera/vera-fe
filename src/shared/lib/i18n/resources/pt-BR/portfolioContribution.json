@@ -1,3 +1,55 @@
 {
-  "title": "Aporte inteligente"
+  "title": "Aporte inteligente",
+  "subtitle": "Diga quanto vai investir e veja onde colocar para aproximar a carteira da meta, sem vender nada (vender gera imposto).",
+  "amount": {
+    "label": "Quanto você vai aportar ({{currency}})",
+    "quickLabel": "Valores rápidos"
+  },
+  "empty": "Informe um valor para ver a sugestão.",
+  "loading": "Calculando a sugestão",
+  "listLabel": "Sugestão por classe",
+  "announce": "Sugestão atualizada para {{amount}}",
+  "classShare": "{{before}} → {{after}} (meta {{target}})",
+  "assetsLabel": "Ativos de {{name}}",
+  "units": {
+    "shares_one": "≈ {{value}} cota",
+    "shares_other": "≈ {{value}} cotas",
+    "units": "≈ {{value}} un.",
+    "bonds_one": "≈ {{value}} título",
+    "bonds_other": "≈ {{value}} títulos",
+    "lessThanOne": "menos de 1 cota",
+    "fixedIncome": "novo título ou reforço",
+    "priceUnavailable": "preço indisponível"
+  },
+  "noAssets": {
+    "message": "Nenhum ativo nesta classe. Cadastre um ativo, ou adicione um com quantidade zero e dê uma meta a ele.",
+    "link": "Ver a classe {{name}}"
+  },
+  "emptyPortfolio": {
+    "message": "Cadastre ativos para direcionar este valor",
+    "link": "Cadastrar ativos"
+  },
+  "note": {
+    "title": "Como a conta é feita",
+    "calculation": "A conta: com o aporte, o patrimônio vai a {{total}}. Cada classe abaixo da meta recebe a diferença até a meta; se o dinheiro não cobre tudo, ele é dividido proporcionalmente ao que falta. Dentro da classe, vale a mesma regra entre os ativos.",
+    "disclaimer": "Isto é uma sugestão matemática para aproximar sua carteira da meta, sem vender nada. Não é recomendação de investimento."
+  },
+  "targetsNotSet": {
+    "title": "Defina sua carteira-alvo primeiro",
+    "description": "Para sugerir onde colocar o aporte, a Vera precisa saber quanto você quer em cada classe.",
+    "action": "Definir carteira-alvo"
+  },
+  "warnings": {
+    "classTargetsNot100": {
+      "title": "As metas das classes não somam 100%",
+      "detail": "A sugestão usa as metas como estão. Ajuste a carteira-alvo para ela refletir o que você quer.",
+      "action": "Ajustar metas"
+    }
+  },
+  "error": {
+    "title": "Não foi possível calcular a sugestão.",
+    "rateLimited": "Muitas simulações em pouco tempo. Aguarde um instante e tente de novo.",
+    "retry": "Tentar de novo"
+  },
+  "settingsError": "Não foi possível carregar a moeda base."
 }

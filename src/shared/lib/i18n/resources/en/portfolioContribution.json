@@ -1,3 +1,55 @@
 {
-  "title": "Smart contribution"
+  "title": "Smart contribution",
+  "subtitle": "Tell us how much you are investing and see where to put it to bring your portfolio closer to the target, without selling anything (selling triggers tax).",
+  "amount": {
+    "label": "How much will you contribute ({{currency}})",
+    "quickLabel": "Quick amounts"
+  },
+  "empty": "Enter an amount to see the suggestion.",
+  "loading": "Calculating the suggestion",
+  "listLabel": "Suggestion by class",
+  "announce": "Suggestion updated for {{amount}}",
+  "classShare": "{{before}} → {{after}} (target {{target}})",
+  "assetsLabel": "Holdings in {{name}}",
+  "units": {
+    "shares_one": "≈ {{value}} share",
+    "shares_other": "≈ {{value}} shares",
+    "units": "≈ {{value}} units",
+    "bonds_one": "≈ {{value}} bond",
+    "bonds_other": "≈ {{value}} bonds",
+    "lessThanOne": "less than 1 share",
+    "fixedIncome": "new bond or top-up",
+    "priceUnavailable": "price unavailable"
+  },
+  "noAssets": {
+    "message": "No holdings in this class. Add one, or add a holding with zero quantity and give it a target.",
+    "link": "View the {{name}} class"
+  },
+  "emptyPortfolio": {
+    "message": "Add holdings to direct this amount",
+    "link": "Add holdings"
+  },
+  "note": {
+    "title": "How the math works",
+    "calculation": "The math: after the contribution, your net worth reaches {{total}}. Each class below its target receives the difference up to the target; if the money does not cover everything, it is split in proportion to what is missing. Inside a class, the same rule applies between holdings.",
+    "disclaimer": "This is a mathematical suggestion to bring your portfolio closer to its target, without selling anything. It is not investment advice."
+  },
+  "targetsNotSet": {
+    "title": "Set your target portfolio first",
+    "description": "To suggest where the contribution goes, Vera needs to know how much you want in each class.",
+    "action": "Set target portfolio"
+  },
+  "warnings": {
+    "classTargetsNot100": {
+      "title": "The class targets do not add up to 100%",
+      "detail": "The suggestion uses the targets as they are. Adjust your target portfolio so it reflects what you want.",
+      "action": "Adjust targets"
+    }
+  },
+  "error": {
+    "title": "We could not calculate the suggestion.",
+    "rateLimited": "Too many simulations in a short time. Wait a moment and try again.",
+    "retry": "Try again"
+  },
+  "settingsError": "We could not load the base currency."
 }
