@@ -1,1 +1,98 @@
-{}
+{
+  "title": "Transações",
+  "description": "A maior parte se classifica sozinha (categoria da Pluggy, dicionário de estabelecimentos e as suas regras). O que sobra, você ensina uma vez.",
+  "actions": {
+    "rules": "Gerenciar regras",
+    "import": "Importar extrato"
+  },
+  "export": {
+    "button": "Baixar planilha",
+    "exporting": "Preparando…",
+    "xlsx": "Planilha (.xlsx)",
+    "csv": "Texto (.csv)",
+    "done": "Planilha baixada",
+    "tooLarge": "Muitas transações para um arquivo só. Escolha um período menor.",
+    "rateLimited": "Muitos downloads seguidos. Espere um pouco e tente de novo.",
+    "failed": "Não foi possível baixar a planilha. Tente de novo."
+  },
+  "banner": {
+    "uncategorizedTitle_one": "{{count}} transação sem categoria",
+    "uncategorizedTitle_other": "{{count}} transações sem categoria",
+    "uncategorizedDetail": "Geralmente Pix para pessoa física. Escolha a categoria e marque “sempre” para criar uma regra.",
+    "show": "Ver só as sem categoria",
+    "allDoneTitle": "Tudo categorizado",
+    "allDoneDetail": "As próximas transações iguais vão cair na categoria certa."
+  },
+  "filters": {
+    "label": "Filtros das transações",
+    "account": "Conta",
+    "allAccounts": "Todas as contas",
+    "category": "Categoria",
+    "categoryWithValue": "Categoria: {{value}}",
+    "allCategories": "Todas as categorias",
+    "noneOption": "Sem categoria",
+    "direction": "Tipo",
+    "all": "Todas",
+    "out": "Saídas",
+    "in": "Entradas",
+    "search": "Buscar por descrição ou favorecido",
+    "clear": "Limpar filtros",
+    "panel": "Filtros",
+    "panelCount": "Filtros ({{count}})"
+  },
+  "columns": {
+    "date": "Data",
+    "description": "Descrição",
+    "category": "Categoria",
+    "account": "Conta",
+    "amount": "Valor"
+  },
+  "list": {
+    "tableLabel": "Transações do mês",
+    "cardsLabel": "Lista de transações",
+    "loading": "Carregando as transações",
+    "loadError": "Não foi possível carregar as transações",
+    "retry": "Tentar de novo"
+  },
+  "row": {
+    "installment": "{{number}}/{{total}}",
+    "sample": "exemplo",
+    "changeCategory": "{{category}}: trocar a categoria de {{description}}"
+  },
+  "empty": {
+    "filteredTitle": "Nenhuma transação com esses filtros",
+    "filteredDescription": "Tente outro mês ou tire algum filtro.",
+    "monthTitle": "Nenhuma transação neste mês",
+    "monthDescription": "Escolha outro mês para ver as transações."
+  },
+  "totals": {
+    "label": "Totais do filtro",
+    "in": "Entradas",
+    "out": "Saídas",
+    "count_one": "{{count}} transação",
+    "count_other": "{{count}} transações"
+  },
+  "inline": {
+    "pick": "Escolher categoria…",
+    "pickLabel": "Categoria de {{description}}",
+    "always": "sempre para {{target}}",
+    "apply": "Aplicar",
+    "invalidRule": "Esta transação não tem favorecido identificado; a regra vai usar a descrição",
+    "kindMismatchOut": "Categoria de renda não vale para uma saída",
+    "kindMismatchIn": "Categoria de gasto não vale para uma entrada"
+  },
+  "dialog": {
+    "title": "Trocar categoria",
+    "pickLabel": "Nova categoria",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "revert": "Voltar ao automático"
+  },
+  "toast": {
+    "applied": "Categoria aplicada",
+    "reverted": "A categoria voltou ao automático",
+    "ruleCreated": "Regra criada para {{target}}.",
+    "ruleCreatedWithCount_one": "Regra criada para {{target}}: mais {{count}} transação recategorizada.",
+    "ruleCreatedWithCount_other": "Regra criada para {{target}}: mais {{count}} transações recategorizadas."
+  }
+}

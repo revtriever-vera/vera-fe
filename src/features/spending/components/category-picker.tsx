@@ -25,6 +25,7 @@ export interface CategoryPickerProps {
     readonly direction?: PickerDirection;
     readonly allowNone?: boolean;
     readonly noneLabel?: string;
+    readonly emptyLabel?: string;
     readonly onlyKind?: CategoryKind;
     readonly excludeId?: string;
     readonly label: string;
@@ -106,6 +107,9 @@ function PickerPanel({
 }
 
 function emptyText(props: CategoryPickerProps, t: TFunction<'spending'>): string {
+    if (props.emptyLabel !== undefined) {
+        return props.emptyLabel;
+    }
     return props.allowNone === true && props.noneLabel !== undefined ? props.noneLabel : t('categories.uncategorized');
 }
 

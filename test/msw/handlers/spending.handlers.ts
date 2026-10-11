@@ -62,6 +62,15 @@ function transactionHandlers(): RequestHandler[] {
         http.patch('*/spending/transactions/:id', () =>
             HttpResponse.json({ transaction: transactionView(), rule: null, recategorized: 0 })
         ),
+        http.get('*/spending/transactions/export', ({ request }) => {
+            const format: string = new URL(request.url).searchParams.get('format') ?? 'csv';
+            return new HttpResponse('data', {
+                headers: {
+                    'content-type': 'application/octet-stream',
+                    'content-disposition': `attachment; filename="vera-transacoes-2026-10-11.${format}"`
+                }
+            });
+        }),
         http.get('*/spending/accounts', () => HttpResponse.json(emptyAccounts())),
         http.patch('*/spending/accounts/:id', async ({ request }) => {
             const body: { name: string } = (await request.json()) as { name: string };
