@@ -50,7 +50,9 @@ Cloudflare Pages, um projeto por ambiente (`vera-app-dev` e `vera-app-prod`).
 - `deploy-dev.yml`: manual (`workflow_dispatch`).
 - `deploy-prod.yml`: roda depois do CI verde na `main`.
 
-Os dois pulam sem erro enquanto faltarem o secret `CLOUDFLARE_API_TOKEN`, o secret `CLOUDFLARE_ACCOUNT_ID` ou a variável de repositório `VERA_DOMAIN`. A URL da API de cada ambiente é `https://api-dev.<domínio>` ou `https://api.<domínio>`, montada a partir de `VERA_DOMAIN`.
+Os dois pulam sem erro enquanto faltarem o secret `CLOUDFLARE_API_TOKEN`, o secret `CLOUDFLARE_ACCOUNT_ID` ou a variável de repositório `VERA_DOMAIN`. O deploy de produção também só roda com a variável de repositório `PROD_DEPLOY_ENABLED` igual a `true`; sem ela, o job termina com um aviso. O deploy de dev é manual (`workflow_dispatch`).
+
+Os hosts saem de `${VERA_HOST_PREFIX}<nome>[-dev].${VERA_DOMAIN}`, sempre em um único nível de subdomínio (compatível com o SSL gratuito do Cloudflare). `VERA_HOST_PREFIX` é uma variável de repositório opcional, vazia por padrão: sem ela o app fica em `app.<domínio>` e a API em `api.<domínio>`. Com `VERA_HOST_PREFIX=vera-` e `VERA_DOMAIN=exemplo.com` saem `vera-app.exemplo.com` e `vera-api.exemplo.com` em produção, `vera-app-dev.exemplo.com` e `vera-api-dev.exemplo.com` em dev. O valor só aceita `a-z`, `0-9` e hífen, até 20 caracteres, terminando em hífen, e precisa ser o mesmo do repositório da API. O nome do projeto Pages (`vera-app-dev`, `vera-app-prod`) não depende do prefixo; o domínio customizado é ligado ao projeto no painel do Cloudflare e deve coincidir com o host acima.
 
 O passo `Sonar` do CI só roda no push para a `main` com a variável `SONAR_ENABLED=true` e o secret `SONAR_TOKEN`.
 
