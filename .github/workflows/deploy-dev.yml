@@ -56,7 +56,7 @@ jobs:
       - run: npm run build
         if: steps.gate.outputs.enabled == 'true'
         env:
-          VITE_API_URL: https://api-dev.${{ vars.VERA_DOMAIN }}
+          VITE_API_URL: https://${{ vars.VERA_HOST_PREFIX }}api-dev.${{ vars.VERA_DOMAIN }}
           VITE_POSTHOG_KEY: ${{ vars.POSTHOG_KEY }}
 
       - uses: cloudflare/wrangler-action@v3
@@ -69,5 +69,5 @@ jobs:
       - name: Smoke
         if: steps.gate.outputs.enabled == 'true'
         run: |
-          curl --fail --silent --show-error --retry 5 --retry-delay 5 --retry-all-errors -o /dev/null https://app-dev.${{ vars.VERA_DOMAIN }}/
-          curl --fail --silent --show-error --retry 5 --retry-delay 5 --retry-all-errors -o /dev/null https://app-dev.${{ vars.VERA_DOMAIN }}/route-that-does-not-exist
+          curl --fail --silent --show-error --retry 5 --retry-delay 5 --retry-all-errors -o /dev/null https://${{ vars.VERA_HOST_PREFIX }}app-dev.${{ vars.VERA_DOMAIN }}/
+          curl --fail --silent --show-error --retry 5 --retry-delay 5 --retry-all-errors -o /dev/null https://${{ vars.VERA_HOST_PREFIX }}app-dev.${{ vars.VERA_DOMAIN }}/route-that-does-not-exist
