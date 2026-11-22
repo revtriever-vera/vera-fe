@@ -23,6 +23,7 @@ describe('progressIndexOf', () => {
         ['/onboarding/', 0],
         ['/onboarding/assets', 1],
         ['/onboarding/banks/', 2],
+        ['/onboarding/done//', 3],
         ['/onboarding/done', 3]
     ])('%s é o passo %i', (path: string, index: number) => {
         expect(progressIndexOf(path)).toBe(index);
