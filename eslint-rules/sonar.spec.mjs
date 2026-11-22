@@ -56,6 +56,8 @@ describe('sonar way in eslint.config.mjs', () => {
         const spec = await eslint.calculateConfigForFile('src/shared/ui/button.spec.tsx');
         expect(source.rules['sonar/S6767']?.[0]).toBe(1);
         expect(source.rules['sonar/S6819']?.[0]).toBe(1);
+        expect(source.rules['sonar/S6847']?.[0]).toBe(1);
+        expect(source.rules['sonar/S6848']?.[0]).toBe(1);
         expect(source.rules['sonar/S3358']?.[0]).toBe(2);
         expect(source.rules['sonar/S9026']).toBeUndefined();
         expect(spec.rules['sonar/S9026']?.[0]).toBe(2);
