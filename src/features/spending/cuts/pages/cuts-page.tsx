@@ -74,13 +74,12 @@ export function CutsPage(): ReactElement {
     const guard: UnsavedGuard = useUnsavedGuard(draft.dirty);
     useTrackViewed(cuts.data, cuts.isPlaceholderData);
     const failure: Error | null = cuts.error ?? settings.error;
+    const loading: ReactElement | null = failure === null ? <CutsLoading /> : null;
     return (
         <section className="flex flex-col gap-4">
             {failure === null ? null : <FailureAlert error={failure} title={t('page.loadFailed')} />}
             {cuts.data === undefined || settings.data === undefined ? (
-                failure === null ? (
-                    <CutsLoading />
-                ) : null
+                loading
             ) : (
                 <CutsBody cuts={cuts.data} draft={draft} busy={cuts.isPlaceholderData} />
             )}

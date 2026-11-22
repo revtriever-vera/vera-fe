@@ -11,7 +11,7 @@ const PREFIX_SEPARATOR: string = ' · ';
 
 export function displayDescription(text: string): string {
     const parts: string[] = text.split(PREFIX_SEPARATOR);
-    return (parts[parts.length - 1] ?? text).trim();
+    return (parts.at(-1) ?? text).trim();
 }
 
 export function descriptionTargetOf(transaction: TargetSource, normalize: (text: string) => string): RuleTarget {

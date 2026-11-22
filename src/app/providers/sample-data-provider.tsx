@@ -15,14 +15,14 @@ import { track } from '@/shared/lib/analytics';
 import { SampleDataContext, type SampleDataControls } from '@/shared/lib/sample-data/sample-data-context';
 import { useToast, type ToastApi } from './toast-provider';
 
-const PRESERVED_ONBOARDING_SEGMENTS: readonly unknown[] = [onboardingKeys.state()[1], onboardingKeys.exit()[1]];
+const PRESERVED_ONBOARDING_SEGMENTS: ReadonlySet<unknown> = new Set<unknown>([onboardingKeys.state()[1], onboardingKeys.exit()[1]]);
 
 function isRefreshable(query: Query): boolean {
     const [scope, segment]: readonly unknown[] = query.queryKey;
     if (scope === authKeys.all[0]) {
         return false;
     }
-    return !(scope === onboardingKeys.all[0] && PRESERVED_ONBOARDING_SEGMENTS.includes(segment));
+    return !(scope === onboardingKeys.all[0] && PRESERVED_ONBOARDING_SEGMENTS.has(segment));
 }
 
 function trackCleared(): void {

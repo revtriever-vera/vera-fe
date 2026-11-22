@@ -21,8 +21,16 @@ export function stepStatus(state: OnboardingState, key: OnboardingStepKey): Step
     return step.skippedAt === null ? 'pending' : 'skipped';
 }
 
+export function trimTrailingSlashes(pathname: string): string {
+    let end: number = pathname.length;
+    while (end > 0 && pathname.charAt(end - 1) === '/') {
+        end -= 1;
+    }
+    return pathname.slice(0, end);
+}
+
 export function progressIndexOf(pathname: string): number {
-    return INDEX_BY_PATH[pathname.replace(/\/+$/, '')] ?? 0;
+    return INDEX_BY_PATH[trimTrailingSlashes(pathname)] ?? 0;
 }
 
 export function onboardingProgress(state: OnboardingState | undefined, pathname: string): OnboardingProgress {

@@ -1,6 +1,4 @@
-import type { ReactElement } from 'react';
-import type { InputHTMLAttributes, ReactNode } from 'react';
-import { useState } from 'react';
+import { useState, type InputHTMLAttributes, type ReactElement, type ReactNode } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/shared/lib/cn';
 import { type UiText, useUiText } from './ui-text';
@@ -41,7 +39,7 @@ function inputClass(isPassword: boolean, error: string | undefined, className: s
     );
 }
 
-export function Field({ label, error, hint, id, className, type, ...props }: FieldProps): ReactElement {
+export function Field({ label, error, hint, id, className, type, ...props }: Readonly<FieldProps>): ReactElement {
     const inputId: string = id ?? props.name ?? label;
     const errorId: string = `${inputId}-error`;
     const [revealed, setRevealed] = useState<boolean>(false);

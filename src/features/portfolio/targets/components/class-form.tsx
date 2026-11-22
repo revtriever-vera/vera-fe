@@ -119,26 +119,27 @@ function ClassFormFields({
     );
 }
 
-export function ClassForm(props: ClassFormProps): ReactElement {
+export function ClassForm({ mode, classes, onClose }: ClassFormProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioTargets', undefined> = useTranslation('portfolioTargets');
-    const { form, actions, initial }: ClassFormState = useClassFormState(props);
-    const create: boolean = props.mode.kind === 'create';
+    const { form, actions, initial }: ClassFormState = useClassFormState({ mode, classes, onClose });
+    const create: boolean = mode.kind === 'create';
+    const idleLabel: string = create ? t('classes.form.create') : t('classes.form.save');
     return (
         <Modal
             title={create ? t('classes.form.createTitle') : t('classes.form.renameTitle', { name: initial.name })}
-            onClose={props.onClose}
+            onClose={onClose}
             footer={
                 <>
-                    <Button variant="ghost" onClick={props.onClose}>
+                    <Button variant="ghost" onClick={onClose}>
                         {t('classes.form.cancel')}
                     </Button>
                     <Button type="submit" form={FORM_ID} loading={actions.busy}>
-                        {actions.busy ? t('classes.form.saving') : create ? t('classes.form.create') : t('classes.form.save')}
+                        {actions.busy ? t('classes.form.saving') : idleLabel}
                     </Button>
                 </>
             }
         >
-            <ClassFormFields mode={props.mode} form={form} actions={actions} />
+            <ClassFormFields mode={mode} form={form} actions={actions} />
         </Modal>
     );
 }

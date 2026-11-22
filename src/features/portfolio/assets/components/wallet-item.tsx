@@ -33,7 +33,9 @@ function useDetail(holding: HoldingView, assetClass: AssetClassView | undefined)
     }
     const unit: UnitLabelKey | null = unitLabelKey(holding.typeGroup);
     const quantity: string = formatQuantity(holding.quantity, holding.quantityDecimals, locale);
-    return `${className} · ${unit === null ? quantity : `${quantity} ${t(`wallet.units.${unit}`)}`}`;
+    const unitName: string = unit === null ? '' : t(`wallet.units.${unit}`);
+    const amount: string = unit === null ? quantity : `${quantity} ${unitName}`;
+    return `${className} · ${amount}`;
 }
 
 function QualityBadge({ holding }: { readonly holding: HoldingView }): ReactElement | null {

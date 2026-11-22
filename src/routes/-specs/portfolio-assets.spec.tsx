@@ -33,7 +33,7 @@ describe('/portfolio/assets: lista', () => {
         expect(within(table).getAllByText('B3 via brapi').length).toBeGreaterThan(0);
         expect(within(table).getAllByText('Finnhub').length).toBeGreaterThan(0);
         expect(within(table).getAllByText('CoinGecko').length).toBeGreaterThan(0);
-        expect(within(table).getAllByText('título').length).toBe(3);
+        expect(within(table).getAllByText('título')).toHaveLength(3);
     });
 
     it('troca a classe de HGLG11 pelo PUT certo e avisa', async () => {

@@ -1,4 +1,4 @@
-import type { UseMutationResult } from '@tanstack/react-query';
+import type { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
 import type { ApiError } from '@/shared/lib/api/api-error';
 import type { z } from 'zod';
 import type { CreateRuleBody, RuleResult } from '../../types';
@@ -6,7 +6,6 @@ import { useMemo, useState, type ReactElement } from 'react';
 import { useForm, useWatch, type UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
-import type { UseQueryResult } from '@tanstack/react-query';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
 import { track } from '@/shared/lib/analytics';
 import { useDebouncedValue } from '@/shared/lib/use-debounced-value';

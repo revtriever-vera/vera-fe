@@ -41,8 +41,9 @@ function priceOf(asset: CatalogAsset, book: QuoteBook, locale: SupportedLocale):
 function moveFocus(event: KeyboardEvent<HTMLDivElement>): void {
     const keys: Readonly<Record<string, number>> = { ArrowDown: 1, ArrowUp: -1 };
     const options: HTMLElement[] = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="option"]'));
-    const current: number = options.findIndex((option: HTMLElement): boolean => option === document.activeElement);
-    const edge: number | undefined = event.key === 'Home' ? 0 : event.key === 'End' ? options.length - 1 : undefined;
+    const current: number = options.indexOf(document.activeElement as HTMLElement);
+    const edges: Readonly<Record<string, number>> = { Home: 0, End: options.length - 1 };
+    const edge: number | undefined = edges[event.key];
     const step: number | undefined = keys[event.key];
     const target: number | undefined = edge ?? (step === undefined ? undefined : Math.min(Math.max(current + step, 0), options.length - 1));
     if (target !== undefined) {

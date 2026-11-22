@@ -32,7 +32,7 @@ export interface PositionPreviewProps {
     readonly onSubmit: () => void;
 }
 
-const VALUE_SOURCES: readonly string[] = [
+const VALUE_SOURCES: ReadonlySet<string> = new Set<string>([
     'brapi',
     'finnhub',
     'twelvedata',
@@ -42,10 +42,10 @@ const VALUE_SOURCES: readonly string[] = [
     'curve_cdi',
     'curve_pre',
     'curve_ipca'
-];
+]);
 
 function isValueSource(source: string): source is ValueSource {
-    return VALUE_SOURCES.includes(source);
+    return VALUE_SOURCES.has(source);
 }
 
 function PreviewTitle({

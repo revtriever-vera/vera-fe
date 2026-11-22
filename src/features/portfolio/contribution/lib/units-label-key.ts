@@ -1,6 +1,6 @@
 export type UnitsLabelKey = 'shares' | 'units' | 'bonds' | 'less_than_one' | 'fixed_income' | 'price_unavailable';
 
-const BOND_GROUPS: readonly string[] = ['tesouro', 'fixed_income'];
+const BOND_GROUPS: ReadonlySet<string> = new Set<string>(['tesouro', 'fixed_income']);
 
 export function unitsLabelKey(typeGroup: string, approxUnits: string | null): UnitsLabelKey {
     if (approxUnits === null) {
@@ -12,5 +12,5 @@ export function unitsLabelKey(typeGroup: string, approxUnits: string | null): Un
     if (typeGroup === 'cripto') {
         return 'units';
     }
-    return BOND_GROUPS.includes(typeGroup) ? 'bonds' : 'shares';
+    return BOND_GROUPS.has(typeGroup) ? 'bonds' : 'shares';
 }

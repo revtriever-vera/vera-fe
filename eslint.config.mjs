@@ -7,6 +7,15 @@ import boundaries from 'eslint-plugin-boundaries';
 import i18next from 'eslint-plugin-i18next';
 import prettier from 'eslint-config-prettier';
 import local from './eslint-rules/index.mjs';
+import { sonarConfigs } from './eslint-rules/sonar.mjs';
+
+const enabled = new Set(
+    [eslint.configs.recommended, ...tseslint.configs.strictTypeChecked].flatMap((config) =>
+        Object.entries(config.rules ?? {})
+            .filter(([, setting]) => ![0, 'off'].includes(Array.isArray(setting) ? setting[0] : setting))
+            .map(([id]) => id)
+    )
+);
 
 export default tseslint.config(
     {
@@ -201,6 +210,16 @@ export default tseslint.config(
                 }
             ]
         }
+    },
+    ...sonarConfigs({
+        sources: ['src/**/*.ts', 'src/**/*.tsx'],
+        tests: ['src/**/*.spec.ts', 'src/**/*.spec.tsx'],
+        enabled
+    }),
+    {
+        files: ['src/**/*.ts', 'src/**/*.tsx'],
+        ignores: ['src/**/*.spec.ts', 'src/**/*.spec.tsx'],
+        rules: { 'sonar/S6819': 'warn', 'sonar/S6767': 'warn', 'sonar/S6847': 'warn', 'sonar/S6848': 'warn' }
     },
     prettier
 );

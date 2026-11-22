@@ -1,6 +1,5 @@
 import type { UseMutationResult } from '@tanstack/react-query';
 import type { ApiError } from '@/shared/lib/api/api-error';
-import type { Recategorized } from '../../types';
 import type { DeleteCategoryInput } from '../api/use-delete-category.mutation';
 import { useState, type ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
@@ -10,7 +9,7 @@ import { Modal } from '@/shared/ui/modal';
 import { CategoryPicker } from '../../components/category-picker';
 import { spendingErrorMessage } from '../../lib/spending-error-message';
 import { useCategoryLabel, type CategoryLabel } from '../../lib/use-category-label';
-import type { CategoryView } from '../../types';
+import type { CategoryView, Recategorized } from '../../types';
 import { useDeleteCategory } from '../api/use-delete-category.mutation';
 import { recategorizedToast } from '../lib/recategorized-toast';
 

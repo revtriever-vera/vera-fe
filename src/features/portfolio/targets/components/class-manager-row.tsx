@@ -66,7 +66,7 @@ interface ActionsProps {
     readonly onDelete: () => void;
 }
 
-function MobileActions({ name, blockedText, onRename, onMerge, onDelete }: ActionsProps): ReactElement {
+function MobileActions({ name, blockedText, onRename, onMerge, onDelete }: Omit<ActionsProps, 'blockedId'>): ReactElement {
     const { t }: UseTranslationResponse<'portfolioTargets', undefined> = useTranslation('portfolioTargets');
     return (
         <DropdownMenu.Root>

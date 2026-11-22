@@ -43,9 +43,19 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, Va
     readonly loading?: boolean;
 }
 
-export function Button({ className, variant, size, block, loading = false, disabled, children, ...props }: ButtonProps): ReactElement {
+export function Button({
+    className,
+    variant,
+    size,
+    block,
+    loading = false,
+    disabled,
+    children,
+    ...props
+}: Readonly<ButtonProps>): ReactElement {
     return (
         <button
+            type="button"
             className={cn(buttonVariants({ variant, size, block }), className)}
             disabled={disabled === true || loading}
             aria-busy={loading}

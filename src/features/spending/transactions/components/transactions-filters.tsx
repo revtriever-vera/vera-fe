@@ -80,12 +80,8 @@ function CategoryFilter({ search, onChange }: FilterProps): ReactElement {
     const labelOf: CategoryLabel = useCategoryLabel();
     const selected: CategoryView | null =
         categories.data?.categories.find((item: CategoryView): boolean => item.id === search.categoryId) ?? null;
-    const current: string =
-        search.uncategorized === true
-            ? t('filters.noneOption')
-            : search.categoryId === undefined
-              ? t('filters.allCategories')
-              : labelOf(selected);
+    const fallback: string = search.categoryId === undefined ? t('filters.allCategories') : labelOf(selected);
+    const current: string = search.uncategorized === true ? t('filters.noneOption') : fallback;
     return (
         <div className="min-w-0 sm:w-56">
             <CategoryPicker

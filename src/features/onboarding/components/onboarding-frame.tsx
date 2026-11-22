@@ -5,7 +5,7 @@ import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { BrandLogo } from '@/shared/ui/brand-logo';
 import { Button } from '@/shared/ui/button';
 import { useOnboardingState } from '../api/use-onboarding-state.query';
-import { onboardingProgress, showsProgress } from '../lib/onboarding-progress';
+import { onboardingProgress, showsProgress, trimTrailingSlashes } from '../lib/onboarding-progress';
 import { ONBOARDING_PATHS } from '../types';
 import { DismissDialog } from './dismiss-dialog';
 import { OnboardingProgressBar } from './onboarding-progress';
@@ -43,7 +43,7 @@ export function OnboardingFrame({ children }: { readonly children: ReactNode }):
     const { t }: UseTranslationResponse<'onboarding', undefined> = useTranslation('onboarding');
     const pathname: string = useRouterState({ select: (state): string => state.location.pathname });
     const { data } = useOnboardingState();
-    const canSkip: boolean = pathname.replace(/\/+$/, '') !== ONBOARDING_PATHS.done;
+    const canSkip: boolean = trimTrailingSlashes(pathname) !== ONBOARDING_PATHS.done;
 
     return (
         <div className="flex min-h-dvh flex-col bg-canvas bg-[radial-gradient(ellipse_80%_60%_at_0%_0%,var(--color-accent-soft),transparent_70%)]">
