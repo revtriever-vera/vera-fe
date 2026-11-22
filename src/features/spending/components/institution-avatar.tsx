@@ -24,6 +24,7 @@ export function InstitutionAvatar({ name, logoUrl, size = 'md' }: InstitutionAva
     if (logoUrl !== null && failedUrl !== logoUrl) {
         return (
             <span className={cn(SHELL, BOX[size], 'bg-surface')}>
+                {/* eslint-disable-next-line sonar/S6847 -- onError is the load-failure fallback of the image, not a user interaction */}
                 <img
                     src={logoUrl}
                     alt={t('institution.logoAlt', { name: name ?? t('institution.unknown') })}

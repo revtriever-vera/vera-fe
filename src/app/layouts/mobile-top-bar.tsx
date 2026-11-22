@@ -66,6 +66,7 @@ function Drawer({ items, topSlot, onClose }: DrawerProps): ReactElement {
     return (
         <div className="fixed inset-0 z-50 min-[861px]:hidden">
             <button type="button" aria-label={t('closeMenu')} tabIndex={-1} onClick={onClose} className="absolute inset-0 bg-black/50" />
+            {/* eslint-disable-next-line sonar/S6819 -- modal panel with its own focus trap; native dialog would change layout and top-layer behavior */}
             <div
                 ref={panelRef}
                 role="dialog"

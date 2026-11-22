@@ -21,7 +21,7 @@ export function QuickAmounts({ currency, selectedMinor, onSelect }: QuickAmounts
     const { t }: UseTranslationResponse<'portfolioContribution', undefined> = useTranslation('portfolioContribution');
     const locale: SupportedLocale = useLocale();
     return (
-        <div role="group" aria-label={t('amount.quickLabel')} className="grid grid-cols-2 gap-2 min-[560px]:flex min-[560px]:flex-wrap">
+        <fieldset aria-label={t('amount.quickLabel')} className="grid grid-cols-2 gap-2 min-[560px]:flex min-[560px]:flex-wrap">
             {QUICK_AMOUNTS[currency].map((major: number): ReactElement => {
                 const minor: number = majorToMinor(major, currency, locale);
                 return (
@@ -38,6 +38,6 @@ export function QuickAmounts({ currency, selectedMinor, onSelect }: QuickAmounts
                     </Button>
                 );
             })}
-        </div>
+        </fieldset>
     );
 }

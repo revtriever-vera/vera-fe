@@ -114,6 +114,20 @@ function panelClass(size: 'default' | 'wide', fullOnMobile: boolean): string {
     );
 }
 
+interface ModalBodyProps {
+    readonly children: ReactNode;
+    readonly footer: ReactNode;
+}
+
+function ModalBody({ children, footer }: ModalBodyProps): ReactElement {
+    return (
+        <>
+            <div className="flex-1 overflow-y-auto px-5 py-3">{children}</div>
+            <div className="flex justify-end gap-2 border-t border-border px-5 py-4">{footer}</div>
+        </>
+    );
+}
+
 export function Modal({
     title,
     description,
@@ -133,6 +147,7 @@ export function Modal({
     return (
         <div className={cn('fixed inset-0 z-50 flex items-center justify-center', fullOnMobile ? 'p-0 sm:p-5' : 'p-5')}>
             <button type="button" aria-label={t.close} onClick={onClose} className="absolute inset-0 bg-black/50" />
+            {/* eslint-disable-next-line sonar/S6819 -- modal panel with its own focus trap; native dialog would change layout and top-layer behavior */}
             <div
                 ref={dialog}
                 role="dialog"
@@ -149,8 +164,7 @@ export function Modal({
                     closeLabel={t.close}
                     onClose={onClose}
                 />
-                <div className="flex-1 overflow-y-auto px-5 py-3">{children}</div>
-                <div className="flex justify-end gap-2 border-t border-border px-5 py-4">{footer}</div>
+                <ModalBody footer={footer}>{children}</ModalBody>
             </div>
         </div>
     );

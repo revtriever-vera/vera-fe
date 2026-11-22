@@ -88,9 +88,8 @@ export function CategoryPickerList({ listId, groups, value, activeId, onPick }: 
     return (
         <div id={listId} role="listbox" aria-label={t('picker.listLabel')} className="flex max-h-72 flex-col gap-2 overflow-y-auto">
             {groups.map((group: PickerGroup): ReactElement => (
-                <div
+                <fieldset
                     key={group.kind ?? 'none'}
-                    role="group"
                     aria-label={group.kind === null ? t('categories.none') : t(`categories.groups.${group.kind}`)}
                 >
                     {group.kind === null ? null : (
@@ -108,7 +107,7 @@ export function CategoryPickerList({ listId, groups, value, activeId, onPick }: 
                             onPick={onPick}
                         />
                     ))}
-                </div>
+                </fieldset>
             ))}
         </div>
     );

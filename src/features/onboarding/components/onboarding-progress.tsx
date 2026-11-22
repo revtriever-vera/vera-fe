@@ -24,6 +24,7 @@ export function OnboardingProgressBar({ progress }: { readonly progress: Onboard
             <div className="hidden w-[min(560px,100%)] min-[861px]:block">
                 <Stepper label={t('progressLabel')} steps={steps} activeIndex={progress.activeIndex} />
             </div>
+            {/* eslint-disable-next-line sonar/S6819 -- progress bar holds visible label content; native progress cannot and has no aria-valuemin */}
             <div
                 role="progressbar"
                 aria-label={t('progressLabel')}

@@ -18,9 +18,9 @@ export function SuggestionResult({ suggestion }: SuggestionResultProps): ReactEl
     const portfolioEmpty: boolean = suggestion.totalBeforeMinor === 0;
     return (
         <div className="flex flex-col gap-4">
-            <p role="status" className="sr-only">
+            <output className="sr-only">
                 {t('announce', { amount: formatCurrency(suggestion.amountMinor, suggestion.baseCurrency, locale) })}
-            </p>
+            </output>
             <ContributionWarnings warnings={suggestion.warnings} />
             <ul aria-label={t('listLabel')} className="flex flex-col gap-3">
                 {suggestion.classes.map((item: ContributionClass): ReactElement => (

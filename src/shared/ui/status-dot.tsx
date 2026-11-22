@@ -22,7 +22,10 @@ function StatusMark({ level, message }: { readonly level: StatusLevel; readonly 
     if (level === STATUS_LEVELS.done) {
         return <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-positive" strokeWidth={2.2} aria-label={message} />;
     }
-    return <span className="block h-1.5 w-1.5 shrink-0 rounded-full bg-caution" role="img" aria-label={message} />;
+    return (
+        // eslint-disable-next-line sonar/S6819 -- decorative dot drawn with CSS; there is no img element to replace it
+        <span className="block h-1.5 w-1.5 shrink-0 rounded-full bg-caution" role="img" aria-label={message} />
+    );
 }
 
 export function StatusDot({ level, message }: StatusDotProps): ReactElement | null {

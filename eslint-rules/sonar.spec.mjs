@@ -50,14 +50,14 @@ tester.run('S7763 export from', sonarRules.S7763, {
 });
 
 describe('sonar way in eslint.config.mjs', () => {
-    it('turns the main rules on as error (S6767 and S6819 as warn until the follow-up) for sources and the test rules for specs', async () => {
+    it('turns the main rules on as error for sources and the test rules for specs', async () => {
         const eslint = new ESLint({ cwd: process.cwd() });
         const source = await eslint.calculateConfigForFile('src/shared/ui/button.tsx');
         const spec = await eslint.calculateConfigForFile('src/shared/ui/button.spec.tsx');
-        expect(source.rules['sonar/S6767']?.[0]).toBe(1);
-        expect(source.rules['sonar/S6819']?.[0]).toBe(1);
-        expect(source.rules['sonar/S6847']?.[0]).toBe(1);
-        expect(source.rules['sonar/S6848']?.[0]).toBe(1);
+        expect(source.rules['sonar/S6767']?.[0]).toBe(2);
+        expect(source.rules['sonar/S6819']?.[0]).toBe(2);
+        expect(source.rules['sonar/S6847']?.[0]).toBe(2);
+        expect(source.rules['sonar/S6848']?.[0]).toBe(2);
         expect(source.rules['sonar/S3358']?.[0]).toBe(2);
         expect(source.rules['sonar/S9026']).toBeUndefined();
         expect(spec.rules['sonar/S9026']?.[0]).toBe(2);

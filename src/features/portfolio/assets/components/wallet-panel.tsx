@@ -24,11 +24,11 @@ interface WalletListProps {
 
 function WalletSkeleton(): ReactElement {
     return (
-        <div role="status" aria-busy="true" className="flex flex-col gap-2">
+        <output aria-busy="true" className="flex flex-col gap-2">
             <Skeleton className="h-12 w-full" />
             <Skeleton className="h-12 w-full" />
             <Skeleton className="h-12 w-full" />
-        </div>
+        </output>
     );
 }
 

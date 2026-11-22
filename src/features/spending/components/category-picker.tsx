@@ -63,7 +63,7 @@ function useActiveIndex(options: readonly PickerOption[], onPick: (id: string | 
     };
 }
 
-interface PanelProps extends CategoryPickerProps {
+interface PanelProps extends Omit<CategoryPickerProps, 'onChange' | 'emptyLabel' | 'label'> {
     readonly categories: readonly CategoryView[];
     readonly onPicked: (id: string | null) => void;
 }
@@ -90,6 +90,7 @@ function PickerPanel({
     const keys: ActiveIndex = useActiveIndex(options, onPicked);
     const active: PickerOption | undefined = options[keys.index];
     return (
+        // eslint-disable-next-line sonar/S6819 -- keyboard delegation wrapper for the list, not an image
         <div className="flex flex-col gap-2" onKeyDown={keys.onKeyDown} role="presentation">
             <SearchInput
                 value={query}

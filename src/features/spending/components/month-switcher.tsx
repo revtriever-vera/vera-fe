@@ -46,7 +46,7 @@ export function MonthSwitcher({ month, previousMonth, nextMonth, isPartial, onCh
     const { t }: UseTranslationResponse<'spending', undefined> = useTranslation('spending');
     const locale: SupportedLocale = useLocale();
     return (
-        <div role="group" aria-label={t('month.label')} className="flex flex-wrap items-center gap-2">
+        <fieldset aria-label={t('month.label')} className="flex flex-wrap items-center gap-2">
             <Arrow
                 label={t('month.previous')}
                 target={previousMonth}
@@ -63,6 +63,6 @@ export function MonthSwitcher({ month, previousMonth, nextMonth, isPartial, onCh
                 onChange={onChange}
             />
             {isPartial ? <Badge tone="caution">{t('month.partial')}</Badge> : null}
-        </div>
+        </fieldset>
     );
 }
