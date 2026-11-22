@@ -1,6 +1,6 @@
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES, type SupportedLocale } from '@/shared/lib/locale';
+import { DEFAULT_LOCALE, type SupportedLocale } from '@/shared/lib/locale';
 
-export { DEFAULT_LOCALE, SUPPORTED_LOCALES, type SupportedLocale };
+export { DEFAULT_LOCALE, SUPPORTED_LOCALES, type SupportedLocale } from '@/shared/lib/locale';
 
 export interface ResolveLocaleInput {
     readonly userLocale?: string | null;

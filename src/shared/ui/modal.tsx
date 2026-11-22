@@ -27,7 +27,7 @@ function trapTab(event: KeyboardEvent, dialog: HTMLElement | null): void {
     }
     const items: HTMLElement[] = focusableIn(dialog);
     const first: HTMLElement | undefined = items[0];
-    const last: HTMLElement | undefined = items[items.length - 1];
+    const last: HTMLElement | undefined = items.at(-1);
     const goingBack: boolean = event.shiftKey && (document.activeElement === first || document.activeElement === dialog);
     const goingOut: boolean = !event.shiftKey && document.activeElement === last;
     if (goingBack || goingOut) {

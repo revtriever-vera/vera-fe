@@ -1,13 +1,12 @@
 import type { UseMutationResult } from '@tanstack/react-query';
 import type { ApiError } from '@/shared/lib/api/api-error';
-import type { Recategorized } from '../../types';
 import type { ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
 import { track } from '@/shared/lib/analytics';
 import { ConfirmDialog } from '@/shared/ui/confirm-dialog';
 import { spendingErrorMessage } from '../../lib/spending-error-message';
-import type { RuleView } from '../../types';
+import type { Recategorized, RuleView } from '../../types';
 import { useDeleteRule } from '../api/use-delete-rule.mutation';
 import { recategorizedToast } from '../lib/recategorized-toast';
 import { ruleLabel } from '../lib/rule-labels';

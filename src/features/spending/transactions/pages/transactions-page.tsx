@@ -160,7 +160,7 @@ function usePageActions(search: TransactionsSearch): PageActions {
 }
 
 function isCompanyEmpty(accounts: UseQueryResult<AccountsResponse>): boolean {
-    return accounts.data !== undefined && accounts.data.accounts.every((account): boolean => account.transactionCount === 0);
+    return accounts.data?.accounts.every((account): boolean => account.transactionCount === 0) === true;
 }
 
 export function TransactionsPage(): ReactElement {

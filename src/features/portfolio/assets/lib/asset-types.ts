@@ -26,7 +26,7 @@ export const ASSET_TYPE_SPECS: Readonly<Record<AddAssetType, AssetTypeSpec>> = {
 };
 
 export function isAddAssetType(value: string): value is AddAssetType {
-    return ADD_ASSET_TYPES.some((type: AddAssetType): boolean => type === value);
+    return (ADD_ASSET_TYPES as readonly string[]).includes(value);
 }
 
 export function catalogGroupOf(type: AddAssetType): CatalogGroup | null {

@@ -29,7 +29,7 @@ const EMPTY_BOOK: QuoteBook = {
 type QuotesQuery = Query<QuotesResponse, Error, QuotesResponse, ReturnType<typeof portfolioKeys.quotes>>;
 
 export function useQuotes(assetIds: readonly string[]): QuoteBook {
-    const ids: readonly string[] = [...assetIds].sort();
+    const ids: readonly string[] = [...assetIds].sort((a: string, b: string): number => a.localeCompare(b));
     const queryClient: QueryClient = useQueryClient();
     const queryKey: ReturnType<typeof portfolioKeys.quotes> = portfolioKeys.quotes(ids);
     const { data, isLoading, dataUpdatedAt } = useQuery({

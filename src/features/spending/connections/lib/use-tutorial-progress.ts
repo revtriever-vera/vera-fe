@@ -16,7 +16,10 @@ export function useTutorialProgress(companyId: string): TutorialProgress {
                 next.add(step);
             }
             setDone(next);
-            writeTutorialProgress(companyId, [...next].sort());
+            writeTutorialProgress(
+                companyId,
+                [...next].sort((a: number, b: number): number => a - b)
+            );
             return checked;
         },
         [companyId, done]

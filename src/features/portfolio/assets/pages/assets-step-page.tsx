@@ -15,6 +15,10 @@ function StepFooter({ count }: { readonly count: number }): ReactElement {
     );
 }
 
+function renderFooter(state: AssetsStepState): ReactElement {
+    return <StepFooter count={state.count} />;
+}
+
 export function AssetsStepPage(): ReactElement {
-    return <AssetsStep footer={(state: AssetsStepState): ReactElement => <StepFooter count={state.count} />} />;
+    return <AssetsStep footer={renderFooter} />;
 }

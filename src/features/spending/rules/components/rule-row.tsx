@@ -1,6 +1,5 @@
 import type { UseMutationResult } from '@tanstack/react-query';
 import type { ApiError } from '@/shared/lib/api/api-error';
-import type { RuleResult } from '../../types';
 import type { UpdateRuleInput } from '../api/use-update-rule.mutation';
 import type { ReactElement } from 'react';
 import { Trash2 } from 'lucide-react';
@@ -13,7 +12,7 @@ import type { SupportedLocale } from '@/shared/lib/locale';
 import { Badge } from '@/shared/ui/badge';
 import { CategoryPicker } from '../../components/category-picker';
 import { spendingErrorMessage } from '../../lib/spending-error-message';
-import type { RuleView } from '../../types';
+import type { RuleResult, RuleView } from '../../types';
 import { useUpdateRule } from '../api/use-update-rule.mutation';
 import { recategorizedToast } from '../lib/recategorized-toast';
 import { pickerDirection, ruleAppliesToLabel, ruleDomId, ruleLabel, ruleTypeLabel } from '../lib/rule-labels';

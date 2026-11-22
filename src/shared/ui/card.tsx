@@ -19,6 +19,6 @@ const cardVariants: (props?: CardVariantProps) => string = cva('rounded-card p-4
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof cardVariants> {}
 
-export function Card({ className, variant, ...props }: CardProps): ReactElement {
+export function Card({ className, variant, ...props }: Readonly<CardProps>): ReactElement {
     return <div className={cn(cardVariants({ variant }), className)} {...props} />;
 }

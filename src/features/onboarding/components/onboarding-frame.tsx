@@ -43,7 +43,7 @@ export function OnboardingFrame({ children }: { readonly children: ReactNode }):
     const { t }: UseTranslationResponse<'onboarding', undefined> = useTranslation('onboarding');
     const pathname: string = useRouterState({ select: (state): string => state.location.pathname });
     const { data } = useOnboardingState();
-    const canSkip: boolean = pathname.replace(/\/+$/, '') !== ONBOARDING_PATHS.done;
+    const canSkip: boolean = pathname.replace(/\/$/, '') !== ONBOARDING_PATHS.done;
 
     return (
         <div className="flex min-h-dvh flex-col bg-canvas bg-[radial-gradient(ellipse_80%_60%_at_0%_0%,var(--color-accent-soft),transparent_70%)]">

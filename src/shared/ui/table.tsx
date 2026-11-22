@@ -18,7 +18,7 @@ export interface TableProps<Row> {
     readonly rowClassName?: (row: Row) => string | undefined;
 }
 
-const ACTIVATION_KEYS: readonly string[] = ['Enter', ' '];
+const ACTIVATION_KEYS: ReadonlySet<string> = new Set<string>(['Enter', ' ']);
 
 interface TableRowProps<Row> {
     readonly row: Row;
@@ -29,7 +29,7 @@ interface TableRowProps<Row> {
 
 function TableRow<Row>({ row, columns, onActivate, className }: TableRowProps<Row>): ReactElement {
     const activate = (event: KeyboardEvent<HTMLTableRowElement>): void => {
-        if (onActivate !== undefined && event.target === event.currentTarget && ACTIVATION_KEYS.includes(event.key)) {
+        if (onActivate !== undefined && event.target === event.currentTarget && ACTIVATION_KEYS.has(event.key)) {
             event.preventDefault();
             onActivate(row);
         }

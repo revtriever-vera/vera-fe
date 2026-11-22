@@ -11,7 +11,7 @@ const FOCUSABLE: string = 'a[href], button:not([disabled]), [tabindex]:not([tabi
 function trapTab(event: globalThis.KeyboardEvent, panel: HTMLElement): void {
     const nodes: HTMLElement[] = Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE));
     const first: HTMLElement | undefined = nodes[0];
-    const last: HTMLElement | undefined = nodes[nodes.length - 1];
+    const last: HTMLElement | undefined = nodes.at(-1);
     if (first === undefined || last === undefined) {
         return;
     }

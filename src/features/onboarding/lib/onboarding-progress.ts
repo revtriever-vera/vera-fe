@@ -22,7 +22,7 @@ export function stepStatus(state: OnboardingState, key: OnboardingStepKey): Step
 }
 
 export function progressIndexOf(pathname: string): number {
-    return INDEX_BY_PATH[pathname.replace(/\/+$/, '')] ?? 0;
+    return INDEX_BY_PATH[pathname.replace(/\/$/, '')] ?? 0;
 }
 
 export function onboardingProgress(state: OnboardingState | undefined, pathname: string): OnboardingProgress {
