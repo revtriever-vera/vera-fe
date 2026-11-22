@@ -90,11 +90,7 @@ export function ConnectionList({ connections, now, stalled, onSyncRequested, onS
         <Card className="flex flex-col gap-3" role="region" aria-labelledby={titleId}>
             <ListHeader sync={sync} hasConnections={connections.length > 0} allSyncing={allSyncing} titleId={titleId} />
             <ListBody connections={connections} now={now} sync={sync} onRemove={setRemoving} onShowStep={onShowStep} onRotate={onRotate} />
-            {stalled ? (
-                <p role="status" className="text-sm text-content-muted">
-                    {t('banks.stalled')}
-                </p>
-            ) : null}
+            {stalled ? <output className="text-sm text-content-muted">{t('banks.stalled')}</output> : null}
             {removing === null ? null : (
                 <RemoveConnectionDialog
                     connection={removing}

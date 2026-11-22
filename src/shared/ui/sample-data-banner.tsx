@@ -32,10 +32,7 @@ export function SampleDataBanner(): ReactElement | null {
         return null;
     }
     return (
-        <div
-            role="status"
-            className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-caution/30 bg-caution/10 px-page-x py-2.5 text-sm"
-        >
+        <output className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-caution/30 bg-caution/10 px-page-x py-2.5 text-sm">
             <span className="flex items-center gap-2 font-medium text-content">
                 <FlaskConical className="size-4 shrink-0 text-caution" aria-hidden="true" />
                 {t.sampleBannerText}
@@ -56,6 +53,6 @@ export function SampleDataBanner(): ReactElement | null {
                     }}
                 />
             )}
-        </div>
+        </output>
     );
 }

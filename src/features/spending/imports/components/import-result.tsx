@@ -11,7 +11,7 @@ export function ImportResult({ created }: { readonly created: ImportCreated }): 
     const locale: SupportedLocale = useLocale();
     const counts: ResultCounts = resultCounts(t, created);
     return (
-        <div role="status" className="flex flex-col gap-3">
+        <output className="flex flex-col gap-3">
             <div className="flex items-center gap-2 text-positive">
                 <CircleCheck className="size-5" aria-hidden="true" />
                 <h3 className="text-base font-semibold">{t('result.title')}</h3>
@@ -29,6 +29,6 @@ export function ImportResult({ created }: { readonly created: ImportCreated }): 
                     ) : null}
                 </li>
             </ul>
-        </div>
+        </output>
     );
 }

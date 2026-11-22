@@ -108,6 +108,20 @@ export interface ToastCardProps {
     readonly onDismiss: (id: string) => void;
 }
 
+function useExitTimer(leaving: boolean, onDismiss: (id: string) => void, id: string): void {
+    useEffect((): undefined | (() => void) => {
+        if (!leaving) {
+            return undefined;
+        }
+        const timer: number = window.setTimeout((): void => {
+            onDismiss(id);
+        }, EXIT_MS);
+        return (): void => {
+            window.clearTimeout(timer);
+        };
+    }, [leaving, onDismiss, id]);
+}
+
 export function ToastCard({ toast, onDismiss }: ToastCardProps): ReactElement {
     const [leaving, setLeaving] = useState<boolean>(false);
     const leave: () => void = useCallback((): void => {
@@ -115,19 +129,10 @@ export function ToastCard({ toast, onDismiss }: ToastCardProps): ReactElement {
     }, []);
     const { hold, release }: Countdown = useCountdown(toast.durationMs, leave);
 
-    useEffect((): undefined | (() => void) => {
-        if (!leaving) {
-            return undefined;
-        }
-        const timer: number = window.setTimeout((): void => {
-            onDismiss(toast.id);
-        }, EXIT_MS);
-        return (): void => {
-            window.clearTimeout(timer);
-        };
-    }, [leaving, onDismiss, toast.id]);
+    useExitTimer(leaving, onDismiss, toast.id);
 
     return (
+        // eslint-disable-next-line sonar/S6819, sonar/S6848 -- role depends on tone (alert or status); hover and focus only pause the dismiss timer, no action is bound
         <div
             role={toast.tone === TOAST_TONES.critical ? 'alert' : 'status'}
             onMouseEnter={hold}

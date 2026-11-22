@@ -28,7 +28,7 @@ export function UserBox(): ReactElement | null {
     };
 
     return (
-        <div className="flex items-center gap-2.5 rounded-card border border-border p-2.5" role="group" aria-label={t('userBox')}>
+        <fieldset className="flex items-center gap-2.5 rounded-card border border-border p-2.5" aria-label={t('userBox')}>
             <Avatar name={user.name} className="size-[34px]" />
             <Link
                 to={ACCOUNT_PATH}
@@ -47,6 +47,6 @@ export function UserBox(): ReactElement | null {
             >
                 <LogOut className="size-[18px]" aria-hidden="true" />
             </button>
-        </div>
+        </fieldset>
     );
 }

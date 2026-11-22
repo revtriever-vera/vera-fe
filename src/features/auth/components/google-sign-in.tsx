@@ -56,7 +56,7 @@ function useGoogleIdentity(
 
 function useGoogleButton(
     identity: GoogleIdentity | null,
-    container: RefObject<HTMLDivElement | null>,
+    container: RefObject<HTMLFieldSetElement | null>,
     width: number,
     locale: SupportedLocale
 ): void {
@@ -78,7 +78,7 @@ function useGoogleButton(
 export function GoogleSignIn({ clientId, onCredential, onUnavailable, disabled = false }: GoogleSignInProps): ReactElement {
     const { t }: UseTranslationResponse<'auth', undefined> = useTranslation('auth');
     const locale: SupportedLocale = useLocale();
-    const container: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null);
+    const container: RefObject<HTMLFieldSetElement | null> = useRef<HTMLFieldSetElement>(null);
     const latest: RefObject<(idToken: string) => void> = useRef<(idToken: string) => void>(onCredential);
     const width: number = useElementWidth(container);
 
@@ -90,9 +90,9 @@ export function GoogleSignIn({ clientId, onCredential, onUnavailable, disabled =
     useGoogleButton(identity, container, width, locale);
 
     return (
-        <div
+        <fieldset
             ref={container}
-            role="group"
+
             aria-label={t('continueWithGoogle')}
             className={cn('flex min-h-10 w-full justify-center', disabled && 'pointer-events-none opacity-60')}
         />

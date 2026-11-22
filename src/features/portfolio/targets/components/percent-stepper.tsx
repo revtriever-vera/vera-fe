@@ -68,7 +68,9 @@ interface StepperHandlers {
     readonly blur: () => void;
 }
 
-function useStepperHandlers({ value, onChange, onCommit, stepBps, minBps, maxBps }: PercentStepperProps): StepperHandlers {
+type StepperConfig = Pick<PercentStepperProps, 'value' | 'onChange' | 'onCommit' | 'stepBps' | 'minBps' | 'maxBps'>;
+
+function useStepperHandlers({ value, onChange, onCommit, stepBps, minBps, maxBps }: StepperConfig): StepperHandlers {
     const bounds: Bounds = { minBps, maxBps };
     const locale: SupportedLocale = useLocale();
     const [draft, setDraft] = useState<string | null>(null);
@@ -97,7 +99,7 @@ function useStepperHandlers({ value, onChange, onCommit, stepBps, minBps, maxBps
 }
 
 interface StepperInputProps {
-    readonly props: PercentStepperProps;
+    readonly props: Pick<PercentStepperProps, 'inputLabel' | 'error' | 'disabled'>;
     readonly handlers: StepperHandlers;
     readonly errorId: string;
 }
@@ -120,36 +122,46 @@ function StepperInput({ props, handlers, errorId }: StepperInputProps): ReactEle
     );
 }
 
+interface StepperErrorProps {
+    readonly id: string;
+    readonly message: string | undefined;
+}
+
+function StepperError({ id, message }: StepperErrorProps): ReactElement | null {
+    return message === undefined ? null : (
+        <p id={id} role="alert" className="text-2xs text-critical">
+            {message}
+        </p>
+    );
+}
+
 export function PercentStepper(props: PercentStepperProps): ReactElement {
-    const { error, disabled = false }: PercentStepperProps = props;
+    const { value, onChange, onCommit, stepBps, minBps, maxBps, inputLabel, error, disabled = false }: PercentStepperProps = props;
     const errorId: string = useId();
-    const handlers: StepperHandlers = useStepperHandlers(props);
+    const handlers: StepperHandlers = useStepperHandlers({ value, onChange, onCommit, stepBps, minBps, maxBps });
+    const { decreaseLabel, increaseLabel }: PercentStepperProps = props;
     return (
         <div className="flex flex-col items-end gap-1">
             <div className="inline-flex items-center gap-1.5">
                 <StepButton
                     icon={Minus}
-                    label={props.decreaseLabel}
-                    disabled={disabled || handlers.base <= props.minBps}
+                    label={decreaseLabel}
+                    disabled={disabled || handlers.base <= minBps}
                     onClick={(): void => {
                         handlers.step(-1);
                     }}
                 />
-                <StepperInput props={props} handlers={handlers} errorId={errorId} />
+                <StepperInput props={{ inputLabel, error, disabled }} handlers={handlers} errorId={errorId} />
                 <StepButton
                     icon={Plus}
-                    label={props.increaseLabel}
-                    disabled={disabled || handlers.base >= props.maxBps}
+                    label={increaseLabel}
+                    disabled={disabled || handlers.base >= maxBps}
                     onClick={(): void => {
                         handlers.step(1);
                     }}
                 />
             </div>
-            {error === undefined ? null : (
-                <p id={errorId} role="alert" className="text-2xs text-critical">
-                    {error}
-                </p>
-            )}
+            <StepperError id={errorId} message={error} />
         </div>
     );
 }

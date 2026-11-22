@@ -47,8 +47,8 @@ function TypeCard({ type, colorKey, count, onSelect }: TypeCardProps): ReactElem
     );
 }
 
-function useFocusType(focusType: AddAssetType | null | undefined): RefObject<HTMLDivElement | null> {
-    const container: RefObject<HTMLDivElement | null> = useRef<HTMLDivElement | null>(null);
+function useFocusType(focusType: AddAssetType | null | undefined): RefObject<HTMLFieldSetElement | null> {
+    const container: RefObject<HTMLFieldSetElement | null> = useRef<HTMLFieldSetElement | null>(null);
     useEffect((): void => {
         if (focusType !== null && focusType !== undefined) {
             container.current?.querySelector<HTMLButtonElement>(`[data-type="${focusType}"]`)?.focus();
@@ -61,14 +61,9 @@ export function AssetTypeCards({ onSelect, focusType, className }: AssetTypeCard
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const holdings: readonly HoldingView[] = useHoldings().data?.data ?? [];
     const classes: readonly AssetClassView[] = useClasses().data?.data ?? [];
-    const container: RefObject<HTMLDivElement | null> = useFocusType(focusType);
+    const container: RefObject<HTMLFieldSetElement | null> = useFocusType(focusType);
     return (
-        <div
-            ref={container}
-            role="group"
-            aria-label={t('typeCards.label')}
-            className={cn('grid grid-cols-1 gap-3 sm:grid-cols-2', className)}
-        >
+        <fieldset ref={container} aria-label={t('typeCards.label')} className={cn('grid grid-cols-1 gap-3 sm:grid-cols-2', className)}>
             {ADD_ASSET_TYPES.map((type: AddAssetType): ReactElement => (
                 <TypeCard
                     key={type}
@@ -78,6 +73,6 @@ export function AssetTypeCards({ onSelect, focusType, className }: AssetTypeCard
                     onSelect={onSelect}
                 />
             ))}
-        </div>
+        </fieldset>
     );
 }

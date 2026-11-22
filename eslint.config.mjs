@@ -216,10 +216,5 @@ export default tseslint.config(
         tests: ['src/**/*.spec.ts', 'src/**/*.spec.tsx'],
         enabled
     }),
-    {
-        files: ['src/**/*.ts', 'src/**/*.tsx'],
-        ignores: ['src/**/*.spec.ts', 'src/**/*.spec.tsx'],
-        rules: { 'sonar/S6819': 'warn', 'sonar/S6767': 'warn', 'sonar/S6847': 'warn', 'sonar/S6848': 'warn' }
-    },
     prettier
 );
