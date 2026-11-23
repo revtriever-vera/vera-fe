@@ -107,6 +107,50 @@ describe('ConcentrationTab', () => {
         expect(screen.getByText('Other 4 groups')).toBeInTheDocument();
     });
 
+    it('mantém Tesouro Nacional em pt-BR para o grupo da chave', async () => {
+        const treasury: ConcentrationResponse = sampleConcentration({
+            byIssuer: [
+                {
+                    key: 'tesouro-nacional',
+                    kind: 'group',
+                    name: 'Tesouro Nacional',
+                    valueMinor: 1000,
+                    shareBps: 10000,
+                    assets: [],
+                    moreCount: 0
+                }
+            ],
+            byIssuerOthers: null
+        });
+        mockConcentration(treasury);
+        renderWithProviders(<ConcentrationTab />);
+        expect(await screen.findByText('Tesouro Nacional')).toBeInTheDocument();
+    });
+
+    it('em inglês mostra National Treasury para o grupo Tesouro Nacional', async () => {
+        await i18n.changeLanguage('en');
+        mockConcentration(
+            sampleConcentration({
+                byIssuer: [
+                    {
+                        key: 'tesouro-nacional',
+                        kind: 'group',
+                        name: 'Tesouro Nacional',
+                        valueMinor: 1000,
+                        shareBps: 10000,
+                        assets: [],
+                        moreCount: 0
+                    }
+                ],
+                byIssuerOthers: null
+            })
+        );
+        renderWithProviders(<ConcentrationTab />);
+
+        expect(await screen.findByText('National Treasury')).toBeInTheDocument();
+        expect(screen.queryByText('Tesouro Nacional')).not.toBeInTheDocument();
+    });
+
     it('mostra o carregamento e depois o erro, e tenta de novo', async () => {
         const user: UserEvent = userEvent.setup();
         server.use(

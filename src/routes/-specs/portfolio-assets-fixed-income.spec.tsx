@@ -27,8 +27,25 @@ function useData(): void {
             HttpResponse.json(
                 maturities([
                     maturityItem(),
-                    maturityItem({ id: 'title-lci', name: 'LCI Beta', issuerName: null, kind: 'lci', daysToMaturity: 75, soon: true, estimated: true, basis: 'cdi_projection' }),
-                    maturityItem({ id: 'td', holdingKind: 'position', name: 'Tesouro IPCA 2035', issuerName: null, kind: null, daysToMaturity: 400, soon: false }),
+                    maturityItem({
+                        id: 'title-lci',
+                        name: 'LCI Beta',
+                        issuerName: null,
+                        kind: 'lci',
+                        daysToMaturity: 75,
+                        soon: true,
+                        estimated: true,
+                        basis: 'cdi_projection'
+                    }),
+                    maturityItem({
+                        id: 'td',
+                        holdingKind: 'position',
+                        name: 'Tesouro IPCA 2035',
+                        issuerName: null,
+                        kind: null,
+                        daysToMaturity: 400,
+                        soon: false
+                    }),
                     maturityItem({ id: 'far', name: 'CDB Longo', daysToMaturity: 1000, soon: false })
                 ])
             )
@@ -37,8 +54,25 @@ function useData(): void {
             HttpResponse.json(
                 realRates([
                     realRateItem(),
-                    realRateItem({ id: 'low', name: 'CDB Baixo', indexer: 'prefixed', rateBps: 1240, realAnnualBps: 200, lowReal: true, purchasingPowerGainMinor: -5000, purchasingPowerGainBps: -120 }),
-                    realRateItem({ id: 'ipca', name: 'LCA Alfa', kind: 'lca', indexer: 'ipca_plus', rateBps: 610, nominalAnnualBps: null, realAnnualBps: null })
+                    realRateItem({
+                        id: 'low',
+                        name: 'CDB Baixo',
+                        indexer: 'prefixed',
+                        rateBps: 1240,
+                        realAnnualBps: 200,
+                        lowReal: true,
+                        purchasingPowerGainMinor: -5000,
+                        purchasingPowerGainBps: -120
+                    }),
+                    realRateItem({
+                        id: 'ipca',
+                        name: 'LCA Alfa',
+                        kind: 'lca',
+                        indexer: 'ipca_plus',
+                        rateBps: 610,
+                        nominalAnnualBps: null,
+                        realAnnualBps: null
+                    })
                 ])
             )
         ),
@@ -120,7 +154,11 @@ describe('/portfolio/assets: renda fixa, vencimentos', () => {
 
     it('erro de uma consulta fica no cartão dela e tenta de novo', async () => {
         useData();
-        server.use(http.get('*/portfolio/maturities', () => HttpResponse.json({ type: 'x', title: 'x', status: 500, detail: 'falha', requestId: 'r1' }, { status: 500 })));
+        server.use(
+            http.get('*/portfolio/maturities', () =>
+                HttpResponse.json({ type: 'x', title: 'x', status: 500, detail: 'falha', requestId: 'r1' }, { status: 500 })
+            )
+        );
         renderRouterAt(PATH, { signedIn: true });
 
         expect(await screen.findByText('Não foi possível carregar agora.', {}, { timeout: 5000 })).toBeInTheDocument();
@@ -130,6 +168,33 @@ describe('/portfolio/assets: renda fixa, vencimentos', () => {
 });
 
 describe('/portfolio/assets: renda fixa, taxa real', () => {
+    it('sem série de IPCA mostra a indisponibilidade traduzida, sem o texto da API e sem tentar de novo', async () => {
+        useData();
+        let calls: number = 0;
+        server.use(
+            http.get('*/portfolio/real-rates', () => {
+                calls += 1;
+                return HttpResponse.json(
+                    {
+                        type: 'fixed_income.index_data_missing',
+                        title: 'ScheduleIndexDataMissingError',
+                        status: 503,
+                        detail: 'There is no IPCA series with twelve consecutive months yet',
+                        requestId: 'r9'
+                    },
+                    { status: 503 }
+                );
+            })
+        );
+        renderRouterAt(PATH, { signedIn: true });
+
+        expect(await screen.findByText('A taxa real não está disponível agora')).toBeInTheDocument();
+        expect(screen.getByText(/Ainda não temos a série do IPCA com 12 meses seguidos/)).toBeInTheDocument();
+        expect(screen.queryByText(/There is no IPCA series/)).not.toBeInTheDocument();
+        expect(screen.queryByText('r9')).not.toBeInTheDocument();
+        expect(calls).toBe(1);
+    });
+
     it('mostra o IPCA da resposta, o contratado e a taxa real com texto', async () => {
         useData();
         renderRouterAt(PATH, { signedIn: true });
@@ -164,7 +229,11 @@ describe('/portfolio/assets: renda fixa, FGC', () => {
     });
 
     it('grupo dentro do limite mostra "dentro"', async () => {
-        server.use(http.get('*/portfolio/fgc', () => HttpResponse.json(fgcCoverage({ groups: [fgcGroup({ overMinor: 0, totalMinor: 1000000, coveredMinor: 1000000 })] }))));
+        server.use(
+            http.get('*/portfolio/fgc', () =>
+                HttpResponse.json(fgcCoverage({ groups: [fgcGroup({ overMinor: 0, totalMinor: 1000000, coveredMinor: 1000000 })] }))
+            )
+        );
         renderRouterAt(PATH, { signedIn: true });
 
         expect(await screen.findByText('dentro')).toBeInTheDocument();
@@ -218,7 +287,9 @@ describe('/portfolio/assets: renda fixa, FGC', () => {
         );
         renderRouterAt(PATH, { signedIn: true });
 
-        expect(await screen.findByText(/Fora do FGC: Tesouro Selic\. Tesouro Direto tem garantia do Tesouro Nacional\./)).toBeInTheDocument();
+        expect(
+            await screen.findByText(/Fora do FGC: Tesouro Selic\. Tesouro Direto tem garantia do Tesouro Nacional\./)
+        ).toBeInTheDocument();
         expect(screen.getByText(/Fora do FGC: Debênture X\. Debênture, CRI e CRA dependem só da empresa\./)).toBeInTheDocument();
         expect(screen.getByText('Sem emissor: CDB sem emissor. Complete o cadastro para ver a cobertura.')).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Completar o cadastro de CDB sem emissor' })).toBeInTheDocument();
@@ -230,7 +301,10 @@ describe('/portfolio/assets: renda fixa, cadastro sem emissor', () => {
         mockHoldingsApi();
         server.use(
             http.get('*/portfolio/fgc', () =>
-                HttpResponse.json({ ...emptyFgc(), outside: [{ id: 'fi-cdb', name: 'CDB Inter', reason: 'missing_issuer', valueMinor: 100 }] })
+                HttpResponse.json({
+                    ...emptyFgc(),
+                    outside: [{ id: 'fi-cdb', name: 'CDB Inter', reason: 'missing_issuer', valueMinor: 100 }]
+                })
             )
         );
         const user: UserEvent = userEvent.setup();

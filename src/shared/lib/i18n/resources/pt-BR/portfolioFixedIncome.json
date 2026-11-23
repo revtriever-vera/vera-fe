@@ -37,6 +37,8 @@
     "description": "A taxa de cada título descontado o IPCA de 12 meses ({{ipca}}), antes do IR. LCI e LCA são isentas de IR.",
     "descriptionNoIpca": "A taxa de cada título descontado o IPCA de 12 meses, antes do IR. LCI e LCA são isentas de IR.",
     "loading": "Carregando a taxa real",
+    "unavailableTitle": "A taxa real não está disponível agora",
+    "unavailableDetail": "Ainda não temos a série do IPCA com 12 meses seguidos. Os vencimentos continuam aparecendo como estimados.",
     "empty": "Nenhum título de renda fixa cadastrado com taxa.",
     "listLabel": "Taxa real por título",
     "columns": {

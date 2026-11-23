@@ -30,3 +30,7 @@ export type SectorKey = (typeof SECTOR_KEYS)[number];
 export const ISSUER_BUCKET_KEYS = ['funds', 'crypto', 'missing_issuer', 'unmapped'] as const;
 
 export type IssuerBucketKey = (typeof ISSUER_BUCKET_KEYS)[number];
+
+export const ISSUER_GROUP_KEYS = ['tesouro-nacional', 'tesouro-eua', 'outro'] as const;
+
+export type IssuerGroupKey = (typeof ISSUER_GROUP_KEYS)[number];

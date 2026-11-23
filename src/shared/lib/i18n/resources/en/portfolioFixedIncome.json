@@ -37,6 +37,8 @@
     "description": "Each security's rate minus the 12-month IPCA ({{ipca}}), before income tax. LCI and LCA are exempt from income tax.",
     "descriptionNoIpca": "Each security's rate minus the 12-month IPCA, before income tax. LCI and LCA are exempt from income tax.",
     "loading": "Loading the real rate",
+    "unavailableTitle": "The real rate is not available right now",
+    "unavailableDetail": "We do not have an IPCA series with 12 consecutive months yet. Maturities are still shown as estimated.",
     "empty": "No fixed income security registered with a rate.",
     "listLabel": "Real rate by security",
     "columns": {
@@ -59,7 +61,7 @@
   },
   "fgc": {
     "title": "FGC coverage",
-    "description": "The FGC guarantees up to R$ 250,000 per CPF at each conglomerate, capped at R$ 1 million every 4 years. CDB, LCI, LCA and LC are included.",
+    "description": "The FGC guarantees up to R$250,000 per CPF at each conglomerate, capped at R$1 million every 4 years. CDB, LCI, LCA and LC are included.",
     "loading": "Loading the FGC coverage",
     "meterLabel": "Covered by the FGC",
     "meterValue": "{{covered}} of {{cap}}",
@@ -89,8 +91,8 @@
   "alerts": {
     "label": "Portfolio notices",
     "maturity": "{{name}} matures {{when}}, on {{date}}, with about {{amount}} to reallocate.",
-    "fgc": "{{amount}} at {{group}} above the R$ 250,000 FGC limit.",
-    "fgcHolder": "{{amount}} of {{holder}} at {{group}} above the R$ 250,000 FGC limit.",
+    "fgc": "{{amount}} at {{group}} above the R$250,000 FGC limit.",
+    "fgcHolder": "{{amount}} of {{holder}} at {{group}} above the R$250,000 FGC limit.",
     "reallocate": "Reallocate",
     "reallocateLabel": "Reallocate the value of {{name}}",
     "viewCoverage": "View coverage"
