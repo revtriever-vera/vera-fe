@@ -32,8 +32,16 @@ function MaturityWhenCell({ item }: { readonly item: MaturityItem }): ReactEleme
 function useColumns(reference: MaturitiesResponse['reference']): readonly TableColumn<MaturityItem>[] {
     const { t }: UseTranslationResponse<'portfolioFixedIncome', undefined> = useTranslation('portfolioFixedIncome');
     return [
-        { key: 'title', header: t('maturities.columns.title'), render: (item: MaturityItem): ReactElement => <MaturityTitleCell item={item} /> },
-        { key: 'when', header: t('maturities.columns.maturity'), render: (item: MaturityItem): ReactElement => <MaturityWhenCell item={item} /> },
+        {
+            key: 'title',
+            header: t('maturities.columns.title'),
+            render: (item: MaturityItem): ReactElement => <MaturityTitleCell item={item} />
+        },
+        {
+            key: 'when',
+            header: t('maturities.columns.maturity'),
+            render: (item: MaturityItem): ReactElement => <MaturityWhenCell item={item} />
+        },
         {
             key: 'value',
             header: t('maturities.columns.value'),
@@ -69,10 +77,12 @@ function MaturitiesTable({ data }: { readonly data: MaturitiesResponse }): React
             columns={columns}
             rows={data.items}
             rowKey={(item: MaturityItem): string => `${item.holdingKind}-${item.id}`}
-            minWidthClass="min-w-[620px]"
+            minWidthClass={MIN_WIDTH}
         />
     );
 }
+
+const MIN_WIDTH: string = 'min-w-[620px]';
 
 export function MaturitiesCard({ showBrlNote }: { readonly showBrlNote: boolean }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioFixedIncome', undefined> = useTranslation('portfolioFixedIncome');

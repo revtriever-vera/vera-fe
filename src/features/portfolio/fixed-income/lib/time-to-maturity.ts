@@ -6,7 +6,7 @@ const DAYS_PER_MONTH: number = 30.4;
 const DAYS_PER_YEAR: number = 365.25;
 const MIN_ANTICIPATION_DAYS: number = 0;
 
-export const TIME_UNIT = {
+export const TIME_UNIT: { readonly today: 'today'; readonly days: 'days'; readonly months: 'months'; readonly years: 'years' } = {
     today: 'today',
     days: 'days',
     months: 'months',
@@ -33,7 +33,7 @@ export function timeToMaturity(days: number): TimeToMaturity {
     return { unit: TIME_UNIT.years, amount: Math.round((days / DAYS_PER_YEAR) * 10) / 10 };
 }
 
-export const DAYS_BUCKET = {
+export const DAYS_BUCKET: { readonly attention: 'up_to_60'; readonly soon: 'up_to_90'; readonly later: 'over_90' } = {
     attention: 'up_to_60',
     soon: 'up_to_90',
     later: 'over_90'

@@ -6,7 +6,7 @@ import { ApiError } from '@/shared/lib/api/api-error';
 import type { SessionIdentity } from '@/features/auth/types';
 import { toSessionUser } from './to-session-user';
 import { useSession } from './session-provider';
-import { useToast } from './toast-provider';
+import { useToast, type ToastApi } from './toast-provider';
 
 const FORBIDDEN_ROLE: string = 'members.forbidden_role';
 
@@ -18,7 +18,7 @@ export function RoleSync(): ReactElement | null {
     const { t }: UseTranslationResponse<'common', undefined> = useTranslation();
     const queryClient: QueryClient = useQueryClient();
     const { replaceUser } = useSession();
-    const toast = useToast();
+    const toast: ToastApi = useToast();
 
     useEffect((): (() => void) => {
         const onFailure = (error: unknown): void => {
@@ -26,9 +26,12 @@ export function RoleSync(): ReactElement | null {
                 return;
             }
             toast.show({ tone: 'critical', title: t('roleChanged') });
-            void apiClient.GET('/auth/me').then((result): void => {
-                replaceUser(toSessionUser(unwrap<SessionIdentity>(result)));
-            }, (): void => undefined);
+            void apiClient.GET('/auth/me').then(
+                (result): void => {
+                    replaceUser(toSessionUser(unwrap<SessionIdentity>(result)));
+                },
+                (): void => undefined
+            );
         };
         const stopQueries: () => void = queryClient.getQueryCache().subscribe((event): void => {
             if (event.type === 'updated' && event.action.type === 'error') {

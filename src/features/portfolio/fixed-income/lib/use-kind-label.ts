@@ -2,7 +2,7 @@ import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { FIXED_INCOME_KINDS, type FixedIncomeKind } from '../../assets/types';
 
 function isFixedIncomeKind(kind: string): kind is FixedIncomeKind {
-    return FIXED_INCOME_KINDS.some((item: FixedIncomeKind): boolean => item === kind);
+    return (FIXED_INCOME_KINDS as readonly string[]).includes(kind);
 }
 
 export function useKindLabel(): (kind: string) => string {

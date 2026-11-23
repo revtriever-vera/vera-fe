@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type UseFormReturn } from 'react-hook-form';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import type { UseMutationResult } from '@tanstack/react-query';
-import { useToast } from '@/app/providers/toast-provider';
+import { useToast, type ToastApi } from '@/app/providers/toast-provider';
 import { track } from '@/shared/lib/analytics';
 import { useInvite, type InviteInput as InviteBody } from '../api/use-invite.mutation';
 import { createInviteSchema, type InviteInput } from '../schemas/invite.schema';
@@ -18,10 +18,10 @@ export interface InviteForm {
 
 export function useInviteForm(): InviteForm {
     const { t }: UseTranslationResponse<'members', undefined> = useTranslation('members');
-    const toast = useToast();
+    const toast: ToastApi = useToast();
     const fail: (error: Error) => void = useMemberFailure();
     const invite: UseMutationResult<InviteResult, Error, InviteBody> = useInvite();
-    const schema = useMemo((): ReturnType<typeof createInviteSchema> => createInviteSchema(t), [t]);
+    const schema: ReturnType<typeof createInviteSchema> = useMemo((): ReturnType<typeof createInviteSchema> => createInviteSchema(t), [t]);
     const form: UseFormReturn<InviteInput> = useForm<InviteInput>({
         resolver: zodResolver(schema),
         mode: 'onTouched',

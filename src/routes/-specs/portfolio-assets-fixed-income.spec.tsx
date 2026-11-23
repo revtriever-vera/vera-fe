@@ -98,7 +98,8 @@ describe('/portfolio/assets: abas', () => {
         expect(screen.getByRole('tab', { name: 'Renda fixa', selected: true })).toBeInTheDocument();
         expect(track).toHaveBeenCalledWith('assets_tab_viewed', { tab: 'fixed-income' });
 
-        router.history.back();
+        const history: { back: () => void } = router.history as { back: () => void };
+        history.back();
 
         expect(await screen.findByRole('tab', { name: 'Ativos', selected: true })).toBeInTheDocument();
     });
@@ -257,7 +258,7 @@ describe('/portfolio/assets: renda fixa, FGC', () => {
             holder: name === null ? null : { userId: `id-${name}`, name },
             coveredMinor: 100,
             capShareBps: 100,
-            groups: [fgcGroup({ groupId: `g-${name}`, groupName: `Grupo de ${name ?? 'todos'}`, overMinor })],
+            groups: [fgcGroup({ groupId: `g-${name ?? 'all'}`, groupName: `Grupo de ${name === null ? 'todos' : name}`, overMinor })],
             outside: []
         });
         server.use(
