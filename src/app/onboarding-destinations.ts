@@ -9,7 +9,7 @@ export interface OnboardingDestinations {
 export const ONBOARDING_DESTINATIONS: OnboardingDestinations = {
     overview: '/portfolio',
     assets: '/portfolio/assets',
-    connections: '/spending/connections',
+    connections: '/settings/banks',
     target: '/portfolio/targets',
     spending: '/spending'
 };

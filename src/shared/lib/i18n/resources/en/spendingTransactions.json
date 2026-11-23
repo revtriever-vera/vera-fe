@@ -1,6 +1,6 @@
 {
   "title": "Transactions",
-  "description": "Most of them sort themselves (Pluggy category, merchant dictionary and your rules). What is left, you teach once.",
+  "description": "Most are sorted by the Pluggy category, the merchant dictionary and your rules. What is left, you teach once.",
   "actions": {
     "rules": "Manage rules",
     "import": "Import statement"

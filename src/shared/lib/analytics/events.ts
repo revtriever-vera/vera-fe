@@ -7,6 +7,7 @@ export type CurrencyCode = 'BRL' | 'USD';
 export type SpendingImportFormatName = 'ofx' | 'csv_nubank_card' | 'csv_nubank_account' | 'csv_generic';
 export type SpendingFlexibilityName = 'fixed' | 'flexible';
 export type SpendingRuleMatchName = 'description' | 'contains';
+export type SettingsTabName = 'plan' | 'integrations' | 'people' | 'whatsapp' | 'calendar' | 'banks' | 'preferences' | 'privacy';
 export type SpendingCutsStatusName = 'no_data' | 'no_income' | 'goal_met' | 'cut_suggested' | 'exceeds_flexible';
 
 export interface AnalyticsEventMap {
@@ -18,6 +19,8 @@ export interface AnalyticsEventMap {
     account_export_requested: undefined;
     account_delete_opened: undefined;
     account_deleted: undefined;
+    settings_viewed: { tab: SettingsTabName };
+    user_menu_opened: undefined;
     language_changed: { locale: 'pt-BR' | 'en' };
     onboarding_started: undefined;
     onboarding_step_viewed: { step: OnboardingStepName };

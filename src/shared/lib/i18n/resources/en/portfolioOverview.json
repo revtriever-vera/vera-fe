@@ -65,7 +65,7 @@
     "action": "See my assets"
   },
   "empty": {
-    "title": "Your portfolio is still empty",
+    "title": "No assets registered",
     "description": "Add your assets to see how your net worth is distributed against your target.",
     "action": "Add my first asset"
   }

@@ -8,12 +8,12 @@ describe('rotas de /portfolio', () => {
     it.each([
         ['/portfolio', 'Visão geral'],
         ['/portfolio/targets', 'Carteira-alvo'],
-        ['/portfolio/contribution', 'Aporte inteligente'],
+        ['/portfolio/contribution', 'Onde aportar'],
         ['/portfolio/assets', 'Meus ativos']
     ])('em %s só a aba %s fica marcada', async (path: string, active: string) => {
         renderRouterAt(path, { signedIn: true });
 
-        const tabs: HTMLElement = await screen.findByRole('navigation', { name: 'Seções do patrimônio' });
+        const tabs: HTMLElement = await screen.findByRole('navigation', { name: 'Seções da carteira' });
         const links: HTMLElement[] = Array.from(tabs.querySelectorAll('a'));
         const marked: string[] = links
             .filter((link: HTMLElement): boolean => link.classList.contains('bg-surface'))
@@ -24,7 +24,7 @@ describe('rotas de /portfolio', () => {
 
     it('as abas navegam entre as telas', async () => {
         const router: AnyRouter = renderRouterAt('/portfolio', { signedIn: true });
-        const tabs: HTMLElement = await screen.findByRole('navigation', { name: 'Seções do patrimônio' });
+        const tabs: HTMLElement = await screen.findByRole('navigation', { name: 'Seções da carteira' });
         const link: HTMLElement = within(tabs).getByRole('link', { name: 'Meus ativos' });
 
         link.click();
@@ -50,7 +50,7 @@ describe('rotas de /portfolio', () => {
     it('lê o valor do aporte como número', async () => {
         installContributionApi();
         const router: AnyRouter = renderRouterAt('/portfolio/contribution?amount=1500', { signedIn: true });
-        await screen.findByRole('heading', { name: 'Aporte inteligente', level: 2 });
+        await screen.findByRole('heading', { name: 'Onde aportar', level: 2 });
 
         expect(router.state.location.search).toEqual({ amount: 1500 });
     });
@@ -58,7 +58,7 @@ describe('rotas de /portfolio', () => {
     it('degrada /portfolio/contribution?amount=abc sem lançar', async () => {
         installContributionApi();
         const router: AnyRouter = renderRouterAt('/portfolio/contribution?amount=abc', { signedIn: true });
-        await screen.findByRole('heading', { name: 'Aporte inteligente', level: 2 });
+        await screen.findByRole('heading', { name: 'Onde aportar', level: 2 });
 
         await waitFor(() => {
             expect(router.state.location.search).toEqual({ amount: 10000 });

@@ -16,7 +16,9 @@ import { Route as AuthOnboardingRouteImport } from './routes/_auth/onboarding'
 import { Route as DevUiRouteImport } from './routes/_dev/ui'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/_app/index'
 import { Route as AuthAppAccountRouteImport } from './routes/_auth/_app/account'
+import { Route as AuthAppPlansRouteImport } from './routes/_auth/_app/plans'
 import { Route as AuthAppPortfolioRouteImport } from './routes/_auth/_app/portfolio'
+import { Route as AuthAppSettingsRouteImport } from './routes/_auth/_app/settings'
 import { Route as AuthAppSpendingRouteImport } from './routes/_auth/_app/spending'
 import { Route as AuthOnboardingIndexRouteImport } from './routes/_auth/onboarding/index'
 import { Route as AuthOnboardingAssetsRouteImport } from './routes/_auth/onboarding/assets'
@@ -27,6 +29,8 @@ import { Route as AuthAppPortfolioAssetsRouteImport } from './routes/_auth/_app/
 import { Route as AuthAppPortfolioContributionRouteImport } from './routes/_auth/_app/portfolio.contribution'
 import { Route as AuthAppPortfolioGetStartedRouteImport } from './routes/_auth/_app/portfolio.get-started'
 import { Route as AuthAppPortfolioTargetsRouteImport } from './routes/_auth/_app/portfolio.targets'
+import { Route as AuthAppSettingsIndexRouteImport } from './routes/_auth/_app/settings.index'
+import { Route as AuthAppSettingsTabRouteImport } from './routes/_auth/_app/settings.$tab'
 import { Route as AuthAppSpendingIndexRouteImport } from './routes/_auth/_app/spending.index'
 import { Route as AuthAppSpendingConnectionsRouteImport } from './routes/_auth/_app/spending.connections'
 import { Route as AuthAppSpendingCutsRouteImport } from './routes/_auth/_app/spending.cuts'
@@ -67,9 +71,19 @@ const AuthAppAccountRoute = AuthAppAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AuthAppRoute,
 } as any)
+const AuthAppPlansRoute = AuthAppPlansRouteImport.update({
+  id: '/plans',
+  path: '/plans',
+  getParentRoute: () => AuthAppRoute,
+} as any)
 const AuthAppPortfolioRoute = AuthAppPortfolioRouteImport.update({
   id: '/portfolio',
   path: '/portfolio',
+  getParentRoute: () => AuthAppRoute,
+} as any)
+const AuthAppSettingsRoute = AuthAppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => AuthAppRoute,
 } as any)
 const AuthAppSpendingRoute = AuthAppSpendingRouteImport.update({
@@ -124,6 +138,16 @@ const AuthAppPortfolioTargetsRoute = AuthAppPortfolioTargetsRouteImport.update({
   path: '/targets',
   getParentRoute: () => AuthAppPortfolioRoute,
 } as any)
+const AuthAppSettingsIndexRoute = AuthAppSettingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthAppSettingsRoute,
+} as any)
+const AuthAppSettingsTabRoute = AuthAppSettingsTabRouteImport.update({
+  id: '/$tab',
+  path: '/$tab',
+  getParentRoute: () => AuthAppSettingsRoute,
+} as any)
 const AuthAppSpendingIndexRoute = AuthAppSpendingIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -164,7 +188,9 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof AuthOnboardingRouteWithChildren
   '/ui': typeof DevUiRoute
   '/account': typeof AuthAppAccountRoute
+  '/plans': typeof AuthAppPlansRoute
   '/portfolio': typeof AuthAppPortfolioRouteWithChildren
+  '/settings': typeof AuthAppSettingsRouteWithChildren
   '/spending': typeof AuthAppSpendingRouteWithChildren
   '/onboarding/assets': typeof AuthOnboardingAssetsRoute
   '/onboarding/banks': typeof AuthOnboardingBanksRoute
@@ -174,11 +200,13 @@ export interface FileRoutesByFullPath {
   '/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
   '/portfolio/targets': typeof AuthAppPortfolioTargetsRoute
+  '/settings/$tab': typeof AuthAppSettingsTabRoute
   '/spending/connections': typeof AuthAppSpendingConnectionsRoute
   '/spending/cuts': typeof AuthAppSpendingCutsRoute
   '/spending/rules': typeof AuthAppSpendingRulesRoute
   '/spending/transactions': typeof AuthAppSpendingTransactionsRoute
   '/portfolio/': typeof AuthAppPortfolioIndexRoute
+  '/settings/': typeof AuthAppSettingsIndexRoute
   '/spending/': typeof AuthAppSpendingIndexRoute
   '/portfolio/classes/$classId': typeof AuthAppPortfolioClassesClassIdRoute
 }
@@ -187,6 +215,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/ui': typeof DevUiRoute
   '/account': typeof AuthAppAccountRoute
+  '/plans': typeof AuthAppPlansRoute
   '/onboarding/assets': typeof AuthOnboardingAssetsRoute
   '/onboarding/banks': typeof AuthOnboardingBanksRoute
   '/onboarding/done': typeof AuthOnboardingDoneRoute
@@ -195,11 +224,13 @@ export interface FileRoutesByTo {
   '/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
   '/portfolio/targets': typeof AuthAppPortfolioTargetsRoute
+  '/settings/$tab': typeof AuthAppSettingsTabRoute
   '/spending/connections': typeof AuthAppSpendingConnectionsRoute
   '/spending/cuts': typeof AuthAppSpendingCutsRoute
   '/spending/rules': typeof AuthAppSpendingRulesRoute
   '/spending/transactions': typeof AuthAppSpendingTransactionsRoute
   '/portfolio': typeof AuthAppPortfolioIndexRoute
+  '/settings': typeof AuthAppSettingsIndexRoute
   '/spending': typeof AuthAppSpendingIndexRoute
   '/portfolio/classes/$classId': typeof AuthAppPortfolioClassesClassIdRoute
 }
@@ -211,7 +242,9 @@ export interface FileRoutesById {
   '/_auth/onboarding': typeof AuthOnboardingRouteWithChildren
   '/_dev/ui': typeof DevUiRoute
   '/_auth/_app/account': typeof AuthAppAccountRoute
+  '/_auth/_app/plans': typeof AuthAppPlansRoute
   '/_auth/_app/portfolio': typeof AuthAppPortfolioRouteWithChildren
+  '/_auth/_app/settings': typeof AuthAppSettingsRouteWithChildren
   '/_auth/_app/spending': typeof AuthAppSpendingRouteWithChildren
   '/_auth/onboarding/assets': typeof AuthOnboardingAssetsRoute
   '/_auth/onboarding/banks': typeof AuthOnboardingBanksRoute
@@ -222,11 +255,13 @@ export interface FileRoutesById {
   '/_auth/_app/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/_auth/_app/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
   '/_auth/_app/portfolio/targets': typeof AuthAppPortfolioTargetsRoute
+  '/_auth/_app/settings/$tab': typeof AuthAppSettingsTabRoute
   '/_auth/_app/spending/connections': typeof AuthAppSpendingConnectionsRoute
   '/_auth/_app/spending/cuts': typeof AuthAppSpendingCutsRoute
   '/_auth/_app/spending/rules': typeof AuthAppSpendingRulesRoute
   '/_auth/_app/spending/transactions': typeof AuthAppSpendingTransactionsRoute
   '/_auth/_app/portfolio/': typeof AuthAppPortfolioIndexRoute
+  '/_auth/_app/settings/': typeof AuthAppSettingsIndexRoute
   '/_auth/_app/spending/': typeof AuthAppSpendingIndexRoute
   '/_auth/_app/portfolio/classes/$classId': typeof AuthAppPortfolioClassesClassIdRoute
 }
@@ -238,7 +273,9 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/ui'
     | '/account'
+    | '/plans'
     | '/portfolio'
+    | '/settings'
     | '/spending'
     | '/onboarding/assets'
     | '/onboarding/banks'
@@ -248,11 +285,13 @@ export interface FileRouteTypes {
     | '/portfolio/contribution'
     | '/portfolio/get-started'
     | '/portfolio/targets'
+    | '/settings/$tab'
     | '/spending/connections'
     | '/spending/cuts'
     | '/spending/rules'
     | '/spending/transactions'
     | '/portfolio/'
+    | '/settings/'
     | '/spending/'
     | '/portfolio/classes/$classId'
   fileRoutesByTo: FileRoutesByTo
@@ -261,6 +300,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/ui'
     | '/account'
+    | '/plans'
     | '/onboarding/assets'
     | '/onboarding/banks'
     | '/onboarding/done'
@@ -269,11 +309,13 @@ export interface FileRouteTypes {
     | '/portfolio/contribution'
     | '/portfolio/get-started'
     | '/portfolio/targets'
+    | '/settings/$tab'
     | '/spending/connections'
     | '/spending/cuts'
     | '/spending/rules'
     | '/spending/transactions'
     | '/portfolio'
+    | '/settings'
     | '/spending'
     | '/portfolio/classes/$classId'
   id:
@@ -284,7 +326,9 @@ export interface FileRouteTypes {
     | '/_auth/onboarding'
     | '/_dev/ui'
     | '/_auth/_app/account'
+    | '/_auth/_app/plans'
     | '/_auth/_app/portfolio'
+    | '/_auth/_app/settings'
     | '/_auth/_app/spending'
     | '/_auth/onboarding/assets'
     | '/_auth/onboarding/banks'
@@ -295,11 +339,13 @@ export interface FileRouteTypes {
     | '/_auth/_app/portfolio/contribution'
     | '/_auth/_app/portfolio/get-started'
     | '/_auth/_app/portfolio/targets'
+    | '/_auth/_app/settings/$tab'
     | '/_auth/_app/spending/connections'
     | '/_auth/_app/spending/cuts'
     | '/_auth/_app/spending/rules'
     | '/_auth/_app/spending/transactions'
     | '/_auth/_app/portfolio/'
+    | '/_auth/_app/settings/'
     | '/_auth/_app/spending/'
     | '/_auth/_app/portfolio/classes/$classId'
   fileRoutesById: FileRoutesById
@@ -361,11 +407,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAppAccountRouteImport
       parentRoute: typeof AuthAppRoute
     }
+    '/_auth/_app/plans': {
+      id: '/_auth/_app/plans'
+      path: '/plans'
+      fullPath: '/plans'
+      preLoaderRoute: typeof AuthAppPlansRouteImport
+      parentRoute: typeof AuthAppRoute
+    }
     '/_auth/_app/portfolio': {
       id: '/_auth/_app/portfolio'
       path: '/portfolio'
       fullPath: '/portfolio'
       preLoaderRoute: typeof AuthAppPortfolioRouteImport
+      parentRoute: typeof AuthAppRoute
+    }
+    '/_auth/_app/settings': {
+      id: '/_auth/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthAppSettingsRouteImport
       parentRoute: typeof AuthAppRoute
     }
     '/_auth/_app/spending': {
@@ -438,6 +498,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAppPortfolioTargetsRouteImport
       parentRoute: typeof AuthAppPortfolioRoute
     }
+    '/_auth/_app/settings/': {
+      id: '/_auth/_app/settings/'
+      path: '/'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof AuthAppSettingsIndexRouteImport
+      parentRoute: typeof AuthAppSettingsRoute
+    }
+    '/_auth/_app/settings/$tab': {
+      id: '/_auth/_app/settings/$tab'
+      path: '/$tab'
+      fullPath: '/settings/$tab'
+      preLoaderRoute: typeof AuthAppSettingsTabRouteImport
+      parentRoute: typeof AuthAppSettingsRoute
+    }
     '/_auth/_app/spending/': {
       id: '/_auth/_app/spending/'
       path: '/'
@@ -504,6 +578,20 @@ const AuthAppPortfolioRouteChildren: AuthAppPortfolioRouteChildren = {
 const AuthAppPortfolioRouteWithChildren =
   AuthAppPortfolioRoute._addFileChildren(AuthAppPortfolioRouteChildren)
 
+interface AuthAppSettingsRouteChildren {
+  AuthAppSettingsTabRoute: typeof AuthAppSettingsTabRoute
+  AuthAppSettingsIndexRoute: typeof AuthAppSettingsIndexRoute
+}
+
+const AuthAppSettingsRouteChildren: AuthAppSettingsRouteChildren = {
+  AuthAppSettingsTabRoute: AuthAppSettingsTabRoute,
+  AuthAppSettingsIndexRoute: AuthAppSettingsIndexRoute,
+}
+
+const AuthAppSettingsRouteWithChildren = AuthAppSettingsRoute._addFileChildren(
+  AuthAppSettingsRouteChildren,
+)
+
 interface AuthAppSpendingRouteChildren {
   AuthAppSpendingConnectionsRoute: typeof AuthAppSpendingConnectionsRoute
   AuthAppSpendingCutsRoute: typeof AuthAppSpendingCutsRoute
@@ -526,14 +614,18 @@ const AuthAppSpendingRouteWithChildren = AuthAppSpendingRoute._addFileChildren(
 
 interface AuthAppRouteChildren {
   AuthAppAccountRoute: typeof AuthAppAccountRoute
+  AuthAppPlansRoute: typeof AuthAppPlansRoute
   AuthAppPortfolioRoute: typeof AuthAppPortfolioRouteWithChildren
+  AuthAppSettingsRoute: typeof AuthAppSettingsRouteWithChildren
   AuthAppSpendingRoute: typeof AuthAppSpendingRouteWithChildren
   AuthAppIndexRoute: typeof AuthAppIndexRoute
 }
 
 const AuthAppRouteChildren: AuthAppRouteChildren = {
   AuthAppAccountRoute: AuthAppAccountRoute,
+  AuthAppPlansRoute: AuthAppPlansRoute,
   AuthAppPortfolioRoute: AuthAppPortfolioRouteWithChildren,
+  AuthAppSettingsRoute: AuthAppSettingsRouteWithChildren,
   AuthAppSpendingRoute: AuthAppSpendingRouteWithChildren,
   AuthAppIndexRoute: AuthAppIndexRoute,
 }

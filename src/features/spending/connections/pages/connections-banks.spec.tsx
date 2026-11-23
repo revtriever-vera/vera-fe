@@ -70,7 +70,7 @@ describe('ConnectionsPage: bancos conectados', () => {
 
     it('mostra a falha ao carregar e tenta de novo', async () => {
         server.use(http.get('*/spending/connections', () => HttpResponse.json(problemBody('x.fail', 400), { status: 400 })));
-        renderRouterAt('/spending/connections', { signedIn: true });
+        renderRouterAt('/settings/banks', { signedIn: true });
 
         expect(await screen.findByText('Não foi possível carregar as conexões.')).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Tentar de novo' })).toBeInTheDocument();
@@ -284,7 +284,7 @@ describe('ConnectionsPage: idioma e ambiente', () => {
             http.post('*/auth/refresh', () => HttpResponse.json({ outcome: 'authenticated', accessToken: 'access-token-1' })),
             http.get('*/auth/me', () => HttpResponse.json(sessionIdentity({ locale: 'en' })))
         );
-        renderRouterAt('/spending/connections');
+        renderRouterAt('/settings/banks');
 
         expect(await screen.findByRole('region', { name: 'Your credentials' })).toBeInTheDocument();
         expect(screen.getByRole('region', { name: 'Meu Pluggy step by step' })).toBeInTheDocument();

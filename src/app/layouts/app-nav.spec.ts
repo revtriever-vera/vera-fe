@@ -30,13 +30,8 @@ describe('APP_NAV_ITEMS', () => {
 describe('grupo Gastos', () => {
     const spending: readonly NavItem[] = APP_NAV_ITEMS.filter((item: NavItem): boolean => item.group === 'spending');
 
-    it('tem os quatro itens, na ordem do menu', () => {
-        expect(spending.map((item: NavItem): string => item.to)).toEqual([
-            '/spending',
-            '/spending/transactions',
-            '/spending/cuts',
-            '/spending/connections'
-        ]);
+    it('tem os três itens, na ordem do menu, sem Conexões', () => {
+        expect(spending.map((item: NavItem): string => item.to)).toEqual(['/spending', '/spending/transactions', '/spending/cuts']);
     });
 
     it('só Transações carrega o contador de sem categoria', () => {
@@ -48,7 +43,25 @@ describe('grupo Gastos', () => {
     it('marca o item mais específico em cada rota de gastos e nenhum em Regras', () => {
         expect(activeNavId('/spending', APP_NAV_ITEMS)).toBe('spending-summary');
         expect(activeNavId('/spending/transactions', APP_NAV_ITEMS)).toBe('spending-transactions');
-        expect(activeNavId('/spending/connections', APP_NAV_ITEMS)).toBe('spending-connections');
+        expect(activeNavId('/spending/connections', APP_NAV_ITEMS)).toBeNull();
         expect(activeNavId('/spending/rules', APP_NAV_ITEMS)).toBeNull();
+    });
+});
+
+describe('grupo Carteira', () => {
+    it('tem os quatro itens, na ordem do menu', () => {
+        const portfolio: readonly NavItem[] = APP_NAV_ITEMS.filter((item: NavItem): boolean => item.group === 'portfolio');
+
+        expect(portfolio.map((item: NavItem): string => item.to)).toEqual([
+            '/portfolio',
+            '/portfolio/targets',
+            '/portfolio/contribution',
+            '/portfolio/assets'
+        ]);
+    });
+
+    it('o menu tem só os dois grupos e sete itens', () => {
+        expect(new Set(APP_NAV_ITEMS.map((item: NavItem) => item.group))).toEqual(new Set(['portfolio', 'spending']));
+        expect(APP_NAV_ITEMS).toHaveLength(7);
     });
 });

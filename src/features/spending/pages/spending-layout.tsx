@@ -10,7 +10,6 @@ export function SpendingLayout(): ReactElement {
         { to: '/spending', label: t('layout.tabs.summary'), exact: true },
         { to: '/spending/transactions', label: t('layout.tabs.transactions') },
         { to: '/spending/cuts', label: t('layout.tabs.cuts') },
-        { to: '/spending/connections', label: t('layout.tabs.connections') },
         { to: '/spending/rules', label: t('layout.tabs.rules') }
     ];
     return (

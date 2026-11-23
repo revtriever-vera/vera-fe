@@ -1,6 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { AccountPage } from '@/features/account/pages/account-page';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_auth/_app/account')({
-    component: AccountPage
+    beforeLoad: (): never => {
+        throw redirect({ to: '/settings/$tab', params: { tab: 'preferences' }, replace: true });
+    }
 });

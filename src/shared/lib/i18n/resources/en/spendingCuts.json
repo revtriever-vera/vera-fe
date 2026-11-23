@@ -20,10 +20,10 @@
     "cutSuggested_one": "You can get there by cutting {{total}} in {{count}} flexible category.",
     "cutSuggested_other": "You can get there by cutting {{total}} in {{count}} flexible categories.",
     "exceedsFlexible": "More than all flexible spending combined. To reach this goal you would need to review a fixed expense or your income.",
-    "goalMet": "You saved more than your goal. That amount can go straight to the smart contribution.",
+    "goalMet": "You saved more than your goal. That amount can go straight to Where to invest.",
     "noIncome": "No income recorded this month, so the goal cannot be calculated.",
     "defineIncome": "Set your income",
-    "contribution": "Go to the smart contribution"
+    "contribution": "Go to Where to invest"
   },
   "table": {
     "title": "Suggested limits for {{month}}",

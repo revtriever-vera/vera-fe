@@ -5,6 +5,7 @@ import { type UiText, useUiText } from './ui-text';
 
 export interface FileDropProps {
     readonly label: string;
+    readonly title?: string;
     readonly hint: string;
     readonly accept: Readonly<Record<string, readonly string[]>>;
     readonly maxSizeBytes: number;
@@ -40,11 +41,12 @@ function rejectionText(
 interface DropAreaProps {
     readonly dropzone: DropzoneState;
     readonly label: string;
+    readonly title?: string;
     readonly hint: string;
     readonly rejection: string | null;
 }
 
-function DropArea({ dropzone, label, hint, rejection }: DropAreaProps): ReactElement {
+function DropArea({ dropzone, label, title, hint, rejection }: DropAreaProps): ReactElement {
     const t: UiText = useUiText();
     return (
         <div
@@ -56,7 +58,7 @@ function DropArea({ dropzone, label, hint, rejection }: DropAreaProps): ReactEle
         >
             <input {...dropzone.getInputProps()} aria-label={label} />
             <span>
-                <span className="font-semibold text-content">{t.dropFileHere}</span> {t.orClickToChoose}
+                <span className="font-semibold text-content">{title ?? t.dropFileHere}</span> {t.orClickToChoose}
             </span>
             <span className="text-2xs text-content-subtle">{hint}</span>
             {rejection === null ? null : (
@@ -70,6 +72,7 @@ function DropArea({ dropzone, label, hint, rejection }: DropAreaProps): ReactEle
 
 export function FileDrop({
     label,
+    title,
     hint,
     accept,
     maxSizeBytes,
@@ -97,5 +100,5 @@ export function FileDrop({
         return <PickedFile fileName={fileName} onClear={onClear} />;
     }
 
-    return <DropArea dropzone={dropzone} label={label} hint={hint} rejection={rejection} />;
+    return <DropArea dropzone={dropzone} label={label} title={title} hint={hint} rejection={rejection} />;
 }

@@ -1,6 +1,6 @@
 {
   "title": "Transações",
-  "description": "A maior parte se classifica sozinha (categoria da Pluggy, dicionário de estabelecimentos e as suas regras). O que sobra, você ensina uma vez.",
+  "description": "A maior parte é classificada pela categoria da Pluggy, pelo dicionário de estabelecimentos e pelas suas regras. O que sobra, você ensina uma vez.",
   "actions": {
     "rules": "Gerenciar regras",
     "import": "Importar extrato"
