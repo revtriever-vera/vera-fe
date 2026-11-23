@@ -12,6 +12,7 @@ import { FailureAlert } from '@/shared/ui/failure-alert';
 import { SkeletonTable } from '@/shared/ui/skeleton-table';
 import { BaseCurrencySwitch } from '../../components/base-currency-switch';
 import { DataSourcesNote } from '../../components/data-sources-note';
+import { FixedIncomeTab } from '../../fixed-income/components/fixed-income-tab';
 import { ConcentrationTab } from '../../concentration/components/concentration-tab';
 import { useClasses } from '../../api/use-classes.query';
 import { useHoldings } from '../../api/use-holdings.query';
@@ -142,7 +143,7 @@ export function AssetsPage(): ReactElement {
         setOpen(true);
     };
     const changeTab = (next: AssetsTab): void => {
-        void navigate({ to: '/portfolio/assets', search: { tab: next === DEFAULT_ASSETS_TAB ? undefined : next }, replace: true });
+        void navigate({ to: '/portfolio/assets', search: { tab: next === DEFAULT_ASSETS_TAB ? undefined : next } });
     };
     return (
         <section className="flex flex-col gap-4">
@@ -152,6 +153,7 @@ export function AssetsPage(): ReactElement {
                 onValueChange={changeTab}
                 panels={{
                     list: <AssetsBody holdings={holdings} classes={classes} onAdd={openModal} />,
+                    'fixed-income': <FixedIncomeTab />,
                     concentration: <ConcentrationTab />
                 }}
             />

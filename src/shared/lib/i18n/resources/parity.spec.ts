@@ -13,6 +13,8 @@ import ptBRPortfolioOverview from './pt-BR/portfolioOverview.json';
 import enPortfolioOverview from './en/portfolioOverview.json';
 import ptBRPortfolioAssets from './pt-BR/portfolioAssets.json';
 import enPortfolioAssets from './en/portfolioAssets.json';
+import ptBRPortfolioFixedIncome from './pt-BR/portfolioFixedIncome.json';
+import enPortfolioFixedIncome from './en/portfolioFixedIncome.json';
 import ptBRPortfolioTargets from './pt-BR/portfolioTargets.json';
 import enPortfolioTargets from './en/portfolioTargets.json';
 import ptBRPortfolioContribution from './pt-BR/portfolioContribution.json';
@@ -66,6 +68,7 @@ const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'portfolio', ptBR: ptBRPortfolio, en: enPortfolio },
     { name: 'portfolioOverview', ptBR: ptBRPortfolioOverview, en: enPortfolioOverview },
     { name: 'portfolioAssets', ptBR: ptBRPortfolioAssets, en: enPortfolioAssets },
+    { name: 'portfolioFixedIncome', ptBR: ptBRPortfolioFixedIncome, en: enPortfolioFixedIncome },
     { name: 'portfolioTargets', ptBR: ptBRPortfolioTargets, en: enPortfolioTargets },
     { name: 'portfolioContribution', ptBR: ptBRPortfolioContribution, en: enPortfolioContribution },
     { name: 'onboarding', ptBR: ptBROnboarding, en: enOnboarding },

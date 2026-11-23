@@ -326,6 +326,7 @@
   "tabs": {
     "label": "My assets sections",
     "list": "Assets",
+    "fixed-income": "Fixed income",
     "concentration": "Issuers and sectors"
   }
 }

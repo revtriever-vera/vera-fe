@@ -1,0 +1,98 @@
+{
+  "common": {
+    "loadError": "Não foi possível carregar agora.",
+    "retry": "Tentar de novo",
+    "brlOnly": "valores em R$",
+    "none": "—"
+  },
+  "when": {
+    "today": "hoje",
+    "days_one": "em {{count}} dia",
+    "days_other": "em {{count}} dias",
+    "months_one": "em {{count}} mês",
+    "months_other": "em {{count}} meses",
+    "years": "em {{years}} anos"
+  },
+  "maturities": {
+    "title": "Próximos vencimentos",
+    "description": "Valor bruto estimado na data, antes do IR. Quando um título vence, o dinheiro volta para a conta: use \"Realocar\" para ver onde aportar.",
+    "loading": "Carregando os vencimentos",
+    "empty": "Nenhum título com vencimento cadastrado.",
+    "listLabel": "Próximos vencimentos",
+    "columns": {
+      "title": "Título",
+      "maturity": "Vence",
+      "value": "Valor na data"
+    },
+    "tesouro": "Tesouro Direto",
+    "issuerLine": "{{issuer}} · {{name}}",
+    "reallocate": "Realocar",
+    "reallocateLabel": "Realocar o valor de {{name}}",
+    "estimatedCdi": "Estimado com o CDI de {{date}}",
+    "estimatedIpca": "Estimado com o IPCA de 12 meses",
+    "estimatedOther": "Valor estimado: depende de uma premissa de mercado."
+  },
+  "realRate": {
+    "title": "Taxa real",
+    "description": "A taxa de cada título descontado o IPCA de 12 meses ({{ipca}}), antes do IR. LCI e LCA são isentas de IR.",
+    "descriptionNoIpca": "A taxa de cada título descontado o IPCA de 12 meses, antes do IR. LCI e LCA são isentas de IR.",
+    "loading": "Carregando a taxa real",
+    "empty": "Nenhum título de renda fixa cadastrado com taxa.",
+    "listLabel": "Taxa real por título",
+    "columns": {
+      "title": "Título",
+      "contracted": "Contratado",
+      "nominal": "Taxa ao ano",
+      "real": "Taxa real",
+      "gain": "Acima da inflação"
+    },
+    "subtitle": "{{kind}} · aplicado em {{date}}",
+    "contracted": {
+      "cdi_percent": "{{rate}} do CDI",
+      "prefixed": "Pré {{rate}}",
+      "ipca_plus": "IPCA + {{rate}}"
+    },
+    "low": "abaixo de 3% ao ano",
+    "ok": "a partir de 3% ao ano",
+    "purchasingPower": "poder de compra {{change}}",
+    "note": "\"Acima da inflação\" compara o valor de hoje com o que foi aplicado corrigido pelo IPCA desde a data da aplicação."
+  },
+  "fgc": {
+    "title": "Cobertura do FGC",
+    "description": "O FGC garante até R$ 250 mil por CPF em cada conglomerado, com teto de R$ 1 milhão a cada 4 anos. Entram CDB, LCI, LCA e LC.",
+    "loading": "Carregando a cobertura do FGC",
+    "meterLabel": "Coberto pelo FGC",
+    "meterValue": "{{covered}} de {{cap}}",
+    "listLabel": "Cobertura por conglomerado",
+    "empty": "Nenhum título coberto pelo FGC.",
+    "columns": {
+      "group": "Conglomerado",
+      "total": "Em títulos cobertos",
+      "covered": "Coberto",
+      "over": "Acima do limite"
+    },
+    "groupDetail": "{{issuers}} · {{titles}}",
+    "within": "dentro",
+    "perCpf": "O limite do FGC vale por CPF. Filtre por titular, no alto da tela, para ver a cobertura de cada pessoa.",
+    "wholeAccount": "Conta toda",
+    "outside": "Fora do FGC: {{names}}.",
+    "reasons": {
+      "tesouro": "Tesouro Direto tem garantia do Tesouro Nacional.",
+      "not_covered_kind": "Debênture, CRI e CRA dependem só da empresa.",
+      "not_associated": "O emissor não é associado ao FGC.",
+      "foreign": "Emissor do exterior não entra no FGC.",
+      "not_calculated": "Você marcou \"Outro emissor\": a cobertura não é calculada."
+    },
+    "missingIssuer": "Sem emissor: {{names}}. Complete o cadastro para ver a cobertura.",
+    "completeIssuer": "Completar o cadastro de {{name}}"
+  },
+  "alerts": {
+    "label": "Avisos da carteira",
+    "maturity": "{{name}} vence {{when}}, em {{date}}, com cerca de {{amount}} para realocar.",
+    "fgc": "{{amount}} em {{group}} acima do limite de R$ 250 mil do FGC.",
+    "fgcHolder": "{{amount}} de {{holder}} em {{group}} acima do limite de R$ 250 mil do FGC.",
+    "reallocate": "Realocar",
+    "reallocateLabel": "Realocar o valor de {{name}}",
+    "viewCoverage": "Ver cobertura"
+  }
+}

@@ -326,6 +326,7 @@
   "tabs": {
     "label": "Seções de Meus ativos",
     "list": "Ativos",
+    "fixed-income": "Renda fixa",
     "concentration": "Emissores e setores"
   }
 }
