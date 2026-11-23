@@ -60,6 +60,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/totp/enroll": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start the authenticator enrollment of the platform admin
+         * @description Takes the setup token of the admin login, generates the secret (stored encrypted) and returns it with the otpauth URI for the QR code. Calling it again before activation replaces the pending secret.
+         */
+        post: operations["AdminTotpController_enroll"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/totp/activate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Activate the authenticator with the first code
+         * @description Checks the first code, activates the authenticator, returns ten single-use recovery codes (shown only now) and issues the platform session. Records admin.totp_enrolled and e-mails the person. Sets the rt_refresh cookie.
+         */
+        post: operations["AdminTotpController_activate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/totp/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Complete the admin login with the authenticator code or a recovery code
+         * @description Accepts the code of the current or previous 30 s window (a code is valid once) or a single-use recovery code; a recovery code also records admin.recovery_code_used and e-mails the person. Issues the platform session and sets the rt_refresh cookie.
+         */
+        post: operations["AdminTotpController_verify"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/auth/google": {
         parameters: {
             query?: never;
@@ -71,7 +131,7 @@ export interface paths {
         put?: never;
         /**
          * Sign in (or sign up) with a Google ID token
-         * @description Verifies the ID token against Google, then signs the person in. A person never seen before gets a company and an owner user in the same call. Sets the rt_refresh cookie.
+         * @description Verifies the ID token against Google, then signs the person in. A person never seen before gets a company and an owner user in the same call. Sets the rt_refresh cookie. With audience `admin` no session is issued: the answer is a `totp_required` challenge (authenticator already active) or a `totp_enrollment_required` setup token, and the session only comes from the /auth/totp endpoints.
          */
         post: operations["AuthController_google"];
         delete?: never;
@@ -2607,6 +2667,428 @@ export interface operations {
             };
         };
     };
+    AdminTotpController_enroll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description `setupToken` returned by the admin login */
+                    setupToken: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Secret and otpauth URI */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Base32 secret, for typing into the authenticator app by hand */
+                        secret: string;
+                        /** @description `otpauth://` URI to render as the QR code (issuer "Vera admin") */
+                        otpauthUri: string;
+                    };
+                };
+            };
+            /** @description Challenge or setup token missing, expired or for another step (identity.invalid_totp_token) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Self-hosted deployment, there is no platform admin (identity.platform_disabled) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The person already has an active authenticator (identity.totp_already_active) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AdminTotpController_activate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description `setupToken` returned by the admin login */
+                    setupToken: string;
+                    /** @description First six-digit code shown by the authenticator app */
+                    code: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Platform session and recovery codes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description The authenticator is active and a platform session was issued
+                         * @enum {string}
+                         */
+                        outcome: "authenticated";
+                        /** @description JWT access token with the `platform` claim — send as Authorization: Bearer */
+                        accessToken: string;
+                        user: {
+                            /**
+                             * Format: uuid
+                             * @description User id
+                             */
+                            id: string;
+                            /** @description User display name */
+                            name: string;
+                            /** @description User email */
+                            email: string;
+                            /**
+                             * @description `owner` runs the company, `editor` changes its data, `viewer` only reads
+                             * @enum {string}
+                             */
+                            role: "owner" | "editor" | "viewer";
+                            /**
+                             * Format: uuid
+                             * @description Company the user belongs to
+                             */
+                            companyId: string;
+                        };
+                        /** @description Ten single-use recovery codes, shown only now; the server keeps only their hash */
+                        recoveryCodes: string[];
+                    };
+                };
+            };
+            /**
+             * @description Wrong code (identity.invalid_totp_code)
+             *
+             *     Challenge or setup token missing, expired or for another step (identity.invalid_totp_token)
+             */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Self-hosted deployment, there is no platform admin (identity.platform_disabled) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No enrollment waiting for activation (identity.totp_not_enrolled) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Five attempts in 15 minutes for this person (core.too_many_attempts); also recorded as admin.totp_locked */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AdminTotpController_verify: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description `challengeToken` returned by the admin login */
+                    challengeToken: string;
+                    /** @description Six-digit authenticator code (current or previous 30 s window) or a recovery code */
+                    code: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Platform session */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description The second factor was accepted and a platform session was issued
+                         * @enum {string}
+                         */
+                        outcome: "authenticated";
+                        /** @description JWT access token with the `platform` claim — send as Authorization: Bearer */
+                        accessToken: string;
+                        user: {
+                            /**
+                             * Format: uuid
+                             * @description User id
+                             */
+                            id: string;
+                            /** @description User display name */
+                            name: string;
+                            /** @description User email */
+                            email: string;
+                            /**
+                             * @description `owner` runs the company, `editor` changes its data, `viewer` only reads
+                             * @enum {string}
+                             */
+                            role: "owner" | "editor" | "viewer";
+                            /**
+                             * Format: uuid
+                             * @description Company the user belongs to
+                             */
+                            companyId: string;
+                        };
+                    };
+                };
+            };
+            /**
+             * @description Wrong or already used code (identity.invalid_totp_code)
+             *
+             *     Challenge or setup token missing, expired or for another step (identity.invalid_totp_token)
+             */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Self-hosted deployment, there is no platform admin (identity.platform_disabled) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The person has no active authenticator (identity.totp_not_enrolled) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Five attempts in 15 minutes for this person (core.too_many_attempts); also recorded as admin.totp_locked */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
     AuthController_google: {
         parameters: {
             query?: never;
@@ -2632,7 +3114,7 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Session issued — refresh cookie set */
+            /** @description Session issued (refresh cookie set), or the second-factor step for audience `admin` */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -2678,6 +3160,22 @@ export interface operations {
                             /** @description Error code of the refusal (for example signup_links.account_not_eligible); null when redeemed */
                             reason: string | null;
                         } | null;
+                    } | {
+                        /**
+                         * @description The person has an authenticator: send the code to POST /auth/totp/verify
+                         * @enum {string}
+                         */
+                        outcome: "totp_required";
+                        /** @description Short-lived token (5 min) that only POST /auth/totp/verify accepts */
+                        challengeToken: string;
+                    } | {
+                        /**
+                         * @description The person has no authenticator yet: enroll it with POST /auth/totp/enroll and POST /auth/totp/activate
+                         * @enum {string}
+                         */
+                        outcome: "totp_enrollment_required";
+                        /** @description Short-lived token (15 min) that only the enroll and activate endpoints accept */
+                        setupToken: string;
                     };
                 };
             };

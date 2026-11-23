@@ -6,7 +6,15 @@ import type { ApiPaths } from './api-paths';
 
 const REFRESH_PATH: string = '/auth/refresh';
 
-const OWN_CREDENTIAL_PATHS: readonly string[] = [REFRESH_PATH, '/auth/logout', '/auth/google', '/auth/facebook'];
+const OWN_CREDENTIAL_PATHS: readonly string[] = [
+    REFRESH_PATH,
+    '/auth/logout',
+    '/auth/google',
+    '/auth/facebook',
+    '/auth/totp/enroll',
+    '/auth/totp/activate',
+    '/auth/totp/verify'
+];
 
 function carriesOwnCredential(url: string): boolean {
     return OWN_CREDENTIAL_PATHS.some((path: string): boolean => url.endsWith(path));

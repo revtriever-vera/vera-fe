@@ -8,7 +8,9 @@ export function useFacebookLogin(inviteToken?: string): UseMutationResult<Comple
     return useMutation({
         mutationKey: authKeys.login('facebook'),
         mutationFn: async (accessToken: string): Promise<CompletedSignIn> => {
-            const session: LoginSession = unwrap<LoginSession>(await apiClient.POST('/auth/facebook', { body: { accessToken, ...(inviteToken === undefined ? {} : { inviteToken }) } }));
+            const session: LoginSession = unwrap<LoginSession>(
+                await apiClient.POST('/auth/facebook', { body: { accessToken, ...(inviteToken === undefined ? {} : { inviteToken }) } })
+            );
             return completeSignIn(session);
         }
     });
