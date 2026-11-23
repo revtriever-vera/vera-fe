@@ -1,4 +1,5 @@
 import type { ReactElement, ReactNode } from 'react';
+import { BillingSection } from './billing-gallery-section';
 import {
     ActionsSection,
     DataSection,
@@ -21,6 +22,7 @@ export function UiGalleryPage({ children }: { readonly children?: ReactNode }): 
                 <DataSection />
                 <SelectionSection />
                 <StructureSection />
+                <BillingSection />
                 {children}
             </div>
         </main>

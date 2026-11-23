@@ -1,0 +1,50 @@
+{
+  "lock": {
+    "cta": "Ver o Premium",
+    "askOwner": "Peça ao Dono da conta",
+    "defaultText": "Disponível no Premium.",
+    "paused": "Cota do mês esgotada. Volta em {{date}}.",
+    "pausedNoDate": "Cota do mês esgotada. Volta na virada do mês.",
+    "loading": "Verificando o seu plano"
+  },
+  "meter": {
+    "title": "Cota de {{month}}",
+    "label": "Cota de uso do mês",
+    "used": "{{percent}}% usada",
+    "renews": "Renova em {{date}}",
+    "remaining": "Sobram {{percent}}%",
+    "nearLimit": "Perto do limite",
+    "paused": "Pausado até a renovação",
+    "byFeature": "Explicações {{ai}}% · WhatsApp {{whatsapp}}%",
+    "note": "Cada explicação gerada e cada mensagem no WhatsApp usam um pouco; a cota cobre o uso normal de um mês."
+  },
+  "banner": {
+    "warningTitle": "{{percent}}% da cota de {{month}} usada",
+    "warning": "Em 100%, explicações e WhatsApp pausam até {{date}}, sem cobrança extra.",
+    "pausedTitle": "Pausado até {{date}}",
+    "paused": "A cota do mês acabou. Explicações e WhatsApp voltam na virada do mês, sem cobrança extra; o resto da Vera segue normal.",
+    "pastDueTitle": "Não conseguimos cobrar o Premium.",
+    "pastDueUntil": "Ele continua até {{date}}.",
+    "pastDueNoDate": "Ele continua por enquanto.",
+    "pay": "Pagar",
+    "payOpening": "Abrindo o pagamento",
+    "tellOwner": "Avise o Dono da conta.",
+    "dismiss": "Dispensar o aviso"
+  },
+  "toast": {
+    "warning": "Você já usou {{percent}}% da cota do mês",
+    "paused": "Cota esgotada: explicações e WhatsApp pausados até {{date}}",
+    "payFailed": "Não foi possível abrir a página de pagamento. Tente de novo."
+  },
+  "errors": {
+    "generic": "Não foi possível consultar o seu plano. Tente de novo.",
+    "premiumRequired": "Esta função é do plano Premium.",
+    "featureDisabled": "Esta função não está ligada nesta instalação.",
+    "capReached": "A cota do mês acabou. Volta em {{date}}.",
+    "capReachedNoDate": "A cota do mês acabou. Volta na virada do mês."
+  },
+  "plan": {
+    "free": "Free",
+    "premium": "Premium"
+  }
+}

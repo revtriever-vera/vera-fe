@@ -9,6 +9,8 @@ import { currentSettingsMode } from '@/features/settings/lib/settings-tabs';
 import { SETTINGS_MODE, SETTINGS_TAB } from '@/features/settings/types';
 import { track } from '@/shared/lib/analytics';
 import { Avatar } from '@/shared/ui/avatar';
+import type { BillingState } from '@/shared/lib/billing/billing-context';
+import { useBilling } from '@/shared/lib/billing/use-billing';
 import { Badge } from '@/shared/ui/badge';
 
 const CONTENT: string = 'z-50 w-64 rounded-card border border-border bg-surface p-1.5 shadow-popover';
@@ -49,6 +51,19 @@ function MenuHeader({ user }: { readonly user: SessionUser }): ReactElement {
     );
 }
 
+function PlanChip(): ReactElement | null {
+    const { t }: UseTranslationResponse<'billing', undefined> = useTranslation('billing');
+    const { plan, isLoading }: BillingState = useBilling();
+    if (isLoading || plan === 'self_hosted') {
+        return null;
+    }
+    return (
+        <Badge className="ml-auto" tone={plan === 'premium' ? 'accent' : 'neutral'}>
+            {t(plan === 'premium' ? 'plan.premium' : 'plan.free')}
+        </Badge>
+    );
+}
+
 function MenuLinks(): ReactElement {
     const { t }: UseTranslationResponse<'common', undefined> = useTranslation();
     const hosted: boolean = currentSettingsMode() === SETTINGS_MODE.hosted;
@@ -59,7 +74,7 @@ function MenuLinks(): ReactElement {
                     <Link to="/settings/$tab" params={PLAN_PARAMS} className={ITEM}>
                         <Crown className="size-4" aria-hidden="true" />
                         {t('userMenuPlan')}
-                        <Badge className="ml-auto">{t('planFree')}</Badge>
+                        <PlanChip />
                     </Link>
                 </Menu.Item>
             ) : null}

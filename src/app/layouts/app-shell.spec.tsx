@@ -16,6 +16,8 @@ import {
     type AnyRouter
 } from '@tanstack/react-router';
 import { SessionProvider } from '@/app/providers/session-provider';
+import { BillingContext } from '@/shared/lib/billing/billing-context';
+import { billingState } from '../../../test/fixtures/billing';
 import { server } from '../../../test/msw/server';
 import { signedInHandlers } from '../../../test/msw/handlers/auth.handlers';
 import type { NavItem } from './app-nav';
@@ -63,7 +65,9 @@ function renderShell(items: readonly NavItem[], path: string, withSlot: boolean 
     render(
         <QueryClientProvider client={new QueryClient()}>
             <SessionProvider>
-                <RouterProvider router={router} />
+                <BillingContext value={billingState()}>
+                    <RouterProvider router={router} />
+                </BillingContext>
             </SessionProvider>
         </QueryClientProvider>
     );

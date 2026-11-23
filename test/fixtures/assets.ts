@@ -85,6 +85,7 @@ export function positionView(overrides: Partial<PositionView> = {}): PositionVie
         quantity: '2000',
         averagePrice: null,
         classId: 'class-acoes-br',
+        holderUserId: null,
         createdAt: '2026-10-01T12:00:00.000Z',
         updatedAt: '2026-10-01T12:00:00.000Z',
         ...overrides
@@ -129,6 +130,7 @@ export function titleView(overrides: Partial<TitleView> = {}): TitleView {
             fgcAssociated: true
         },
         needsIssuer: false,
+        holderUserId: null,
         createdAt: '2026-10-09T12:00:00.000Z',
         updatedAt: '2026-10-09T12:00:00.000Z',
         valuation: previewResult(),

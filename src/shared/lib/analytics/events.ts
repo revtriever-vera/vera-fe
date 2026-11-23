@@ -9,6 +9,10 @@ export type ExportFormatName = 'csv' | 'xlsx';
 export type AssetsTabName = 'list' | 'fixed-income' | 'concentration';
 export type MaturityDaysBucket = 'up_to_60' | 'up_to_90' | 'over_90';
 export type OverviewAlertKind = 'maturity' | 'fgc';
+export type PaidFeatureName = 'ai' | 'whatsapp' | 'calendar';
+export type PremiumGateStateName = 'premium_required' | 'paused' | 'disabled';
+export type BillingBannerKindName = 'past_due' | 'paused' | 'warning';
+export type InvoicePayOriginName = 'banner' | 'plan';
 export type CurrencyCode = 'BRL' | 'USD';
 export type SpendingImportFormatName = 'ofx' | 'csv_nubank_card' | 'csv_nubank_account' | 'csv_generic';
 export type SpendingFlexibilityName = 'fixed' | 'flexible';
@@ -82,6 +86,10 @@ export interface AnalyticsEventMap {
     invite_viewed: undefined;
     invite_accepted: { provider: AuthProviderName };
     invite_failed: { code: string };
+    premium_gate_viewed: { feature: PaidFeatureName; state: PremiumGateStateName };
+    premium_gate_clicked: { feature: PaidFeatureName };
+    billing_banner_viewed: { kind: BillingBannerKindName };
+    invoice_pay_clicked: { from: InvoicePayOriginName };
 }
 
 export type AnalyticsEventName = keyof AnalyticsEventMap;

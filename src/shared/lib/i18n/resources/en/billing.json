@@ -1,0 +1,50 @@
+{
+  "lock": {
+    "cta": "See Premium",
+    "askOwner": "Ask the account Owner",
+    "defaultText": "Available on Premium.",
+    "paused": "This month's quota is used up. It comes back on {{date}}.",
+    "pausedNoDate": "This month's quota is used up. It comes back when the month turns.",
+    "loading": "Checking your plan"
+  },
+  "meter": {
+    "title": "{{month}} quota",
+    "label": "Monthly usage quota",
+    "used": "{{percent}}% used",
+    "renews": "Renews on {{date}}",
+    "remaining": "{{percent}}% left",
+    "nearLimit": "Close to the limit",
+    "paused": "Paused until it renews",
+    "byFeature": "Explanations {{ai}}% · WhatsApp {{whatsapp}}%",
+    "note": "Each explanation written and each WhatsApp message uses a little; the quota covers a normal month of use."
+  },
+  "banner": {
+    "warningTitle": "{{percent}}% of the {{month}} quota used",
+    "warning": "At 100%, explanations and WhatsApp pause until {{date}}, at no extra charge.",
+    "pausedTitle": "Paused until {{date}}",
+    "paused": "The month's quota is used up. Explanations and WhatsApp come back when the month turns, at no extra charge; the rest of Vera keeps working.",
+    "pastDueTitle": "We could not charge Premium.",
+    "pastDueUntil": "It keeps working until {{date}}.",
+    "pastDueNoDate": "It keeps working for now.",
+    "pay": "Pay",
+    "payOpening": "Opening the payment",
+    "tellOwner": "Let the account Owner know.",
+    "dismiss": "Dismiss the notice"
+  },
+  "toast": {
+    "warning": "You have used {{percent}}% of this month's quota",
+    "paused": "Quota used up: explanations and WhatsApp paused until {{date}}",
+    "payFailed": "We could not open the payment page. Try again."
+  },
+  "errors": {
+    "generic": "We could not load your plan. Try again.",
+    "premiumRequired": "This feature is part of the Premium plan.",
+    "featureDisabled": "This feature is not turned on in this installation.",
+    "capReached": "The month's quota is used up. It comes back on {{date}}.",
+    "capReachedNoDate": "The month's quota is used up. It comes back when the month turns."
+  },
+  "plan": {
+    "free": "Free",
+    "premium": "Premium"
+  }
+}

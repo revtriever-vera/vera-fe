@@ -35,6 +35,9 @@ export const portfolioKeys: {
     fixedIncomeTitle: (id: string) => readonly ['portfolio', 'fixed-income-title', string];
     contributions: () => readonly ['portfolio', 'contribution'];
     contribution: (amount: number) => readonly ['portfolio', 'contribution', number];
+    fgc: () => readonly ['portfolio', 'fgc'];
+    maturities: () => readonly ['portfolio', 'maturities'];
+    realRates: () => readonly ['portfolio', 'real-rates'];
 } = {
     all: ['portfolio'] as const,
     settings: (): readonly ['portfolio', 'settings'] => [...portfolioKeys.all, 'settings'] as const,
