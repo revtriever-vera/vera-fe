@@ -95,9 +95,9 @@ describe('rota /settings', () => {
     });
 
     it('as abas ainda sem dono mostram o espaço reservado', async () => {
-        renderRouterAt('/settings/whatsapp', { signedIn: true });
+        renderRouterAt('/settings/calendar', { signedIn: true });
 
-        const region: HTMLElement = await screen.findByRole('region', { name: 'WhatsApp' });
+        const region: HTMLElement = await screen.findByRole('region', { name: 'Google Agenda' });
 
         expect(within(region).getByText('Esta seção chega em breve.')).toBeInTheDocument();
     });

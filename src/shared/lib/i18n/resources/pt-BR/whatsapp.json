@@ -1,0 +1,88 @@
+{
+  "loading": "Carregando o WhatsApp",
+  "locked": {
+    "title": "Vera no WhatsApp",
+    "description": "Pergunte sobre carteira e gastos, marque reuniões e crie lembretes por mensagem.",
+    "line": "Disponível no Premium."
+  },
+  "unavailable": {
+    "title": "Vera no WhatsApp",
+    "selfHosted": "Sem as chaves do WhatsApp e do modelo de linguagem nesta instalação.",
+    "integrations": "Ver integrações",
+    "hosted": "A Vera no WhatsApp está indisponível agora."
+  },
+  "paused": "Cota do mês esgotada. A Vera volta a responder em {{date}}.",
+  "pausedNoDate": "Cota do mês esgotada. A Vera volta a responder na virada do mês.",
+  "notice": {
+    "stale": "Vínculo desfeito por falta de uso. Vincule de novo quando quiser.",
+    "premiumEnded": "O Premium terminou e o número foi desconectado."
+  },
+  "start": {
+    "title": "Vincular seu WhatsApp",
+    "description": "A Vera só responde ao número que mandar o código. Pix e pagamentos ficam de fora: ela só lê seus dados.",
+    "consent": "Para responder, a Vera envia totais agregados a um modelo de linguagem, por um serviço da Vercel. Nomes de pessoas e de estabelecimentos, descrições das transações, contas e credenciais nunca são enviados. Concordo, e isso também liga os resumos em texto. Dá para desligar em Configurações › Dados e privacidade.",
+    "seeSent": "Ver o que é enviado",
+    "generate": "Gerar código"
+  },
+  "waiting": {
+    "title": "Falta só a mensagem",
+    "description": "Mande o código do seu WhatsApp. Esta tela atualiza assim que a mensagem chegar.",
+    "phoneTitle": "No celular",
+    "open": "Abrir no WhatsApp",
+    "qrTitle": "No computador",
+    "qrHint": "Aponte a câmera do celular",
+    "qrLabel": "QR code para vincular o WhatsApp",
+    "manual": "Ou mande VINCULAR {{code}} para {{number}}.",
+    "copyCode": "Copiar o código",
+    "validUntil": "O código vale até {{time}}.",
+    "expired": "O código venceu.",
+    "another": "Gerar outro código",
+    "pendingNoLink": "Você já gerou um código, que vale até {{time}}. Para ver o link de novo, gere outro."
+  },
+  "linked": {
+    "title": "Número vinculado",
+    "since": "desde {{date}}",
+    "active": "ativo",
+    "suspended": "suspenso",
+    "answersFrom": "A Vera responde por {{number}}.",
+    "unlink": "Desvincular",
+    "dialogTitle": "Desvincular o WhatsApp?",
+    "dialogText": "A Vera para de responder em {{phone}}, os lembretes criados por lá são cancelados e o histórico da conversa sai daqui. Dá para vincular de novo quando quiser.",
+    "dialogConfirm": "Desvincular",
+    "dialogCancel": "Cancelar"
+  },
+  "examples": {
+    "title": "O que você pode mandar",
+    "open": "Abrir no WhatsApp",
+    "items": {
+      "delivery": "Quanto gastei com delivery?",
+      "portfolio": "Como está minha carteira?",
+      "meeting": "Marca reunião com o contador sexta às 15h",
+      "meetings": "Quais minhas reuniões?",
+      "reminder": "Me lembra de aportar todo dia 5"
+    },
+    "noPayments": "A Vera não faz Pix nem pagamentos."
+  },
+  "reminders": {
+    "title": "Lembretes",
+    "description": "Criados pelo WhatsApp; a Vera avisa na hora marcada.",
+    "loading": "Carregando os lembretes",
+    "empty": "Nenhum lembrete. Peça no WhatsApp: \"me lembra de aportar todo dia 5\".",
+    "monthly": "todo dia {{day}}, {{time}}",
+    "noDate": "sem data",
+    "delete": "Apagar lembrete {{text}}",
+    "pausedNote": "Com a cota esgotada, os lembretes não saem até o mês virar."
+  },
+  "toasts": {
+    "linked": "WhatsApp vinculado",
+    "unlinked": "WhatsApp desvinculado",
+    "reminderDeleted": "Lembrete apagado"
+  },
+  "errors": {
+    "generic": "Não foi possível falar com o WhatsApp agora. Tente de novo.",
+    "alreadyLinked": "Você já tem um número vinculado.",
+    "consentRequired": "Marque a caixa de concordância para gerar o código.",
+    "providerDisabled": "A Vera no WhatsApp está indisponível agora.",
+    "tooManyAttempts": "Muitos códigos seguidos. Tente de novo em uma hora."
+  }
+}
