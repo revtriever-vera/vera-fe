@@ -7,3 +7,5 @@ export type ContributionWarning = ContributionSuggestion['warnings'][number];
 
 export const TARGETS_NOT_SET: string = 'contribution.targets_not_set';
 export const TOO_MANY_REQUESTS: number = 429;
+
+export type ContributionGoal = ContributionSuggestion['goals'][number];

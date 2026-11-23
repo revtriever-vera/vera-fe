@@ -14,6 +14,7 @@ import { useCuts } from '../api/use-cuts.query';
 import { CutsStatusCard } from '../components/cuts-status-card';
 import { CutsSuggestions } from '../components/cuts-suggestions';
 import { GoalCard } from '../components/goal-card';
+import { ObjectivesCard } from '../components/objectives-card';
 import { UncategorizedNote } from '../components/uncategorized-note';
 import { UnsavedDialog } from '../components/unsaved-dialog';
 import { useGoalDraft, type GoalDraftControls } from '../lib/goal-draft';
@@ -52,6 +53,7 @@ function CutsBody({
     }
     return (
         <div aria-busy={busy} className="flex flex-col gap-4">
+            <ObjectivesCard cuts={cuts} draft={draft} />
             {cuts.status === 'no_income' ? null : <GoalCard cuts={cuts} draft={draft} />}
             <CutsStatusCard cuts={cuts} />
             <CutsSuggestions cuts={cuts} />

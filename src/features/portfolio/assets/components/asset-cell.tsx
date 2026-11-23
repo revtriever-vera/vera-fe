@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { Badge } from '@/shared/ui/badge';
+import { HoldingGoalBadges } from '../../goals/components/holding-goal-badges';
 import { ClassTile } from '../../components/class-tile';
 import { toClassColorKey } from '../../lib/class-color';
 import { needsIssuer } from '../lib/holding-flags';
@@ -19,6 +20,7 @@ export function AssetCell({ holding, assetClass }: AssetCellProps): ReactElement
             <span className="flex min-w-0 flex-col">
                 <b className="truncate text-sm font-bold text-content">{holding.symbol}</b>
                 <span className="truncate text-xs text-content-muted">{holding.name}</span>
+                <HoldingGoalBadges kind={holding.kind} holdingId={holding.id} />
             </span>
         </div>
     );
