@@ -9,6 +9,7 @@ describe('rotas de /portfolio', () => {
         ['/portfolio', 'Visão geral'],
         ['/portfolio/targets', 'Carteira-alvo'],
         ['/portfolio/contribution', 'Onde aportar'],
+        ['/portfolio/goals', 'Objetivos'],
         ['/portfolio/assets', 'Meus ativos']
     ])('em %s só a aba %s fica marcada', async (path: string, active: string) => {
         renderRouterAt(path, { signedIn: true });

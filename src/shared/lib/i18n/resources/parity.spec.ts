@@ -24,6 +24,8 @@ import enPortfolioFixedIncome from './en/portfolioFixedIncome.json';
 import ptBRPortfolioTargets from './pt-BR/portfolioTargets.json';
 import enPortfolioTargets from './en/portfolioTargets.json';
 import ptBRPortfolioContribution from './pt-BR/portfolioContribution.json';
+import ptBRPortfolioGoals from './pt-BR/portfolioGoals.json';
+import enPortfolioGoals from './en/portfolioGoals.json';
 import enPortfolioContribution from './en/portfolioContribution.json';
 import ptBROnboarding from './pt-BR/onboarding.json';
 import enOnboarding from './en/onboarding.json';
@@ -84,6 +86,7 @@ const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'portfolioFixedIncome', ptBR: ptBRPortfolioFixedIncome, en: enPortfolioFixedIncome },
     { name: 'portfolioTargets', ptBR: ptBRPortfolioTargets, en: enPortfolioTargets },
     { name: 'portfolioContribution', ptBR: ptBRPortfolioContribution, en: enPortfolioContribution },
+    { name: 'portfolioGoals', ptBR: ptBRPortfolioGoals, en: enPortfolioGoals },
     { name: 'onboarding', ptBR: ptBROnboarding, en: enOnboarding },
     { name: 'spending', ptBR: ptBRSpending, en: enSpending },
     { name: 'spendingSummary', ptBR: ptBRSpendingSummary, en: enSpendingSummary },

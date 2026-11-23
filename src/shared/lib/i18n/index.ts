@@ -26,6 +26,8 @@ import ptBRPortfolioTargets from './resources/pt-BR/portfolioTargets.json';
 import enPortfolioTargets from './resources/en/portfolioTargets.json';
 import ptBRPortfolioContribution from './resources/pt-BR/portfolioContribution.json';
 import enPortfolioContribution from './resources/en/portfolioContribution.json';
+import ptBRPortfolioGoals from './resources/pt-BR/portfolioGoals.json';
+import enPortfolioGoals from './resources/en/portfolioGoals.json';
 import ptBROnboarding from './resources/pt-BR/onboarding.json';
 import enOnboarding from './resources/en/onboarding.json';
 import ptBRSpending from './resources/pt-BR/spending.json';
@@ -67,6 +69,7 @@ type LocaleResources = {
     readonly portfolioFixedIncome: typeof ptBRPortfolioFixedIncome;
     readonly portfolioTargets: typeof ptBRPortfolioTargets;
     readonly portfolioContribution: typeof ptBRPortfolioContribution;
+    readonly portfolioGoals: typeof ptBRPortfolioGoals;
     readonly onboarding: typeof ptBROnboarding;
     readonly spending: typeof ptBRSpending;
     readonly spendingSummary: typeof ptBRSpendingSummary;
@@ -95,6 +98,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolioFixedIncome: ptBRPortfolioFixedIncome,
         portfolioTargets: ptBRPortfolioTargets,
         portfolioContribution: ptBRPortfolioContribution,
+        portfolioGoals: ptBRPortfolioGoals,
         onboarding: ptBROnboarding,
         spending: ptBRSpending,
         spendingSummary: ptBRSpendingSummary,
@@ -121,6 +125,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolioFixedIncome: enPortfolioFixedIncome,
         portfolioTargets: enPortfolioTargets,
         portfolioContribution: enPortfolioContribution,
+        portfolioGoals: enPortfolioGoals,
         onboarding: enOnboarding,
         spending: enSpending,
         spendingSummary: enSpendingSummary,
@@ -158,6 +163,7 @@ void i18next.use(initReactI18next).init({
         'portfolioFixedIncome',
         'portfolioTargets',
         'portfolioContribution',
+        'portfolioGoals',
         'onboarding',
         'spending',
         'spendingSummary',

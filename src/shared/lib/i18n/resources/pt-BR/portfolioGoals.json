@@ -1,0 +1,51 @@
+{
+  "title": "Objetivos",
+  "subtitle": "Quanto falta para cada objetivo e quanto guardar por mês.",
+  "loading": "Carregando os objetivos",
+  "loadError": "Não foi possível carregar os objetivos",
+  "retry": "Tentar de novo",
+  "listLabel": "Seus objetivos",
+  "create": {
+    "header": "Novo objetivo",
+    "reserve": "Criar reserva de emergência",
+    "other": "Criar outro objetivo"
+  },
+  "kpis": {
+    "monthly": "Guardar por mês",
+    "monthlySupport": "A conta não inclui rendimento futuro.",
+    "onTrack": "Em dia",
+    "doneSupport_one": "{{count}} concluído",
+    "doneSupport_other": "{{count}} concluídos",
+    "behind": "Atrasados"
+  },
+  "empty": {
+    "title": "Nenhum objetivo criado",
+    "description": "Diga quanto e até quando. A Vera calcula quanto guardar por mês com os ativos que você já tem.",
+    "viewerDescription": "Quem edita a conta cria os objetivos. Quando houver um, o que falta aparece aqui.",
+    "filteredTitle": "Nenhum objetivo deste titular",
+    "filteredDescription": "Troque o filtro de titular para ver os outros objetivos."
+  },
+  "status": {
+    "done": "Concluído",
+    "on_track": "Em dia",
+    "behind": "Atrasado",
+    "overdue": "Prazo vencido"
+  },
+  "card": {
+    "progress": "Progresso de {{name}}",
+    "saved": "{{balance}} de {{target}}",
+    "done": "Objetivo atingido.",
+    "remaining": "Faltam {{remaining}}. {{monthly}} por mês até {{date}}.",
+    "overdue": "Faltam {{remaining}}. O prazo era {{date}}.",
+    "behindShift": "Eram {{plan}} por mês; agora são {{monthly}}.",
+    "monthGain": "+{{amount}} neste mês",
+    "monthLoss": "−{{amount}} neste mês",
+    "holdingsLabel": "Ativos vinculados a {{name}}",
+    "holdingShare": "{{name}} {{share}}",
+    "manual": "Fora da carteira: {{amount}}",
+    "removed_one": "{{count}} ativo vinculado foi removido",
+    "removed_other": "{{count}} ativos vinculados foram removidos",
+    "holder": "Titular: {{holder}}",
+    "holderAll": "Conta toda"
+  }
+}

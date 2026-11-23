@@ -1,0 +1,51 @@
+{
+  "title": "Goals",
+  "subtitle": "What is missing for each goal and how much to save each month.",
+  "loading": "Loading your goals",
+  "loadError": "Could not load your goals",
+  "retry": "Try again",
+  "listLabel": "Your goals",
+  "create": {
+    "header": "New goal",
+    "reserve": "Create emergency reserve",
+    "other": "Create another goal"
+  },
+  "kpis": {
+    "monthly": "Save per month",
+    "monthlySupport": "The math leaves out future yield.",
+    "onTrack": "On track",
+    "doneSupport_one": "{{count}} done",
+    "doneSupport_other": "{{count}} done",
+    "behind": "Behind"
+  },
+  "empty": {
+    "title": "No goals yet",
+    "description": "Say how much and by when. Vera works out how much to save each month from the assets you already have.",
+    "viewerDescription": "People who can edit the account create the goals. Once there is one, what is missing shows up here.",
+    "filteredTitle": "No goals for this holder",
+    "filteredDescription": "Change the holder filter to see the other goals."
+  },
+  "status": {
+    "done": "Done",
+    "on_track": "On track",
+    "behind": "Behind",
+    "overdue": "Past due"
+  },
+  "card": {
+    "progress": "Progress of {{name}}",
+    "saved": "{{balance}} of {{target}}",
+    "done": "Goal reached.",
+    "remaining": "{{remaining}} missing. {{monthly}} per month until {{date}}.",
+    "overdue": "{{remaining}} missing. The deadline was {{date}}.",
+    "behindShift": "It was {{plan}} per month; now it is {{monthly}}.",
+    "monthGain": "+{{amount}} this month",
+    "monthLoss": "−{{amount}} this month",
+    "holdingsLabel": "Assets linked to {{name}}",
+    "holdingShare": "{{name}} {{share}}",
+    "manual": "Outside the portfolio: {{amount}}",
+    "removed_one": "{{count}} linked asset was removed",
+    "removed_other": "{{count}} linked assets were removed",
+    "holder": "Holder: {{holder}}",
+    "holderAll": "Whole account"
+  }
+}
