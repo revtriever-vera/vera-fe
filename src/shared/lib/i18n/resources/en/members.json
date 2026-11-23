@@ -28,7 +28,7 @@
   "removeBody": "{{name}} loses access to the account.",
   "removeInviteBody": "The invite link stops working.",
   "inviteTitle": "Invite",
-  "inviteBody": "The person gets a link by e-mail and signs in with Google or Facebook. No password needed.",
+  "inviteBody": "The person gets a link by e-mail and signs in with their Google account for that e-mail. No password needed.",
   "inviteEmailLabel": "E-mail",
   "inviteEmailRequired": "Enter the person's e-mail.",
   "inviteEmailInvalid": "That e-mail does not look right.",
