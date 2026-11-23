@@ -5751,7 +5751,10 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                /** @description Account id */
+                id: string;
+            };
             cookie?: never;
         };
         requestBody: {
@@ -5815,15 +5818,328 @@ export interface operations {
                                 joinedAt: string;
                             }[];
                             /** @description Subscriptions and invoices, without any card data */
-                            billing: unknown;
+                            billing: {
+                                /** @description Every subscription of the account, card data left out */
+                                subscriptions: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    /** @description `pending`, `active`, `failed` or `canceled` */
+                                    status: string;
+                                    /** @enum {string} */
+                                    paymentMethod: "card" | "pix";
+                                    /**
+                                     * Format: date-time
+                                     * @description Until when the subscription is paid
+                                     */
+                                    paidThrough: string | null;
+                                    /**
+                                     * Format: date-time
+                                     * @description When the first charge was paid
+                                     */
+                                    firstPaidAt: string | null;
+                                    /** Format: date-time */
+                                    canceledAt: string | null;
+                                    /** Format: date-time */
+                                    createdAt: string;
+                                }[];
+                                /** @description The 100 most recent invoices */
+                                invoices: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    /** @description `issued`, `overdue` or `paid` */
+                                    status: string;
+                                    /** @description Invoice total in cents (BRL); null while not priced */
+                                    totalCents: number | null;
+                                    /** @enum {string|null} */
+                                    method: "card" | "pix" | null;
+                                    /** Format: date-time */
+                                    dueDate: string | null;
+                                    /** Format: date-time */
+                                    cycleStart: string | null;
+                                    /** Format: date-time */
+                                    cycleEnd: string | null;
+                                    /** Format: date-time */
+                                    paidAt: string | null;
+                                }[];
+                            } | null;
                             /** @description Signup link offer the account redeemed; null when none */
-                            offer: unknown;
+                            offer: {
+                                trial: {
+                                    /**
+                                     * @description `none`: no trial. `card`: trial with the card saved. `no_card`: trial without a card
+                                     * @enum {string}
+                                     */
+                                    kind: "none" | "card" | "no_card";
+                                    /** @description Trial length in days; null when there is no trial */
+                                    days: number | null;
+                                };
+                                /** @description Discount scale by paid cycle */
+                                rules: {
+                                    /** @description Discount on the Premium price, in percent */
+                                    percent: number;
+                                    /** @description First paid cycle the rule covers */
+                                    fromCycle: number;
+                                    /** @description Last paid cycle the rule covers, inclusive */
+                                    toCycle: number;
+                                }[];
+                                /**
+                                 * Format: date-time
+                                 * @description When the account redeemed the link
+                                 */
+                                redeemedAt: string;
+                                /**
+                                 * Format: date-time
+                                 * @description Until when the offer can still start
+                                 */
+                                expiresAt: string;
+                                /** @description Where the redemption came from */
+                                source: string;
+                                /** Format: date-time */
+                                trialStartedAt: string | null;
+                                /**
+                                 * Format: date-time
+                                 * @description When the offer was applied to a subscription
+                                 */
+                                appliedAt: string | null;
+                            } | null;
                             /** @description Paid usage per period and feature */
-                            usage: unknown;
+                            usage: {
+                                /** @description Billing period, `YYYY-MM` */
+                                period: string;
+                                /** @description `ai` or `whatsapp` */
+                                feature: string;
+                                /** @description Cost in millionths of a BRL (1_000_000 = R$ 1,00) */
+                                costMicros: number;
+                                /** @description Paid uses in the period */
+                                entries: number;
+                            }[] | null;
                         };
-                        /** @description Present when the `data` layer was asked: one entry per area. Keys, credentials, tokens and WhatsApp conversations never appear */
+                        /** @description Present when the `data` layer was asked: one entry per area. Money is in cents. Keys, credentials, tokens, hints and WhatsApp conversations never appear */
                         data?: {
-                            [key: string]: unknown;
+                            positions: {
+                                symbol: string | null;
+                                name: string | null;
+                                /** @description Decimal quantity, as text */
+                                quantity: string;
+                                /** @description Decimal average price, as text */
+                                averagePrice: string | null;
+                                /** Format: uuid */
+                                classId: string | null;
+                                /** Format: uuid */
+                                holderUserId: string | null;
+                                /** Format: date-time */
+                                createdAt: string;
+                            }[];
+                            fixed_income: {
+                                titles: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    kind: string;
+                                    name: string;
+                                    issuerId: string | null;
+                                    /** Format: uuid */
+                                    holderUserId: string | null;
+                                    indexer: string;
+                                    /** @description Rate in basis points */
+                                    rateBps: number;
+                                    currency: string;
+                                    /** @description Amount applied, in cents (minor units) */
+                                    appliedMinor: number;
+                                    /** @description Date of the application, `YYYY-MM-DD` */
+                                    appliedAt: string;
+                                    /** @description Maturity date, `YYYY-MM-DD` */
+                                    maturityDate: string;
+                                    taxRegime: string;
+                                    /** Format: date-time */
+                                    createdAt: string;
+                                }[];
+                            };
+                            allocation: {
+                                settings: {
+                                    baseCurrency: string;
+                                    /** @description Rebalance tolerance in basis points */
+                                    toleranceBps: number;
+                                };
+                                classes: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    systemKey: string | null;
+                                    aliasKeys: string[];
+                                    name: string | null;
+                                    colorKey: string;
+                                    /** @description Target share of the portfolio in basis points */
+                                    targetBps: number;
+                                    sortOrder: number;
+                                    /** Format: date-time */
+                                    createdAt: string;
+                                }[];
+                                assetTargets: {
+                                    subjectType: string;
+                                    subjectId: string;
+                                    /** Format: uuid */
+                                    classId: string;
+                                    /** @description Target share inside the class in basis points */
+                                    targetInClassBps: number;
+                                }[];
+                            };
+                            goals: {
+                                goals: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    kind: string;
+                                    name: string;
+                                    /** @description Target amount, in cents (minor units) */
+                                    targetMinor: number;
+                                    /** @description Target date, `YYYY-MM-DD` */
+                                    targetDate: string;
+                                    /** Format: uuid */
+                                    holderUserId: string | null;
+                                    /** @description Amount saved by hand, in cents (minor units) */
+                                    manualMinor: number;
+                                    /** @description Months of expenses of an emergency reserve goal */
+                                    reserveMonths: number | null;
+                                    /** Format: date-time */
+                                    createdAt: string;
+                                }[];
+                                goalHoldings: {
+                                    /** Format: uuid */
+                                    goalId: string;
+                                    holdingKind: string;
+                                    holdingId: string;
+                                    /** @description Share of the holding given to the goal, in basis points */
+                                    shareBps: number;
+                                }[];
+                            };
+                            transactions: {
+                                accounts: {
+                                    name: string;
+                                    kind: string;
+                                    institutionName: string | null;
+                                    numberLast4: string | null;
+                                    currency: string;
+                                    /** @enum {string} */
+                                    source: "pluggy" | "file";
+                                }[];
+                                transactions: {
+                                    /** @description `YYYY-MM-DD` */
+                                    date: string;
+                                    /** @description Signed amount, in cents (minor units) */
+                                    amountMinor: number;
+                                    currency: string;
+                                    description: string;
+                                    counterpartyName: string | null;
+                                    category: string | null;
+                                    categorySource: string;
+                                    /** @description Name of the financial account */
+                                    account: string;
+                                    source: string;
+                                    installment: {
+                                        number: number;
+                                        total: number;
+                                    } | null;
+                                }[];
+                                imports: {
+                                    format: string;
+                                    fileName: string;
+                                    rows: number;
+                                    inserted: number;
+                                    duplicates: number;
+                                    /** Format: date-time */
+                                    createdAt: string;
+                                    status: string;
+                                }[];
+                            };
+                            spending_categories: {
+                                categories: {
+                                    systemKey: string | null;
+                                    name: string | null;
+                                    kind: string;
+                                    flexibility: string | null;
+                                    icon: string;
+                                }[];
+                                rules: {
+                                    matchType: string;
+                                    pattern: string | null;
+                                    label: string;
+                                    appliesTo: string;
+                                    categoryKey: string | null;
+                                }[];
+                            };
+                            spending_settings: {
+                                /** @description Savings goal in basis points of the income */
+                                savingsGoalBps: number;
+                                /** @description `transactions` or `declared` */
+                                incomeMode: string;
+                                /** @description Monthly income declared, in cents (minor units) */
+                                declaredIncomeMinor: number | null;
+                            } | null;
+                            recurring: {
+                                series: {
+                                    name: string;
+                                    merchantKey: string;
+                                    account: string;
+                                    kind: string;
+                                    cadence: string;
+                                    valueMode: string;
+                                    status: string;
+                                    origin: string;
+                                    /** @description Typical charge, in cents (minor units) */
+                                    typicalAmountMinor: number;
+                                    /** @description Smallest charge, in cents (minor units) */
+                                    minAmountMinor: number;
+                                    /** @description Largest charge, in cents (minor units) */
+                                    maxAmountMinor: number;
+                                    expectedDay: number | null;
+                                    /** @description `YYYY-MM-DD` */
+                                    firstDate: string;
+                                    /** @description `YYYY-MM-DD` */
+                                    lastDate: string;
+                                    /** @description `YYYY-MM-DD` */
+                                    snoozedUntil: string | null;
+                                    /** Format: date-time */
+                                    confirmedAt: string | null;
+                                    /** Format: date-time */
+                                    dismissedAt: string | null;
+                                    /** Format: date-time */
+                                    stoppedAt: string | null;
+                                    stoppedBy: string | null;
+                                    charges: {
+                                        /** @description `YYYY-MM-DD` */
+                                        date: string;
+                                        /** @description Charge, in cents (minor units) */
+                                        amountMinor: number;
+                                        role: string;
+                                    }[];
+                                }[];
+                                suppressions: {
+                                    merchantKey: string;
+                                    /** @description Typical charge, in cents (minor units) */
+                                    typicalAmountMinor: number;
+                                    /** Format: date-time */
+                                    createdAt: string;
+                                }[];
+                                alerts: {
+                                    /** @description Name of the series */
+                                    series: string;
+                                    kind: string;
+                                    /** @description `YYYY-MM-DD` */
+                                    occurredOn: string;
+                                    seen: boolean;
+                                    data: {
+                                        [key: string]: string | number;
+                                    };
+                                }[];
+                            };
+                            bank_connections: {
+                                connections: {
+                                    connectorName: string | null;
+                                    status: string;
+                                    /** Format: date-time */
+                                    createdAt: string;
+                                    /** Format: date-time */
+                                    lastSuccessAt: string | null;
+                                }[];
+                            };
                         };
                     };
                 };
@@ -13521,7 +13837,7 @@ export interface operations {
                         averageMinor: number | null;
                         /** @description Closed months (YYYY-MM, oldest first) the average used, up to 3, only months with transactions */
                         averageMonths: string[];
-                        /** @description `months` times the average, BRL cents; null without data (ask the person) */
+                        /** @description `months` times the average rounded to R$ 100, BRL cents; null without data (ask the person) */
                         suggestedMinor: number | null;
                     };
                 };

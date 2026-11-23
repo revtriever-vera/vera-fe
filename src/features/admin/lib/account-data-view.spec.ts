@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { columnsOf, humanizeKey, MAX_COLUMNS, recordRows, scalarText, type ScalarLabels } from './account-data-view';
+import { columnsOf, fieldText, humanizeKey, MAX_COLUMNS, recordRows, scalarText, type ScalarLabels } from './account-data-view';
 import { toAccessInput } from './open-account-input';
 
 const labels: ScalarLabels = { yes: 'Sim', no: 'Não', empty: 'Sem dados' };
@@ -36,5 +36,26 @@ describe('account data view', () => {
 
     it('builds the access input with trimmed reason and the chosen layers', () => {
         expect(toAccessInput({ reason: '  suporte  ', summary: false, data: true })).toEqual({ reason: 'suporte', layers: ['data'] });
+    });
+});
+
+function plain(text: string): string {
+    return text.replaceAll('\u00a0', ' ');
+}
+
+describe('field text', () => {
+    it('writes money, micros, basis points and dates by the key', () => {
+        expect(plain(fieldText('targetMinor', 1000000, labels, 'pt-BR'))).toBe('R$ 10.000,00');
+        expect(plain(fieldText('totalCents', 1990, labels, 'pt-BR'))).toBe('R$ 19,90');
+        expect(plain(fieldText('costMicros', 1500000, labels, 'pt-BR'))).toBe('R$ 1,50');
+        expect(fieldText('targetBps', 2500, labels, 'pt-BR')).toBe('25%');
+        expect(fieldText('targetDate', '2027-12-31', labels, 'pt-BR')).toBe('31/12/2027');
+        expect(fieldText('paidAt', '2026-11-10T12:00:00.000Z', labels, 'pt-BR')).toContain('10/11/2026');
+    });
+
+    it('takes the currency from the row and leaves other values as text', () => {
+        expect(plain(fieldText('amountMinor', 1000, labels, 'en', 'USD'))).toBe('$10.00');
+        expect(fieldText('entries', 12, labels, 'pt-BR')).toBe('12');
+        expect(fieldText('name', null, labels, 'pt-BR')).toBe('Sem dados');
     });
 });

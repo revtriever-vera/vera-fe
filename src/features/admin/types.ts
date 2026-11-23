@@ -30,3 +30,4 @@ export type AccessLayer = AccessInput['layers'][number];
 export type AccountAccess = AccessPath['responses']['200']['content']['application/json'];
 export type AccountSummary = NonNullable<AccountAccess['summary']>;
 export type AccountPerson = AccountSummary['people'][number];
+export type AccountData = NonNullable<AccountAccess['data']>;
