@@ -36,6 +36,7 @@ import { Route as AuthAppSettingsTabRouteImport } from './routes/_auth/_app/sett
 import { Route as AuthAppSpendingIndexRouteImport } from './routes/_auth/_app/spending.index'
 import { Route as AuthAppSpendingConnectionsRouteImport } from './routes/_auth/_app/spending.connections'
 import { Route as AuthAppSpendingCutsRouteImport } from './routes/_auth/_app/spending.cuts'
+import { Route as AuthAppSpendingRecurringRouteImport } from './routes/_auth/_app/spending.recurring'
 import { Route as AuthAppSpendingRulesRouteImport } from './routes/_auth/_app/spending.rules'
 import { Route as AuthAppSpendingTransactionsRouteImport } from './routes/_auth/_app/spending.transactions'
 import { Route as AuthAppPortfolioClassesClassIdRouteImport } from './routes/_auth/_app/portfolio.classes.$classId'
@@ -176,6 +177,12 @@ const AuthAppSpendingCutsRoute = AuthAppSpendingCutsRouteImport.update({
   path: '/cuts',
   getParentRoute: () => AuthAppSpendingRoute,
 } as any)
+const AuthAppSpendingRecurringRoute =
+  AuthAppSpendingRecurringRouteImport.update({
+    id: '/recurring',
+    path: '/recurring',
+    getParentRoute: () => AuthAppSpendingRoute,
+  } as any)
 const AuthAppSpendingRulesRoute = AuthAppSpendingRulesRouteImport.update({
   id: '/rules',
   path: '/rules',
@@ -217,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/settings/$tab': typeof AuthAppSettingsTabRoute
   '/spending/connections': typeof AuthAppSpendingConnectionsRoute
   '/spending/cuts': typeof AuthAppSpendingCutsRoute
+  '/spending/recurring': typeof AuthAppSpendingRecurringRoute
   '/spending/rules': typeof AuthAppSpendingRulesRoute
   '/spending/transactions': typeof AuthAppSpendingTransactionsRoute
   '/portfolio/': typeof AuthAppPortfolioIndexRoute
@@ -243,6 +251,7 @@ export interface FileRoutesByTo {
   '/settings/$tab': typeof AuthAppSettingsTabRoute
   '/spending/connections': typeof AuthAppSpendingConnectionsRoute
   '/spending/cuts': typeof AuthAppSpendingCutsRoute
+  '/spending/recurring': typeof AuthAppSpendingRecurringRoute
   '/spending/rules': typeof AuthAppSpendingRulesRoute
   '/spending/transactions': typeof AuthAppSpendingTransactionsRoute
   '/portfolio': typeof AuthAppPortfolioIndexRoute
@@ -276,6 +285,7 @@ export interface FileRoutesById {
   '/_auth/_app/settings/$tab': typeof AuthAppSettingsTabRoute
   '/_auth/_app/spending/connections': typeof AuthAppSpendingConnectionsRoute
   '/_auth/_app/spending/cuts': typeof AuthAppSpendingCutsRoute
+  '/_auth/_app/spending/recurring': typeof AuthAppSpendingRecurringRoute
   '/_auth/_app/spending/rules': typeof AuthAppSpendingRulesRoute
   '/_auth/_app/spending/transactions': typeof AuthAppSpendingTransactionsRoute
   '/_auth/_app/portfolio/': typeof AuthAppPortfolioIndexRoute
@@ -308,6 +318,7 @@ export interface FileRouteTypes {
     | '/settings/$tab'
     | '/spending/connections'
     | '/spending/cuts'
+    | '/spending/recurring'
     | '/spending/rules'
     | '/spending/transactions'
     | '/portfolio/'
@@ -334,6 +345,7 @@ export interface FileRouteTypes {
     | '/settings/$tab'
     | '/spending/connections'
     | '/spending/cuts'
+    | '/spending/recurring'
     | '/spending/rules'
     | '/spending/transactions'
     | '/portfolio'
@@ -366,6 +378,7 @@ export interface FileRouteTypes {
     | '/_auth/_app/settings/$tab'
     | '/_auth/_app/spending/connections'
     | '/_auth/_app/spending/cuts'
+    | '/_auth/_app/spending/recurring'
     | '/_auth/_app/spending/rules'
     | '/_auth/_app/spending/transactions'
     | '/_auth/_app/portfolio/'
@@ -572,6 +585,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAppSpendingCutsRouteImport
       parentRoute: typeof AuthAppSpendingRoute
     }
+    '/_auth/_app/spending/recurring': {
+      id: '/_auth/_app/spending/recurring'
+      path: '/recurring'
+      fullPath: '/spending/recurring'
+      preLoaderRoute: typeof AuthAppSpendingRecurringRouteImport
+      parentRoute: typeof AuthAppSpendingRoute
+    }
     '/_auth/_app/spending/rules': {
       id: '/_auth/_app/spending/rules'
       path: '/rules'
@@ -636,6 +656,7 @@ const AuthAppSettingsRouteWithChildren = AuthAppSettingsRoute._addFileChildren(
 interface AuthAppSpendingRouteChildren {
   AuthAppSpendingConnectionsRoute: typeof AuthAppSpendingConnectionsRoute
   AuthAppSpendingCutsRoute: typeof AuthAppSpendingCutsRoute
+  AuthAppSpendingRecurringRoute: typeof AuthAppSpendingRecurringRoute
   AuthAppSpendingRulesRoute: typeof AuthAppSpendingRulesRoute
   AuthAppSpendingTransactionsRoute: typeof AuthAppSpendingTransactionsRoute
   AuthAppSpendingIndexRoute: typeof AuthAppSpendingIndexRoute
@@ -644,6 +665,7 @@ interface AuthAppSpendingRouteChildren {
 const AuthAppSpendingRouteChildren: AuthAppSpendingRouteChildren = {
   AuthAppSpendingConnectionsRoute: AuthAppSpendingConnectionsRoute,
   AuthAppSpendingCutsRoute: AuthAppSpendingCutsRoute,
+  AuthAppSpendingRecurringRoute: AuthAppSpendingRecurringRoute,
   AuthAppSpendingRulesRoute: AuthAppSpendingRulesRoute,
   AuthAppSpendingTransactionsRoute: AuthAppSpendingTransactionsRoute,
   AuthAppSpendingIndexRoute: AuthAppSpendingIndexRoute,

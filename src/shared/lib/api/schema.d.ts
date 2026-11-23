@@ -1195,13 +1195,57 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Recurring charges: totals, lists and alerts
+         * @description The total per month and per year counts only the confirmed series. The suggestions come apart, with what they would add per month. `alerts` lists the ones not marked as seen: price increase, charge twice, same subscription on two cards, trial that became a charge, a stopped series that charged again, a suggestion nobody reviewed and an annual renewal in the next 30 days.
+         */
+        get: operations["RecurringController_getOverview"];
         put?: never;
         /**
          * Mark a transaction as recurring
          * @description Creates a confirmed series from a debit. When the Vera already detected a series that holds the transaction, that series is confirmed instead. The cadence comes from the similar charges, or is monthly when there is nothing to compare.
          */
         post: operations["RecurringController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/recurring/calendar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Expected charges of the next days
+         * @description One line per expected charge of the confirmed and suggested series, from today in the company time zone. The date is the last charge plus the cadence, adjusted to the expected day. A charge that did not arrive within 4 days of its date comes as `missed`.
+         */
+        get: operations["RecurringController_getCalendar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/recurring/alerts/{id}/seen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Mark an alert as seen ("Visto")
+         * @description The alert stops showing in the list. Only the stored alerts can be cleared: the ones with `canMarkSeen` true.
+         */
+        post: operations["RecurringController_markAlertSeen"];
         delete?: never;
         options?: never;
         head?: never;
@@ -11499,6 +11543,435 @@ export interface operations {
             };
         };
     };
+    RecurringController_getOverview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Totals, series by situation and alerts */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        totals: {
+                            /** @description Sum of the monthly equivalents of the confirmed series, in BRL cents */
+                            monthlyMinor: number;
+                            /** @description `monthlyMinor` x 12 */
+                            yearlyMinor: number;
+                            /** @description Monthly total of the confirmed series by type */
+                            byKind: {
+                                subscription: number;
+                                bill: number;
+                                other: number;
+                            };
+                            /** @description Suggestions to review. They are not part of the total */
+                            suggestions: {
+                                count: number;
+                                monthlyMinor: number;
+                            };
+                        };
+                        /** @description Suggestions to review, without the ones snoozed */
+                        review: {
+                            /** Format: uuid */
+                            id: string;
+                            name: string;
+                            /** @description Key that groups the merchant across charges */
+                            merchantKey: string;
+                            /**
+                             * Format: uuid
+                             * @description Financial account of most charges
+                             */
+                            accountId: string;
+                            /**
+                             * @description How often the charge repeats
+                             * @enum {string}
+                             */
+                            cadence: "weekly" | "biweekly" | "monthly" | "bimonthly" | "quarterly" | "semiannual" | "annual";
+                            /** @enum {string} */
+                            valueMode: "fixed" | "variable";
+                            /**
+                             * @description `subscription`, `bill` or `other`
+                             * @enum {string}
+                             */
+                            kind: "subscription" | "bill" | "other";
+                            /**
+                             * @description `suggested`, `confirmed`, `dismissed` or `stopped`
+                             * @enum {string}
+                             */
+                            status: "suggested" | "confirmed" | "dismissed" | "stopped";
+                            /**
+                             * @description `detected` by the Vera or `manual`, from a transaction
+                             * @enum {string}
+                             */
+                            origin: "detected" | "manual";
+                            /** @description Amount of the charge in BRL cents, always positive */
+                            typicalAmountMinor: number;
+                            minAmountMinor: number;
+                            maxAmountMinor: number;
+                            /** @description Day of the month the charge is expected; 29 to 31 mean the last day of shorter months; null for weekly and biweekly */
+                            expectedDay: number | null;
+                            /** @description Set when the charge moved to another day of the month */
+                            dayChange: {
+                                fromDay: number;
+                                toDay: number;
+                            } | null;
+                            /** @description True when the merchant is a known subscription */
+                            knownSubscription: boolean;
+                            /** @description Date of the first charge, YYYY-MM-DD */
+                            firstDate: string;
+                            /** @description Date of the last charge, YYYY-MM-DD */
+                            lastDate: string;
+                            /** @description YYYY-MM-DD while the suggestion is hidden */
+                            snoozedUntil: string | null;
+                            /** Format: date-time */
+                            confirmedAt: string | null;
+                            /** Format: date-time */
+                            dismissedAt: string | null;
+                            /** Format: date-time */
+                            stoppedAt: string | null;
+                            /**
+                             * @description `user` ("Cancelei") or `auto` (no charge in time)
+                             * @enum {string|null}
+                             */
+                            stoppedBy: "user" | "auto" | null;
+                            /** Format: date-time */
+                            createdAt: string;
+                            /** Format: date-time */
+                            updatedAt: string;
+                            /** @description Name of the financial account of the series */
+                            accountName: string;
+                            institutionName: string | null;
+                            /** @description `checking`, `savings`, `credit_card` or `other` */
+                            accountKind: string;
+                            /** @description Next expected charge, YYYY-MM-DD. Null when the series is stopped or dismissed */
+                            nextDate: string | null;
+                            /** @description What the series costs per month: weekly x52/12, biweekly x26/12, annual /12 and so on */
+                            monthlyEquivalentMinor: number;
+                            /** @description Up to the 3 last charges. Filled only for the list "review" */
+                            lastCharges: {
+                                /** Format: uuid */
+                                transactionId: string;
+                                /** @description YYYY-MM-DD */
+                                date: string;
+                                /** @description Amount in BRL cents, positive */
+                                amountMinor: number;
+                            }[];
+                        }[];
+                        confirmed: {
+                            /** Format: uuid */
+                            id: string;
+                            name: string;
+                            /** @description Key that groups the merchant across charges */
+                            merchantKey: string;
+                            /**
+                             * Format: uuid
+                             * @description Financial account of most charges
+                             */
+                            accountId: string;
+                            /**
+                             * @description How often the charge repeats
+                             * @enum {string}
+                             */
+                            cadence: "weekly" | "biweekly" | "monthly" | "bimonthly" | "quarterly" | "semiannual" | "annual";
+                            /** @enum {string} */
+                            valueMode: "fixed" | "variable";
+                            /**
+                             * @description `subscription`, `bill` or `other`
+                             * @enum {string}
+                             */
+                            kind: "subscription" | "bill" | "other";
+                            /**
+                             * @description `suggested`, `confirmed`, `dismissed` or `stopped`
+                             * @enum {string}
+                             */
+                            status: "suggested" | "confirmed" | "dismissed" | "stopped";
+                            /**
+                             * @description `detected` by the Vera or `manual`, from a transaction
+                             * @enum {string}
+                             */
+                            origin: "detected" | "manual";
+                            /** @description Amount of the charge in BRL cents, always positive */
+                            typicalAmountMinor: number;
+                            minAmountMinor: number;
+                            maxAmountMinor: number;
+                            /** @description Day of the month the charge is expected; 29 to 31 mean the last day of shorter months; null for weekly and biweekly */
+                            expectedDay: number | null;
+                            /** @description Set when the charge moved to another day of the month */
+                            dayChange: {
+                                fromDay: number;
+                                toDay: number;
+                            } | null;
+                            /** @description True when the merchant is a known subscription */
+                            knownSubscription: boolean;
+                            /** @description Date of the first charge, YYYY-MM-DD */
+                            firstDate: string;
+                            /** @description Date of the last charge, YYYY-MM-DD */
+                            lastDate: string;
+                            /** @description YYYY-MM-DD while the suggestion is hidden */
+                            snoozedUntil: string | null;
+                            /** Format: date-time */
+                            confirmedAt: string | null;
+                            /** Format: date-time */
+                            dismissedAt: string | null;
+                            /** Format: date-time */
+                            stoppedAt: string | null;
+                            /**
+                             * @description `user` ("Cancelei") or `auto` (no charge in time)
+                             * @enum {string|null}
+                             */
+                            stoppedBy: "user" | "auto" | null;
+                            /** Format: date-time */
+                            createdAt: string;
+                            /** Format: date-time */
+                            updatedAt: string;
+                            /** @description Name of the financial account of the series */
+                            accountName: string;
+                            institutionName: string | null;
+                            /** @description `checking`, `savings`, `credit_card` or `other` */
+                            accountKind: string;
+                            /** @description Next expected charge, YYYY-MM-DD. Null when the series is stopped or dismissed */
+                            nextDate: string | null;
+                            /** @description What the series costs per month: weekly x52/12, biweekly x26/12, annual /12 and so on */
+                            monthlyEquivalentMinor: number;
+                            /** @description Up to the 3 last charges. Filled only for the list "review" */
+                            lastCharges: {
+                                /** Format: uuid */
+                                transactionId: string;
+                                /** @description YYYY-MM-DD */
+                                date: string;
+                                /** @description Amount in BRL cents, positive */
+                                amountMinor: number;
+                            }[];
+                        }[];
+                        stopped: {
+                            /** Format: uuid */
+                            id: string;
+                            name: string;
+                            /** @description Key that groups the merchant across charges */
+                            merchantKey: string;
+                            /**
+                             * Format: uuid
+                             * @description Financial account of most charges
+                             */
+                            accountId: string;
+                            /**
+                             * @description How often the charge repeats
+                             * @enum {string}
+                             */
+                            cadence: "weekly" | "biweekly" | "monthly" | "bimonthly" | "quarterly" | "semiannual" | "annual";
+                            /** @enum {string} */
+                            valueMode: "fixed" | "variable";
+                            /**
+                             * @description `subscription`, `bill` or `other`
+                             * @enum {string}
+                             */
+                            kind: "subscription" | "bill" | "other";
+                            /**
+                             * @description `suggested`, `confirmed`, `dismissed` or `stopped`
+                             * @enum {string}
+                             */
+                            status: "suggested" | "confirmed" | "dismissed" | "stopped";
+                            /**
+                             * @description `detected` by the Vera or `manual`, from a transaction
+                             * @enum {string}
+                             */
+                            origin: "detected" | "manual";
+                            /** @description Amount of the charge in BRL cents, always positive */
+                            typicalAmountMinor: number;
+                            minAmountMinor: number;
+                            maxAmountMinor: number;
+                            /** @description Day of the month the charge is expected; 29 to 31 mean the last day of shorter months; null for weekly and biweekly */
+                            expectedDay: number | null;
+                            /** @description Set when the charge moved to another day of the month */
+                            dayChange: {
+                                fromDay: number;
+                                toDay: number;
+                            } | null;
+                            /** @description True when the merchant is a known subscription */
+                            knownSubscription: boolean;
+                            /** @description Date of the first charge, YYYY-MM-DD */
+                            firstDate: string;
+                            /** @description Date of the last charge, YYYY-MM-DD */
+                            lastDate: string;
+                            /** @description YYYY-MM-DD while the suggestion is hidden */
+                            snoozedUntil: string | null;
+                            /** Format: date-time */
+                            confirmedAt: string | null;
+                            /** Format: date-time */
+                            dismissedAt: string | null;
+                            /** Format: date-time */
+                            stoppedAt: string | null;
+                            /**
+                             * @description `user` ("Cancelei") or `auto` (no charge in time)
+                             * @enum {string|null}
+                             */
+                            stoppedBy: "user" | "auto" | null;
+                            /** Format: date-time */
+                            createdAt: string;
+                            /** Format: date-time */
+                            updatedAt: string;
+                            /** @description Name of the financial account of the series */
+                            accountName: string;
+                            institutionName: string | null;
+                            /** @description `checking`, `savings`, `credit_card` or `other` */
+                            accountKind: string;
+                            /** @description Next expected charge, YYYY-MM-DD. Null when the series is stopped or dismissed */
+                            nextDate: string | null;
+                            /** @description What the series costs per month: weekly x52/12, biweekly x26/12, annual /12 and so on */
+                            monthlyEquivalentMinor: number;
+                            /** @description Up to the 3 last charges. Filled only for the list "review" */
+                            lastCharges: {
+                                /** Format: uuid */
+                                transactionId: string;
+                                /** @description YYYY-MM-DD */
+                                date: string;
+                                /** @description Amount in BRL cents, positive */
+                                amountMinor: number;
+                            }[];
+                        }[];
+                        /** @description Series the person said are not recurring; `restore` brings them back */
+                        dismissed: {
+                            /** Format: uuid */
+                            id: string;
+                            name: string;
+                            /** @description Key that groups the merchant across charges */
+                            merchantKey: string;
+                            /**
+                             * Format: uuid
+                             * @description Financial account of most charges
+                             */
+                            accountId: string;
+                            /**
+                             * @description How often the charge repeats
+                             * @enum {string}
+                             */
+                            cadence: "weekly" | "biweekly" | "monthly" | "bimonthly" | "quarterly" | "semiannual" | "annual";
+                            /** @enum {string} */
+                            valueMode: "fixed" | "variable";
+                            /**
+                             * @description `subscription`, `bill` or `other`
+                             * @enum {string}
+                             */
+                            kind: "subscription" | "bill" | "other";
+                            /**
+                             * @description `suggested`, `confirmed`, `dismissed` or `stopped`
+                             * @enum {string}
+                             */
+                            status: "suggested" | "confirmed" | "dismissed" | "stopped";
+                            /**
+                             * @description `detected` by the Vera or `manual`, from a transaction
+                             * @enum {string}
+                             */
+                            origin: "detected" | "manual";
+                            /** @description Amount of the charge in BRL cents, always positive */
+                            typicalAmountMinor: number;
+                            minAmountMinor: number;
+                            maxAmountMinor: number;
+                            /** @description Day of the month the charge is expected; 29 to 31 mean the last day of shorter months; null for weekly and biweekly */
+                            expectedDay: number | null;
+                            /** @description Set when the charge moved to another day of the month */
+                            dayChange: {
+                                fromDay: number;
+                                toDay: number;
+                            } | null;
+                            /** @description True when the merchant is a known subscription */
+                            knownSubscription: boolean;
+                            /** @description Date of the first charge, YYYY-MM-DD */
+                            firstDate: string;
+                            /** @description Date of the last charge, YYYY-MM-DD */
+                            lastDate: string;
+                            /** @description YYYY-MM-DD while the suggestion is hidden */
+                            snoozedUntil: string | null;
+                            /** Format: date-time */
+                            confirmedAt: string | null;
+                            /** Format: date-time */
+                            dismissedAt: string | null;
+                            /** Format: date-time */
+                            stoppedAt: string | null;
+                            /**
+                             * @description `user` ("Cancelei") or `auto` (no charge in time)
+                             * @enum {string|null}
+                             */
+                            stoppedBy: "user" | "auto" | null;
+                            /** Format: date-time */
+                            createdAt: string;
+                            /** Format: date-time */
+                            updatedAt: string;
+                            /** @description Name of the financial account of the series */
+                            accountName: string;
+                            institutionName: string | null;
+                            /** @description `checking`, `savings`, `credit_card` or `other` */
+                            accountKind: string;
+                            /** @description Next expected charge, YYYY-MM-DD. Null when the series is stopped or dismissed */
+                            nextDate: string | null;
+                            /** @description What the series costs per month: weekly x52/12, biweekly x26/12, annual /12 and so on */
+                            monthlyEquivalentMinor: number;
+                            /** @description Up to the 3 last charges. Filled only for the list "review" */
+                            lastCharges: {
+                                /** Format: uuid */
+                                transactionId: string;
+                                /** @description YYYY-MM-DD */
+                                date: string;
+                                /** @description Amount in BRL cents, positive */
+                                amountMinor: number;
+                            }[];
+                        }[];
+                        /** @description Alerts not marked as seen, newest first */
+                        alerts: {
+                            /** @description Row id for the stored alerts (uuid) or `<kind>:<seriesId>` for the ones computed from the date */
+                            id: string;
+                            /**
+                             * @description `price_increase`, `duplicate_charge`, `duplicate_account`, `trial_converted`, `returned`, `still_using` or `renewal`
+                             * @enum {string}
+                             */
+                            kind: "price_increase" | "duplicate_charge" | "duplicate_account" | "trial_converted" | "returned" | "still_using" | "renewal";
+                            /** Format: uuid */
+                            seriesId: string;
+                            seriesName: string;
+                            /** @description Date of the charge that raised the alert, YYYY-MM-DD */
+                            occurredOn: string;
+                            /** @description True when `POST /spending/recurring/alerts/{id}/seen` clears the alert */
+                            canMarkSeen: boolean;
+                            /** @description Numbers and dates for the text. price_increase: fromAmountMinor, toAmountMinor, percent, chargeDate. duplicate_charge: firstDate, firstAmountMinor, secondDate, secondAmountMinor. duplicate_account: accountId, accountName, otherAccountId, otherAccountName, otherSeriesId, amountMinor, otherAmountMinor. trial_converted: trialAmountMinor, firstAmountMinor, chargeDate. returned: lastDate, returnDate, amountMinor, gapDays. still_using: chargeCount, amountMinor. renewal: renewalDate, amountMinor, daysUntil */
+                            data: {
+                                [key: string]: string | number;
+                            };
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
     RecurringController_create: {
         parameters: {
             query?: never;
@@ -11694,6 +12167,223 @@ export interface operations {
             };
             /** @description The transaction is not a debit in BRL (recurring.transaction_not_eligible) or the limit was reached (recurring.limit_reached) */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    RecurringController_getCalendar: {
+        parameters: {
+            query?: {
+                /** @description How many days ahead to forecast, from today in the company time zone. Default 60, up to 90 */
+                days?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Expected charges, oldest first */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Expected date, YYYY-MM-DD */
+                        date: string;
+                        /**
+                         * @description `missed`: the charge did not arrive within the tolerance of the expected date
+                         * @enum {string}
+                         */
+                        state: "upcoming" | "missed";
+                        /** Format: uuid */
+                        seriesId: string;
+                        name: string;
+                        /** @description Expected amount in BRL cents; an estimate when `isEstimate` */
+                        amountMinor: number;
+                        /** @description True for variable series */
+                        isEstimate: boolean;
+                        /** @description True when the series was not confirmed yet */
+                        isSuggestion: boolean;
+                        /** Format: uuid */
+                        accountId: string;
+                        accountName: string;
+                        institutionName: string | null;
+                        /** @description `credit_card` means the real debit comes in the card bill, whose date the Vera does not predict */
+                        accountKind: string;
+                    }[];
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    RecurringController_markAlertSeen: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Alert id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The alert was marked as seen */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        seen: boolean;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The role of the person cannot change recurring series (identity.forbidden) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The alert does not exist in this company (recurring.alert_not_found) */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

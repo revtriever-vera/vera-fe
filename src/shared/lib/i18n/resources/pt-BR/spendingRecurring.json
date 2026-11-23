@@ -1,0 +1,123 @@
+{
+  "title": "Assinaturas e contas",
+  "subtitle": "O que se repete no seu extrato, quanto custa por mês e por ano.",
+  "loading": "Carregando assinaturas e contas",
+  "loadError": "Não foi possível carregar as assinaturas e contas",
+  "retry": "Tentar de novo",
+  "kpis": {
+    "monthly": "Por mês",
+    "monthlySupport": "Soma só o que você confirmou.",
+    "yearly": "Por ano",
+    "subscriptions": "Assinaturas",
+    "bills": "Contas",
+    "suggestions_one": "+{{amount}} por mês em {{count}} sugestão para revisar",
+    "suggestions_other": "+{{amount}} por mês em {{count}} sugestões para revisar"
+  },
+  "cadence": {
+    "weekly": "Semanal",
+    "biweekly": "Quinzenal",
+    "monthly": "Mensal",
+    "bimonthly": "Bimestral",
+    "quarterly": "Trimestral",
+    "semiannual": "Semestral",
+    "annual": "Anual"
+  },
+  "kind": {
+    "subscription": "Assinatura",
+    "bill": "Conta",
+    "other": "Outra"
+  },
+  "day": {
+    "value": "Dia {{day}}",
+    "none": "Sem dia fixo"
+  },
+  "value": {
+    "estimate": "≈ {{amount}}",
+    "range": "{{min}} a {{max}}"
+  },
+  "review": {
+    "title": "Para revisar ({{count}})",
+    "description": "Confirme o que é recorrente. Sugestões não entram nos totais.",
+    "listLabel": "Sugestões para revisar",
+    "confirm": "Confirmar",
+    "confirmLabel": "Confirmar {{name}}",
+    "dismiss": "Não é recorrente",
+    "dismissLabel": "{{name}}: não é recorrente",
+    "snooze": "Agora não",
+    "snoozeLabel": "{{name}}: agora não",
+    "lastCharges": "Últimas cobranças",
+    "known": "Assinatura conhecida",
+    "dayChange": "Mudou do dia {{from}} para o dia {{to}}",
+    "noCharges": "Sem cobranças para mostrar"
+  },
+  "confirmed": {
+    "title": "Confirmadas",
+    "tableLabel": "Assinaturas e contas confirmadas",
+    "name": "Nome",
+    "cadence": "Cadência",
+    "day": "Dia",
+    "value": "Valor",
+    "account": "Conta",
+    "monthly": "Equivalente por mês",
+    "actions": "Ações",
+    "stop": "Cancelei",
+    "stopLabel": "{{name}}: cancelei",
+    "stopTitle": "Marcar {{name}} como cancelada?",
+    "stopDescription": "A Vera para de prever essa cobrança e avisa se ela voltar. A Vera não cancela nada: cancele no app ou no site do serviço.",
+    "stopConfirm": "Marcar como cancelada"
+  },
+  "inactive": {
+    "title": "Paradas e descartadas ({{count}})",
+    "stopped": "Paradas",
+    "dismissed": "Descartadas",
+    "stoppedByUser": "Você marcou como cancelada",
+    "stoppedAuto": "Sem cobrança no prazo",
+    "restore": "Desfazer",
+    "restoreLabel": "Desfazer: {{name}}"
+  },
+  "confirm": {
+    "title": "Confirmar {{name}}",
+    "description": "Ajuste o nome, a cadência e o dia. Depois de confirmada, a cobrança entra nos totais.",
+    "name": "Nome",
+    "cadence": "Cadência",
+    "day": "Dia do mês",
+    "dayHint": "De 1 a 31. Do dia 29 ao 31, vale o último dia dos meses mais curtos.",
+    "kind": "Tipo",
+    "category": "Categoria",
+    "categoryNone": "Sem categoria",
+    "categoryHint": "Se você já escolheu a categoria dessas cobranças, a Vera não muda.",
+    "always": "Sempre para {{name}}",
+    "submit": "Confirmar",
+    "cancel": "Cancelar",
+    "errors": {
+      "nameRequired": "Informe o nome",
+      "nameTooLong": "Use até 80 caracteres",
+      "dayInvalid": "Informe um dia de 1 a 31"
+    }
+  },
+  "toast": {
+    "confirmed": "Confirmada: {{name}}",
+    "dismissed": "{{name}} saiu das sugestões. Ela fica em Paradas e descartadas, com Desfazer.",
+    "snoozed": "{{name}} fica oculta por 30 dias",
+    "stopped": "{{name}} marcada como cancelada",
+    "restored": "{{name}} voltou"
+  },
+  "empty": {
+    "noTransactionsTitle": "Nenhuma transação importada",
+    "noTransactionsDescription": "Com 3 meses de extrato, a Vera acha o que se repete.",
+    "viewerDescription": "Peça a quem edita a conta para conectar os bancos ou importar um extrato.",
+    "connect": "Conectar bancos",
+    "import": "Importar extrato",
+    "noSeriesTitle": "Nada se repetiu nos últimos 13 meses",
+    "noSeriesDescription": "Quando uma cobrança se repetir, ela aparece aqui para você confirmar.",
+    "markTransaction": "Marcar uma transação como recorrente"
+  },
+  "errors": {
+    "generic": "Não foi possível concluir. Tente de novo.",
+    "forbidden": "Só quem edita a conta pode mudar assinaturas e contas.",
+    "notFound": "Essa assinatura ou conta não existe mais. Atualize a tela.",
+    "invalidState": "Essa assinatura ou conta já mudou de situação. Atualize a tela.",
+    "categoryKindMismatch": "Escolha uma categoria de gasto.",
+    "validationFailed": "Confira os campos e tente de novo."
+  }
+}

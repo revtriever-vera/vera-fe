@@ -28,6 +28,8 @@ import ptBRPortfolioContribution from './resources/pt-BR/portfolioContribution.j
 import enPortfolioContribution from './resources/en/portfolioContribution.json';
 import ptBRPortfolioGoals from './resources/pt-BR/portfolioGoals.json';
 import enPortfolioGoals from './resources/en/portfolioGoals.json';
+import ptBRSpendingRecurring from './resources/pt-BR/spendingRecurring.json';
+import enSpendingRecurring from './resources/en/spendingRecurring.json';
 import ptBROnboarding from './resources/pt-BR/onboarding.json';
 import enOnboarding from './resources/en/onboarding.json';
 import ptBRSpending from './resources/pt-BR/spending.json';
@@ -70,6 +72,7 @@ type LocaleResources = {
     readonly portfolioTargets: typeof ptBRPortfolioTargets;
     readonly portfolioContribution: typeof ptBRPortfolioContribution;
     readonly portfolioGoals: typeof ptBRPortfolioGoals;
+    readonly spendingRecurring: typeof ptBRSpendingRecurring;
     readonly onboarding: typeof ptBROnboarding;
     readonly spending: typeof ptBRSpending;
     readonly spendingSummary: typeof ptBRSpendingSummary;
@@ -99,6 +102,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolioTargets: ptBRPortfolioTargets,
         portfolioContribution: ptBRPortfolioContribution,
         portfolioGoals: ptBRPortfolioGoals,
+        spendingRecurring: ptBRSpendingRecurring,
         onboarding: ptBROnboarding,
         spending: ptBRSpending,
         spendingSummary: ptBRSpendingSummary,
@@ -126,6 +130,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolioTargets: enPortfolioTargets,
         portfolioContribution: enPortfolioContribution,
         portfolioGoals: enPortfolioGoals,
+        spendingRecurring: enSpendingRecurring,
         onboarding: enOnboarding,
         spending: enSpending,
         spendingSummary: enSpendingSummary,
@@ -164,6 +169,7 @@ void i18next.use(initReactI18next).init({
         'portfolioTargets',
         'portfolioContribution',
         'portfolioGoals',
+        'spendingRecurring',
         'onboarding',
         'spending',
         'spendingSummary',

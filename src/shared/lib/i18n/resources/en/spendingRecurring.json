@@ -1,0 +1,123 @@
+{
+  "title": "Subscriptions and bills",
+  "subtitle": "What repeats in your statement, and what it costs per month and per year.",
+  "loading": "Loading subscriptions and bills",
+  "loadError": "Could not load subscriptions and bills",
+  "retry": "Try again",
+  "kpis": {
+    "monthly": "Per month",
+    "monthlySupport": "Adds up only what you confirmed.",
+    "yearly": "Per year",
+    "subscriptions": "Subscriptions",
+    "bills": "Bills",
+    "suggestions_one": "+{{amount}} per month in {{count}} suggestion to review",
+    "suggestions_other": "+{{amount}} per month in {{count}} suggestions to review"
+  },
+  "cadence": {
+    "weekly": "Weekly",
+    "biweekly": "Every two weeks",
+    "monthly": "Monthly",
+    "bimonthly": "Every two months",
+    "quarterly": "Quarterly",
+    "semiannual": "Every six months",
+    "annual": "Yearly"
+  },
+  "kind": {
+    "subscription": "Subscription",
+    "bill": "Bill",
+    "other": "Other"
+  },
+  "day": {
+    "value": "Day {{day}}",
+    "none": "No fixed day"
+  },
+  "value": {
+    "estimate": "≈ {{amount}}",
+    "range": "{{min}} to {{max}}"
+  },
+  "review": {
+    "title": "To review ({{count}})",
+    "description": "Confirm what is recurring. Suggestions are not part of the totals.",
+    "listLabel": "Suggestions to review",
+    "confirm": "Confirm",
+    "confirmLabel": "Confirm {{name}}",
+    "dismiss": "Not recurring",
+    "dismissLabel": "{{name}}: not recurring",
+    "snooze": "Not now",
+    "snoozeLabel": "{{name}}: not now",
+    "lastCharges": "Latest charges",
+    "known": "Known subscription",
+    "dayChange": "Moved from day {{from}} to day {{to}}",
+    "noCharges": "No charges to show"
+  },
+  "confirmed": {
+    "title": "Confirmed",
+    "tableLabel": "Confirmed subscriptions and bills",
+    "name": "Name",
+    "cadence": "Cadence",
+    "day": "Day",
+    "value": "Amount",
+    "account": "Account",
+    "monthly": "Monthly equivalent",
+    "actions": "Actions",
+    "stop": "I cancelled it",
+    "stopLabel": "{{name}}: I cancelled it",
+    "stopTitle": "Mark {{name}} as cancelled?",
+    "stopDescription": "Vera stops forecasting this charge and warns you if it comes back. Vera does not cancel anything: cancel in the service's app or website.",
+    "stopConfirm": "Mark as cancelled"
+  },
+  "inactive": {
+    "title": "Stopped and dismissed ({{count}})",
+    "stopped": "Stopped",
+    "dismissed": "Dismissed",
+    "stoppedByUser": "You marked it as cancelled",
+    "stoppedAuto": "No charge in time",
+    "restore": "Undo",
+    "restoreLabel": "Undo: {{name}}"
+  },
+  "confirm": {
+    "title": "Confirm {{name}}",
+    "description": "Adjust the name, cadence and day. Once confirmed, the charge counts in the totals.",
+    "name": "Name",
+    "cadence": "Cadence",
+    "day": "Day of the month",
+    "dayHint": "From 1 to 31. From day 29 to 31, the last day of shorter months applies.",
+    "kind": "Type",
+    "category": "Category",
+    "categoryNone": "No category",
+    "categoryHint": "If you already chose the category of these charges, Vera does not change it.",
+    "always": "Always for {{name}}",
+    "submit": "Confirm",
+    "cancel": "Cancel",
+    "errors": {
+      "nameRequired": "Enter the name",
+      "nameTooLong": "Use up to 80 characters",
+      "dayInvalid": "Enter a day from 1 to 31"
+    }
+  },
+  "toast": {
+    "confirmed": "Confirmed: {{name}}",
+    "dismissed": "{{name}} left the suggestions. It stays in Stopped and dismissed, with Undo.",
+    "snoozed": "{{name}} is hidden for 30 days",
+    "stopped": "{{name}} marked as cancelled",
+    "restored": "{{name}} is back"
+  },
+  "empty": {
+    "noTransactionsTitle": "No transactions imported",
+    "noTransactionsDescription": "With 3 months of statements, Vera finds what repeats.",
+    "viewerDescription": "Ask someone who edits the account to connect the banks or import a statement.",
+    "connect": "Connect banks",
+    "import": "Import statement",
+    "noSeriesTitle": "Nothing repeated in the last 13 months",
+    "noSeriesDescription": "When a charge repeats, it shows up here for you to confirm.",
+    "markTransaction": "Mark a transaction as recurring"
+  },
+  "errors": {
+    "generic": "Could not finish. Try again.",
+    "forbidden": "Only people who edit the account can change subscriptions and bills.",
+    "notFound": "This subscription or bill no longer exists. Refresh the screen.",
+    "invalidState": "This subscription or bill already changed status. Refresh the screen.",
+    "categoryKindMismatch": "Choose an expense category.",
+    "validationFailed": "Check the fields and try again."
+  }
+}

@@ -1,11 +1,11 @@
 import type ptBRCommon from '@/shared/lib/i18n/resources/pt-BR/common.json';
-import { Flag, List, PieChart, Receipt, Scissors, Target, Wallet, Zap, type LucideIcon } from 'lucide-react';
+import { Flag, List, PieChart, Receipt, Repeat, Scissors, Target, Wallet, Zap, type LucideIcon } from 'lucide-react';
 
 export type NavGroup = 'portfolio' | 'spending';
 
 export type NavLabelKey = keyof typeof ptBRCommon;
 
-export type NavBadge = 'spendingUncategorized';
+export type NavBadge = 'spendingUncategorized' | 'recurringReview';
 
 export interface NavItem {
     readonly id: string;
@@ -31,6 +31,14 @@ export const APP_NAV_ITEMS: readonly NavItem[] = [
         icon: List,
         group: 'spending',
         badge: 'spendingUncategorized'
+    },
+    {
+        id: 'spending-recurring',
+        to: '/spending/recurring',
+        labelKey: 'navSpendingRecurring',
+        icon: Repeat,
+        group: 'spending',
+        badge: 'recurringReview'
     },
     { id: 'spending-cuts', to: '/spending/cuts', labelKey: 'navSpendingCuts', icon: Scissors, group: 'spending' }
 ];
