@@ -28,7 +28,7 @@
   "removeBody": "{{name}} perde o acesso à conta.",
   "removeInviteBody": "O link do convite deixa de funcionar.",
   "inviteTitle": "Convidar",
-  "inviteBody": "A pessoa recebe um link por e-mail e entra com Google ou Facebook. Não precisa criar senha.",
+  "inviteBody": "A pessoa recebe um link por e-mail e entra com a conta do Google nesse e-mail. Não precisa criar senha.",
   "inviteEmailLabel": "E-mail",
   "inviteEmailRequired": "Informe o e-mail da pessoa.",
   "inviteEmailInvalid": "Esse e-mail não parece certo.",

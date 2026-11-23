@@ -4,41 +4,36 @@ import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import type { AnyRouter } from '@tanstack/react-router';
 import { tokenStore } from '@/shared/lib/api/token-store';
-import type { FacebookLoginResponse, FacebookSdk } from '@/features/auth/lib/facebook-sdk';
-import type { GoogleIdentity } from '@/features/auth/lib/google-identity';
+import type { GoogleCredentialResponse, GoogleIdentity } from '@/features/auth/lib/google-identity';
 import { loginSession, problem, sessionIdentity } from '../../../test/fixtures/auth';
 import { signedInHandlers } from '../../../test/msw/handlers/auth.handlers';
 import { server } from '../../../test/msw/server';
 import { renderRouterAt } from '../../../test/router';
 
-const mocks: { env: Record<string, string>; loadGoogle: Mock; loadFacebook: Mock; track: Mock } = vi.hoisted(() => ({
+const mocks: { env: Record<string, string>; loadGoogle: Mock; track: Mock } = vi.hoisted(() => ({
     env: { VITE_API_URL: 'http://localhost:3333' },
     loadGoogle: vi.fn(),
-    loadFacebook: vi.fn(),
     track: vi.fn()
 }));
 
 vi.mock('@/shared/config/env', () => ({ env: mocks.env }));
 vi.mock('@/shared/lib/analytics', () => ({ track: mocks.track, resetAnalytics: vi.fn(), initAnalytics: vi.fn() }));
 vi.mock('@/features/auth/lib/google-identity', () => ({ loadGoogleIdentity: mocks.loadGoogle }));
-vi.mock('@/features/auth/lib/facebook-sdk', async (importOriginal: () => Promise<typeof import('@/features/auth/lib/facebook-sdk')>) => ({
-    ...(await importOriginal()),
-    loadFacebookSdk: mocks.loadFacebook
-}));
 
 const TOKEN: string = 'convite-token-com-mais-de-vinte-caracteres';
 
-function connectFacebook(): void {
-    const response: FacebookLoginResponse = { authResponse: { accessToken: 'fb-token-1' } };
-    const sdk: FacebookSdk = {
-        init: vi.fn(),
-        login: (done: (value: FacebookLoginResponse) => void): void => {
-            done(response);
-        }
+let emitGoogleCredential: (idToken: string) => void = (): void => undefined;
+
+function connectGoogle(): void {
+    const identity: GoogleIdentity = {
+        initialize: (config): void => {
+            emitGoogleCredential = (idToken: string): void => {
+                config.callback({ credential: idToken } satisfies GoogleCredentialResponse);
+            };
+        },
+        renderButton: vi.fn()
     };
-    const identity: GoogleIdentity = { initialize: vi.fn(), renderButton: vi.fn() };
     mocks.loadGoogle.mockResolvedValue(identity);
-    mocks.loadFacebook.mockResolvedValue(sdk);
 }
 
 async function openInvite(): Promise<AnyRouter> {
@@ -47,12 +42,12 @@ async function openInvite(): Promise<AnyRouter> {
     return router;
 }
 
-async function clickFacebook(user: UserEvent): Promise<void> {
-    const button: HTMLElement = await screen.findByRole('button', { name: 'Continuar com Facebook' });
+async function signInWithGoogle(): Promise<void> {
+    await screen.findByRole('group', { name: 'Continuar com Google' });
     await waitFor((): void => {
-        expect(button).toBeEnabled();
+        expect(mocks.loadGoogle).toHaveBeenCalled();
     });
-    await user.click(button);
+    emitGoogleCredential('google-token-1');
 }
 
 beforeEach((): void => {
@@ -61,13 +56,13 @@ beforeEach((): void => {
         VITE_GOOGLE_CLIENT_ID: 'google-client-test',
         VITE_FACEBOOK_APP_ID: 'facebook-app-test'
     });
-    connectFacebook();
+    connectGoogle();
 });
 
 afterEach((): void => {
     tokenStore.set(null);
     mocks.loadGoogle.mockReset();
-    mocks.loadFacebook.mockReset();
+    mocks.loadGoogle.mockReset();
     mocks.track.mockReset();
 });
 
@@ -76,15 +71,16 @@ describe('invite route', () => {
         await openInvite();
 
         expect(screen.getByText('Papel: Editor. Editor mexe em carteira e gastos.')).toBeInTheDocument();
-        expect(screen.getByText('Entre com a conta do Google ou do Facebook de l***@exemplo.com.')).toBeInTheDocument();
+        expect(
+            screen.getByText('Entre com a conta do Google de l***@exemplo.com. O convite só vale para esse e-mail.')
+        ).toBeInTheDocument();
         expect(mocks.track).toHaveBeenCalledWith('invite_viewed');
     });
 
     it('signs in with the invite token and lands on the home with a toast', async () => {
-        const user: UserEvent = userEvent.setup();
         const bodies: unknown[] = [];
         server.use(
-            http.post('*/auth/facebook', async ({ request }): Promise<Response> => {
+            http.post('*/auth/google', async ({ request }): Promise<Response> => {
                 bodies.push(await request.json());
                 return HttpResponse.json(loginSession());
             }),
@@ -92,34 +88,29 @@ describe('invite route', () => {
         );
         const router: AnyRouter = await openInvite();
 
-        await clickFacebook(user);
+        await signInWithGoogle();
 
         expect(await screen.findByText('Você entrou na conta de Marcos')).toBeInTheDocument();
-        expect(bodies).toEqual([{ accessToken: 'fb-token-1', inviteToken: TOKEN }]);
+        expect(bodies).toEqual([{ idToken: 'google-token-1', inviteToken: TOKEN }]);
         await waitFor((): void => {
             expect(router.state.location.pathname).not.toContain('/convite');
         });
-        expect(mocks.track).toHaveBeenCalledWith('invite_accepted', { provider: 'facebook' });
+        expect(mocks.track).toHaveBeenCalledWith('invite_accepted', { provider: 'google' });
     });
 
     it.each([
         ['invites.invalid', 410, 'Este convite expirou ou já foi usado. Peça um convite novo.'],
-        [
-            'invites.email_mismatch',
-            409,
-            'O convite precisa do login com Google no e-mail l***@exemplo.com. O Facebook não confirma o e-mail. Toque em Continuar com Google.'
-        ],
+        ['invites.email_mismatch', 409, 'Entre com a conta de l***@exemplo.com, o e-mail que recebeu o convite.'],
         [
             'members.account_not_empty',
             409,
             'Você já tem uma conta na Vera com dados. Para entrar nesta, exporte e exclua a sua em Configurações › Dados e privacidade, ou peça um convite para outro e-mail.'
         ]
     ])('shows the message for %s on sign in', async (type: string, status: number, message: string): Promise<void> => {
-        const user: UserEvent = userEvent.setup();
-        server.use(http.post('*/auth/facebook', (): Response => HttpResponse.json(problem(type, status), { status })));
+        server.use(http.post('*/auth/google', (): Response => HttpResponse.json(problem(type, status), { status })));
         await openInvite();
 
-        await clickFacebook(user);
+        await signInWithGoogle();
 
         expect(await screen.findByText(message)).toBeInTheDocument();
         expect(mocks.track).toHaveBeenCalledWith('invite_failed', { code: type });
@@ -130,6 +121,13 @@ describe('invite route', () => {
         renderRouterAt(`/convite/${TOKEN}`);
 
         expect(await screen.findByText('Este convite expirou ou já foi usado. Peça um convite novo.')).toBeInTheDocument();
+        expect(screen.queryByRole('group', { name: 'Continuar com Google' })).not.toBeInTheDocument();
+    });
+
+    it('offers only Google, never Facebook', async () => {
+        await openInvite();
+
+        expect(await screen.findByRole('group', { name: 'Continuar com Google' })).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Continuar com Facebook' })).not.toBeInTheDocument();
     });
 
@@ -144,7 +142,7 @@ describe('invite route', () => {
         expect(screen.getByText('Você está em outra conta. Saia para aceitar o convite.')).toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: 'Sair e aceitar' }));
 
-        expect(await screen.findByRole('button', { name: 'Continuar com Facebook' })).toBeInTheDocument();
+        expect(await screen.findByRole('group', { name: 'Continuar com Google' })).toBeInTheDocument();
     });
 
     it('goes home when already in the invited account', async () => {
