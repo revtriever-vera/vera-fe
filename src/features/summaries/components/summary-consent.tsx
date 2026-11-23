@@ -10,6 +10,7 @@ import { Button } from '@/shared/ui/button';
 import { useGrantConsent, type GrantConsentInput } from '../api/use-grant-consent.mutation';
 import { summaryErrorMessage } from '../lib/summary-error-message';
 import { summaryDescription, summaryTitle } from '../lib/summary-titles';
+import { useNoticeSuffix } from '../lib/use-notice-key';
 import { useTrackSummaryViewed } from '../lib/use-track-summary-viewed';
 import type { ConsentState, ConsentSource, SummaryKind, SummaryParams } from '../types';
 import { LinkButton } from './link-button';
@@ -63,12 +64,13 @@ function AllowRow({ consent }: { readonly consent: ConsentState }): ReactElement
 export function SummaryConsent({ kind, month, params, consent }: SummaryConsentProps): ReactElement {
     const { t }: UseTranslationResponse<'summaries', undefined> = useTranslation('summaries');
     const locale: SupportedLocale = useLocale();
+    const suffix: '' | 'SelfHosted' = useNoticeSuffix();
     const [payloadOpen, setPayloadOpen] = useState<boolean>(false);
     useTrackSummaryViewed(kind, 'consent');
     return (
         <SummaryShell title={summaryTitle(t, kind, month, locale)} description={summaryDescription(t, kind)}>
             <p className="m-0 rounded-control bg-surface-muted p-3 text-sm text-content-muted">
-                {t('consent.notice')}{' '}
+                {t(`consent.notice${suffix}`)}{' '}
                 <LinkButton
                     onClick={(): void => {
                         setPayloadOpen(true);

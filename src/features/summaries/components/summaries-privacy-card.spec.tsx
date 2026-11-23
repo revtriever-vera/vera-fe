@@ -108,6 +108,14 @@ describe('SummariesPrivacyCard', () => {
         expect(await screen.findByText('O aviso mudou. Leia o pedido de novo e permita outra vez.')).toBeInTheDocument();
     });
 
+    it('na auto-hospedada com modelo cadastrado o texto não cita a Vercel nem o treino do provedor', async () => {
+        useConsent(consentState());
+        renderSummaries(<SummariesPrivacyCard />, { billing: { mode: 'self_hosted' } });
+        const region: HTMLElement = await screen.findByRole('region', { name: 'Resumos em texto' });
+        expect(within(region).getByText(/escritos pelo modelo de linguagem que você cadastrou em Integrações/)).toBeInTheDocument();
+        expect(within(region).queryByText(/Vercel|treinar/)).not.toBeInTheDocument();
+    });
+
     it('quem só lê vê o interruptor desligado para mexer e a orientação', async () => {
         useConsent(grantedConsent({ canChange: false }));
         renderSummaries(<SummariesPrivacyCard />, { identity: { role: 'viewer' } });

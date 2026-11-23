@@ -18,6 +18,7 @@ import { useAiConsent } from '../api/use-ai-consent.query';
 import { useGrantConsent, type GrantConsentInput } from '../api/use-grant-consent.mutation';
 import { useRevokeConsent } from '../api/use-revoke-consent.mutation';
 import { summaryErrorMessage } from '../lib/summary-error-message';
+import { useNoticeSuffix } from '../lib/use-notice-key';
 import { useSummaryParams } from '../lib/use-summary-params';
 import { SUMMARY_KIND, type ConsentState, type SummaryParams } from '../types';
 import { LinkButton } from './link-button';
@@ -202,6 +203,7 @@ function PrivacyBody({ portfolioParams }: { readonly portfolioParams: SummaryPar
 export function SummariesPrivacyCard(): ReactElement {
     const { t }: UseTranslationResponse<'summaries', undefined> = useTranslation('summaries');
     const titleId: string = useId();
+    const suffix: '' | 'SelfHosted' = useNoticeSuffix();
     const portfolioParams: SummaryParams = useSummaryParams(SUMMARY_KIND.portfolio, undefined, undefined);
     return (
         <Card role="region" aria-labelledby={titleId} className="flex flex-col gap-3">
@@ -209,7 +211,7 @@ export function SummariesPrivacyCard(): ReactElement {
                 <h2 id={titleId} className="text-base font-semibold text-content">
                     {t('privacy.title')}
                 </h2>
-                <p className="m-0 text-sm text-content-muted">{t('privacy.description')}</p>
+                <p className="m-0 text-sm text-content-muted">{t(`privacy.description${suffix}`)}</p>
             </div>
             <PrivacyBody portfolioParams={portfolioParams} />
         </Card>

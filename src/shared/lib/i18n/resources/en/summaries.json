@@ -14,6 +14,7 @@
   },
   "consent": {
     "notice": "To write this summary, Vera sends aggregated totals to a language model, through a Vercel service. Names of people and merchants, transaction descriptions, accounts and credentials are never sent. The model provider uses what it receives and what it writes to train its own models, with no zero retention.",
+    "noticeSelfHosted": "To write this summary, Vera sends aggregated totals to the language model you registered in Integrations. Names of people and merchants, transaction descriptions, accounts and credentials are never sent.",
     "seeSent": "See what is sent",
     "allow": "Allow and show",
     "hint": "You can turn it off in Settings › Data and privacy.",
@@ -36,6 +37,7 @@
   "payload": {
     "title": "What is sent",
     "description": "Built now from your data. It goes to a language model, through a Vercel service. Aggregated numbers only, no names. Turn it off in Settings › Data and privacy.",
+    "descriptionSelfHosted": "Built now from your data. It goes to the language model you registered in Integrations. Aggregated numbers only, no names. Turn it off in Settings › Data and privacy.",
     "close": "Got it",
     "loading": "Building what is sent",
     "failed": "Could not build what is sent right now.",
@@ -48,6 +50,7 @@
   "privacy": {
     "title": "Text summaries",
     "description": "The texts for the month, the cuts and the portfolio are written by a language model, from aggregated totals sent through a Vercel service. Names of people and merchants, transaction descriptions, accounts and credentials are never sent. The model provider uses what it receives and what it writes to train its own models, with no zero retention. When it is off, nothing more is sent.",
+    "descriptionSelfHosted": "The texts for the month, the cuts and the portfolio are written by the language model you registered in Integrations, from aggregated totals. Names of people and merchants, transaction descriptions, accounts and credentials are never sent. When it is off, nothing more is sent.",
     "switchLabel": "Allow sending aggregated totals",
     "switchHint": "When off, nothing is sent and the summaries disappear from the screens.",
     "seeSent": "See what is sent",

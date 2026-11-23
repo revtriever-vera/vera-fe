@@ -222,6 +222,24 @@ describe('SummaryCard com permissão', () => {
         expect(screen.queryByRole('button', { name: 'Escrever de novo' })).not.toBeInTheDocument();
     });
 
+    it('na auto-hospedada o pedido de permissão cita o modelo cadastrado, sem Vercel nem treino', async () => {
+        useConsent(consentState());
+        renderSummaries(<SummaryCard kind="month" month="2026-09" />, { billing: { mode: 'self_hosted' } });
+        const region: HTMLElement = await screen.findByRole('region', { name: 'Resumo de setembro' });
+        expect(within(region).getByText(/o modelo de linguagem que você cadastrou em Integrações/)).toBeInTheDocument();
+        expect(within(region).queryByText(/Vercel/)).not.toBeInTheDocument();
+        expect(within(region).queryByText(/treinar/)).not.toBeInTheDocument();
+    });
+
+    it('com a cota pausada o texto guardado segue visível, com a faixa e o botão desligado', async () => {
+        useConsent(grantedConsent());
+        useSummary(summaryView({ usage: { state: 'paused', usedBps: 10000, resetsAt: '2026-12-01T03:00:00.000Z' } }));
+        renderSummaries(<SummaryCard kind="month" month="2026-09" />, { billing: { featureState: featureAccess('paused') } });
+        expect(await screen.findByText(/R\$ 8\.420/)).toBeInTheDocument();
+        expect(screen.getByText('Pausado até 1º de dezembro')).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Escrever de novo' })).toBeDisabled();
+    });
+
     it('a cota pausada desliga o botão e mostra a faixa', async () => {
         useConsent(grantedConsent());
         useSummary(summaryView({ usage: { state: 'paused', usedBps: 10000, resetsAt: '2026-12-01T03:00:00.000Z' } }));

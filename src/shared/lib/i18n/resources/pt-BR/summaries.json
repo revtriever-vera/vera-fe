@@ -14,6 +14,7 @@
   },
   "consent": {
     "notice": "Para escrever este resumo, a Vera envia totais agregados a um modelo de linguagem, por um serviço da Vercel. Nomes de pessoas e de estabelecimentos, descrições das transações, contas e credenciais nunca são enviados. O provedor do modelo usa o que recebe e o que escreve para treinar os modelos dele, sem retenção zero.",
+    "noticeSelfHosted": "Para escrever este resumo, a Vera envia totais agregados ao modelo de linguagem que você cadastrou em Integrações. Nomes de pessoas e de estabelecimentos, descrições das transações, contas e credenciais nunca são enviados.",
     "seeSent": "Ver o que é enviado",
     "allow": "Permitir e mostrar",
     "hint": "Dá para desligar em Configurações › Dados e privacidade.",
@@ -36,6 +37,7 @@
   "payload": {
     "title": "O que é enviado",
     "description": "Montado agora com os seus dados. Vai para um modelo de linguagem, por um serviço da Vercel. Só números agregados, sem nomes. Desligue em Configurações › Dados e privacidade.",
+    "descriptionSelfHosted": "Montado agora com os seus dados. Vai para o modelo de linguagem que você cadastrou em Integrações. Só números agregados, sem nomes. Desligue em Configurações › Dados e privacidade.",
     "close": "Entendi",
     "loading": "Montando o que é enviado",
     "failed": "Não deu para montar o que é enviado agora.",
@@ -48,6 +50,7 @@
   "privacy": {
     "title": "Resumos em texto",
     "description": "Os textos do mês, dos cortes e da carteira são escritos por um modelo de linguagem, a partir de totais agregados enviados por um serviço da Vercel. Nomes de pessoas e de estabelecimentos, descrições das transações, contas e credenciais nunca são enviados. O provedor do modelo usa o que recebe e o que escreve para treinar os modelos dele, sem retenção zero. Desligado, nada mais é enviado.",
+    "descriptionSelfHosted": "Os textos do mês, dos cortes e da carteira são escritos pelo modelo de linguagem que você cadastrou em Integrações, a partir de totais agregados. Nomes de pessoas e de estabelecimentos, descrições das transações, contas e credenciais nunca são enviados. Desligado, nada mais é enviado.",
     "switchLabel": "Permitir o envio de totais agregados",
     "switchHint": "Desligado, nada é enviado e os resumos somem das telas.",
     "seeSent": "Ver o que é enviado",

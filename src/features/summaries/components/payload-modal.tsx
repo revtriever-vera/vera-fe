@@ -6,6 +6,7 @@ import { Button } from '@/shared/ui/button';
 import { Modal } from '@/shared/ui/modal';
 import { Loading, SkeletonText } from '@/shared/ui/skeleton';
 import { useAiPayload } from '../api/use-ai-payload.query';
+import { useNoticeSuffix } from '../lib/use-notice-key';
 import type { PayloadView, SummaryKind, SummaryParams } from '../types';
 
 export interface PayloadFrameProps {
@@ -18,7 +19,7 @@ export function PayloadFrame({ onClose, children }: PayloadFrameProps): ReactEle
     return (
         <Modal
             title={t('payload.title')}
-            description={t('payload.description')}
+            description={t(`payload.description${useNoticeSuffix()}`)}
             onClose={onClose}
             size="wide"
             fullOnMobile
