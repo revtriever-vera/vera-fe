@@ -10,6 +10,8 @@ import { ClassName } from '../../components/class-name';
 import { ClassTile } from '../../components/class-tile';
 import { toClassColorKey } from '../../lib/class-color';
 import { formatShareBps, formatTargetBps } from '../../lib/format-bps';
+import type { HolderParam } from '../../lib/holder-filter';
+import { useHolderParam } from '../../lib/use-holder-param';
 import type { ClassDetail } from '../types';
 
 export interface ClassHeaderProps {
@@ -20,10 +22,12 @@ export function ClassHeader({ detail }: ClassHeaderProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioTargets', undefined> = useTranslation('portfolioTargets');
     const locale: SupportedLocale = useLocale();
     const { class: assetClass } = detail;
+    const holder: HolderParam = useHolderParam();
     return (
         <header className="flex flex-col gap-3">
             <Link
                 to="/portfolio"
+                search={{ holder }}
                 activeOptions={{ exact: true }}
                 className="inline-flex items-center gap-1 self-start text-sm font-semibold text-accent-strong underline-offset-2 hover:underline"
             >

@@ -7,6 +7,8 @@ import { useToast, type ToastApi } from '@/app/providers/toast-provider';
 import { track } from '@/shared/lib/analytics';
 import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
+import { HOLDER_ALL, trackHolder } from '../../lib/holder-filter';
+import { usePeople, type PeopleState } from '../../lib/people-context';
 import { useClassLabel, type ClassLabel } from '../../lib/use-class-label';
 import type { AssetClassView } from '../../types';
 import type { UseMutationResult } from '@tanstack/react-query';
@@ -54,7 +56,8 @@ export function fixedIncomeDefaults(
         currency: 'BRL',
         appliedAt: null,
         maturityDate: null,
-        classId: defaultClassId(classes, indexerClassKey('cdi_percent'), initialClassId)
+        classId: defaultClassId(classes, indexerClassKey('cdi_percent'), initialClassId),
+        holder: HOLDER_ALL
     };
 }
 
@@ -87,10 +90,11 @@ function useTitleSubmit({ form, classes, onSaved, setAlertMessage }: SubmitParam
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const toast: ToastApi = useToast();
     const classLabel: ClassLabel = useClassLabel();
+    const { multi }: PeopleState = usePeople();
     const create: UseMutationResult<TitleView, ApiError, CreateTitleBody> = useCreateFixedIncomeTitle();
     const report: (error: Error) => void = useFailureReporter({ onAlert: setAlertMessage }, t('toasts.addFailed'));
     const submit: () => Promise<void> = form.handleSubmit(async (input: FixedIncomeFormInput): Promise<void> => {
-        const body: CreateTitleBody | null = toTitleBody(input);
+        const body: CreateTitleBody | null = toTitleBody(input, multi);
         if (body === null) {
             return;
         }
@@ -98,6 +102,7 @@ function useTitleSubmit({ form, classes, onSaved, setAlertMessage }: SubmitParam
         try {
             await create.mutateAsync(body);
             track('portfolio_asset_added', { type: 'fixed_income', source: 'fixed_income' });
+            trackHolder(input.holder, multi, 'add');
             const chosen: AssetClassView | undefined = classes.find((item: AssetClassView): boolean => item.id === input.classId);
             const className: string = chosen === undefined ? '' : classLabel(chosen.systemKey, chosen.name);
             toast.show({ tone: 'positive', title: t('toasts.added', { name: input.name.trim(), className }) });

@@ -44,7 +44,8 @@ function buildAsset(seed: AssetSeed, classValue: number): ClassDetailAsset {
         gapMinor: Math.round((classValue * seed.targetBps) / BPS) - seed.valueMinor,
         isZeroQuantity: seed.zeroQuantity ?? false,
         missingQuote: seed.missingQuote ?? false,
-        stale: false
+        stale: false,
+        holder: null
     };
 }
 

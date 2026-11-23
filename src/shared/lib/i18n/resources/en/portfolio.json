@@ -170,5 +170,17 @@
     "etf_indice": "Index ETFs",
     "cripto": "Crypto",
     "unmapped_sector": "No sector in the catalog"
+  },
+  "holder": {
+    "label": "Filter by holder",
+    "any": "Everyone",
+    "all": "Whole account",
+    "field": "Holder",
+    "column": "Holder",
+    "cell": "Holder of {{symbol}}",
+    "changed": "{{symbol}}: holder {{holder}}",
+    "changeFailed": "Could not change the holder",
+    "emptyTitle": "No assets of {{holder}}",
+    "emptyDescription": "Change the holder filter or set the holder of each asset in My assets."
   }
 }

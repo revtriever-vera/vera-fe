@@ -2,14 +2,18 @@ import type { ReactElement } from 'react';
 import { Outlet } from '@tanstack/react-router';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { TabNav, type TabItem } from '@/shared/ui/tab-nav';
+import type { HolderParam } from '../lib/holder-filter';
+import { useHolderParam } from '../lib/use-holder-param';
 
 export function PortfolioLayout(): ReactElement {
     const { t }: UseTranslationResponse<'portfolio', undefined> = useTranslation('portfolio');
+    const holder: HolderParam = useHolderParam();
+    const search: TabItem['search'] = { holder };
     const tabs: readonly TabItem[] = [
-        { to: '/portfolio', label: t('layout.tabs.overview'), exact: true },
+        { to: '/portfolio', label: t('layout.tabs.overview'), exact: true, search },
         { to: '/portfolio/targets', label: t('layout.tabs.targets') },
         { to: '/portfolio/contribution', label: t('layout.tabs.contribution') },
-        { to: '/portfolio/assets', label: t('layout.tabs.assets') }
+        { to: '/portfolio/assets', label: t('layout.tabs.assets'), search }
     ];
     return (
         <div className="mx-auto flex w-full max-w-5xl min-w-0 flex-col gap-4 px-page-x py-page-y">

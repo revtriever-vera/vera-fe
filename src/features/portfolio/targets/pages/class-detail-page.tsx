@@ -17,6 +17,9 @@ import { useClassDetail } from '../api/use-class-detail.query';
 import { ClassHeader } from '../components/class-header';
 import { ClassTargetsEditor } from '../components/class-targets-editor';
 import { ZeroQuantityNote } from '../components/zero-quantity-note';
+import { HolderFilter } from '../../components/holder-filter';
+import type { HolderParam } from '../../lib/holder-filter';
+import { useHolderParam } from '../../lib/use-holder-param';
 import type { ClassDetail } from '../types';
 
 const CLASS_NOT_FOUND: string = 'allocation.class_not_found';
@@ -109,9 +112,8 @@ function DetailContent({ detail }: { readonly detail: ClassDetail }): ReactEleme
     );
 }
 
-export function ClassDetailPage(): ReactElement {
-    const { classId }: { classId: string } = useParams({ from: '/_auth/_app/portfolio/classes/$classId' });
-    const query: UseQueryResult<ClassDetail> = useClassDetail(classId);
+function ClassDetailBody({ classId, holder }: { readonly classId: string; readonly holder: HolderParam }): ReactElement {
+    const query: UseQueryResult<ClassDetail> = useClassDetail(classId, holder);
     if (query.error instanceof ApiError && query.error.problem.type === CLASS_NOT_FOUND) {
         return <NotFound />;
     }
@@ -126,4 +128,17 @@ export function ClassDetailPage(): ReactElement {
         );
     }
     return query.data === undefined ? <DetailLoading /> : <DetailContent detail={query.data} />;
+}
+
+export function ClassDetailPage(): ReactElement {
+    const { classId }: { classId: string } = useParams({ from: '/_auth/_app/portfolio/classes/$classId' });
+    const holder: HolderParam = useHolderParam();
+    return (
+        <div className="flex flex-col gap-4">
+            <div className="max-w-full empty:hidden">
+                <HolderFilter />
+            </div>
+            <ClassDetailBody classId={classId} holder={holder} />
+        </div>
+    );
 }
