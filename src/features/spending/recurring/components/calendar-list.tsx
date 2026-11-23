@@ -4,7 +4,8 @@ import { formatCurrency } from '@/shared/lib/format/currency';
 import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { Badge } from '@/shared/ui/badge';
-import { Table, type TableColumn } from '@/shared/ui/table';
+import { ResponsiveRows } from '@/shared/ui/responsive-rows';
+import type { TableColumn } from '@/shared/ui/table';
 import { groupByWeek, type WeekGroup } from '../lib/calendar-groups';
 import { calendarAccountText, calendarAmountText } from '../lib/calendar-text';
 import { shortDate, weekdayShortDate } from '../lib/recurring-dates';
@@ -61,7 +62,7 @@ function WeekTable({ week, onOpenSeries }: { readonly week: WeekGroup; readonly 
     return (
         <div className="flex flex-col gap-2">
             <h4 className="text-sm font-semibold text-content-muted">{t('calendar.weekTitle', range)}</h4>
-            <Table
+            <ResponsiveRows
                 label={t('calendar.tableLabel', range)}
                 columns={columns}
                 rows={week.entries}

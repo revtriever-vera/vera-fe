@@ -6,7 +6,8 @@ import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { Badge, type BadgeProps } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
-import { Table, type TableColumn } from '@/shared/ui/table';
+import { ResponsiveRows } from '@/shared/ui/responsive-rows';
+import type { TableColumn } from '@/shared/ui/table';
 import { TRIAL_KIND } from '../lib/signup-link-offer';
 import type { SignupLink, SignupLinkStatus } from '../types';
 
@@ -120,7 +121,7 @@ export function SignupLinksTable({ links, onCopy, onRevoke }: SignupLinksTablePr
         }
     ];
     return (
-        <Table
+        <ResponsiveRows
             label={t('linksTableLabel')}
             columns={columns}
             rows={links}

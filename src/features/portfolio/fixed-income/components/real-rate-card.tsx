@@ -12,7 +12,7 @@ import type { RealRateItem, RealRatesResponse } from '../types';
 import { FixedIncomeCard } from './fixed-income-card';
 import { QueryBody } from './query-body';
 import { GainCell, PercentCell, RealRateCell, RealRateTitleCell } from './real-rate-cells';
-import { ResponsiveRows } from './responsive-rows';
+import { ResponsiveRows } from '@/shared/ui/responsive-rows';
 
 function useColumns(): readonly TableColumn<RealRateItem>[] {
     const { t }: UseTranslationResponse<'portfolioFixedIncome', undefined> = useTranslation('portfolioFixedIncome');

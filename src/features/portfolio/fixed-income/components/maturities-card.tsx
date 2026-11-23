@@ -15,7 +15,7 @@ import { MaturityTitleCell } from './maturity-title-cell';
 import { MaturityValueCell } from './maturity-value-cell';
 import { QueryBody } from './query-body';
 import { ReallocateButton } from './reallocate-button';
-import { ResponsiveRows } from './responsive-rows';
+import { ResponsiveRows } from '@/shared/ui/responsive-rows';
 
 function MaturityWhenCell({ item }: { readonly item: MaturityItem }): ReactElement {
     const locale: SupportedLocale = useLocale();
