@@ -3,7 +3,7 @@ import { Navigate, useNavigate, type UseNavigateResult } from '@tanstack/react-r
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useSession } from '@/app/providers/session-provider';
-import { useToast } from '@/app/providers/toast-provider';
+import { useToast, type ToastApi } from '@/app/providers/toast-provider';
 import { track } from '@/shared/lib/analytics';
 import { Alert } from '@/shared/ui/alert';
 import { BrandLogo } from '@/shared/ui/brand-logo';
@@ -25,7 +25,7 @@ interface InviteSignInProps {
 
 function InviteSignIn({ token, invite }: InviteSignInProps): ReactElement {
     const { t }: UseTranslationResponse<'auth', undefined> = useTranslation('auth');
-    const toast = useToast();
+    const toast: ToastApi = useToast();
     const navigate: UseNavigateResult<string> = useNavigate();
     const providers: ProviderAvailability = useProviderAvailability();
     const login: SocialLogin = useSocialLogin({

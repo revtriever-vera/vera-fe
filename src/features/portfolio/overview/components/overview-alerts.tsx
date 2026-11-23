@@ -1,3 +1,4 @@
+import type { AssetsTabName } from '@/shared/lib/analytics/events';
 import type { ReactElement, ReactNode } from 'react';
 import { CalendarClock, ShieldAlert } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
@@ -15,6 +16,8 @@ import { ReallocateButton } from '../../fixed-income/components/reallocate-butto
 import { useWhenLabel } from '../../fixed-income/lib/use-when-label';
 import { overLimitGroups, type OverLimitGroup } from '../../fixed-income/lib/over-limit-groups';
 import type { FgcCoverage, MaturityItem } from '../../fixed-income/types';
+
+const FIXED_INCOME_TAB: AssetsTabName = 'fixed-income';
 
 interface AlertLineProps {
     readonly icon: ReactNode;
@@ -83,7 +86,7 @@ function FgcAlert({ item }: { readonly item: OverLimitGroup }): ReactElement {
             action={
                 <Link
                     to="/portfolio/assets"
-                    search={{ tab: 'fixed-income' }}
+                    search={{ tab: FIXED_INCOME_TAB }}
                     className={buttonVariants({ variant: 'ghost', size: 'sm' })}
                     onClick={(): void => {
                         track('overview_alert_clicked', { kind: 'fgc' });

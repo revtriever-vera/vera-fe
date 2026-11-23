@@ -7,6 +7,7 @@ import type { SupportedLocale } from '@/shared/lib/locale';
 import type { FgcCoverage } from '../types';
 
 const FULL_BPS: number = 10000;
+const PERCENT_DIVISOR: number = 100;
 
 export interface FgcMeterProps {
     readonly coveredMinor: number;
@@ -27,6 +28,7 @@ export function FgcMeter({ coveredMinor, capMinor, capShareBps, currency }: FgcM
                 <span className="text-content-muted">{t('fgc.meterLabel')}</span>
                 <span className="numeric">{t('fgc.meterValue', { covered, cap })}</span>
             </div>
+            {/* eslint-disable-next-line sonar/S6819 -- native <meter> cannot hold the styled fill child used here */}
             <div
                 role="meter"
                 aria-label={t('fgc.meterLabel')}
@@ -38,7 +40,7 @@ export function FgcMeter({ coveredMinor, capMinor, capShareBps, currency }: FgcM
             >
                 <div
                     className={cn('h-full rounded-control', over ? 'bg-critical' : 'bg-accent')}
-                    style={{ width: `${Math.min(capShareBps, FULL_BPS) / 100}%` }}
+                    style={{ width: `${String(Math.min(capShareBps, FULL_BPS) / PERCENT_DIVISOR)}%` }}
                 />
             </div>
         </div>

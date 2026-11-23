@@ -62,12 +62,14 @@ function RealRateTable({ data }: { readonly data: RealRatesResponse }): ReactEle
                 columns={columns}
                 rows={data.items}
                 rowKey={(item: RealRateItem): string => item.id}
-                minWidthClass="min-w-[680px]"
+                minWidthClass={MIN_WIDTH}
             />
             <p className="text-xs text-content-muted">{t('realRate.note')}</p>
         </>
     );
 }
+
+const MIN_WIDTH: string = 'min-w-[680px]';
 
 export function RealRateCard({ showBrlNote }: { readonly showBrlNote: boolean }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioFixedIncome', undefined> = useTranslation('portfolioFixedIncome');

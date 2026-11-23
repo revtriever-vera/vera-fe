@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
-import { useToast } from '@/app/providers/toast-provider';
+import { useToast, type ToastApi } from '@/app/providers/toast-provider';
 import { track } from '@/shared/lib/analytics';
 import { ConfirmDialog } from '@/shared/ui/confirm-dialog';
 import { useRemoveMember } from '../api/use-remove-member.mutation';
@@ -16,7 +16,7 @@ interface RemoveMemberDialogProps {
 
 export function RemoveMemberDialog({ person, onClose }: RemoveMemberDialogProps): ReactElement {
     const { t }: UseTranslationResponse<'members', undefined> = useTranslation('members');
-    const toast = useToast();
+    const toast: ToastApi = useToast();
     const fail: (error: Error) => void = useMemberFailure();
     const removeMember: UseMutationResult<void, Error, string> = useRemoveMember();
     const revokeInvite: UseMutationResult<void, Error, string> = useRevokeInvite();
