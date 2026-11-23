@@ -11,7 +11,9 @@ import type { BillingMe } from '../types';
 import { CheckoutModal } from './checkout-modal';
 import { FreePlan } from './free-plan';
 import { InvoicesHistory } from './invoices-history';
+import { OfferCard } from './offer-card';
 import { SubscriptionCard } from './subscription-card';
+import { TrialStrip } from './trial-strip';
 import { UsageCard } from './usage-card';
 
 export interface PlanTabProps {
@@ -33,7 +35,9 @@ function PremiumPlan({
 }): ReactElement {
     return (
         <div className="flex flex-col gap-4">
+            <TrialStrip me={me} onSubscribe={onSubscribe} />
             <SubscriptionCard me={me} onSubscribe={onSubscribe} peopleCount={peopleCount} />
+            <OfferCard me={me} />
             {me.usage === null ? null : <UsageCard usage={me.usage} />}
             {me.subscription === null ? null : <InvoicesHistory />}
         </div>

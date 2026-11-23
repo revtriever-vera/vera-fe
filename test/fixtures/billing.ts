@@ -50,6 +50,7 @@ export function billingState(overrides: Partial<BillingState> = {}): BillingStat
         plan: 'premium',
         canManage: true,
         usage: null,
+        trial: null,
         subscriptionStatus: 'active',
         graceEndsAt: null,
         openInvoice: null,

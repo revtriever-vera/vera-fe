@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactElement, type ReactNode } from 'react';
+import { Link } from '@tanstack/react-router';
 import { CircleAlert, TriangleAlert, X } from 'lucide-react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { track } from '@/shared/lib/analytics';
@@ -6,11 +7,11 @@ import { cn } from '@/shared/lib/cn';
 import { billingBannerKind, type BillingBannerKind } from '@/shared/lib/billing/billing-banner-kind';
 import type { BillingState } from '@/shared/lib/billing/billing-context';
 import { formatDayMonth, periodMonthName, usedPercent } from '@/shared/lib/billing/billing-dates';
-import type { BillingUsage } from '@/shared/lib/billing/billing-types';
+import type { BillingTrial, BillingUsage } from '@/shared/lib/billing/billing-types';
 import { useBilling } from '@/shared/lib/billing/use-billing';
 import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
-import { Button } from './button';
+import { Button, buttonVariants } from './button';
 
 const DISMISS_KEY: string = 'vera.billing.warning-dismissed';
 
@@ -71,6 +72,32 @@ function Shell({ strip, children }: { readonly strip: Strip; readonly children?:
             </span>
             {children}
         </output>
+    );
+}
+
+const PLAN_PARAMS: { readonly tab: string } = { tab: 'plan' };
+
+function trialEndingStrip(trial: BillingTrial, t: BillingT, locale: SupportedLocale): Strip {
+    return {
+        tone: 'caution',
+        title: t('banner.trialEndingTitle', { date: formatDayMonth(trial.endsAt, locale) }),
+        detail: t('banner.trialEnding')
+    };
+}
+
+function TrialEndingBanner({ billing, trial }: { readonly billing: BillingState; readonly trial: BillingTrial }): ReactElement {
+    const { t }: UseTranslationResponse<'billing', undefined> = useTranslation('billing');
+    const locale: SupportedLocale = useLocale();
+    return (
+        <Shell strip={trialEndingStrip(trial, t, locale)}>
+            {billing.canManage ? (
+                <Link to="/settings/$tab" params={PLAN_PARAMS} className={buttonVariants({ variant: 'secondary', size: 'sm' })}>
+                    {t('planTab.cards.subscribe')}
+                </Link>
+            ) : (
+                <span className="text-sm font-semibold text-content-muted">{t('banner.tellOwner')}</span>
+            )}
+        </Shell>
     );
 }
 
@@ -154,6 +181,24 @@ function PastDueBanner({ billing }: { readonly billing: BillingState }): ReactEl
     );
 }
 
+function BannerView({
+    kind,
+    billing,
+    onDismiss
+}: {
+    readonly kind: BillingBannerKind;
+    readonly billing: BillingState;
+    readonly onDismiss: () => void;
+}): ReactElement | null {
+    if (kind === 'past_due') {
+        return <PastDueBanner billing={billing} />;
+    }
+    if (kind === 'trial_ending') {
+        return billing.trial === null ? null : <TrialEndingBanner billing={billing} trial={billing.trial} />;
+    }
+    return billing.usage === null ? null : <UsageBanner kind={kind} usage={billing.usage} onDismiss={onDismiss} />;
+}
+
 export function BillingBanner(): ReactElement | null {
     const billing: BillingState = useBilling();
     const { dismissed, dismiss } = useDismissal(billing.usage?.resetsAt ?? null);
@@ -164,8 +209,5 @@ export function BillingBanner(): ReactElement | null {
     if (kind === null || hidden) {
         return null;
     }
-    if (kind === 'past_due') {
-        return <PastDueBanner billing={billing} />;
-    }
-    return billing.usage === null ? null : <UsageBanner kind={kind} usage={billing.usage} onDismiss={dismiss} />;
+    return <BannerView kind={kind} billing={billing} onDismiss={dismiss} />;
 }

@@ -25,6 +25,7 @@ function demoState(overrides: Partial<BillingState>, access: FeatureAccess): Bil
         plan: 'premium',
         canManage: true,
         usage: null,
+        trial: null,
         subscriptionStatus: 'active',
         graceEndsAt: null,
         openInvoice: null,
@@ -97,9 +98,24 @@ function MeterDemos(): ReactElement {
     );
 }
 
+function TrialBannerDemo(): ReactElement {
+    return (
+        <Demo
+            label="Faixa: teste acaba em 3 dias"
+            state={demoState(
+                { subscriptionStatus: null, trial: { kind: 'no_card', endsAt: '2026-12-01T12:00:00.000Z', daysLeft: 3 } },
+                'available'
+            )}
+        >
+            <BillingBanner />
+        </Demo>
+    );
+}
+
 function BannerDemos(): ReactElement {
     return (
         <>
+            <TrialBannerDemo />
             <Demo label="Faixa: 85%" state={demoState({ usage: usage(8500, 'warning') }, 'available')}>
                 <BillingBanner />
             </Demo>

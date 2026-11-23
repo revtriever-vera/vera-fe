@@ -62,6 +62,9 @@ function chipOf(t: Translate, status: BillingSubscription['status']): ReactEleme
     if (status === 'past_due') {
         return <Badge tone="critical">{t('planTab.subscription.chipPastDue')}</Badge>;
     }
+    if (status === 'trialing') {
+        return <Badge tone="positive">{t('planTab.subscription.chipTrialing')}</Badge>;
+    }
     return <Badge tone="positive">{t('planTab.subscription.chipActive')}</Badge>;
 }
 
@@ -72,6 +75,13 @@ function TrialRow({ me, onSubscribe }: { readonly me: BillingMe; readonly onSubs
         return null;
     }
     const subscribable: boolean = me.canManage && me.methods.length > 0 && me.subscription === null;
+    if (me.trial.kind === 'card') {
+        return (
+            <Row title={t('planTab.subscription.trial.cardTitle')}>
+                {t('planTab.subscription.trial.cardText', { date: longDate(me.trial.endsAt, locale) })}
+            </Row>
+        );
+    }
     return (
         <Row
             title={t('planTab.subscription.trial.title')}

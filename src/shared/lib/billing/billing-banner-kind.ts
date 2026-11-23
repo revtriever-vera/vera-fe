@@ -1,8 +1,11 @@
 import type { BillingState } from './billing-context';
+import { isNoCardTrialEnding } from './trial-ending';
 
-export type BillingBannerKind = 'past_due' | 'paused' | 'warning';
+export type BillingBannerKind = 'past_due' | 'paused' | 'trial_ending' | 'warning';
 
-export function billingBannerKind(billing: Pick<BillingState, 'plan' | 'subscriptionStatus' | 'usage'>): BillingBannerKind | null {
+export function billingBannerKind(
+    billing: Pick<BillingState, 'plan' | 'subscriptionStatus' | 'usage' | 'trial'>
+): BillingBannerKind | null {
     if (billing.plan === 'free') {
         return null;
     }
@@ -11,6 +14,9 @@ export function billingBannerKind(billing: Pick<BillingState, 'plan' | 'subscrip
     }
     if (billing.usage?.state === 'paused') {
         return 'paused';
+    }
+    if (isNoCardTrialEnding(billing.trial, billing.subscriptionStatus !== null)) {
+        return 'trial_ending';
     }
     return billing.usage?.state === 'warning' ? 'warning' : null;
 }

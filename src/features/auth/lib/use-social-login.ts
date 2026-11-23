@@ -21,14 +21,15 @@ function failureCode(failure: Error): string {
 
 export interface SocialLoginOptions {
     readonly inviteToken?: string;
+    readonly offerToken?: string;
     readonly onSignedIn?: (completed: CompletedSignIn, provider: AuthProviderName) => void;
     readonly onFailed?: (failure: Error, provider: AuthProviderName) => void;
 }
 
-export function useSocialLogin({ inviteToken, onSignedIn, onFailed }: SocialLoginOptions = {}): SocialLogin {
+export function useSocialLogin({ inviteToken, offerToken, onSignedIn, onFailed }: SocialLoginOptions = {}): SocialLogin {
     const { signIn } = useSession();
-    const google: UseMutationResult<CompletedSignIn, Error, string> = useGoogleLogin(inviteToken);
-    const facebook: UseMutationResult<CompletedSignIn, Error, string> = useFacebookLogin(inviteToken);
+    const google: UseMutationResult<CompletedSignIn, Error, string> = useGoogleLogin(inviteToken, offerToken);
+    const facebook: UseMutationResult<CompletedSignIn, Error, string> = useFacebookLogin(inviteToken, offerToken);
     const [error, setError] = useState<Error | null>(null);
     const callbacksFor = (
         provider: AuthProviderName

@@ -12,3 +12,7 @@ export type OpenInvoice = NonNullable<BillingMe['openInvoice']>;
 export type PaidFeature = keyof BillingMe['features'];
 export type FeatureAccess = FeatureState | 'loading';
 export type InvoicePayOrigin = 'banner' | 'plan';
+export type BillingOffer = NonNullable<BillingMe['offer']>;
+export type OfferRule = BillingOffer['rules'][number];
+export type OfferTrial = BillingOffer['trial'];
+export type BillingTrial = NonNullable<BillingMe['trial']>;

@@ -2,6 +2,7 @@ import { createContext, type Context } from 'react';
 import type {
     BillingMode,
     BillingPlan,
+    BillingTrial,
     BillingUsage,
     FeatureAccess,
     InvoicePayOrigin,
@@ -16,6 +17,7 @@ export interface BillingState {
     readonly plan: BillingPlan;
     readonly canManage: boolean;
     readonly usage: BillingUsage | null;
+    readonly trial: BillingTrial | null;
     readonly subscriptionStatus: SubscriptionStatus | null;
     readonly graceEndsAt: string | null;
     readonly openInvoice: OpenInvoice | null;
