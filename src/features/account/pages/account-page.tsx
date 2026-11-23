@@ -5,6 +5,7 @@ import type { SessionUser } from '@/app/providers/session-context';
 import { DeleteAccountCard } from '../components/delete-account-card';
 import { ExportCard } from '../components/export-card';
 import { LanguageCard } from '../components/language-card';
+import { PeopleCard } from '../components/people-card';
 import { ProfileCard } from '../components/profile-card';
 
 export function AccountPage(): ReactElement | null {
@@ -21,6 +22,7 @@ export function AccountPage(): ReactElement | null {
             <h1 className="text-xl font-semibold tracking-tight text-content">{t('title')}</h1>
             <ProfileCard user={current} />
             <LanguageCard />
+            <PeopleCard />
             <ExportCard />
             <DeleteAccountCard user={current} />
         </main>

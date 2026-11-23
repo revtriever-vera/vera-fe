@@ -27,6 +27,7 @@ export interface RenderedInRouter {
 export function sampleControls(overrides: Partial<SampleDataControls> = {}): SampleDataControls {
     return {
         available: true,
+        canManage: true,
         active: false,
         isLoading: false,
         load: (): Promise<void> => Promise.resolve(),

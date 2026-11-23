@@ -7,6 +7,7 @@ import { SampleDataBanner } from './sample-data-banner';
 function controls(overrides: Partial<SampleDataControls> = {}): SampleDataControls {
     return {
         available: true,
+        canManage: true,
         active: true,
         isLoading: false,
         load: vi.fn((): Promise<void> => Promise.resolve()),

@@ -1,6 +1,7 @@
 import { Pencil, Trash2 } from 'lucide-react';
 import type { ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
+import { useRole } from '@/app/providers/use-role';
 import { Button } from '@/shared/ui/button';
 import type { HoldingView } from '../../types';
 
@@ -10,8 +11,12 @@ export interface HoldingRowActionsProps {
     readonly onRemove: (holding: HoldingView) => void;
 }
 
-export function HoldingRowActions({ holding, onEdit, onRemove }: HoldingRowActionsProps): ReactElement {
+export function HoldingRowActions({ holding, onEdit, onRemove }: HoldingRowActionsProps): ReactElement | null {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
+    const { canEdit } = useRole();
+    if (!canEdit) {
+        return null;
+    }
     return (
         <div className="flex items-center justify-end gap-1">
             {holding.kind === 'fixed_income' ? (

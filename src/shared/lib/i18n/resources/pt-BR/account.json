@@ -42,5 +42,8 @@
   "errorForbidden": "Só quem criou a conta pode excluí-la.",
   "errorErasureFailed": "Não conseguimos excluir a conta agora. Ela continua intacta; tente de novo em instantes.",
   "errorTooManyAttempts": "Muitas tentativas. Aguarde alguns minutos e tente de novo.",
-  "errorDeleteGeneric": "Não foi possível excluir a conta. Tente novamente em instantes."
+  "errorDeleteGeneric": "Não foi possível excluir a conta. Tente novamente em instantes.",
+  "peopleTitle": "Pessoas da conta",
+  "peopleDescription": "Convide quem divide a carteira e os gastos com você, mude papéis ou saia da conta.",
+  "peopleOpen": "Abrir Pessoas"
 }

@@ -48,5 +48,6 @@
   "sampleConfirmTitle": "Remove the sample data?",
   "sampleConfirmBody": "The data you added yourself is not affected.",
   "sampleLoaded": "Sample data loaded",
-  "sampleCleared": "Sample data removed"
+  "sampleCleared": "Sample data removed",
+  "roleChanged": "Your role in this account changed. Refresh the page."
 }

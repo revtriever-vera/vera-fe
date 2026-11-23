@@ -48,5 +48,6 @@
   "sampleConfirmTitle": "Remover os dados de exemplo?",
   "sampleConfirmBody": "Os dados que você cadastrou não são afetados.",
   "sampleLoaded": "Dados de exemplo carregados",
-  "sampleCleared": "Dados de exemplo removidos"
+  "sampleCleared": "Dados de exemplo removidos",
+  "roleChanged": "Seu papel nesta conta mudou. Atualize a página."
 }

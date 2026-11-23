@@ -4,11 +4,11 @@ import type { LoginSession } from '../types';
 import { authKeys } from './auth-keys';
 import { completeSignIn, type CompletedSignIn } from './complete-sign-in';
 
-export function useGoogleLogin(): UseMutationResult<CompletedSignIn, Error, string> {
+export function useGoogleLogin(inviteToken?: string): UseMutationResult<CompletedSignIn, Error, string> {
     return useMutation({
         mutationKey: authKeys.login('google'),
         mutationFn: async (idToken: string): Promise<CompletedSignIn> => {
-            const session: LoginSession = unwrap<LoginSession>(await apiClient.POST('/auth/google', { body: { idToken } }));
+            const session: LoginSession = unwrap<LoginSession>(await apiClient.POST('/auth/google', { body: { idToken, ...(inviteToken === undefined ? {} : { inviteToken }) } }));
             return completeSignIn(session);
         }
     });

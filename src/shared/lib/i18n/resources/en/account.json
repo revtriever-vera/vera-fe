@@ -42,5 +42,8 @@
   "errorForbidden": "Only the person who created the account can delete it.",
   "errorErasureFailed": "We could not delete the account right now. It is still intact; try again in a moment.",
   "errorTooManyAttempts": "Too many attempts. Wait a few minutes and try again.",
-  "errorDeleteGeneric": "Could not delete the account. Please try again in a moment."
+  "errorDeleteGeneric": "Could not delete the account. Please try again in a moment.",
+  "peopleTitle": "People in the account",
+  "peopleDescription": "Invite whoever shares the portfolio and spending with you, change roles or leave the account.",
+  "peopleOpen": "Open People"
 }

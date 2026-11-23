@@ -19,10 +19,16 @@ function failureCode(failure: Error): string {
     return failure instanceof ApiError ? failure.problem.type : 'unknown';
 }
 
-export function useSocialLogin(): SocialLogin {
+export interface SocialLoginOptions {
+    readonly inviteToken?: string;
+    readonly onSignedIn?: (completed: CompletedSignIn, provider: AuthProviderName) => void;
+    readonly onFailed?: (failure: Error, provider: AuthProviderName) => void;
+}
+
+export function useSocialLogin({ inviteToken, onSignedIn, onFailed }: SocialLoginOptions = {}): SocialLogin {
     const { signIn } = useSession();
-    const google: UseMutationResult<CompletedSignIn, Error, string> = useGoogleLogin();
-    const facebook: UseMutationResult<CompletedSignIn, Error, string> = useFacebookLogin();
+    const google: UseMutationResult<CompletedSignIn, Error, string> = useGoogleLogin(inviteToken);
+    const facebook: UseMutationResult<CompletedSignIn, Error, string> = useFacebookLogin(inviteToken);
     const [error, setError] = useState<Error | null>(null);
     const callbacksFor = (
         provider: AuthProviderName
@@ -30,10 +36,12 @@ export function useSocialLogin(): SocialLogin {
         onSuccess: (completed: CompletedSignIn): void => {
             track('auth_authenticated', { provider, isNewAccount: completed.isNewAccount });
             signIn(completed.accessToken, completed.user);
+            onSignedIn?.(completed, provider);
         },
         onError: (failure: Error): void => {
             track('auth_failed', { provider, code: failureCode(failure) });
             setError(failure);
+            onFailed?.(failure, provider);
         }
     });
     return {

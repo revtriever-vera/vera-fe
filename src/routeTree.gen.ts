@@ -14,8 +14,10 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthAppRouteImport } from './routes/_auth/_app'
 import { Route as AuthOnboardingRouteImport } from './routes/_auth/onboarding'
 import { Route as DevUiRouteImport } from './routes/_dev/ui'
+import { Route as ConviteTokenRouteImport } from './routes/convite.$token'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/_app/index'
 import { Route as AuthAppAccountRouteImport } from './routes/_auth/_app/account'
+import { Route as AuthAppPeopleRouteImport } from './routes/_auth/_app/people'
 import { Route as AuthAppPortfolioRouteImport } from './routes/_auth/_app/portfolio'
 import { Route as AuthAppSpendingRouteImport } from './routes/_auth/_app/spending'
 import { Route as AuthOnboardingIndexRouteImport } from './routes/_auth/onboarding/index'
@@ -57,6 +59,11 @@ const DevUiRoute = DevUiRouteImport.update({
   path: '/ui',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConviteTokenRoute = ConviteTokenRouteImport.update({
+  id: '/convite/$token',
+  path: '/convite/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthAppIndexRoute = AuthAppIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -65,6 +72,11 @@ const AuthAppIndexRoute = AuthAppIndexRouteImport.update({
 const AuthAppAccountRoute = AuthAppAccountRouteImport.update({
   id: '/account',
   path: '/account',
+  getParentRoute: () => AuthAppRoute,
+} as any)
+const AuthAppPeopleRoute = AuthAppPeopleRouteImport.update({
+  id: '/people',
+  path: '/people',
   getParentRoute: () => AuthAppRoute,
 } as any)
 const AuthAppPortfolioRoute = AuthAppPortfolioRouteImport.update({
@@ -163,7 +175,9 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/onboarding': typeof AuthOnboardingRouteWithChildren
   '/ui': typeof DevUiRoute
+  '/convite/$token': typeof ConviteTokenRoute
   '/account': typeof AuthAppAccountRoute
+  '/people': typeof AuthAppPeopleRoute
   '/portfolio': typeof AuthAppPortfolioRouteWithChildren
   '/spending': typeof AuthAppSpendingRouteWithChildren
   '/onboarding/assets': typeof AuthOnboardingAssetsRoute
@@ -186,7 +200,9 @@ export interface FileRoutesByTo {
   '/': typeof AuthAppIndexRoute
   '/login': typeof LoginRoute
   '/ui': typeof DevUiRoute
+  '/convite/$token': typeof ConviteTokenRoute
   '/account': typeof AuthAppAccountRoute
+  '/people': typeof AuthAppPeopleRoute
   '/onboarding/assets': typeof AuthOnboardingAssetsRoute
   '/onboarding/banks': typeof AuthOnboardingBanksRoute
   '/onboarding/done': typeof AuthOnboardingDoneRoute
@@ -210,7 +226,9 @@ export interface FileRoutesById {
   '/_auth/_app': typeof AuthAppRouteWithChildren
   '/_auth/onboarding': typeof AuthOnboardingRouteWithChildren
   '/_dev/ui': typeof DevUiRoute
+  '/convite/$token': typeof ConviteTokenRoute
   '/_auth/_app/account': typeof AuthAppAccountRoute
+  '/_auth/_app/people': typeof AuthAppPeopleRoute
   '/_auth/_app/portfolio': typeof AuthAppPortfolioRouteWithChildren
   '/_auth/_app/spending': typeof AuthAppSpendingRouteWithChildren
   '/_auth/onboarding/assets': typeof AuthOnboardingAssetsRoute
@@ -237,7 +255,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/onboarding'
     | '/ui'
+    | '/convite/$token'
     | '/account'
+    | '/people'
     | '/portfolio'
     | '/spending'
     | '/onboarding/assets'
@@ -260,7 +280,9 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/ui'
+    | '/convite/$token'
     | '/account'
+    | '/people'
     | '/onboarding/assets'
     | '/onboarding/banks'
     | '/onboarding/done'
@@ -283,7 +305,9 @@ export interface FileRouteTypes {
     | '/_auth/_app'
     | '/_auth/onboarding'
     | '/_dev/ui'
+    | '/convite/$token'
     | '/_auth/_app/account'
+    | '/_auth/_app/people'
     | '/_auth/_app/portfolio'
     | '/_auth/_app/spending'
     | '/_auth/onboarding/assets'
@@ -308,6 +332,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
   DevUiRoute: typeof DevUiRoute
+  ConviteTokenRoute: typeof ConviteTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -347,6 +372,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevUiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/convite/$token': {
+      id: '/convite/$token'
+      path: '/convite/$token'
+      fullPath: '/convite/$token'
+      preLoaderRoute: typeof ConviteTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth/_app/': {
       id: '/_auth/_app/'
       path: '/'
@@ -359,6 +391,13 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AuthAppAccountRouteImport
+      parentRoute: typeof AuthAppRoute
+    }
+    '/_auth/_app/people': {
+      id: '/_auth/_app/people'
+      path: '/people'
+      fullPath: '/people'
+      preLoaderRoute: typeof AuthAppPeopleRouteImport
       parentRoute: typeof AuthAppRoute
     }
     '/_auth/_app/portfolio': {
@@ -526,6 +565,7 @@ const AuthAppSpendingRouteWithChildren = AuthAppSpendingRoute._addFileChildren(
 
 interface AuthAppRouteChildren {
   AuthAppAccountRoute: typeof AuthAppAccountRoute
+  AuthAppPeopleRoute: typeof AuthAppPeopleRoute
   AuthAppPortfolioRoute: typeof AuthAppPortfolioRouteWithChildren
   AuthAppSpendingRoute: typeof AuthAppSpendingRouteWithChildren
   AuthAppIndexRoute: typeof AuthAppIndexRoute
@@ -533,6 +573,7 @@ interface AuthAppRouteChildren {
 
 const AuthAppRouteChildren: AuthAppRouteChildren = {
   AuthAppAccountRoute: AuthAppAccountRoute,
+  AuthAppPeopleRoute: AuthAppPeopleRoute,
   AuthAppPortfolioRoute: AuthAppPortfolioRouteWithChildren,
   AuthAppSpendingRoute: AuthAppSpendingRouteWithChildren,
   AuthAppIndexRoute: AuthAppIndexRoute,
@@ -575,6 +616,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
   DevUiRoute: DevUiRoute,
+  ConviteTokenRoute: ConviteTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

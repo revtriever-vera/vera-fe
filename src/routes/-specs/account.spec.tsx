@@ -308,8 +308,8 @@ describe('account deletion', () => {
         expect(resetAnalytics).toHaveBeenCalled();
     });
 
-    it('shows the owner-only notice instead of the button for a member', async () => {
-        await openAccount({ role: 'member' });
+    it('shows the owner-only notice instead of the button for an editor', async () => {
+        await openAccount({ role: 'editor' });
 
         expect(screen.getByText('Só quem criou a conta pode excluí-la.')).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Excluir minha conta' })).not.toBeInTheDocument();
