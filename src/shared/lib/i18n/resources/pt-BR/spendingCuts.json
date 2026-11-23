@@ -59,6 +59,9 @@
     "behind_one": "{{count}} objetivo atrasado.",
     "behind_other": "{{count}} objetivos atrasados.",
     "adopt": "Usar {{amount}} como meta",
+    "adoptCapped": "Usar {{amount}} como meta (máximo de {{rate}})",
+    "savedCapped": "Meta limitada ao máximo de {{rate}} da renda: os objetivos pedem mais",
+    "exceedsIncome": "Seus objetivos pedem mais que a renda: a meta só pode chegar a {{rate}} dela.",
     "view": "Ver objetivos",
     "saved": "Meta atualizada pelos objetivos"
   }

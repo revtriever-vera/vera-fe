@@ -59,6 +59,9 @@
     "behind_one": "{{count}} goal is behind.",
     "behind_other": "{{count}} goals are behind.",
     "adopt": "Use {{amount}} as the savings goal",
+    "adoptCapped": "Use {{amount}} as the savings goal ({{rate}} maximum)",
+    "savedCapped": "Goal capped at {{rate}} of income: your goals ask for more",
+    "exceedsIncome": "Your goals ask for more than your income: the savings goal can only reach {{rate}} of it.",
     "view": "View goals",
     "saved": "Savings goal updated from your goals"
   }

@@ -37,13 +37,13 @@ export function GoalCard({ goal }: { readonly goal: GoalView }): ReactElement {
     const locale: SupportedLocale = useLocale();
     const money = (minor: number): string => formatCurrency(minor, GOAL_BASE_CURRENCY, locale);
     return (
-        <li className="surface-card flex flex-col gap-3 p-4">
-            <div className="flex items-start justify-between gap-3">
-                <div className="flex min-w-0 items-center gap-3">
+        <li className="surface-card flex min-w-0 flex-col gap-3 p-4">
+            <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+                <div className="flex min-w-0 max-w-full items-center gap-3">
                     <IconTile icon={ICONS[goal.kind]} tone="neutral" size="sm" />
                     <h3 className="min-w-0 truncate text-base font-semibold">{goal.name}</h3>
                 </div>
-                <div className="flex shrink-0 items-center gap-2">
+                <div className="flex shrink-0 flex-wrap items-center gap-2">
                     <GoalStatusBadge status={goal.status} />
                     <EditGoalLink goalId={goal.id} name={goal.name} />
                 </div>

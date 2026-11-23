@@ -64,7 +64,7 @@ function GoalsContent({ list }: { readonly list: GoalsList }): ReactElement {
     return (
         <div className="flex flex-col gap-4">
             <GoalsKpis totals={list.totals} />
-            <ul aria-label={t('listLabel')} className="grid items-start gap-4 lg:grid-cols-2">
+            <ul aria-label={t('listLabel')} className="grid grid-cols-1 items-start gap-4 lg:grid-cols-2">
                 {list.items.map((goal: GoalView): ReactElement => (
                     <GoalCard key={goal.id} goal={goal} />
                 ))}
