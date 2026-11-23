@@ -161,5 +161,19 @@
   "totpRecoveryCopy": "Copy codes",
   "totpRecoveryCopied": "Codes copied",
   "totpRecoveryDownload": "Download codes",
-  "totpRecoverySaved": "I saved the codes"
+  "totpRecoverySaved": "I saved the codes",
+  "formEditTitle": "Edit signup link",
+  "formEditDescription": "Changes apply to whoever uses the link from now on and to accounts that used it and have not subscribed yet. Subscriptions already made keep the discount they recorded.",
+  "formEditNotice": "Subscriptions already made keep their discount scale.",
+  "formSave": "Save changes",
+  "formSaving": "Saving",
+  "formOfferValidity": "Offer validity (days)",
+  "formOfferValidityHint": "How many days the account has to subscribe after using the link, from 1 to 365.",
+  "formOfferValidityInvalid": "Enter 1 to 365 days.",
+  "errorOffer_offer_validity_out_of_range": "The offer validity goes from 1 to 365 days.",
+  "editLink": "Edit",
+  "editLinkNamed": "Edit the link {{name}}",
+  "linkUpdated": "Link updated",
+  "offerValidity_one": "Valid {{count}} day after use",
+  "offerValidity_other": "Valid {{count}} days after use"
 }

@@ -6,6 +6,8 @@ export const MAX_RULES: number = 20;
 export const MAX_PERCENT: number = 90;
 export const MAX_TRIAL_DAYS: number = 60;
 export const NO_CARD_MAX_VALIDITY_DAYS: number = 90;
+export const MAX_OFFER_VALIDITY_DAYS: number = 365;
+export const DEFAULT_OFFER_VALIDITY_DAYS: number = 30;
 
 export const TRIAL_KIND: { readonly none: 'none'; readonly card: 'card'; readonly noCard: 'no_card' } = {
     none: 'none',

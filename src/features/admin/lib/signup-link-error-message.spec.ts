@@ -17,6 +17,12 @@ describe('signupLinkErrorMessage', () => {
         );
     });
 
+    it('explains an offer validity out of range', () => {
+        expect(signupLinkErrorMessage(t, problem('signup_links.invalid_offer', 422, { reason: 'offer_validity_out_of_range' }))).toBe(
+            'A validade da oferta vai de 1 a 365 dias.'
+        );
+    });
+
     it('falls back to a generic offer message for an unknown reason', () => {
         expect(signupLinkErrorMessage(t, problem('signup_links.invalid_offer', 422, { reason: 'new_rule' }))).toBe(
             'A oferta não cumpre as regras da plataforma.'

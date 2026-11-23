@@ -24,6 +24,7 @@ describe('Admin signup links', () => {
         const row: HTMLElement = (await screen.findByText('Parceiros')).closest('tr') as HTMLElement;
         expect(within(row).getByText('Teste de 14 dias com cartão')).toBeInTheDocument();
         expect(within(row).getByText('1 regra de desconto')).toBeInTheDocument();
+        expect(within(row).getByText('Vale 30 dias depois do uso')).toBeInTheDocument();
         expect(within(row).getByText('Ativo')).toBeInTheDocument();
         expect(within(row).getByText('12 de 100')).toBeInTheDocument();
         const revoked: HTMLElement = screen.getByText('Feira').closest('tr') as HTMLElement;
@@ -118,7 +119,8 @@ describe('Admin signup links', () => {
             trial: { kind: 'card', days: 14 },
             rules: [{ percent: 50, fromCycle: 1, toCycle: 3 }],
             maxUses: null,
-            expiresAt: null
+            expiresAt: null,
+            offerValidityDays: 30
         });
         await waitFor((): void => {
             expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -140,5 +142,63 @@ describe('Admin signup links', () => {
         await user.click(within(dialog).getByRole('button', { name: 'Criar link' }));
 
         expect(await within(dialog).findByText(/Uma regra de desconto está fora dos limites/)).toBeInTheDocument();
+    });
+
+    it('edits a link with the same form, warning that subscriptions keep their scale', async () => {
+        listLinks(signupLink());
+        let patched: { id: string; body: unknown } | null = null;
+        server.use(
+            http.patch('*/platform/signup-links/:id', async ({ request, params }) => {
+                patched = { id: String(params['id']), body: await request.json() };
+                return HttpResponse.json(signupLink({ label: 'Parceiros 2', offerValidityDays: 10 }));
+            })
+        );
+        const user: UserEvent = userEvent.setup();
+        renderRouterAt('/admin/links', { signedIn: true });
+
+        await user.click(await screen.findByRole('button', { name: 'Editar o link Parceiros' }));
+        const dialog: HTMLElement = await screen.findByRole('dialog');
+        expect(within(dialog).getByText('Editar link de cadastro')).toBeInTheDocument();
+        expect(within(dialog).getByText('Assinaturas já feitas mantêm a régua de desconto delas.')).toBeInTheDocument();
+        expect(within(dialog).getByLabelText('Nome do link')).toHaveValue('Parceiros');
+        expect(within(dialog).getByLabelText('Dias de teste')).toHaveValue('14');
+        const label: HTMLElement = within(dialog).getByLabelText('Nome do link');
+        await user.clear(label);
+        await user.type(label, 'Parceiros 2');
+        const validity: HTMLElement = within(dialog).getByLabelText('Validade da oferta (dias)');
+        await user.clear(validity);
+        await user.type(validity, '10');
+        await user.click(within(dialog).getByRole('button', { name: 'Salvar alterações' }));
+
+        expect(await screen.findByText('Link atualizado')).toBeInTheDocument();
+        expect(patched).toMatchObject({
+            id: '33333333-3333-4333-8333-333333333333',
+            body: { label: 'Parceiros 2', offerValidityDays: 10, expiresAt: '2026-12-31T23:59:59.000Z', maxUses: 100 }
+        });
+    });
+
+    it('refuses an offer validity out of range and a refusal of the API on edit', async () => {
+        listLinks(signupLink());
+        server.use(
+            http.patch('*/platform/signup-links/:id', () => {
+                const refusal = { ...problem('signup_links.invalid_offer', 422), meta: { reason: 'offer_validity_out_of_range' } };
+                return HttpResponse.json(refusal, { status: 422 });
+            })
+        );
+        const user: UserEvent = userEvent.setup();
+        renderRouterAt('/admin/links', { signedIn: true });
+
+        await user.click(await screen.findByRole('button', { name: 'Editar o link Parceiros' }));
+        const dialog: HTMLElement = await screen.findByRole('dialog');
+        const validity: HTMLElement = within(dialog).getByLabelText('Validade da oferta (dias)');
+        await user.clear(validity);
+        await user.type(validity, '400');
+        await user.click(within(dialog).getByRole('button', { name: 'Salvar alterações' }));
+        expect(await within(dialog).findByText('Informe de 1 a 365 dias.')).toBeInTheDocument();
+
+        await user.clear(validity);
+        await user.type(validity, '365');
+        await user.click(within(dialog).getByRole('button', { name: 'Salvar alterações' }));
+        expect(await within(dialog).findByText('A validade da oferta vai de 1 a 365 dias.')).toBeInTheDocument();
     });
 });

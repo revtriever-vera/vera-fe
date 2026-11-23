@@ -16,6 +16,7 @@ const ERROR_KEYS: Readonly<Record<string, AdminKey>> = {
 const OFFER_REASON_KEYS: Readonly<Record<string, AdminKey>> = {
     trial_days_without_trial: 'errorOffer_trial_days_without_trial',
     trial_days_out_of_range: 'errorOffer_trial_days_out_of_range',
+    offer_validity_out_of_range: 'errorOffer_offer_validity_out_of_range',
     too_many_rules: 'errorOffer_too_many_rules',
     rule_out_of_range: 'errorOffer_rule_out_of_range',
     expires_in_the_past: 'errorOffer_expires_in_the_past',

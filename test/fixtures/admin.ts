@@ -23,6 +23,7 @@ export function signupLink(overrides: Partial<SignupLink> = {}): SignupLink {
         maxUses: 100,
         offerValidityDays: 30,
         expiresAt: '2026-12-31T23:59:59.000Z',
+        offerValidityDays: 30,
         status: 'active',
         redemptionCount: 12,
         trialCount: 10,
