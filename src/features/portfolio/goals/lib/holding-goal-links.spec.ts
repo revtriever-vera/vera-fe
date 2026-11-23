@@ -1,12 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { behindTravel, goal, goalHolding } from '../../../../../test/fixtures/goals';
+import type { GoalView } from '../types';
 import { hasBehindGoalWithHolding } from './behind-goals';
 import { holdingGoalLinks } from './holding-goal-links';
 
 describe('holdingGoalLinks', () => {
     it('junta os objetivos que usam o ativo, com a parte de cada um', () => {
-        const reserve = goal({ holdings: [goalHolding({ holdingId: 'h-1', shareBps: 6000 })] });
-        const travel = behindTravel({ holdings: [goalHolding({ holdingId: 'h-1', shareBps: 2500 })] });
+        const reserve: GoalView = goal({ holdings: [goalHolding({ holdingId: 'h-1', shareBps: 6000 })] });
+        const travel: GoalView = behindTravel({ holdings: [goalHolding({ holdingId: 'h-1', shareBps: 2500 })] });
 
         expect(holdingGoalLinks([reserve, travel], 'fixed_income', 'h-1')).toEqual([
             { goalId: reserve.id, name: 'Reserva de emergência', kind: 'emergency_reserve', shareBps: 6000 },
@@ -15,7 +16,7 @@ describe('holdingGoalLinks', () => {
     });
 
     it('não confunde o tipo do ativo, ignora vínculo removido e outro ativo', () => {
-        const reserve = goal({
+        const reserve: GoalView = goal({
             holdings: [goalHolding({ holdingId: 'h-1' }), goalHolding({ holdingId: 'h-2', removed: true })]
         });
 
