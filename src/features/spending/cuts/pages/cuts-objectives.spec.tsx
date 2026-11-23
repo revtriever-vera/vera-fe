@@ -78,4 +78,21 @@ describe('Onde cortar: objetivos', () => {
         expect(await screen.findByRole('heading', { name: /^Seus objetivos pedem R\$\s2\.100 por mês$/ })).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: /como meta/ })).not.toBeInTheDocument();
     });
+
+    it('com o teto de 90% cortando, o botão mostra o valor gravado e avisa', async () => {
+        const api: CutsApi = installCutsApi({
+            override: {
+                ...withObjectives({ monthlyNeededMinor: 2429200, behindCount: 1, asGoalBps: 9000 }),
+                incomeMinor: 1200000
+            }
+        });
+        const user: UserEvent = userEvent.setup();
+        renderRouterAt(PATH, { signedIn: true });
+
+        expect(await screen.findByText(/Seus objetivos pedem mais que a renda/)).toBeInTheDocument();
+        await user.click(screen.getByRole('button', { name: /^Usar R\$\s10\.800 como meta \(máximo de 90%\)$/ }));
+
+        expect(await screen.findByText(/Meta limitada ao máximo de 90.*da renda/)).toBeInTheDocument();
+        expect(api.puts).toEqual([{ savingsGoalBps: 9000 }]);
+    });
 });

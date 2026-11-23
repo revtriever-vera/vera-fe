@@ -21,9 +21,19 @@ export interface ObjectivesCardProps {
     readonly draft: GoalDraftControls;
 }
 
-function useAdoptGoal(draft: GoalDraftControls): { readonly adopt: (bps: number) => Promise<void>; readonly pending: boolean } {
+const BPS_BASE: number = 10000;
+
+function isCapped(cuts: CutsResponse, bps: number): boolean {
+    return cuts.objectives.monthlyNeededMinor * BPS_BASE > bps * cuts.incomeMinor;
+}
+
+function useAdoptGoal(
+    draft: GoalDraftControls,
+    capped: boolean
+): { readonly adopt: (bps: number) => Promise<void>; readonly pending: boolean } {
     const { t }: UseTranslationResponse<'spendingCuts', undefined> = useTranslation('spendingCuts');
     const { t: tSpending }: UseTranslationResponse<'spending', undefined> = useTranslation('spending');
+    const locale: SupportedLocale = useLocale();
     const toast: ToastApi = useToast();
     const update: UseMutationResult<SpendingSettings, ApiError, UpdateSpendingSettings> = useUpdateSpendingSettings();
     const adopt = async (bps: number): Promise<void> => {
@@ -31,7 +41,10 @@ function useAdoptGoal(draft: GoalDraftControls): { readonly adopt: (bps: number)
             await update.mutateAsync({ savingsGoalBps: bps });
             draft.reset();
             track('spending_goal_from_objectives');
-            toast.show({ tone: 'positive', title: t('objectives.saved') });
+            toast.show({
+                tone: 'positive',
+                title: capped ? t('objectives.savedCapped', { rate: formatRateBps(bps, locale) }) : t('objectives.saved')
+            });
         } catch (error) {
             toast.show({ tone: 'critical', title: spendingErrorMessage(tSpending, error instanceof Error ? error : null) });
         }
@@ -43,11 +56,18 @@ function AdoptButton({ cuts, draft }: ObjectivesCardProps): ReactElement | null 
     const { t }: UseTranslationResponse<'spendingCuts', undefined> = useTranslation('spendingCuts');
     const locale: SupportedLocale = useLocale();
     const { canEdit } = useRole();
-    const { adopt, pending } = useAdoptGoal(draft);
     const bps: number | null = cuts.objectives.asGoalBps;
+    const capped: boolean = bps !== null && isCapped(cuts, bps);
+    const { adopt, pending } = useAdoptGoal(draft, capped);
     if (!canEdit || bps === null || bps === draft.savedBps) {
         return null;
     }
+    const label: string = capped
+        ? t('objectives.adoptCapped', {
+              amount: formatWhole(Math.round((cuts.incomeMinor * bps) / BPS_BASE), locale),
+              rate: formatRateBps(bps, locale)
+          })
+        : t('objectives.adopt', { amount: formatWhole(cuts.objectives.monthlyNeededMinor, locale) });
     return (
         <Button
             loading={pending}
@@ -55,9 +75,19 @@ function AdoptButton({ cuts, draft }: ObjectivesCardProps): ReactElement | null 
                 void adopt(bps);
             }}
         >
-            {t('objectives.adopt', { amount: formatWhole(cuts.objectives.monthlyNeededMinor, locale) })}
+            {label}
         </Button>
     );
+}
+
+function CappedNotice({ cuts }: { readonly cuts: CutsResponse }): ReactElement | null {
+    const { t }: UseTranslationResponse<'spendingCuts', undefined> = useTranslation('spendingCuts');
+    const locale: SupportedLocale = useLocale();
+    const bps: number | null = cuts.objectives.asGoalBps;
+    if (bps === null || !isCapped(cuts, bps)) {
+        return null;
+    }
+    return <p className="text-sm font-medium text-caution">{t('objectives.exceedsIncome', { rate: formatRateBps(bps, locale) })}</p>;
 }
 
 export function ObjectivesCard({ cuts, draft }: ObjectivesCardProps): ReactElement | null {
@@ -82,6 +112,7 @@ export function ObjectivesCard({ cuts, draft }: ObjectivesCardProps): ReactEleme
                               amount: formatWhole(cuts.goal.minor, locale)
                           })}
                 </p>
+                <CappedNotice cuts={cuts} />
                 {behindCount > 0 ? (
                     <p className="text-sm font-medium text-caution">{t('objectives.behind', { count: behindCount })}</p>
                 ) : null}
