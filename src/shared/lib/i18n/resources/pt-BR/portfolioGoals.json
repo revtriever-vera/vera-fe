@@ -46,6 +46,90 @@
     "removed_one": "{{count}} ativo vinculado foi removido",
     "removed_other": "{{count}} ativos vinculados foram removidos",
     "holder": "Titular: {{holder}}",
-    "holderAll": "Conta toda"
+    "holderAll": "Conta toda",
+    "edit": "Editar {{name}}",
+    "editLabel": "Editar"
+  },
+  "errors": {
+    "generic": "Não foi possível salvar o objetivo. Tente de novo.",
+    "validationFailed": "Confira os campos e tente de novo.",
+    "holdingNotFound": "Um ativo vinculado não está mais na carteira. Revise a lista de ativos.",
+    "holdingOverallocated": "A soma das partes passa de 100% em um dos ativos. Reduza a parte neste objetivo.",
+    "emergencyReserveExists": "Já existe uma reserva de emergência para este titular. Edite a que existe.",
+    "targetDateInPast": "Escolha uma data depois de hoje.",
+    "limitReached": "A conta chegou ao limite de 20 objetivos. Remova um para criar outro.",
+    "goalNotFound": "Este objetivo não existe mais.",
+    "reserveMonthsNotAllowed": "Os meses de gastos valem só para a reserva de emergência."
+  },
+  "form": {
+    "createTitle": "Novo objetivo",
+    "editTitle": "Editar {{name}}",
+    "description": "Diga quanto e até quando. A conta não inclui rendimento futuro.",
+    "loadFailed": "Não foi possível abrir o objetivo",
+    "model": "Modelo",
+    "models": {
+      "emergency_reserve": {
+        "label": "Reserva de emergência",
+        "name": "Reserva de emergência"
+      },
+      "travel": {
+        "label": "Viagem",
+        "name": "Viagem"
+      },
+      "home_down_payment": {
+        "label": "Entrada do imóvel",
+        "name": "Entrada do imóvel"
+      },
+      "other": {
+        "label": "Outro",
+        "name": ""
+      }
+    },
+    "name": "Nome",
+    "namePlaceholder": "Ex.: Troca do carro",
+    "target": "Valor do objetivo",
+    "date": "Data",
+    "manual": "Fora da carteira",
+    "manualHint": "Dinheiro guardado que não está cadastrado, como poupança ou conta corrente.",
+    "reserve": {
+      "monthsLabel": "Meses de gastos cobertos",
+      "monthsOption": "{{months}} meses",
+      "monthsHint": "3 meses: renda estável e reserva de outras fontes. 12 meses: autônomo ou renda variável.",
+      "suggestionRange": "Sugestão: {{suggested}}. São {{months}} meses da sua média de gastos de {{from}} a {{to}} ({{average}}).",
+      "suggestionOne": "Sugestão: {{suggested}}. São {{months}} meses da sua média de gastos de {{from}} ({{average}}).",
+      "use": "Usar {{suggested}}",
+      "spendLabel": "Quanto você gasta por mês?",
+      "spendHint": "Ainda não há gastos importados. A Vera multiplica este valor pelos meses escolhidos.",
+      "connect": "Conectar bancos",
+      "loadError": "Não foi possível calcular a sugestão. Informe o valor do objetivo.",
+      "changed": "Sua média de gastos mudou para {{average}}. Reserva sugerida: {{suggested}}.",
+      "update": "Atualizar o valor"
+    },
+    "holdings": {
+      "title": "Onde está o dinheiro",
+      "hint": "Informe a parte de cada ativo que conta para este objetivo. Deixe em branco o que não conta.",
+      "reserveHint": "Para a reserva, prefira ativos de liquidez diária, como o Tesouro Selic. Deixe em branco o que não conta.",
+      "rowLabel": "{{name}} (parte em %)",
+      "sharePlaceholder": "Ex.: 40%",
+      "free": "Livre: {{free}} deste ativo",
+      "empty": "Nenhum ativo cadastrado.",
+      "addAssets": "Adicionar ativos",
+      "loadError": "Não foi possível carregar os ativos."
+    },
+    "errors": {
+      "nameRequired": "Dê um nome ao objetivo",
+      "nameTooLong": "Use até {{max}} caracteres",
+      "targetRequired": "Informe o valor do objetivo",
+      "dateRequired": "Escolha a data",
+      "datePast": "Escolha uma data depois de hoje",
+      "shareInvalid": "Informe uma parte entre 0,01% e 100%",
+      "shareOverFree": "A parte passa do que está livre neste ativo"
+    },
+    "cancel": "Cancelar",
+    "create": "Criar objetivo",
+    "save": "Salvar",
+    "saving": "Salvando",
+    "created": "Objetivo criado.",
+    "saved": "Objetivo salvo."
   }
 }

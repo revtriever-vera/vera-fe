@@ -1160,6 +1160,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/goals/emergency-suggestion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Suggest the emergency reserve from the spending average
+         * @description Returns months times the monthly average of the spending (expense categories, fixed and flexible, plus what has no category; transfers, card bills and investments stay out) of the up to 3 closed months before the current one, only months with transactions. `months` is 3, 6 (default) or 12. Without imported spending `averageMinor` and `suggestedMinor` are null and the person types the monthly spending. The target of a goal never changes alone: see `reserve` in the goal.
+         */
+        get: operations["GoalsController_emergencySuggestion"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/goals/{id}": {
         parameters: {
             query?: never;
@@ -10801,6 +10821,21 @@ export interface operations {
                             monthDeltaMinor: number | null;
                             /** @description How many linked holdings were removed from the portfolio */
                             removedHoldings: number;
+                            /** @description Only for an emergency reserve created with `reserveMonths`; null otherwise */
+                            reserve: {
+                                /** @description Months the target was built on */
+                                months: number;
+                                /** @description Monthly spending the target was built on (target divided by months), BRL cents */
+                                baseMinor: number;
+                                /** @description Monthly average of the spending today; null without data */
+                                averageMinor: number | null;
+                                /** @description `months` times the average today, BRL cents */
+                                suggestedMinor: number | null;
+                                /** @description Change of the average against the base, basis points */
+                                deltaBps: number | null;
+                                /** @description True when the average moved more than 10% from the base: offer "Atualizar o valor". The target never changes alone */
+                                shouldUpdate: boolean;
+                            } | null;
                             holdings: {
                                 /** @enum {string} */
                                 kind: "position" | "fixed_income";
@@ -10888,6 +10923,8 @@ export interface operations {
                     holderUserId?: string | null;
                     /** @description Money kept outside the portfolio for this goal, in BRL cents (0 or more) */
                     manualMinor?: number;
+                    /** @description Months of spending the emergency reserve covers (3, 6 or 12). Only for `emergency_reserve`; remembers the spending base of the target */
+                    reserveMonths?: number;
                     /** @description Holdings linked to the goal. The sum of the shares of one holding across all goals is at most 10000 bps */
                     holdings: {
                         /**
@@ -10956,6 +10993,21 @@ export interface operations {
                         monthDeltaMinor: number | null;
                         /** @description How many linked holdings were removed from the portfolio */
                         removedHoldings: number;
+                        /** @description Only for an emergency reserve created with `reserveMonths`; null otherwise */
+                        reserve: {
+                            /** @description Months the target was built on */
+                            months: number;
+                            /** @description Monthly spending the target was built on (target divided by months), BRL cents */
+                            baseMinor: number;
+                            /** @description Monthly average of the spending today; null without data */
+                            averageMinor: number | null;
+                            /** @description `months` times the average today, BRL cents */
+                            suggestedMinor: number | null;
+                            /** @description Change of the average against the base, basis points */
+                            deltaBps: number | null;
+                            /** @description True when the average moved more than 10% from the base: offer "Atualizar o valor". The target never changes alone */
+                            shouldUpdate: boolean;
+                        } | null;
                         holdings: {
                             /** @enum {string} */
                             kind: "position" | "fixed_income";
@@ -11101,6 +11153,86 @@ export interface operations {
             };
         };
     };
+    GoalsController_emergencySuggestion: {
+        parameters: {
+            query?: {
+                /** @description Months of spending the reserve covers: 3, 6 (default) or 12 */
+                months?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Average and suggested reserve */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Months of spending the suggestion covers */
+                        months: number;
+                        /** @description Monthly average of the spending of the closed months, BRL cents; null without data */
+                        averageMinor: number | null;
+                        /** @description Closed months (YYYY-MM, oldest first) the average used, up to 3, only months with transactions */
+                        averageMonths: string[];
+                        /** @description `months` times the average, BRL cents; null without data (ask the person) */
+                        suggestedMinor: number | null;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
     GoalsController_get: {
         parameters: {
             query?: never;
@@ -11162,6 +11294,21 @@ export interface operations {
                         monthDeltaMinor: number | null;
                         /** @description How many linked holdings were removed from the portfolio */
                         removedHoldings: number;
+                        /** @description Only for an emergency reserve created with `reserveMonths`; null otherwise */
+                        reserve: {
+                            /** @description Months the target was built on */
+                            months: number;
+                            /** @description Monthly spending the target was built on (target divided by months), BRL cents */
+                            baseMinor: number;
+                            /** @description Monthly average of the spending today; null without data */
+                            averageMinor: number | null;
+                            /** @description `months` times the average today, BRL cents */
+                            suggestedMinor: number | null;
+                            /** @description Change of the average against the base, basis points */
+                            deltaBps: number | null;
+                            /** @description True when the average moved more than 10% from the base: offer "Atualizar o valor". The target never changes alone */
+                            shouldUpdate: boolean;
+                        } | null;
                         holdings: {
                             /** @enum {string} */
                             kind: "position" | "fixed_income";
@@ -11330,6 +11477,8 @@ export interface operations {
                     holderUserId?: string | null;
                     /** @description Money kept outside the portfolio for this goal, in BRL cents (0 or more) */
                     manualMinor?: number;
+                    /** @description Months of spending the emergency reserve covers (3, 6 or 12). Only for `emergency_reserve`; remembers the spending base of the target */
+                    reserveMonths?: number;
                     /** @description Holdings linked to the goal. The sum of the shares of one holding across all goals is at most 10000 bps */
                     holdings?: {
                         /**
@@ -11398,6 +11547,21 @@ export interface operations {
                         monthDeltaMinor: number | null;
                         /** @description How many linked holdings were removed from the portfolio */
                         removedHoldings: number;
+                        /** @description Only for an emergency reserve created with `reserveMonths`; null otherwise */
+                        reserve: {
+                            /** @description Months the target was built on */
+                            months: number;
+                            /** @description Monthly spending the target was built on (target divided by months), BRL cents */
+                            baseMinor: number;
+                            /** @description Monthly average of the spending today; null without data */
+                            averageMinor: number | null;
+                            /** @description `months` times the average today, BRL cents */
+                            suggestedMinor: number | null;
+                            /** @description Change of the average against the base, basis points */
+                            deltaBps: number | null;
+                            /** @description True when the average moved more than 10% from the base: offer "Atualizar o valor". The target never changes alone */
+                            shouldUpdate: boolean;
+                        } | null;
                         holdings: {
                             /** @enum {string} */
                             kind: "position" | "fixed_income";
