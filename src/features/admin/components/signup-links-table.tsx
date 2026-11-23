@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { Copy } from 'lucide-react';
+import { Copy, Pencil, type LucideIcon } from 'lucide-react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { formatDate } from '@/shared/lib/format/date';
 import { useLocale } from '@/shared/lib/i18n';
@@ -14,6 +14,7 @@ import type { SignupLink, SignupLinkStatus } from '../types';
 export interface SignupLinksTableProps {
     readonly links: readonly SignupLink[];
     readonly onCopy: (link: SignupLink) => void;
+    readonly onEdit: (link: SignupLink) => void;
     readonly onRevoke: (link: SignupLink) => void;
 }
 
@@ -47,6 +48,7 @@ function OfferSummary({ link }: { readonly link: SignupLink }): ReactElement {
         <span className="flex flex-col">
             <span>{trial}</span>
             <span className="text-xs text-content-muted">{rules}</span>
+            <span className="text-xs text-content-muted">{t('offerValidity', { count: link.offerValidityDays })}</span>
         </span>
     );
 }
@@ -57,42 +59,71 @@ function usesText(t: UseTranslationResponse<'admin', undefined>['t'], link: Sign
         : t('usesOf', { used: link.redemptionCount, max: link.maxUses });
 }
 
+interface RowButtonProps {
+    readonly link: SignupLink;
+    readonly label: string;
+    readonly ariaLabel: string;
+    readonly icon: LucideIcon | null;
+    readonly variant: 'secondary' | 'ghost';
+    readonly onPress: (link: SignupLink) => void;
+}
+
+function RowButton({ link, label, ariaLabel, icon: Icon, variant, onPress }: RowButtonProps): ReactElement {
+    return (
+        <Button
+            variant={variant}
+            size="sm"
+            aria-label={ariaLabel}
+            onClick={(): void => {
+                onPress(link);
+            }}
+        >
+            {Icon === null ? null : <Icon className="size-3.5" aria-hidden="true" />}
+            {label}
+        </Button>
+    );
+}
+
 function LinkActions({
     link,
     onCopy,
+    onEdit,
     onRevoke
-}: { readonly link: SignupLink } & Pick<SignupLinksTableProps, 'onCopy' | 'onRevoke'>): ReactElement {
+}: { readonly link: SignupLink } & Pick<SignupLinksTableProps, 'onCopy' | 'onEdit' | 'onRevoke'>): ReactElement {
     const { t }: UseTranslationResponse<'admin', undefined> = useTranslation('admin');
     return (
         <span className="flex gap-2">
-            <Button
+            <RowButton
+                link={link}
+                label={t('copyLink')}
+                ariaLabel={t('copyLinkNamed', { name: link.label })}
+                icon={Copy}
                 variant="secondary"
-                size="sm"
-                aria-label={t('copyLinkNamed', { name: link.label })}
-                onClick={(): void => {
-                    onCopy(link);
-                }}
-            >
-                <Copy className="size-3.5" aria-hidden="true" />
-                {t('copyLink')}
-            </Button>
+                onPress={onCopy}
+            />
+            <RowButton
+                link={link}
+                label={t('editLink')}
+                ariaLabel={t('editLinkNamed', { name: link.label })}
+                icon={Pencil}
+                variant="secondary"
+                onPress={onEdit}
+            />
             {link.status === 'active' ? (
-                <Button
+                <RowButton
+                    link={link}
+                    label={t('revokeLink')}
+                    ariaLabel={t('revokeLinkNamed', { name: link.label })}
+                    icon={null}
                     variant="ghost"
-                    size="sm"
-                    aria-label={t('revokeLinkNamed', { name: link.label })}
-                    onClick={(): void => {
-                        onRevoke(link);
-                    }}
-                >
-                    {t('revokeLink')}
-                </Button>
+                    onPress={onRevoke}
+                />
             ) : null}
         </span>
     );
 }
 
-export function SignupLinksTable({ links, onCopy, onRevoke }: SignupLinksTableProps): ReactElement {
+export function SignupLinksTable({ links, onCopy, onEdit, onRevoke }: SignupLinksTableProps): ReactElement {
     const { t }: UseTranslationResponse<'admin', undefined> = useTranslation('admin');
     const locale: SupportedLocale = useLocale();
     const timeZone: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -117,7 +148,7 @@ export function SignupLinksTable({ links, onCopy, onRevoke }: SignupLinksTablePr
         {
             key: 'actions',
             header: t('linkColumnActions'),
-            render: (link: SignupLink): ReactElement => <LinkActions link={link} onCopy={onCopy} onRevoke={onRevoke} />
+            render: (link: SignupLink): ReactElement => <LinkActions link={link} onCopy={onCopy} onEdit={onEdit} onRevoke={onRevoke} />
         }
     ];
     return (

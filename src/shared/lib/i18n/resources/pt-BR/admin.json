@@ -161,5 +161,19 @@
   "totpRecoveryCopy": "Copiar códigos",
   "totpRecoveryCopied": "Códigos copiados",
   "totpRecoveryDownload": "Baixar códigos",
-  "totpRecoverySaved": "Guardei os códigos"
+  "totpRecoverySaved": "Guardei os códigos",
+  "formEditTitle": "Editar link de cadastro",
+  "formEditDescription": "Mudanças valem para quem usar o link daqui para frente e para quem já usou e ainda não assinou. Assinaturas já feitas mantêm o desconto que gravaram.",
+  "formEditNotice": "Assinaturas já feitas mantêm a régua de desconto delas.",
+  "formSave": "Salvar alterações",
+  "formSaving": "Salvando",
+  "formOfferValidity": "Validade da oferta (dias)",
+  "formOfferValidityHint": "Quantos dias a conta tem para assinar depois de usar o link, de 1 a 365.",
+  "formOfferValidityInvalid": "Informe de 1 a 365 dias.",
+  "errorOffer_offer_validity_out_of_range": "A validade da oferta vai de 1 a 365 dias.",
+  "editLink": "Editar",
+  "editLinkNamed": "Editar o link {{name}}",
+  "linkUpdated": "Link atualizado",
+  "offerValidity_one": "Vale {{count}} dia depois do uso",
+  "offerValidity_other": "Vale {{count}} dias depois do uso"
 }

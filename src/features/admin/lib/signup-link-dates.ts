@@ -5,7 +5,11 @@ const MINUTE_MS: number = 60_000;
 const DAY_MS: number = 86_400_000;
 
 export function todayIso(now: Date = new Date()): string {
-    return isoOf(now.getFullYear(), now.getMonth(), now.getDate());
+    return localIso(now);
+}
+
+export function localIso(date: Date): string {
+    return isoOf(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
 export function noCardLastIso(now: Date = new Date()): string {
