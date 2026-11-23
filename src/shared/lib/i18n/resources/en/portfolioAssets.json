@@ -195,6 +195,7 @@
       "covered": "Covered by the FGC. With this security you will have {{total}} in the {{group}} conglomerate, against a limit of {{limit}}.",
       "over_limit": "With this security you will have {{total}} in the {{group}} conglomerate: {{over}} above the FGC limit of {{limit}}.",
       "not_covered_kind": "{{kind}} is not covered by the FGC: the risk is only the issuing company.",
+      "not_calculated": "No coverage is calculated for this issuer.",
       "not_associated": "This issuer is not an FGC member."
     }
   },

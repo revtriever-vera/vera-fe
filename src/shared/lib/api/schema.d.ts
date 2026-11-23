@@ -204,6 +204,150 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the people of the account and the pending invites
+         * @description Any person of the account can read it. The email of other people and the pending invites are only returned to the owner.
+         */
+        get: operations["MembersController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/members/invites": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Invite a person by email
+         * @description Sends a link that is valid for the configured days. Inviting an email that already has a pending invite resends it with the new role. The person enters with Google or Facebook and the verified email has to be the invited one.
+         */
+        post: operations["MembersController_invite"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/members/invites/{inviteId}/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Resend a pending invite
+         * @description Generates a new link, invalidates the previous one and renews the validity.
+         */
+        post: operations["MembersController_resend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/members/invites/{inviteId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Revoke a pending invite
+         * @description The link of the invite stops working.
+         */
+        delete: operations["MembersController_revoke"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/members/me/leave": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Leave the account
+         * @description The person loses the access to this account and the sessions are revoked. The only owner cannot leave. To come back, someone in the account has to invite the person again.
+         */
+        post: operations["MembersController_leave"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/members/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Remove a person from the account
+         * @description Revokes the sessions of the person, removes the sign-in methods, frees the email and tells the modules that hold things of that person. The portfolio and the expenses stay with the account.
+         */
+        delete: operations["MembersController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Change the role of a person
+         * @description The account always keeps at least one owner. Takes effect on the next request of that person.
+         */
+        patch: operations["MembersController_changeRole"];
+        trace?: never;
+    };
+    "/invites/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Look up an invite by its link token
+         * @description Public, no session. Returns who invited, the account, the role and the invited email masked, so the screen can say which email to sign in with without exposing it to anyone who finds the link.
+         */
+        get: operations["InvitesController_lookup"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/allocation/classes": {
         parameters: {
             query?: never;
@@ -580,6 +724,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/issuers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Search the curated list of issuers
+         * @description Searches institutions and business groups by name, alias or group name, ignoring accents and case, and returns at most 20. Retired institutions only appear when the text matches their name exactly, so an old security can still be edited. Use `kind=bank` for CDB, LCI, LCA and LC, and `kind=company` for debenture, CRI and CRA. Limited to 120 calls per minute per company.
+         */
+        get: operations["IssuersController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/fixed-income/titles": {
         parameters: {
             query?: never;
@@ -628,7 +792,27 @@ export interface paths {
         patch: operations["FixedIncomeController_update"];
         trace?: never;
     };
-    "/issuers": {
+    "/fixed-income/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Estimate the value of a security without saving it
+         * @description Calculates the valuation today for the given terms with the same engine as the registration, and stores nothing. Limited to 120 calls per minute per company.
+         */
+        post: operations["FixedIncomeController_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/portfolio/fgc": {
         parameters: {
             query?: never;
             header?: never;
@@ -636,10 +820,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Search the curated list of issuers
-         * @description Searches institutions and business groups by name, alias or group name, ignoring accents and case, and returns at most 20. Retired institutions only appear when the text matches their name exactly, so an old security can still be edited. Use `kind=bank` for CDB, LCI, LCA and LC, and `kind=company` for debenture, CRI and CRA. Limited to 120 calls per minute per company.
+         * FGC coverage by conglomerate
+         * @description Groups the CDB, LCI, LCA and LC in BRL of banks associated with the FGC by prudential conglomerate and applies the limit of R$ 250,000 per CPF per conglomerate to the value today (gross of income tax). Matured securities do not count. Holdings the FGC does not cover come back in `outside` with the reason (`not_calculated` is the "Outro emissor" option, not a pending registration). The R$ 1,000,000 cap is a reference only: the real rule is about guarantees paid in 4 years. Amounts are always in BRL.
          */
-        get: operations["IssuersController_search"];
+        get: operations["FgcController_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -658,8 +842,8 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Simulate the FGC coverage of a new security
-         * @description Adds the value to the conglomerate of the issuer and tells whether the account stays covered by the FGC. Hand-written from the contract of vera#90 until the endpoint reaches the API milestone: regenerate with `npm run api:types`.
+         * Simulate a security against the FGC limit
+         * @description State of the issuer group with a hypothetical security and the verdict: covered, over_limit, not_covered_kind, not_associated or not_calculated (issuer "outro": no coverage calculated). Writes nothing. Use excludeTitleId when editing, so the security is not counted twice. Limited to 60 calls per minute per company.
          */
         post: operations["FgcController_simulate"];
         delete?: never;
@@ -668,20 +852,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/fixed-income/preview": {
+    "/portfolio/maturities": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
         /**
-         * Estimate the value of a security without saving it
-         * @description Calculates the valuation today for the given terms with the same engine as the registration, and stores nothing. Limited to 120 calls per minute per company.
+         * Upcoming maturities with the estimated value
+         * @description Fixed income securities and Tesouro Direto positions that mature today or later, nearest first, with the estimated gross value on the maturity date (before income tax), the days to maturity, the amount to carry to the contribution suggestion (value rounded down to R$ 100) and the basis of the estimate. The projection holds the latest CDI and the 12-month IPCA constant until the maturity and counts business days on a 252-day year; it is not a guarantee. The reference rates used come in the response. Without the index series the rows come back estimated, with today value.
          */
-        post: operations["FixedIncomeController_preview"];
+        get: operations["ScheduleController_listMaturities"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/portfolio/real-rates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Real rate and purchasing power of each fixed income security
+         * @description For each BRL security not yet matured: the nominal yearly rate, the real rate above the 12-month IPCA, the applied amount corrected by the IPCA published since the application date and the purchasing power gain (value today minus the corrected amount). Every figure is before income tax. Rows below 3% a year of real rate are flagged.
+         */
+        get: operations["ScheduleController_listRealRates"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -876,70 +1080,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/spending/imports/preview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Preview a bank statement without saving anything
-         * @description Detects the format (OFX 1.x or 2.x, Nubank card or account CSV, or a generic CSV), reads the file and returns the period, a sample, the rows it could not read and the account of the company that matches the file. Nothing is stored: the file is read in memory and discarded, and the confirmed import sends the same file again. A generic CSV sent without `mapping` returns only `columns` and the number of data lines, so the client can ask for the mapping.
-         */
-        post: operations["ImportsController_preview"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/spending/imports": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List the imports of the company
-         * @description Newest first. The sample rows and the file content are not part of the list.
-         */
-        get: operations["ImportsController_listImports"];
-        put?: never;
-        /**
-         * Import a bank statement
-         * @description Saves the transactions of the file in an existing account (`accountId`) or in a new one (`newAccountName` and `newAccountKind`). The same transaction already saved from this file, from another file or from the bank connection (same account, same amount, one day apart) counts in `duplicates` and is not created again, so importing the same file twice adds nothing. The import is one batch that `DELETE /spending/imports/{id}` undoes; if it fails midway, nothing is kept.
-         */
-        post: operations["ImportsController_commit"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/spending/imports/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Undo an import
-         * @description Removes the transactions this import created. A transaction that came from the bank connection stays: it only loses the link with the rows of the file it had absorbed. Undoing an import already undone removes nothing.
-         */
-        delete: operations["ImportsController_undo"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/spending/categories": {
         parameters: {
             query?: never;
@@ -1056,50 +1196,6 @@ export interface paths {
         patch: operations["RulesController_update"];
         trace?: never;
     };
-    "/spending/summary": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Monthly spending summary
-         * @description Monthly summary computed on demand from the transactions, in BRL and integer cents (accounts in another currency are left out and counted in `excludedCurrencyCount`). Without `month`, returns the last closed month in the company timezone. Formulas: `spentMinor` of an expense category is minus the sum of its transactions in the month (a refund reduces it). `uncategorizedMinor` is minus the sum of the outflows without category; inflows without category are neither income nor expense (`uncategorizedInflowMinor`). `expensesMinor` = sum of `spentMinor` + `uncategorizedMinor`. `income.minor` is the sum of the `income` transactions (mode `transactions`) or `declaredIncomeMinor` (mode `declared`). `savedMinor` = income - expenses. `savingsRateBps` = round(saved * 10000 / income), half up, null when income is 0. `goal.minor` = round(income * goal.bps / 10000). `gapMinor` = max(0, goal - saved). `fixedMinor` and `flexibleMinor` sum `spentMinor` by flexibility; `fixedShareBps` = fixed / income. `transfersOutMinor` is the outflow of `transfer` categories (card bill payments, investments, own transfers), informative only. The average of a category is the mean of `spentMinor` over the 3 calendar months before `month` that have at least one transaction (`averageMonths` = how many entered; `averageMinor` and `deltaBps` are null with 0). `deltaBps` = round((spent - average) * 10000 / average) when average > 0; with average 0 and spent > 0 it is null and `isNew` is true. `categories` lists expense categories with spending or average, by `spentMinor` descending then `position`. `incomeCategories` carries the received amount in `spentMinor`, without average. Sample transactions count. A future month or a malformed one returns 422.
-         */
-        get: operations["SummaryController_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/spending/settings": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Read the spending settings
-         * @description Returns the savings goal and the income source. The first read creates the defaults: 2000 bps (20%) and `transactions`.
-         */
-        get: operations["SettingsController_get"];
-        /**
-         * Change the spending settings
-         * @description Changes the savings goal (0 to 9000 bps) and/or the income source. In `declared` mode the declared income must be greater than zero. The declared value is kept when the mode goes back to `transactions`. Takes effect on the next summary, with no cache.
-         */
-        put: operations["SettingsController_update"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/spending/transactions": {
         parameters: {
             query?: never;
@@ -1204,7 +1300,7 @@ export interface paths {
         patch: operations["AccountsController_rename"];
         trace?: never;
     };
-    "/spending/transactions/export": {
+    "/spending/summary": {
         parameters: {
             query?: never;
             header?: never;
@@ -1212,11 +1308,35 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Download the transactions as a spreadsheet
-         * @description One row per transaction of the filter, oldest first: date, description, payee, signed amount (negative is money out), currency, category, where the category comes from, account, institution and source. The filters are the ones of the list; without a date filter the current month is exported. Headers, default category names and the csv separators follow the locale of the session (pt-BR: ";" and decimal comma, dates dd/MM/yyyy; en: "," and decimal point, dates yyyy-MM-dd). Amount and date are numbers and dates in the xlsx, never text; text that starts with a formula character is prefixed with an apostrophe. At most 50,000 rows per file.
+         * Monthly spending summary
+         * @description Monthly summary computed on demand from the transactions, in BRL and integer cents (accounts in another currency are left out and counted in `excludedCurrencyCount`). Without `month`, returns the last closed month in the company timezone. Formulas: `spentMinor` of an expense category is minus the sum of its transactions in the month (a refund reduces it). `uncategorizedMinor` is minus the sum of the outflows without category; inflows without category are neither income nor expense (`uncategorizedInflowMinor`). `expensesMinor` = sum of `spentMinor` + `uncategorizedMinor`. `income.minor` is the sum of the `income` transactions (mode `transactions`) or `declaredIncomeMinor` (mode `declared`). `savedMinor` = income - expenses. `savingsRateBps` = round(saved * 10000 / income), half up, null when income is 0. `goal.minor` = round(income * goal.bps / 10000). `gapMinor` = max(0, goal - saved). `fixedMinor` and `flexibleMinor` sum `spentMinor` by flexibility; `fixedShareBps` = fixed / income. `transfersOutMinor` is the outflow of `transfer` categories (card bill payments, investments, own transfers), informative only. The average of a category is the mean of `spentMinor` over the 3 calendar months before `month` that have at least one transaction (`averageMonths` = how many entered; `averageMinor` and `deltaBps` are null with 0). `deltaBps` = round((spent - average) * 10000 / average) when average > 0; with average 0 and spent > 0 it is null and `isNew` is true. `categories` lists expense categories with spending or average, by `spentMinor` descending then `position`. `incomeCategories` carries the received amount in `spentMinor`, without average. Sample transactions count. A future month or a malformed one returns 422.
          */
-        get: operations["TransactionsExportController_export"];
+        get: operations["SummaryController_get"];
         put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read the spending settings
+         * @description Returns the savings goal and the income source. The first read creates the defaults: 2000 bps (20%) and `transactions`.
+         */
+        get: operations["SettingsController_get"];
+        /**
+         * Change the spending settings
+         * @description Changes the savings goal (0 to 9000 bps) and/or the income source. In `declared` mode the declared income must be greater than zero. The declared value is kept when the mode goes back to `transactions`. Takes effect on the next summary, with no cache.
+         */
+        put: operations["SettingsController_update"];
         post?: never;
         delete?: never;
         options?: never;
@@ -1239,6 +1359,90 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/transactions/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Download the transactions as a spreadsheet
+         * @description One row per transaction of the filter, oldest first: date, description, payee, signed amount (negative is money out), currency, category, where the category comes from, account, institution and source. The filters are the ones of the list; without a date filter the current month is exported. Headers, default category names and the csv separators follow the locale of the session (pt-BR: ";" and decimal comma, dates dd/MM/yyyy; en: "," and decimal point, dates yyyy-MM-dd). Amount and date are numbers and dates in the xlsx, never text; text that starts with a formula character is prefixed with an apostrophe. At most 50,000 rows per file.
+         */
+        get: operations["TransactionsExportController_export"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/imports/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Preview a bank statement without saving anything
+         * @description Detects the format (OFX 1.x or 2.x, Nubank card or account CSV, or a generic CSV), reads the file and returns the period, a sample, the rows it could not read and the account of the company that matches the file. Nothing is stored: the file is read in memory and discarded, and the confirmed import sends the same file again. A generic CSV sent without `mapping` returns only `columns` and the number of data lines, so the client can ask for the mapping.
+         */
+        post: operations["ImportsController_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/imports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the imports of the company
+         * @description Newest first. The sample rows and the file content are not part of the list.
+         */
+        get: operations["ImportsController_listImports"];
+        put?: never;
+        /**
+         * Import a bank statement
+         * @description Saves the transactions of the file in an existing account (`accountId`) or in a new one (`newAccountName` and `newAccountKind`). The same transaction already saved from this file, from another file or from the bank connection (same account, same amount, one day apart) counts in `duplicates` and is not created again, so importing the same file twice adds nothing. The import is one batch that `DELETE /spending/imports/{id}` undoes; if it fails midway, nothing is kept.
+         */
+        post: operations["ImportsController_commit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/imports/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Undo an import
+         * @description Removes the transactions this import created. A transaction that came from the bank connection stays: it only loses the link with the rows of the file it had absorbed. Undoing an import already undone removes nothing.
+         */
+        delete: operations["ImportsController_undo"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1500,126 +1704,6 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    IssuersController_search: {
-        parameters: {
-            query?: {
-                /** @description Fragment of the institution name, alias or group name, up to 60 characters; accents and case are ignored */
-                q?: string;
-                /** @description `bank` for CDB, LCI, LCA and LC issuers; `company` for debenture, CRI and CRA issuers; omitted searches every kind */
-                kind?: "bank" | "company";
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Institutions ordered by relevance */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Institutions ordered by relevance, at most 20 */
-                        items: {
-                            /** @description Stable slug of the institution, e.g. banco-inter */
-                            id: string;
-                            /** @description Institution name */
-                            name: string;
-                            /** @description Slug of the prudential conglomerate or business group the institution belongs to */
-                            groupId: string;
-                            /** @description Name of the conglomerate or group, after following any incorporation */
-                            groupName: string;
-                            /**
-                             * @description `bank`, `company` or `sovereign`
-                             * @enum {string}
-                             */
-                            kind: "bank" | "company" | "sovereign";
-                            /** @description Whether the institution is associated to the FGC */
-                            fgcAssociated: boolean;
-                            /**
-                             * @description `retired` institutions only show up when the search matches the name exactly
-                             * @enum {string}
-                             */
-                            status: "active" | "retired";
-                        }[];
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    FgcController_simulate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description Slug of the issuer in the curated list (GET /issuers) */
-                    issuerId: string;
-                    /**
-                     * @description Kind of security: cdb, lci, lca, lc, debenture, cri or cra
-                     * @enum {string}
-                     */
-                    kind: "cdb" | "lci" | "lca" | "lc" | "debenture" | "cri" | "cra";
-                    /** @description Value of the new security in the smallest unit of the currency */
-                    valueMinor: number;
-                    /** @description Security being edited: its current value leaves the sum */
-                    excludeTitleId?: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Verdict of the simulation */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description Where the security stands against the FGC
-                         * @enum {string}
-                         */
-                        verdict: "covered" | "over_limit" | "not_covered_kind" | "not_associated";
-                        /** @description Slug of the conglomerate of the issuer */
-                        groupId: string;
-                        /** @description Name of the conglomerate of the issuer */
-                        groupName: string;
-                        /** @description Total in the conglomerate after the new security, in minor units */
-                        totalAfterMinor: number;
-                        /** @description Amount above the limit per conglomerate, in minor units; 0 when covered */
-                        overMinor: number;
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description fixed_income.unknown_issuer or fixed_income.issuer_kind_mismatch */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
     HealthController_check: {
         parameters: {
             query?: never;
@@ -1740,7 +1824,7 @@ export interface operations {
                             /** @description User email */
                             email: string;
                             /**
-                             * @description `owner` runs the company; `member` is reserved for invited teammates
+                             * @description `owner` runs the company, `editor` changes its data, `viewer` only reads
                              * @enum {string}
                              */
                             role: "owner" | "editor" | "viewer";
@@ -1752,6 +1836,8 @@ export interface operations {
                         };
                         /** @description True when this login created the company and the user */
                         isNewAccount: boolean;
+                        /** @description True when this login entered an account through an invite (no company was created) */
+                        joinedAccount: boolean;
                     };
                 };
             };
@@ -1779,8 +1865,32 @@ export interface operations {
                     };
                 };
             };
-            /** @description Email already belongs to an account that cannot be linked (identity.email_in_use) */
+            /** @description Email already belongs to an account that cannot be linked (identity.email_in_use). With an invite: the verified email is not the invited one (invites.email_mismatch) or the person already has an account with data or with other people (members.account_not_empty) */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The invite does not exist, expired, was revoked or was already used (invites.invalid) */
+            410: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1896,7 +2006,7 @@ export interface operations {
                             /** @description User email */
                             email: string;
                             /**
-                             * @description `owner` runs the company; `member` is reserved for invited teammates
+                             * @description `owner` runs the company, `editor` changes its data, `viewer` only reads
                              * @enum {string}
                              */
                             role: "owner" | "editor" | "viewer";
@@ -1908,6 +2018,8 @@ export interface operations {
                         };
                         /** @description True when this login created the company and the user */
                         isNewAccount: boolean;
+                        /** @description True when this login entered an account through an invite (no company was created) */
+                        joinedAccount: boolean;
                     };
                 };
             };
@@ -1935,8 +2047,32 @@ export interface operations {
                     };
                 };
             };
-            /** @description Email already belongs to an account that cannot be linked (identity.email_in_use) */
+            /** @description Email already belongs to an account that cannot be linked (identity.email_in_use). With an invite: the verified email is not the invited one (invites.email_mismatch) or the person already has an account with data or with other people (members.account_not_empty) */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The invite does not exist, expired, was revoked or was already used (invites.invalid) */
+            410: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -2091,7 +2227,7 @@ export interface operations {
                             /** @description User email */
                             email: string;
                             /**
-                             * @description `owner` runs the company; `member` is reserved for invited teammates
+                             * @description `owner` runs the company, `editor` changes its data, `viewer` only reads
                              * @enum {string}
                              */
                             role: "owner" | "editor" | "viewer";
@@ -2178,7 +2314,7 @@ export interface operations {
                         /** @description User email */
                         email: string;
                         /**
-                         * @description Role inside the company
+                         * @description Role inside the company: `owner`, `editor` or `viewer`
                          * @enum {string}
                          */
                         role: "owner" | "editor" | "viewer";
@@ -2269,7 +2405,7 @@ export interface operations {
                         /** @description User email */
                         email: string;
                         /**
-                         * @description Role inside the company
+                         * @description Role inside the company: `owner`, `editor` or `viewer`
                          * @enum {string}
                          */
                         role: "owner" | "editor" | "viewer";
@@ -2526,7 +2662,7 @@ export interface operations {
                     };
                 };
             };
-            /** @description Only the owner can delete the company (identity.forbidden) */
+            /** @description Only the owner can delete the company (members.forbidden_role) */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -2600,6 +2736,929 @@ export interface operations {
             };
             /** @description An area failed to erase, nothing was deleted (identity.erasure_failed, meta.area) */
             500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    MembersController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Active people and pending invites */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Active people of the account */
+                        members: {
+                            /**
+                             * Format: uuid
+                             * @description Person id
+                             */
+                            userId: string;
+                            /** @description Person display name */
+                            name: string;
+                            /** @description Email; only the owner sees the email of other people, the rest get null */
+                            email: string | null;
+                            /**
+                             * @description `owner` runs the account, `editor` changes its data, `viewer` only reads
+                             * @enum {string}
+                             */
+                            role: "owner" | "editor" | "viewer";
+                            /** @description True for the person who is asking */
+                            isYou: boolean;
+                            /**
+                             * Format: date-time
+                             * @description When the person joined the account (ISO 8601)
+                             */
+                            joinedAt: string;
+                        }[];
+                        /** @description Pending invites; always empty for people who are not the owner */
+                        invites: {
+                            /**
+                             * Format: uuid
+                             * @description Invite id
+                             */
+                            id: string;
+                            /** @description Email the invite was sent to */
+                            email: string;
+                            /**
+                             * @description `owner` runs the account, `editor` changes its data, `viewer` only reads
+                             * @enum {string}
+                             */
+                            role: "owner" | "editor" | "viewer";
+                            /**
+                             * Format: date-time
+                             * @description When the link stops working (ISO 8601)
+                             */
+                            expiresAt: string;
+                            /**
+                             * Format: date-time
+                             * @description When the link was last sent (ISO 8601)
+                             */
+                            lastSentAt: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    MembersController_invite: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: email
+                     * @description Email the invite link is sent to; the person must sign in with this email
+                     */
+                    email: string;
+                    /**
+                     * @description `owner` runs the account, `editor` changes its data, `viewer` only reads
+                     * @enum {string}
+                     */
+                    role: "owner" | "editor" | "viewer";
+                };
+            };
+        };
+        responses: {
+            /** @description Invite created or resent */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        invite: {
+                            /**
+                             * Format: uuid
+                             * @description Invite id
+                             */
+                            id: string;
+                            /** @description Email the invite was sent to */
+                            email: string;
+                            /**
+                             * @description `owner` runs the account, `editor` changes its data, `viewer` only reads
+                             * @enum {string}
+                             */
+                            role: "owner" | "editor" | "viewer";
+                            /**
+                             * Format: date-time
+                             * @description When the link stops working (ISO 8601)
+                             */
+                            expiresAt: string;
+                        };
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The role of the person is not enough (members.forbidden_role) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The email is already a person of the account (invites.already_member) or the account is full (members.limit_reached) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 20 invites in a day for this account (core.too_many_attempts) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    MembersController_resend: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                inviteId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Invite resent */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        invite: {
+                            /**
+                             * Format: uuid
+                             * @description Invite id
+                             */
+                            id: string;
+                            /** @description Email the invite was sent to */
+                            email: string;
+                            /**
+                             * @description `owner` runs the account, `editor` changes its data, `viewer` only reads
+                             * @enum {string}
+                             */
+                            role: "owner" | "editor" | "viewer";
+                            /**
+                             * Format: date-time
+                             * @description When the link stops working (ISO 8601)
+                             */
+                            expiresAt: string;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The role of the person is not enough (members.forbidden_role) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No pending invite with this id (invites.not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 5 resends in an hour for this invite (core.too_many_attempts) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    MembersController_revoke: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                inviteId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The role of the person is not enough (members.forbidden_role) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No pending invite with this id (invites.not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    MembersController_leave: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The account would be left without an owner (members.last_owner) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    MembersController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The owner removing themselves must use the leave endpoint (members.cannot_remove_self) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The role of the person is not enough (members.forbidden_role) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No active person with this id in the account (members.not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The account would be left without an owner (members.last_owner) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    MembersController_changeRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * @description `owner` runs the account, `editor` changes its data, `viewer` only reads
+                     * @enum {string}
+                     */
+                    role: "owner" | "editor" | "viewer";
+                };
+            };
+        };
+        responses: {
+            /** @description Person with the new role */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        member: {
+                            /**
+                             * Format: uuid
+                             * @description Person id
+                             */
+                            userId: string;
+                            /** @description Person display name */
+                            name: string;
+                            /** @description Email; only the owner sees the email of other people, the rest get null */
+                            email: string | null;
+                            /**
+                             * @description `owner` runs the account, `editor` changes its data, `viewer` only reads
+                             * @enum {string}
+                             */
+                            role: "owner" | "editor" | "viewer";
+                            /** @description True for the person who is asking */
+                            isYou: boolean;
+                            /**
+                             * Format: date-time
+                             * @description When the person joined the account (ISO 8601)
+                             */
+                            joinedAt: string;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The role of the person is not enough (members.forbidden_role) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No active person with this id in the account (members.not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The account would be left without an owner (members.last_owner) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    InvitesController_lookup: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Public data of the invite */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description First name of the person who invited */
+                        inviterName: string;
+                        /** @description Name of the account the invite gives access to */
+                        accountName: string;
+                        /**
+                         * @description `owner` runs the account, `editor` changes its data, `viewer` only reads
+                         * @enum {string}
+                         */
+                        role: "owner" | "editor" | "viewer";
+                        /** @description Invited email with the local part masked, e.g. l***@gmail.com */
+                        emailMasked: string;
+                        /**
+                         * Format: date-time
+                         * @description When the link stops working (ISO 8601)
+                         */
+                        expiresAt: string;
+                    };
+                };
+            };
+            /** @description The invite does not exist, expired, was revoked or was already used (invites.invalid) */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Too many lookups from this IP (core.too_many_attempts) */
+            429: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -5120,6 +6179,10 @@ export interface operations {
                             quantityDecimals: number;
                             /** @description Maturity date (YYYY-MM-DD) for Tesouro Direto bonds, otherwise null */
                             maturityDate: string | null;
+                            /** @description Sector key from the curated profile (e.g. financeiro); null when the asset has no profile yet */
+                            sector: string | null;
+                            /** @description Slug of the issuer group from the curated profile, used to add up holdings of the same group; null when none */
+                            issuerGroupId: string | null;
                         }[];
                     };
                 };
@@ -5254,6 +6317,10 @@ export interface operations {
                         quantityDecimals: number;
                         /** @description Maturity date (YYYY-MM-DD) for Tesouro Direto bonds, otherwise null */
                         maturityDate: string | null;
+                        /** @description Sector key from the curated profile (e.g. financeiro); null when the asset has no profile yet */
+                        sector: string | null;
+                        /** @description Slug of the issuer group from the curated profile, used to add up holdings of the same group; null when none */
+                        issuerGroupId: string | null;
                     };
                 };
             };
@@ -5283,6 +6350,127 @@ export interface operations {
             };
             /** @description The asset does not exist (catalog.asset_not_found) */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    IssuersController_list: {
+        parameters: {
+            query?: {
+                /** @description Fragment of the institution name, alias or group name, up to 60 characters; accents and case are ignored */
+                q?: string;
+                /** @description `bank` for CDB, LCI, LCA and LC issuers; `company` for debenture, CRI and CRA issuers; `outro` (any kind, outside the FGC) comes last in every search; omitted searches every kind */
+                kind?: "bank" | "company";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Institutions ordered by relevance */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Institutions ordered by relevance, at most 20 */
+                        items: {
+                            /** @description Stable slug of the institution, e.g. banco-inter */
+                            id: string;
+                            /** @description Institution name */
+                            name: string;
+                            /** @description Slug of the prudential conglomerate or business group the institution belongs to */
+                            groupId: string;
+                            /** @description Name of the conglomerate or group, after following any incorporation */
+                            groupName: string;
+                            /**
+                             * @description `bank`, `company`, `sovereign` or `other` (the "Outro emissor" option)
+                             * @enum {string}
+                             */
+                            kind: "bank" | "company" | "sovereign" | "other";
+                            /** @description Whether the institution is associated to the FGC */
+                            fgcAssociated: boolean;
+                            /**
+                             * @description `retired` institutions only show up when the search matches the name exactly
+                             * @enum {string}
+                             */
+                            status: "active" | "retired";
+                        }[];
+                    };
+                };
+            };
+            /** @description Invalid query (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 120 searches in a minute for the company (core.too_many_attempts) */
+            429: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -5342,13 +6530,13 @@ export interface operations {
                     maturityDate: string;
                     /** @description Name given by the user, trimmed, 1 to 80 characters without control characters. Untrusted text */
                     name: string;
+                    /** @description Slug of the issuer in the curated list (GET /issuers), e.g. banco-inter */
+                    issuerId?: string;
                     /**
                      * Format: uuid
                      * @description Class of the security; omitted uses the class suggested by the indexer
                      */
                     classId?: string;
-                    /** @description Issuer of the security; optional, but the app asks for it on new securities */
-                    issuerId?: string;
                 };
             };
         };
@@ -5814,6 +7002,8 @@ export interface operations {
                     kind?: "cdb" | "lci" | "lca" | "lc" | "debenture" | "cri" | "cra";
                     /** @description Name given by the user, trimmed, 1 to 80 characters without control characters. Untrusted text */
                     name?: string;
+                    /** @description Slug of the issuer in the curated list (GET /issuers), e.g. banco-inter */
+                    issuerId?: string | null;
                     /**
                      * @description Indexer: `cdi_percent` (percentage of CDI), `prefixed` or `ipca_plus` (IPCA + fixed rate)
                      * @enum {string}
@@ -5832,8 +7022,6 @@ export interface operations {
                     appliedAt?: string;
                     /** @description Maturity date, YYYY-MM-DD, after the application date and at most 50 years ahead of it */
                     maturityDate?: string;
-                    /** @description New issuer; null removes the current one */
-                    issuerId?: string | null;
                 };
             };
         };
@@ -6197,6 +7385,503 @@ export interface operations {
             };
             /** @description More than 120 previews in a minute (core.too_many_attempts) */
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    FgcController_get: {
+        parameters: {
+            query?: {
+                /** @description Holder (person) of the securities. Not supported yet: answers 400 fgc.holder_not_supported */
+                holderId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Coverage of the account */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Currency of every amount; always BRL, even when the base currency is USD
+                         * @enum {string}
+                         */
+                        currency: "BRL";
+                        /**
+                         * @description Whole account; per-holder blocks arrive with the holders
+                         * @enum {string}
+                         */
+                        scope: "account";
+                        /** @description Number of people on the account; the FGC limit is per CPF */
+                        peopleCount: number;
+                        /** @description FGC limit per CPF per conglomerate, in BRL minor units */
+                        limitPerGroupMinor: number;
+                        /** @description Reference cap of the guarantees paid to one person every 4 years, in BRL minor units */
+                        capMinor: number;
+                        /** @description Sum of the covered amounts of every group */
+                        coveredMinor: number;
+                        /** @description coveredMinor over capMinor in basis points; may be above 10000 */
+                        capShareBps: number;
+                        /** @description Groups by totalMinor, largest first */
+                        groups: {
+                            /** @description Prudential conglomerate id */
+                            groupId: string;
+                            /** @description Conglomerate name */
+                            groupName: string;
+                            /** @description Value today (gross) of the eligible securities of the group */
+                            totalMinor: number;
+                            /** @description min(totalMinor, limit) */
+                            coveredMinor: number;
+                            /** @description max(0, totalMinor - limit) */
+                            overMinor: number;
+                            titles: {
+                                id: string;
+                                /** @description Security name given by the user. Untrusted text */
+                                name: string;
+                                issuerName: string;
+                                kind: string;
+                                /** @description Value today, gross of income tax */
+                                valueMinor: number;
+                                /** @description True when the value is the applied amount or rests on an assumption */
+                                estimated: boolean;
+                            }[];
+                        }[];
+                        /** @description Holdings that the FGC does not cover, with the reason */
+                        outside: {
+                            id: string;
+                            /** @description Untrusted text */
+                            name: string;
+                            /** @enum {string} */
+                            reason: "tesouro" | "not_covered_kind" | "not_associated" | "foreign" | "missing_issuer" | "not_calculated";
+                            /** @description Value today in the holding currency */
+                            valueMinor: number;
+                        }[];
+                        /** @description Reference date, YYYY-MM-DD */
+                        asOf: string;
+                    };
+                };
+            };
+            /** @description holderId informed (fgc.holder_not_supported) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    FgcController_simulate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Issuer id from GET /issuers */
+                    issuerId: string;
+                    /**
+                     * @description Kind of the hypothetical security
+                     * @enum {string}
+                     */
+                    kind: "cdb" | "lci" | "lca" | "lc" | "debenture" | "cri" | "cra";
+                    /** @description Value of the security, in BRL minor units */
+                    valueMinor: number;
+                    /**
+                     * Format: uuid
+                     * @description Security being edited, not counted twice
+                     */
+                    excludeTitleId?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Verdict */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        verdict: "covered" | "over_limit" | "not_covered_kind" | "not_associated" | "not_calculated";
+                        groupId: string;
+                        groupName: string;
+                        /** @description Group total with the hypothetical security (without it when the verdict is not covered) */
+                        totalAfterMinor: number;
+                        /** @description Amount of the group above the limit */
+                        overMinor: number;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Unknown issuer or issuer kind that does not fit the security (fixed_income.unknown_issuer, fixed_income.issuer_kind_mismatch) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 60 simulations in a minute for the company (core.too_many_attempts) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    ScheduleController_listMaturities: {
+        parameters: {
+            query?: {
+                /** @description Maximum number of rows, nearest maturity first. From 1 to 500, default 50 */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Upcoming maturities */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Reference date in the company time zone, YYYY-MM-DD */
+                        asOf: string;
+                        /** @description Reference rates used by the projection */
+                        reference: {
+                            /** @description Latest daily CDI annualized over 252 business days, in basis points; null without a CDI series */
+                            cdiAnnualBps: number | null;
+                            /** @description IPCA accumulated over the last 12 published months, in basis points; null without 12 consecutive months */
+                            ipca12mBps: number | null;
+                            /** @description Date of the CDI point used, YYYY-MM-DD; null without a CDI series */
+                            cdiDate: string | null;
+                            /** @description Last published IPCA month used, YYYY-MM; null without 12 consecutive months */
+                            ipcaMonth: string | null;
+                        };
+                        /** @description Securities and Tesouro Direto positions that mature today or later, nearest first */
+                        items: {
+                            /**
+                             * @description fixed_income: security of the company; position: Tesouro Direto position
+                             * @enum {string}
+                             */
+                            holdingKind: "fixed_income" | "position";
+                            /** @description Security id or position id, according to holdingKind */
+                            id: string;
+                            /** @description Security name given by the user, or Tesouro Direto title symbol. Untrusted text */
+                            name: string;
+                            /** @description Issuer from the curated list; null for Tesouro Direto or an issuer not informed */
+                            issuerName: string | null;
+                            /** @description Kind of fixed income security (cdb, lci, ...); null for a position */
+                            kind: string | null;
+                            /** @description Maturity date, YYYY-MM-DD */
+                            maturityDate: string;
+                            /** @description Calendar days from today to the maturity, in the company time zone; 0 on the maturity day */
+                            daysToMaturity: number;
+                            /** @description True when the maturity is 90 days away or less */
+                            soon: boolean;
+                            /** @description Estimated gross value on the maturity date, before income tax, in BRL minor units */
+                            estimatedValueMinor: number;
+                            /**
+                             * @description Currency of estimatedValueMinor and reallocateMinor; always BRL
+                             * @enum {string}
+                             */
+                            currency: "BRL";
+                            /** @description Estimated value rounded down to a multiple of R$ 100, the amount to carry to the contribution suggestion */
+                            reallocateMinor: number;
+                            /** @description True when the value rests on an assumption (missing series, USD conversion, inflation only) */
+                            estimated: boolean;
+                            /**
+                             * @description contract: contracted rate; cdi_projection: today CDI held constant; ipca_projection: 12-month IPCA held constant plus the contracted rate; inflation_only: 12-month IPCA only, the contracted rate is unknown; face_value: R$ 1,000 per unit
+                             * @enum {string}
+                             */
+                            basis: "contract" | "cdi_projection" | "ipca_projection" | "inflation_only" | "face_value";
+                            /**
+                             * @description Income tax regime of the security (exempt for LCI and LCA); null for a position
+                             * @enum {string|null}
+                             */
+                            taxRegime: "regressive" | "exempt" | null;
+                            /** @description True for example data */
+                            isSample: boolean;
+                        }[];
+                    };
+                };
+            };
+            /** @description Invalid limit (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    ScheduleController_listRealRates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Real rates */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Reference date in the company time zone, YYYY-MM-DD */
+                        asOf: string;
+                        /** @description Reference rate used by the calculation */
+                        reference: {
+                            /** @description IPCA accumulated over the last 12 published months, in basis points */
+                            ipca12mBps: number;
+                            /** @description Last published IPCA month used, YYYY-MM */
+                            ipcaMonth: string;
+                        };
+                        /** @description BRL securities not yet matured, nearest maturity first. Every figure is before income tax */
+                        items: {
+                            /** @description Security id */
+                            id: string;
+                            /** @description Security name given by the user. Untrusted text */
+                            name: string;
+                            /** @description Kind of security (cdb, lci, ...) */
+                            kind: string;
+                            /**
+                             * @description Indexer of the security
+                             * @enum {string}
+                             */
+                            indexer: "cdi_percent" | "prefixed" | "ipca_plus";
+                            /** @description Contracted rate in basis points, as registered */
+                            rateBps: number;
+                            /** @description Applied amount, in BRL minor units */
+                            appliedMinor: number;
+                            /** @description Application date, YYYY-MM-DD */
+                            appliedAt: string;
+                            /** @description Gross value today, in BRL minor units */
+                            valueMinor: number;
+                            /** @description Nominal yearly rate in basis points, with CDI and IPCA held at their reference values; null without the CDI series */
+                            nominalAnnualBps: number | null;
+                            /** @description Yearly rate above the 12-month IPCA, in basis points; null when the nominal rate is unknown */
+                            realAnnualBps: number | null;
+                            /** @description True when the real rate is below 3% a year */
+                            lowReal: boolean;
+                            /** @description Applied amount corrected by the IPCA published since the application date */
+                            correctedMinor: number;
+                            /** @description valueMinor minus correctedMinor; negative when the security lost against inflation */
+                            purchasingPowerGainMinor: number;
+                            /** @description Purchasing power gain over correctedMinor, in basis points */
+                            purchasingPowerGainBps: number;
+                            /**
+                             * @description Income tax regime; every figure is before income tax
+                             * @enum {string}
+                             */
+                            taxRegime: "regressive" | "exempt";
+                            /** @description True when a series is missing or incomplete for this row */
+                            estimated: boolean;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description There is no IPCA series with 12 consecutive months (fixed_income.index_data_missing) */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -7733,669 +9418,6 @@ export interface operations {
             };
         };
     };
-    ImportsController_preview: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": {
-                    /**
-                     * Format: binary
-                     * @description The statement file, up to 5 MB
-                     */
-                    file: string;
-                    /**
-                     * @description Forces the format instead of the detected one
-                     * @enum {string}
-                     */
-                    format?: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
-                    /** @description Column mapping of a generic CSV, as JSON text: { hasHeader, dateColumn, descriptionColumn, amountColumn | debitColumn + creditColumn, dateFormat, decimalSeparator, invertSign, delimiter? } */
-                    mapping?: string;
-                };
-            };
-        };
-        responses: {
-            /** @description What the file holds and what would happen */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * @description Format detected from the content
-                         * @enum {string}
-                         */
-                        detectedFormat: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
-                        /**
-                         * @description Format used to read the file; the forced one when the request sent `format`
-                         * @enum {string}
-                         */
-                        format: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
-                        /** @description Base name of the uploaded file, up to 120 characters */
-                        fileName: string;
-                        /** @description Valid rows; for a generic CSV sent without mapping, the data lines found */
-                        rows: number;
-                        /** @description Rows that could not be read */
-                        rejected: number;
-                        /** @description Up to 20 examples of rejected rows */
-                        rejections: {
-                            /** @description Line of the file where the row starts, counted from 1 */
-                            line: number;
-                            /**
-                             * @description Why the row was rejected; the content of the line is never returned
-                             * @enum {string}
-                             */
-                            reason: "invalid_date" | "invalid_amount" | "zero_amount" | "empty_description";
-                        }[];
-                        /** @description Oldest transaction date, YYYY-MM-DD */
-                        periodStart: string | null;
-                        /** @description Newest transaction date, YYYY-MM-DD */
-                        periodEnd: string | null;
-                        /** @description Currency declared by the file (OFX only); a CSV takes the currency of the account */
-                        currency: string | null;
-                        /** @description First rows of the file, up to 10 */
-                        sample: {
-                            /** @description Transaction date, YYYY-MM-DD */
-                            date: string;
-                            /** @description Description of the transaction, up to 200 characters */
-                            description: string;
-                            /** @description Signed amount in minor units; negative is an outflow */
-                            amountMinor: number;
-                        }[];
-                        /** @description Generic CSV only: the header cells, or "Coluna 1..n" without header */
-                        columns: string[] | null;
-                        /** @description What the file says about its account; null when it says nothing */
-                        accountHint: {
-                            /** @description Institution found in the file */
-                            institution: string | null;
-                            /** @description Last four digits of the account or card number found in the file */
-                            numberLast4: string | null;
-                        } | null;
-                        /**
-                         * Format: uuid
-                         * @description The only account of the company that matches the hint; null on a tie or no match
-                         */
-                        suggestedAccountId: string | null;
-                        /**
-                         * Format: date-time
-                         * @description When the exact same file was imported before; it only warns, it does not block
-                         */
-                        alreadyImportedAt: string | null;
-                    };
-                };
-            };
-            /** @description Invalid fields, missing file or invalid mapping (zod validation details in meta.errors) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description The file is larger than 5 MB (imports.file_too_large) */
-            413: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Not a statement (imports.unsupported_format), no valid rows or broken structure (imports.invalid_file, meta.reason), more than 10,000 rows (imports.too_many_rows) */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description More than 60 previews in an hour for the company */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    ImportsController_listImports: {
-        parameters: {
-            query?: {
-                /** @description Page number, starting at 1 */
-                page?: number;
-                /** @description Items per page, 1 to 200 (default 50) */
-                pageSize?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Page of imports */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Imports of the page, newest first */
-                        data: {
-                            /**
-                             * Format: uuid
-                             * @description Import id
-                             */
-                            id: string;
-                            /**
-                             * Format: uuid
-                             * @description Financial account that received the rows
-                             */
-                            accountId: string;
-                            /** @description Name of that account */
-                            accountName: string;
-                            /**
-                             * @description Format of the file
-                             * @enum {string}
-                             */
-                            format: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
-                            /** @description Base name of the uploaded file */
-                            fileName: string;
-                            /** @description Valid rows of the file */
-                            rows: number;
-                            /** @description Rows that became new transactions */
-                            inserted: number;
-                            /** @description Rows that were already there, from this file, another file or the bank connection */
-                            duplicates: number;
-                            /** @description Rows that could not be read */
-                            rejected: number;
-                            /** @description Oldest transaction date, YYYY-MM-DD */
-                            periodStart: string | null;
-                            /** @description Newest transaction date, YYYY-MM-DD */
-                            periodEnd: string | null;
-                            /**
-                             * @description `undone` imports had their rows removed; `failed` ones were rolled back
-                             * @enum {string}
-                             */
-                            status: "processing" | "completed" | "undone" | "failed";
-                            /**
-                             * Format: date-time
-                             * @description Creation instant, ISO 8601 UTC
-                             */
-                            createdAt: string;
-                        }[];
-                        pagination: {
-                            page: number;
-                            pageSize: number;
-                            totalRecords: number;
-                            totalPages: number;
-                        };
-                    };
-                };
-            };
-            /** @description Invalid fields, missing file or invalid mapping (zod validation details in meta.errors) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    ImportsController_commit: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": {
-                    /**
-                     * Format: binary
-                     * @description The statement file, up to 5 MB
-                     */
-                    file: string;
-                    /**
-                     * @description Format of the file; send the one the preview returned
-                     * @enum {string}
-                     */
-                    format: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
-                    /** @description Column mapping of a generic CSV, as JSON text: { hasHeader, dateColumn, descriptionColumn, amountColumn | debitColumn + creditColumn, dateFormat, decimalSeparator, invertSign, delimiter? } */
-                    mapping?: string;
-                    /**
-                     * Format: uuid
-                     * @description Existing financial account of the company that receives the transactions
-                     */
-                    accountId?: string;
-                    /** @description Name of a new account to create; exclusive with accountId */
-                    newAccountName?: string;
-                    /**
-                     * @description Kind of the new account; required with newAccountName
-                     * @enum {string}
-                     */
-                    newAccountKind?: "checking" | "savings" | "credit_card" | "other";
-                    /** @description Institution of the new account; defaults to the one found in the file */
-                    newAccountInstitution?: string;
-                };
-            };
-        };
-        responses: {
-            /** @description The import with its counters and up to 20 examples of rejected rows */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /**
-                         * Format: uuid
-                         * @description Import id
-                         */
-                        id: string;
-                        /**
-                         * Format: uuid
-                         * @description Financial account that received the rows
-                         */
-                        accountId: string;
-                        /** @description Name of that account */
-                        accountName: string;
-                        /**
-                         * @description Format of the file
-                         * @enum {string}
-                         */
-                        format: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
-                        /** @description Base name of the uploaded file */
-                        fileName: string;
-                        /** @description Valid rows of the file */
-                        rows: number;
-                        /** @description Rows that became new transactions */
-                        inserted: number;
-                        /** @description Rows that were already there, from this file, another file or the bank connection */
-                        duplicates: number;
-                        /** @description Rows that could not be read */
-                        rejected: number;
-                        /** @description Oldest transaction date, YYYY-MM-DD */
-                        periodStart: string | null;
-                        /** @description Newest transaction date, YYYY-MM-DD */
-                        periodEnd: string | null;
-                        /**
-                         * @description `undone` imports had their rows removed; `failed` ones were rolled back
-                         * @enum {string}
-                         */
-                        status: "processing" | "completed" | "undone" | "failed";
-                        /**
-                         * Format: date-time
-                         * @description Creation instant, ISO 8601 UTC
-                         */
-                        createdAt: string;
-                        /** @description Up to 20 examples of rejected rows */
-                        rejections: {
-                            /** @description Line of the file where the row starts, counted from 1 */
-                            line: number;
-                            /**
-                             * @description Why the row was rejected; the content of the line is never returned
-                             * @enum {string}
-                             */
-                            reason: "invalid_date" | "invalid_amount" | "zero_amount" | "empty_description";
-                        }[];
-                    };
-                };
-            };
-            /** @description Invalid fields, missing file or invalid mapping (zod validation details in meta.errors) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description The account does not exist in this company (transactions.account_not_found) */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description The file is larger than 5 MB (imports.file_too_large) */
-            413: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Same errors as the preview, plus a generic CSV without mapping (imports.mapping_required), a file currency that differs from the account (imports.currency_mismatch) and the transaction limit (transactions.limit_reached) */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description More than 20 imports in an hour for the company */
-            429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    ImportsController_undo: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Import id */
-                id: unknown;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description How many transactions were removed */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Transactions removed from the account; rows absorbed by the bank connection stay */
-                        removed: number;
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description The import does not exist in this company (imports.import_not_found) */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
     CategoriesController_list: {
         parameters: {
             query?: never;
@@ -9620,310 +10642,6 @@ export interface operations {
             };
         };
     };
-    SummaryController_get: {
-        parameters: {
-            query?: {
-                /** @description Calendar month, YYYY-MM, from 2000-01 to the current month. Defaults to the last closed month */
-                month?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Monthly summary */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        month: string;
-                        isPartial: boolean;
-                        hasData: boolean;
-                        /** @enum {string} */
-                        currency: "BRL";
-                        previousMonth: string | null;
-                        nextMonth: string | null;
-                        availableMonths: string[];
-                        income: {
-                            minor: number;
-                            /**
-                             * @description `transactions` takes the income from the `income` transactions; `declared` uses `declaredIncomeMinor`
-                             * @enum {string}
-                             */
-                            mode: "transactions" | "declared";
-                            fromTransactionsMinor: number;
-                        };
-                        expensesMinor: number;
-                        uncategorizedMinor: number;
-                        uncategorizedCount: number;
-                        uncategorizedInflowMinor: number;
-                        savedMinor: number;
-                        savingsRateBps: number | null;
-                        goal: {
-                            bps: number;
-                            minor: number;
-                        };
-                        gapMinor: number;
-                        fixedMinor: number;
-                        fixedShareBps: number | null;
-                        flexibleMinor: number;
-                        transfersOutMinor: number;
-                        averageMonths: number;
-                        excludedCurrencyCount: number;
-                        categories: {
-                            /** Format: uuid */
-                            categoryId: string;
-                            systemKey: string | null;
-                            name: string | null;
-                            icon: string;
-                            /** @enum {string|null} */
-                            flexibility: "fixed" | "flexible" | null;
-                            spentMinor: number;
-                            averageMinor: number | null;
-                            deltaBps: number | null;
-                            isNew: boolean;
-                            transactionCount: number;
-                        }[];
-                        incomeCategories: {
-                            /** Format: uuid */
-                            categoryId: string;
-                            systemKey: string | null;
-                            name: string | null;
-                            icon: string;
-                            /** @enum {string|null} */
-                            flexibility: "fixed" | "flexible" | null;
-                            spentMinor: number;
-                            averageMinor: number | null;
-                            deltaBps: number | null;
-                            isNew: boolean;
-                            transactionCount: number;
-                        }[];
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Malformed, earlier than 2000-01 or future month (summary.invalid_month) */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    SettingsController_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Spending settings */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Savings goal as a share of the income, in basis points (2000 = 20%), 0 to 9000 */
-                        savingsGoalBps: number;
-                        /**
-                         * @description `transactions` takes the income from the `income` transactions; `declared` uses `declaredIncomeMinor`
-                         * @enum {string}
-                         */
-                        incomeMode: "transactions" | "declared";
-                        /** @description Monthly income declared by the user, in cents. Required and greater than zero when the mode is `declared` */
-                        declaredIncomeMinor: number | null;
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    SettingsController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description Savings goal as a share of the income, in basis points (2000 = 20%), 0 to 9000 */
-                    savingsGoalBps?: number;
-                    /**
-                     * @description `transactions` takes the income from the `income` transactions; `declared` uses `declaredIncomeMinor`
-                     * @enum {string}
-                     */
-                    incomeMode?: "transactions" | "declared";
-                    /** @description Monthly income declared by the user, in cents. Required and greater than zero when the mode is `declared` */
-                    declaredIncomeMinor?: number | null;
-                };
-            };
-        };
-        responses: {
-            /** @description Spending settings after the change */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Savings goal as a share of the income, in basis points (2000 = 20%), 0 to 9000 */
-                        savingsGoalBps: number;
-                        /**
-                         * @description `transactions` takes the income from the `income` transactions; `declared` uses `declaredIncomeMinor`
-                         * @enum {string}
-                         */
-                        incomeMode: "transactions" | "declared";
-                        /** @description Monthly income declared by the user, in cents. Required and greater than zero when the mode is `declared` */
-                        declaredIncomeMinor: number | null;
-                    };
-                };
-            };
-            /** @description Invalid payload (zod validation details in meta.errors) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Declared mode without a declared income (summary.declared_income_required) */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
     TransactionsController_listTransactions: {
         parameters: {
             query?: {
@@ -10659,6 +11377,441 @@ export interface operations {
             };
         };
     };
+    SummaryController_get: {
+        parameters: {
+            query?: {
+                /** @description Calendar month, YYYY-MM, from 2000-01 to the current month. Defaults to the last closed month */
+                month?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Monthly summary */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        month: string;
+                        isPartial: boolean;
+                        hasData: boolean;
+                        /** @enum {string} */
+                        currency: "BRL";
+                        previousMonth: string | null;
+                        nextMonth: string | null;
+                        availableMonths: string[];
+                        income: {
+                            minor: number;
+                            /**
+                             * @description `transactions` takes the income from the `income` transactions; `declared` uses `declaredIncomeMinor`
+                             * @enum {string}
+                             */
+                            mode: "transactions" | "declared";
+                            fromTransactionsMinor: number;
+                        };
+                        expensesMinor: number;
+                        uncategorizedMinor: number;
+                        uncategorizedCount: number;
+                        uncategorizedInflowMinor: number;
+                        savedMinor: number;
+                        savingsRateBps: number | null;
+                        goal: {
+                            bps: number;
+                            minor: number;
+                        };
+                        gapMinor: number;
+                        fixedMinor: number;
+                        fixedShareBps: number | null;
+                        flexibleMinor: number;
+                        transfersOutMinor: number;
+                        averageMonths: number;
+                        excludedCurrencyCount: number;
+                        categories: {
+                            /** Format: uuid */
+                            categoryId: string;
+                            systemKey: string | null;
+                            name: string | null;
+                            icon: string;
+                            /** @enum {string|null} */
+                            flexibility: "fixed" | "flexible" | null;
+                            spentMinor: number;
+                            averageMinor: number | null;
+                            deltaBps: number | null;
+                            isNew: boolean;
+                            transactionCount: number;
+                        }[];
+                        incomeCategories: {
+                            /** Format: uuid */
+                            categoryId: string;
+                            systemKey: string | null;
+                            name: string | null;
+                            icon: string;
+                            /** @enum {string|null} */
+                            flexibility: "fixed" | "flexible" | null;
+                            spentMinor: number;
+                            averageMinor: number | null;
+                            deltaBps: number | null;
+                            isNew: boolean;
+                            transactionCount: number;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Malformed, earlier than 2000-01 or future month (summary.invalid_month) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    SettingsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Spending settings */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Savings goal as a share of the income, in basis points (2000 = 20%), 0 to 9000 */
+                        savingsGoalBps: number;
+                        /**
+                         * @description `transactions` takes the income from the `income` transactions; `declared` uses `declaredIncomeMinor`
+                         * @enum {string}
+                         */
+                        incomeMode: "transactions" | "declared";
+                        /** @description Monthly income declared by the user, in cents. Required and greater than zero when the mode is `declared` */
+                        declaredIncomeMinor: number | null;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    SettingsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Savings goal as a share of the income, in basis points (2000 = 20%), 0 to 9000 */
+                    savingsGoalBps?: number;
+                    /**
+                     * @description `transactions` takes the income from the `income` transactions; `declared` uses `declaredIncomeMinor`
+                     * @enum {string}
+                     */
+                    incomeMode?: "transactions" | "declared";
+                    /** @description Monthly income declared by the user, in cents. Required and greater than zero when the mode is `declared` */
+                    declaredIncomeMinor?: number | null;
+                };
+            };
+        };
+        responses: {
+            /** @description Spending settings after the change */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Savings goal as a share of the income, in basis points (2000 = 20%), 0 to 9000 */
+                        savingsGoalBps: number;
+                        /**
+                         * @description `transactions` takes the income from the `income` transactions; `declared` uses `declaredIncomeMinor`
+                         * @enum {string}
+                         */
+                        incomeMode: "transactions" | "declared";
+                        /** @description Monthly income declared by the user, in cents. Required and greater than zero when the mode is `declared` */
+                        declaredIncomeMinor: number | null;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Declared mode without a declared income (summary.declared_income_required) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    CutsController_get: {
+        parameters: {
+            query?: {
+                /** @description Calendar month analysed, YYYY-MM, from 2000-01 to the current month. Defaults to the last closed month */
+                month?: string;
+                /** @description Simulated savings goal in basis points (2000 = 20%), 0 to 9000. Replaces the saved goal in this response only */
+                goalBps?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Cut suggestion */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        month: string;
+                        limitMonth: string;
+                        isPartial: boolean;
+                        /** @enum {string} */
+                        status: "no_data" | "no_income" | "goal_met" | "cut_suggested" | "exceeds_flexible";
+                        goal: {
+                            bps: number;
+                            minor: number;
+                            simulated: boolean;
+                        };
+                        incomeMinor: number;
+                        savedMinor: number;
+                        savingsRateBps: number | null;
+                        gapMinor: number;
+                        surplusMinor: number;
+                        totalCutMinor: number;
+                        flexibleTotalMinor: number;
+                        excessTotalMinor: number;
+                        categoriesWithCut: number;
+                        uncategorizedMinor: number;
+                        averageMonths: number;
+                        suggestions: {
+                            /** Format: uuid */
+                            categoryId: string;
+                            systemKey: string | null;
+                            name: string | null;
+                            icon: string;
+                            spentMinor: number;
+                            averageMinor: number | null;
+                            excessMinor: number;
+                            cutMinor: number;
+                            limitMinor: number;
+                        }[];
+                    };
+                };
+            };
+            /** @description `goalBps` outside 0 to 9000 or not an integer (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Malformed, earlier than 2000-01 or future month (summary.invalid_month) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
     TransactionsExportController_export: {
         parameters: {
             query: {
@@ -10899,64 +12052,103 @@ export interface operations {
             };
         };
     };
-    CutsController_get: {
+    ImportsController_preview: {
         parameters: {
-            query?: {
-                /** @description Calendar month analysed, YYYY-MM, from 2000-01 to the current month. Defaults to the last closed month */
-                month?: string;
-                /** @description Simulated savings goal in basis points (2000 = 20%), 0 to 9000. Replaces the saved goal in this response only */
-                goalBps?: number;
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description The statement file, up to 5 MB
+                     */
+                    file: string;
+                    /**
+                     * @description Forces the format instead of the detected one
+                     * @enum {string}
+                     */
+                    format?: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
+                    /** @description Column mapping of a generic CSV, as JSON text: { hasHeader, dateColumn, descriptionColumn, amountColumn | debitColumn + creditColumn, dateFormat, decimalSeparator, invertSign, delimiter? } */
+                    mapping?: string;
+                };
+            };
+        };
         responses: {
-            /** @description Cut suggestion */
+            /** @description What the file holds and what would happen */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": {
-                        month: string;
-                        limitMonth: string;
-                        isPartial: boolean;
-                        /** @enum {string} */
-                        status: "no_data" | "no_income" | "goal_met" | "cut_suggested" | "exceeds_flexible";
-                        goal: {
-                            bps: number;
-                            minor: number;
-                            simulated: boolean;
-                        };
-                        incomeMinor: number;
-                        savedMinor: number;
-                        savingsRateBps: number | null;
-                        gapMinor: number;
-                        surplusMinor: number;
-                        totalCutMinor: number;
-                        flexibleTotalMinor: number;
-                        excessTotalMinor: number;
-                        categoriesWithCut: number;
-                        uncategorizedMinor: number;
-                        averageMonths: number;
-                        suggestions: {
-                            /** Format: uuid */
-                            categoryId: string;
-                            systemKey: string | null;
-                            name: string | null;
-                            icon: string;
-                            spentMinor: number;
-                            averageMinor: number | null;
-                            excessMinor: number;
-                            cutMinor: number;
-                            limitMinor: number;
+                        /**
+                         * @description Format detected from the content
+                         * @enum {string}
+                         */
+                        detectedFormat: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
+                        /**
+                         * @description Format used to read the file; the forced one when the request sent `format`
+                         * @enum {string}
+                         */
+                        format: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
+                        /** @description Base name of the uploaded file, up to 120 characters */
+                        fileName: string;
+                        /** @description Valid rows; for a generic CSV sent without mapping, the data lines found */
+                        rows: number;
+                        /** @description Rows that could not be read */
+                        rejected: number;
+                        /** @description Up to 20 examples of rejected rows */
+                        rejections: {
+                            /** @description Line of the file where the row starts, counted from 1 */
+                            line: number;
+                            /**
+                             * @description Why the row was rejected; the content of the line is never returned
+                             * @enum {string}
+                             */
+                            reason: "invalid_date" | "invalid_amount" | "zero_amount" | "empty_description";
                         }[];
+                        /** @description Oldest transaction date, YYYY-MM-DD */
+                        periodStart: string | null;
+                        /** @description Newest transaction date, YYYY-MM-DD */
+                        periodEnd: string | null;
+                        /** @description Currency declared by the file (OFX only); a CSV takes the currency of the account */
+                        currency: string | null;
+                        /** @description First rows of the file, up to 10 */
+                        sample: {
+                            /** @description Transaction date, YYYY-MM-DD */
+                            date: string;
+                            /** @description Description of the transaction, up to 200 characters */
+                            description: string;
+                            /** @description Signed amount in minor units; negative is an outflow */
+                            amountMinor: number;
+                        }[];
+                        /** @description Generic CSV only: the header cells, or "Coluna 1..n" without header */
+                        columns: string[] | null;
+                        /** @description What the file says about its account; null when it says nothing */
+                        accountHint: {
+                            /** @description Institution found in the file */
+                            institution: string | null;
+                            /** @description Last four digits of the account or card number found in the file */
+                            numberLast4: string | null;
+                        } | null;
+                        /**
+                         * Format: uuid
+                         * @description The only account of the company that matches the hint; null on a tie or no match
+                         */
+                        suggestedAccountId: string | null;
+                        /**
+                         * Format: date-time
+                         * @description When the exact same file was imported before; it only warns, it does not block
+                         */
+                        alreadyImportedAt: string | null;
                     };
                 };
             };
-            /** @description `goalBps` outside 0 to 9000 or not an integer (zod validation details in meta.errors) */
+            /** @description Invalid fields, missing file or invalid mapping (zod validation details in meta.errors) */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -11004,8 +12196,501 @@ export interface operations {
                     };
                 };
             };
-            /** @description Malformed, earlier than 2000-01 or future month (summary.invalid_month) */
+            /** @description The file is larger than 5 MB (imports.file_too_large) */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Not a statement (imports.unsupported_format), no valid rows or broken structure (imports.invalid_file, meta.reason), more than 10,000 rows (imports.too_many_rows) */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 60 previews in an hour for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    ImportsController_listImports: {
+        parameters: {
+            query?: {
+                /** @description Page number, starting at 1 */
+                page?: number;
+                /** @description Items per page, 1 to 200 (default 50) */
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page of imports */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Imports of the page, newest first */
+                        data: {
+                            /**
+                             * Format: uuid
+                             * @description Import id
+                             */
+                            id: string;
+                            /**
+                             * Format: uuid
+                             * @description Financial account that received the rows
+                             */
+                            accountId: string;
+                            /** @description Name of that account */
+                            accountName: string;
+                            /**
+                             * @description Format of the file
+                             * @enum {string}
+                             */
+                            format: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
+                            /** @description Base name of the uploaded file */
+                            fileName: string;
+                            /** @description Valid rows of the file */
+                            rows: number;
+                            /** @description Rows that became new transactions */
+                            inserted: number;
+                            /** @description Rows that were already there, from this file, another file or the bank connection */
+                            duplicates: number;
+                            /** @description Rows that could not be read */
+                            rejected: number;
+                            /** @description Oldest transaction date, YYYY-MM-DD */
+                            periodStart: string | null;
+                            /** @description Newest transaction date, YYYY-MM-DD */
+                            periodEnd: string | null;
+                            /**
+                             * @description `undone` imports had their rows removed; `failed` ones were rolled back
+                             * @enum {string}
+                             */
+                            status: "processing" | "completed" | "undone" | "failed";
+                            /**
+                             * Format: date-time
+                             * @description Creation instant, ISO 8601 UTC
+                             */
+                            createdAt: string;
+                        }[];
+                        pagination: {
+                            page: number;
+                            pageSize: number;
+                            totalRecords: number;
+                            totalPages: number;
+                        };
+                    };
+                };
+            };
+            /** @description Invalid fields, missing file or invalid mapping (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    ImportsController_commit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description The statement file, up to 5 MB
+                     */
+                    file: string;
+                    /**
+                     * @description Format of the file; send the one the preview returned
+                     * @enum {string}
+                     */
+                    format: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
+                    /** @description Column mapping of a generic CSV, as JSON text: { hasHeader, dateColumn, descriptionColumn, amountColumn | debitColumn + creditColumn, dateFormat, decimalSeparator, invertSign, delimiter? } */
+                    mapping?: string;
+                    /**
+                     * Format: uuid
+                     * @description Existing financial account of the company that receives the transactions
+                     */
+                    accountId?: string;
+                    /** @description Name of a new account to create; exclusive with accountId */
+                    newAccountName?: string;
+                    /**
+                     * @description Kind of the new account; required with newAccountName
+                     * @enum {string}
+                     */
+                    newAccountKind?: "checking" | "savings" | "credit_card" | "other";
+                    /** @description Institution of the new account; defaults to the one found in the file */
+                    newAccountInstitution?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description The import with its counters and up to 20 examples of rejected rows */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Import id
+                         */
+                        id: string;
+                        /**
+                         * Format: uuid
+                         * @description Financial account that received the rows
+                         */
+                        accountId: string;
+                        /** @description Name of that account */
+                        accountName: string;
+                        /**
+                         * @description Format of the file
+                         * @enum {string}
+                         */
+                        format: "ofx" | "csv_nubank_card" | "csv_nubank_account" | "csv_generic";
+                        /** @description Base name of the uploaded file */
+                        fileName: string;
+                        /** @description Valid rows of the file */
+                        rows: number;
+                        /** @description Rows that became new transactions */
+                        inserted: number;
+                        /** @description Rows that were already there, from this file, another file or the bank connection */
+                        duplicates: number;
+                        /** @description Rows that could not be read */
+                        rejected: number;
+                        /** @description Oldest transaction date, YYYY-MM-DD */
+                        periodStart: string | null;
+                        /** @description Newest transaction date, YYYY-MM-DD */
+                        periodEnd: string | null;
+                        /**
+                         * @description `undone` imports had their rows removed; `failed` ones were rolled back
+                         * @enum {string}
+                         */
+                        status: "processing" | "completed" | "undone" | "failed";
+                        /**
+                         * Format: date-time
+                         * @description Creation instant, ISO 8601 UTC
+                         */
+                        createdAt: string;
+                        /** @description Up to 20 examples of rejected rows */
+                        rejections: {
+                            /** @description Line of the file where the row starts, counted from 1 */
+                            line: number;
+                            /**
+                             * @description Why the row was rejected; the content of the line is never returned
+                             * @enum {string}
+                             */
+                            reason: "invalid_date" | "invalid_amount" | "zero_amount" | "empty_description";
+                        }[];
+                    };
+                };
+            };
+            /** @description Invalid fields, missing file or invalid mapping (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The account does not exist in this company (transactions.account_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The file is larger than 5 MB (imports.file_too_large) */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Same errors as the preview, plus a generic CSV without mapping (imports.mapping_required), a file currency that differs from the account (imports.currency_mismatch) and the transaction limit (transactions.limit_reached) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 20 imports in an hour for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    ImportsController_undo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Import id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description How many transactions were removed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Transactions removed from the account; rows absorbed by the bank connection stay */
+                        removed: number;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The import does not exist in this company (imports.import_not_found) */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
