@@ -133,6 +133,11 @@
     "more_other": "e mais {{count}}",
     "others_one": "Outros {{count}} grupo",
     "others_other": "Outros {{count}} grupos",
+    "groups": {
+      "tesouro-nacional": "Tesouro Nacional",
+      "tesouro-eua": "Tesouro dos EUA",
+      "outro": "Sem grupo"
+    },
     "buckets": {
       "funds": "Fundos e ETFs, vários emissores",
       "crypto": "Cripto, sem emissor",

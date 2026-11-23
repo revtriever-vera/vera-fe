@@ -1,12 +1,19 @@
 import type { TFunction } from 'i18next';
-import { ISSUER_BUCKET_KEYS, type IssuerBucketKey, type IssuerRow } from '../types';
+import { ISSUER_BUCKET_KEYS, ISSUER_GROUP_KEYS, type IssuerBucketKey, type IssuerGroupKey, type IssuerRow } from '../types';
 import { isSectorKey } from './sector-keys';
 
 function isIssuerBucketKey(key: string): key is IssuerBucketKey {
     return (ISSUER_BUCKET_KEYS as readonly string[]).includes(key);
 }
 
+function isIssuerGroupKey(key: string): key is IssuerGroupKey {
+    return (ISSUER_GROUP_KEYS as readonly string[]).includes(key);
+}
+
 export function issuerLabel(t: TFunction<'portfolio'>, row: Pick<IssuerRow, 'key' | 'kind' | 'name'>): string {
+    if (row.kind === 'group' && isIssuerGroupKey(row.key)) {
+        return t(`concentration.groups.${row.key}`);
+    }
     if (row.kind === 'group' && row.name !== null) {
         return row.name;
     }
