@@ -21,6 +21,7 @@ import {
     type TitleIssuer
 } from '../types';
 import { ClassSelect } from './class-select';
+import { HolderField } from './holder-field';
 import { ErrorLine } from './error-line';
 import { IssuerField } from './issuer-field';
 import { LabeledSelect } from './labeled-select';
@@ -262,6 +263,27 @@ function ClassField({
     );
 }
 
+function ClassAndHolder({
+    form,
+    classes,
+    showClass
+}: {
+    readonly form: UseFormReturn<FixedIncomeFormInput>;
+    readonly classes: readonly AssetClassView[];
+    readonly showClass: boolean;
+}): ReactElement {
+    return (
+        <>
+            {showClass ? <ClassField form={form} classes={classes} /> : null}
+            <Controller
+                control={form.control}
+                name="holder"
+                render={({ field }): ReactElement => <HolderField value={field.value} onChange={field.onChange} />}
+            />
+        </>
+    );
+}
+
 function TesouroNotice(): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     return (
@@ -307,7 +329,7 @@ export function FixedIncomeForm({
                 <AppliedAtField form={form} today={today} />
                 <MaturityField form={form} />
             </div>
-            {showClass ? <ClassField form={form} classes={classes} /> : null}
+            <ClassAndHolder form={form} classes={classes} showClass={showClass} />
             <TesouroNotice />
         </form>
     );

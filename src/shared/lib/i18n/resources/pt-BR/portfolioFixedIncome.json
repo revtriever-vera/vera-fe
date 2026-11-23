@@ -73,7 +73,7 @@
     },
     "groupDetail": "{{issuers}} · {{titles}}",
     "within": "dentro",
-    "perCpf": "O limite do FGC vale por CPF. Filtre por titular, no alto da tela, para ver a cobertura de cada pessoa.",
+    "perCpf": "O limite do FGC vale por CPF. Filtre por titular, no alto da tela, para ver só a cobertura de uma pessoa.",
     "wholeAccount": "Conta toda",
     "outside": "Fora do FGC: {{names}}.",
     "reasons": {

@@ -170,5 +170,17 @@
     "etf_indice": "ETFs de índice",
     "cripto": "Cripto",
     "unmapped_sector": "Sem setor no catálogo"
+  },
+  "holder": {
+    "label": "Filtrar por titular",
+    "any": "Todos",
+    "all": "Conta toda",
+    "field": "Titular",
+    "column": "Titular",
+    "cell": "Titular de {{symbol}}",
+    "changed": "{{symbol}}: titular {{holder}}",
+    "changeFailed": "Não foi possível mudar o titular",
+    "emptyTitle": "Nenhum ativo de {{holder}}",
+    "emptyDescription": "Troque o filtro de titular ou marque o titular de cada ativo em Meus ativos."
   }
 }

@@ -24,7 +24,7 @@ describe('hooks de leitura do patrimônio', () => {
         });
 
         expect(result.current.data?.data).toHaveLength(19);
-        expect(client.getQueryData(portfolioKeys.holdings())).toBeDefined();
+        expect(client.getQueryData(portfolioKeys.holdingsOf(undefined))).toBeDefined();
     });
 
     it('useOverview devolve a visão geral', async () => {
@@ -37,7 +37,7 @@ describe('hooks de leitura do patrimônio', () => {
         });
 
         expect(result.current.data?.totalMinor).toBe(177310040);
-        expect(client.getQueryData(portfolioKeys.overview())).toBeDefined();
+        expect(client.getQueryData(portfolioKeys.overviewOf(undefined))).toBeDefined();
     });
 
     it('useClasses devolve as classes padrão', async () => {

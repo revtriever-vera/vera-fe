@@ -121,6 +121,7 @@ export function titleView(overrides: Partial<TitleView> = {}): TitleView {
         appliedAt: '2025-03-10',
         maturityDate: '2028-03-10',
         classId: 'class-rf-pos',
+        holderUserId: null,
         issuer: {
             id: 'banco-xp',
             name: 'Banco XP',

@@ -12,7 +12,8 @@ const VALID: FixedIncomeFormInput = {
     currency: 'BRL',
     appliedAt: '2025-03-10',
     maturityDate: '2028-03-10',
-    classId: 'class-rf-pos'
+    classId: 'class-rf-pos',
+    holder: 'all'
 };
 
 describe('fixed-income-body', () => {
@@ -29,7 +30,7 @@ describe('fixed-income-body', () => {
     });
 
     it('monta o título com nome aparado e classe', () => {
-        expect(toTitleBody(VALID)).toMatchObject({ name: 'CDB Banco XP', classId: 'class-rf-pos', rateBps: 11000 });
+        expect(toTitleBody(VALID, false)).toMatchObject({ name: 'CDB Banco XP', classId: 'class-rf-pos', rateBps: 11000 });
     });
 
     it('devolve nulo quando falta dado', () => {
@@ -37,6 +38,6 @@ describe('fixed-income-body', () => {
         expect(toPreviewBody({ ...VALID, appliedAt: null })).toBeNull();
         expect(toPreviewBody({ ...VALID, maturityDate: null })).toBeNull();
         expect(toPreviewBody({ ...VALID, rate: 'x' })).toBeNull();
-        expect(toTitleBody({ ...VALID, rate: 'x' })).toBeNull();
+        expect(toTitleBody({ ...VALID, rate: 'x' }, false)).toBeNull();
     });
 });

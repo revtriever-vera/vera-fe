@@ -73,7 +73,7 @@
     },
     "groupDetail": "{{issuers}} · {{titles}}",
     "within": "within",
-    "perCpf": "The FGC limit applies per CPF. Filter by holder at the top of the screen to see each person's coverage.",
+    "perCpf": "The FGC limit applies per CPF. Filter by holder at the top of the screen to see only one person's coverage.",
     "wholeAccount": "Whole account",
     "outside": "Outside the FGC: {{names}}.",
     "reasons": {

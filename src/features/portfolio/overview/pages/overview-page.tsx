@@ -13,6 +13,10 @@ import { Loading, Skeleton } from '@/shared/ui/skeleton';
 import { useOverview } from '../../api/use-overview.query';
 import { BaseCurrencySwitch } from '../../components/base-currency-switch';
 import { DataSourcesNote } from '../../components/data-sources-note';
+import { HolderEmpty } from '../../components/holder-empty';
+import { HolderFilter } from '../../components/holder-filter';
+import type { HolderParam } from '../../lib/holder-filter';
+import { useHolderParam } from '../../lib/use-holder-param';
 import type { Overview } from '../../types';
 import { ActualVsTargetCard } from '../components/actual-vs-target-card';
 import { ClassCardList } from '../components/class-card-list';
@@ -32,7 +36,10 @@ function OverviewHeader(): ReactElement {
                 <h2 className="text-xl font-extrabold">{t('title')}</h2>
                 <p className="text-sm text-content-muted">{t('subtitle')}</p>
             </div>
-            <BaseCurrencySwitch />
+            <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2">
+                <HolderFilter />
+                <BaseCurrencySwitch />
+            </div>
         </div>
     );
 }
@@ -62,9 +69,12 @@ function OverviewFailure({ error, onRetry }: { readonly error: Error; readonly o
     );
 }
 
-function OverviewEmpty(): ReactElement {
+function OverviewEmpty({ holder }: { readonly holder: HolderParam }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioOverview', undefined> = useTranslation('portfolioOverview');
     const { canEdit } = useRole();
+    if (holder !== undefined) {
+        return <HolderEmpty holder={holder} />;
+    }
     if (!canEdit) {
         return (
             <EmptyState icon={<Wallet className="size-6" />} title={t('empty.viewerTitle')} description={t('empty.viewerDescription')} />
@@ -120,9 +130,10 @@ function OverviewContent({ overview }: { readonly overview: Overview }): ReactEl
 }
 
 function OverviewBody(): ReactElement {
-    const overview: UseQueryResult<Overview> = useOverview();
+    const holder: HolderParam = useHolderParam();
+    const overview: UseQueryResult<Overview> = useOverview(holder);
     if (overview.data !== undefined) {
-        return overview.data.empty ? <OverviewEmpty /> : <OverviewContent overview={overview.data} />;
+        return overview.data.empty ? <OverviewEmpty holder={holder} /> : <OverviewContent overview={overview.data} />;
     }
     if (overview.error !== null) {
         return (
