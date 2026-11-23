@@ -92,7 +92,7 @@ GitHub is the memory: issues, PRs and their comments hold the decisions, the evi
 
 <!-- contract:end -->
 
-Web app of Vera, an open source personal finance platform. React 19, Vite, TanStack Router and Query, Tailwind 4, Radix, openapi-fetch, i18next. One build serves every environment. The repository is public: nothing sensitive in the tree, issues, PRs or commits.
+Web app of Vera, an open source personal finance platform. React 19, Vite, TanStack Router and Query, Tailwind 4, Radix, openapi-fetch, i18next. `VITE_APP_TARGET` picks what a build contains: `unified` (default, everything), `tenant` (no admin) or `admin` (platform admin only, own subdomain). The repository is public: nothing sensitive in the tree, issues, PRs or commits.
 
 ## Commands
 
@@ -102,7 +102,7 @@ Scripts live in `package.json`; the ones that matter before a PR:
 - `npm run lint` and `npm run format:check` (`npm run format` writes). Lint also enforces the layer boundaries.
 - `npm run typecheck`.
 - `npm test` runs Vitest; `npx vitest run --config vitest.config.ts <file>` runs one spec. `npm run test:cov` applies the 85% coverage gate and `npm run test:types` the type specs.
-- `npm run build` runs `tsc -b` and the Vite build.
+- `npm run build` runs `tsc -b` and the Vite build (`unified`); `npm run build:tenant` and `npm run build:admin` build one target each; `npm run dev:admin` serves the admin target.
 - `npm run api:types` regenerates `src/shared/lib/api/schema.d.ts` from the `openapi.json` that `npm run openapi:dump` writes in `vera-api` (default `../vera-api/openapi.json`, or pass a path: `npm run api:types -- <file>`). No server needed. Run it when the API contract changes and commit the result.
 
 CI (`.github/workflows/ci.yml`) runs lint, format check, typecheck, `test:cov` and build, on PRs into `main` and on `main`. The husky pre-push runs typecheck and the whole test suite; push with `--no-verify` when you already ran the checks above for the change.
