@@ -1,11 +1,6 @@
-import type { ReactElement } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
-import { ComingSoonPage } from '@/features/admin/pages/coming-soon-page';
-
-function LinksRoute(): ReactElement {
-    return <ComingSoonPage section="links" />;
-}
+import { LinksPage } from '@/features/admin/pages/links-page';
 
 export const Route = createFileRoute('/_platform/admin/links')({
-    component: LinksRoute
+    component: LinksPage
 });
