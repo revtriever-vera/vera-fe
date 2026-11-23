@@ -10,7 +10,8 @@ const schema = z.object({
     VITE_FACEBOOK_APP_ID: z.string().default(''),
     VITE_TERMS_URL: optionalUrl,
     VITE_PRIVACY_URL: optionalUrl,
-    VITE_LOGIN_PHOTO_URL: optionalUrl
+    VITE_LOGIN_PHOTO_URL: optionalUrl,
+    VITE_REPO_URL: optionalUrl
 });
 
 export const env = schema.parse(import.meta.env);

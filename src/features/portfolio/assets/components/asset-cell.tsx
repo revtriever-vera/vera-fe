@@ -3,7 +3,9 @@ import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { Badge } from '@/shared/ui/badge';
 import { ClassTile } from '../../components/class-tile';
 import { toClassColorKey } from '../../lib/class-color';
+import { needsIssuer } from '../lib/holding-flags';
 import type { AssetClassView, HoldingView } from '../../types';
+import { CompleteIssuerBadge } from './complete-issuer-badge';
 
 export interface AssetCellProps {
     readonly holding: HoldingView;
@@ -22,7 +24,21 @@ export function AssetCell({ holding, assetClass }: AssetCellProps): ReactElement
     );
 }
 
-export function QuantityOrTitle({ holding, quantity }: { readonly holding: HoldingView; readonly quantity: ReactElement }): ReactElement {
+export interface QuantityOrTitleProps {
+    readonly holding: HoldingView;
+    readonly quantity: ReactElement;
+    readonly onCompleteIssuer: (holding: HoldingView) => void;
+}
+
+export function QuantityOrTitle({ holding, quantity, onCompleteIssuer }: QuantityOrTitleProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
-    return holding.kind === 'fixed_income' ? <Badge>{t('titleChip')}</Badge> : quantity;
+    if (holding.kind !== 'fixed_income') {
+        return quantity;
+    }
+    return (
+        <span className="flex flex-wrap items-center gap-1.5">
+            <Badge>{t('titleChip')}</Badge>
+            {needsIssuer(holding) ? <CompleteIssuerBadge holding={holding} onComplete={onCompleteIssuer} /> : null}
+        </span>
+    );
 }

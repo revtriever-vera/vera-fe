@@ -6,6 +6,7 @@ import { termsAreValid } from './terms-valid';
 
 const VALID: FixedIncomeFormInput = {
     kind: 'cdb',
+    issuer: null,
     name: '',
     indexer: 'cdi_percent',
     rate: '105',

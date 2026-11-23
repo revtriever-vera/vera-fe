@@ -2,6 +2,8 @@ export type AuthProviderName = 'google' | 'facebook';
 export type OnboardingStepName = 'welcome' | 'assets' | 'banks' | 'done';
 export type AssetTypeName = 'fixed_income' | 'tesouro' | 'acoes_br' | 'fii' | 'acoes_eua' | 'reits' | 'cripto';
 export type AddAssetSource = 'search' | 'fixed_income';
+export type IssuerKindName = 'bank' | 'company';
+export type FgcVerdictName = 'covered' | 'over_limit' | 'not_covered_kind' | 'not_associated';
 export type ExportFormatName = 'csv' | 'xlsx';
 export type CurrencyCode = 'BRL' | 'USD';
 export type SpendingImportFormatName = 'ofx' | 'csv_nubank_card' | 'csv_nubank_account' | 'csv_generic';
@@ -32,6 +34,9 @@ export interface AnalyticsEventMap {
     sample_data_cleared: undefined;
     portfolio_export_downloaded: { format: ExportFormatName };
     portfolio_asset_added: { type: AssetTypeName; source: AddAssetSource };
+    issuer_searched: { kind: IssuerKindName; hasResults: boolean };
+    fixed_income_issuer_set: { context: 'create' | 'edit' };
+    fgc_preview_shown: { verdict: FgcVerdictName };
     portfolio_duplicate_redirect: undefined;
     portfolio_asset_removed: undefined;
     portfolio_asset_reclassified: undefined;

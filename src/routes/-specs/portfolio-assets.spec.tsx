@@ -5,7 +5,9 @@ import { screen, waitFor, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import type { AnyRouter } from '@tanstack/react-router';
 import { i18n } from '@/shared/lib/i18n';
+import type { HoldingsResponse } from '@/features/portfolio/types';
 import { mockHoldingsApi, type HoldingsApi } from '../../../test/helpers/holdings-api';
+import { issuerItem, titleView } from '../../../test/fixtures/assets';
 import { holding, emptyHoldings, sampleHoldings } from '../../../test/fixtures/portfolio';
 import { sessionIdentity } from '../../../test/fixtures/auth';
 import { server } from '../../../test/msw/server';
@@ -268,5 +270,101 @@ describe('/portfolio/assets: sinalizações e estados', () => {
 
         expect(screen.queryByRole('table')).toBeNull();
         expect(within(screen.getByRole('list', { name: 'Lista dos seus ativos' })).getAllByRole('listitem')).toHaveLength(19);
+    });
+});
+
+function withoutIssuer(): HoldingsResponse {
+    return {
+        ...emptyHoldings(),
+        data: [holding({ id: 'fi-cdb', symbol: 'CDB Inter', kind: 'fixed_income', issuerId: null, quantity: null })]
+    };
+}
+
+function mockTitleWithoutIssuer(simulations: unknown[]): void {
+    server.use(
+        http.get('*/fixed-income/titles/:id', ({ params }) =>
+            HttpResponse.json(titleView({ id: String(params['id']), name: 'CDB Inter', issuer: null, needsIssuer: true }))
+        ),
+        http.get('*/issuers', () =>
+            HttpResponse.json({ items: [issuerItem({ id: 'banco-inter', name: 'Banco Inter', groupName: 'Inter&Co' })] })
+        ),
+        http.post('*/portfolio/fgc/simulate', async ({ request }) => {
+            simulations.push(await request.json());
+            return HttpResponse.json({
+                verdict: 'covered',
+                groupId: 'inter-co',
+                groupName: 'Inter&Co',
+                totalAfterMinor: 5000000,
+                overMinor: 0
+            });
+        })
+    );
+}
+
+describe('/portfolio/assets: Complete o cadastro', () => {
+    it('não mostra o chip quando todos os títulos têm emissor', async () => {
+        mockHoldingsApi();
+        renderRouterAt(PATH, { signedIn: true });
+        await loaded();
+
+        expect(screen.queryByRole('button', { name: /Complete o cadastro/ })).toBeNull();
+    });
+
+    it('o chip abre a edição com o foco no emissor e o salvar leva o emissor', async () => {
+        const api: HoldingsApi = mockHoldingsApi({ holdings: withoutIssuer() });
+        const simulations: unknown[] = [];
+        mockTitleWithoutIssuer(simulations);
+        const user: UserEvent = userEvent.setup();
+        renderRouterAt(PATH, { signedIn: true });
+        await screen.findByText('CDB Inter');
+
+        await user.click(screen.getByRole('button', { name: 'Complete o cadastro de CDB Inter: informar o emissor' }));
+        const dialog: HTMLElement = await screen.findByRole('dialog', { name: 'Editar CDB Inter' });
+        const box: HTMLElement = await within(dialog).findByRole('combobox', { name: 'Emissor' });
+        await waitFor(() => {
+            expect(box).toHaveFocus();
+        });
+        await user.click(await within(dialog).findByRole('option', { name: /Banco Inter/ }));
+        await waitFor(() => {
+            expect(simulations).toEqual([{ issuerId: 'banco-inter', kind: 'cdb', valueMinor: 5000000, excludeTitleId: 'fi-cdb' }]);
+        });
+        await user.click(within(dialog).getByRole('button', { name: 'Salvar alterações' }));
+
+        await waitFor(() => {
+            expect(api.titlePatched).toHaveLength(1);
+        });
+        expect(api.titlePatched[0]).toMatchObject({ id: 'fi-cdb', body: { issuerId: 'banco-inter' } });
+        expect(track).toHaveBeenCalledWith('fixed_income_issuer_set', { context: 'edit' });
+    });
+
+    it('o título antigo pode ser salvo sem emissor', async () => {
+        const api: HoldingsApi = mockHoldingsApi({ holdings: withoutIssuer() });
+        mockTitleWithoutIssuer([]);
+        const user: UserEvent = userEvent.setup();
+        renderRouterAt(PATH, { signedIn: true });
+        await screen.findByText('CDB Inter');
+
+        await user.click(screen.getByRole('button', { name: 'Editar CDB Inter' }));
+        const dialog: HTMLElement = await screen.findByRole('dialog', { name: 'Editar CDB Inter' });
+        await within(dialog).findByText('Imposto estimado');
+        await user.click(within(dialog).getByRole('button', { name: 'Salvar alterações' }));
+
+        await waitFor(() => {
+            expect(api.titlePatched).toHaveLength(1);
+        });
+        expect(api.titlePatched[0]).toMatchObject({ body: { issuerId: null } });
+    });
+
+    it('o chip também aparece na lista de cartões', async () => {
+        mockHoldingsApi({ holdings: withoutIssuer() });
+        vi.stubGlobal('matchMedia', (query: string) => ({
+            matches: query.includes('max-width: 639px'),
+            addEventListener: vi.fn(),
+            removeEventListener: vi.fn()
+        }));
+        renderRouterAt(PATH, { signedIn: true });
+        await screen.findByText('CDB Inter');
+
+        expect(within(screen.getByRole('list', { name: 'Lista dos seus ativos' })).getByText('Complete o cadastro')).toBeInTheDocument();
     });
 });
