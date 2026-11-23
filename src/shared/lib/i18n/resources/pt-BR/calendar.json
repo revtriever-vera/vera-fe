@@ -1,0 +1,58 @@
+{
+  "loading": "Carregando o Google Agenda",
+  "title": "Google Agenda",
+  "description": "Para criar e listar reuniões pelo WhatsApp. A permissão da agenda é pedida só aqui, nunca no login.",
+  "locked": {
+    "line": "Disponível no Premium, junto com a Vera no WhatsApp."
+  },
+  "unavailable": {
+    "selfHosted": "Sem as chaves do Google nesta instalação.",
+    "integrations": "Ver integrações",
+    "hosted": "O Google Agenda está indisponível agora."
+  },
+  "connected": "conectado",
+  "connect": "Conectar Google Agenda",
+  "revoked": "A permissão foi revogada no Google. Conecte de novo.",
+  "permission": {
+    "readWrite": "Permissão: ver e editar eventos da agenda principal.",
+    "readOnly": "Permissão: só ver eventos da agenda principal."
+  },
+  "disconnect": {
+    "action": "Desconectar",
+    "title": "Desconectar o Google Agenda?",
+    "text": "A Vera para de criar e listar reuniões. A permissão é revogada no Google.",
+    "confirm": "Desconectar",
+    "cancel": "Cancelar"
+  },
+  "modal": {
+    "title": "Conectar o Google Agenda",
+    "intro": "Você vai para o Google autorizar. No login a Vera só recebeu nome e e-mail; a agenda é pedida agora, à parte.",
+    "permissionTitle": "Permissão pedida: ver e editar eventos",
+    "permissionText": "Para criar as reuniões que você pedir no WhatsApp e listar seus próximos compromissos.",
+    "notAccessedTitle": "O que a Vera não acessa",
+    "notAccessedText": "E-mails, contatos e arquivos. Você pode revogar o acesso aqui ou na sua Conta do Google.",
+    "continue": "Continuar no Google",
+    "cancel": "Cancelar"
+  },
+  "events": {
+    "title": "Próximos compromissos",
+    "loading": "Carregando os compromissos",
+    "empty": "Nenhum compromisso nos próximos 7 dias.",
+    "error": "Não deu para ler a agenda agora.",
+    "retry": "Tentar de novo",
+    "byVera": "pela Vera",
+    "allDay": "dia todo"
+  },
+  "toasts": {
+    "connected": "Google Agenda conectado",
+    "disconnected": "Google Agenda desconectado e permissão revogada"
+  },
+  "errors": {
+    "generic": "Não deu certo agora. Tente de novo em instantes.",
+    "consentDenied": "Você não autorizou a agenda. Nada foi conectado.",
+    "scopeMissing": "A permissão de ver e editar eventos não foi marcada. Conecte de novo e marque a opção.",
+    "stateInvalid": "O pedido venceu. Conecte de novo.",
+    "providerUnavailable": "O Google não respondeu a tempo. Tente de novo em instantes.",
+    "providerDisabled": "O Google Agenda está indisponível agora."
+  }
+}

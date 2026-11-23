@@ -8,10 +8,12 @@ import ptBRAccount from './resources/pt-BR/account.json';
 import ptBRMembers from './resources/pt-BR/members.json';
 import ptBRIntegrations from './resources/pt-BR/integrations.json';
 import ptBRWhatsapp from './resources/pt-BR/whatsapp.json';
+import ptBRCalendar from './resources/pt-BR/calendar.json';
 import enAccount from './resources/en/account.json';
 import enMembers from './resources/en/members.json';
 import enIntegrations from './resources/en/integrations.json';
 import enWhatsapp from './resources/en/whatsapp.json';
+import enCalendar from './resources/en/calendar.json';
 import ptBRPortfolio from './resources/pt-BR/portfolio.json';
 import enPortfolio from './resources/en/portfolio.json';
 import ptBRPortfolioOverview from './resources/pt-BR/portfolioOverview.json';
@@ -58,6 +60,7 @@ type LocaleResources = {
     readonly members: typeof ptBRMembers;
     readonly integrations: typeof ptBRIntegrations;
     readonly whatsapp: typeof ptBRWhatsapp;
+    readonly calendar: typeof ptBRCalendar;
     readonly portfolio: typeof ptBRPortfolio;
     readonly portfolioOverview: typeof ptBRPortfolioOverview;
     readonly portfolioAssets: typeof ptBRPortfolioAssets;
@@ -85,6 +88,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         members: ptBRMembers,
         integrations: ptBRIntegrations,
         whatsapp: ptBRWhatsapp,
+        calendar: ptBRCalendar,
         portfolio: ptBRPortfolio,
         portfolioOverview: ptBRPortfolioOverview,
         portfolioAssets: ptBRPortfolioAssets,
@@ -110,6 +114,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         members: enMembers,
         integrations: enIntegrations,
         whatsapp: enWhatsapp,
+        calendar: enCalendar,
         portfolio: enPortfolio,
         portfolioOverview: enPortfolioOverview,
         portfolioAssets: enPortfolioAssets,
@@ -146,6 +151,7 @@ void i18next.use(initReactI18next).init({
         'members',
         'integrations',
         'whatsapp',
+        'calendar',
         'portfolio',
         'portfolioOverview',
         'portfolioAssets',

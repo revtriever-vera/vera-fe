@@ -1,0 +1,58 @@
+{
+  "loading": "Loading Google Calendar",
+  "title": "Google Calendar",
+  "description": "To create and list meetings through WhatsApp. The calendar permission is only asked for here, never at sign-in.",
+  "locked": {
+    "line": "Available on Premium, together with Vera on WhatsApp."
+  },
+  "unavailable": {
+    "selfHosted": "No Google keys in this installation.",
+    "integrations": "See integrations",
+    "hosted": "Google Calendar is unavailable right now."
+  },
+  "connected": "connected",
+  "connect": "Connect Google Calendar",
+  "revoked": "The permission was revoked at Google. Connect again.",
+  "permission": {
+    "readWrite": "Permission: view and edit events on the main calendar.",
+    "readOnly": "Permission: view events on the main calendar only."
+  },
+  "disconnect": {
+    "action": "Disconnect",
+    "title": "Disconnect Google Calendar?",
+    "text": "Vera stops creating and listing meetings. The permission is revoked at Google.",
+    "confirm": "Disconnect",
+    "cancel": "Cancel"
+  },
+  "modal": {
+    "title": "Connect Google Calendar",
+    "intro": "You will go to Google to authorize. At sign-in Vera only received your name and e-mail; the calendar is asked for now, separately.",
+    "permissionTitle": "Permission requested: view and edit events",
+    "permissionText": "To create the meetings you ask for on WhatsApp and list your upcoming events.",
+    "notAccessedTitle": "What Vera does not access",
+    "notAccessedText": "E-mails, contacts and files. You can revoke access here or in your Google Account.",
+    "continue": "Continue to Google",
+    "cancel": "Cancel"
+  },
+  "events": {
+    "title": "Upcoming events",
+    "loading": "Loading events",
+    "empty": "No events in the next 7 days.",
+    "error": "Could not read the calendar right now.",
+    "retry": "Try again",
+    "byVera": "by Vera",
+    "allDay": "all day"
+  },
+  "toasts": {
+    "connected": "Google Calendar connected",
+    "disconnected": "Google Calendar disconnected and permission revoked"
+  },
+  "errors": {
+    "generic": "That did not work. Try again in a moment.",
+    "consentDenied": "You did not authorize the calendar. Nothing was connected.",
+    "scopeMissing": "The permission to view and edit events was not checked. Connect again and check the option.",
+    "stateInvalid": "The request expired. Connect again.",
+    "providerUnavailable": "Google did not answer in time. Try again in a moment.",
+    "providerDisabled": "Google Calendar is unavailable right now."
+  }
+}

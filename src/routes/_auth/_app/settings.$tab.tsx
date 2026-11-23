@@ -1,5 +1,7 @@
-import type { ReactElement } from 'react';
-import { Navigate, createFileRoute } from '@tanstack/react-router';
+import { useCallback, type ReactElement } from 'react';
+import { Navigate, createFileRoute, useNavigate, type UseNavigateResult } from '@tanstack/react-router';
+import { CalendarTab } from '@/features/calendar/components/calendar-tab';
+import { calendarSearchSchema, type CalendarSearch } from '@/features/calendar/schemas/calendar-search.schema';
 import { IntegrationsTab } from '@/features/integrations/components/integrations-tab';
 import { PreferencesTab } from '@/features/account/pages/preferences-tab';
 import { PrivacyTab } from '@/features/account/pages/privacy-tab';
@@ -19,11 +21,20 @@ const TAB_CONTENT: Readonly<Record<SettingsTabId, () => ReactElement>> = {
     integrations: (): ReactElement => <IntegrationsTab />,
     people: (): ReactElement => <MembersPage />,
     whatsapp: (): ReactElement => <WhatsAppTab />,
-    calendar: (): ReactElement => <SettingsPlaceholder title="tabs.calendar" tab={SETTINGS_TAB.calendar} />,
+    calendar: (): ReactElement => <CalendarRoute />,
     banks: (): ReactElement => <ConnectionsPage />,
     preferences: (): ReactElement => <PreferencesTab />,
     privacy: (): ReactElement => <PrivacyTab summariesSlot={<SummariesPrivacyCard />} />
 };
+
+function CalendarRoute(): ReactElement {
+    const search: CalendarSearch = Route.useSearch();
+    const navigate: UseNavigateResult<'/settings/$tab'> = useNavigate({ from: '/settings/$tab' });
+    const clear = useCallback((): void => {
+        void navigate({ search: {}, replace: true });
+    }, [navigate]);
+    return <CalendarTab returned={{ connected: search.connected !== undefined, error: search.error }} onReturnHandled={clear} />;
+}
 
 function SettingsTabRoute(): ReactElement | null {
     const { tab }: { tab: string } = Route.useParams();
@@ -40,6 +51,6 @@ function SettingsTabRoute(): ReactElement | null {
 }
 
 export const Route = createFileRoute('/_auth/_app/settings/$tab')({
-    validateSearch: layoutSearchSchema,
+    validateSearch: layoutSearchSchema.extend(calendarSearchSchema.shape),
     component: SettingsTabRoute
 });
