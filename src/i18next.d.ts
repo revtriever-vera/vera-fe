@@ -1,6 +1,7 @@
 import type ptBRCommon from './shared/lib/i18n/resources/pt-BR/common.json';
 import type ptBRAuth from './shared/lib/i18n/resources/pt-BR/auth.json';
 import type ptBRAccount from './shared/lib/i18n/resources/pt-BR/account.json';
+import type ptBRMembers from './shared/lib/i18n/resources/pt-BR/members.json';
 import type ptBRPortfolio from './shared/lib/i18n/resources/pt-BR/portfolio.json';
 import type ptBRPortfolioOverview from './shared/lib/i18n/resources/pt-BR/portfolioOverview.json';
 import type ptBRPortfolioAssets from './shared/lib/i18n/resources/pt-BR/portfolioAssets.json';
@@ -24,6 +25,7 @@ declare module 'i18next' {
             common: typeof ptBRCommon;
             auth: typeof ptBRAuth;
             account: typeof ptBRAccount;
+            members: typeof ptBRMembers;
             portfolio: typeof ptBRPortfolio;
             portfolioOverview: typeof ptBRPortfolioOverview;
             portfolioAssets: typeof ptBRPortfolioAssets;

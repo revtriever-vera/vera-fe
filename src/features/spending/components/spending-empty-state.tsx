@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react';
+import { useRole } from '@/app/providers/use-role';
 import { Plug } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
@@ -10,6 +11,12 @@ const BANKS_TAB: { readonly tab: string } = { tab: 'banks' };
 
 export function SpendingEmptyState(): ReactElement {
     const { t }: UseTranslationResponse<'spending', undefined> = useTranslation('spending');
+    const { canEdit } = useRole();
+    if (!canEdit) {
+        return (
+            <EmptyState title={t('emptyState.title')} description={t('emptyState.viewerDescription')} icon={<Plug className="size-6" />} />
+        );
+    }
     return (
         <EmptyState
             title={t('emptyState.title')}

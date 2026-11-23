@@ -1,10 +1,14 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { server } from '../../../../test/msw/server';
 import { renderWithProviders } from '../../../../test/render';
 import { BaseCurrencySwitch } from './base-currency-switch';
+
+vi.mock('@/app/providers/use-role', () => ({
+    useRole: (): { role: string; canEdit: boolean; isOwner: boolean } => ({ role: 'owner', canEdit: true, isOwner: true })
+}));
 
 describe('BaseCurrencySwitch', () => {
     it('mostra R$ marcado quando a moeda base é BRL', async () => {

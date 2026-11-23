@@ -3,6 +3,8 @@ import type { ReactElement } from 'react';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { Link, useNavigate, useSearch, type UseNavigateResult } from '@tanstack/react-router';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
+import { RoleGate } from '@/app/providers/role-gate';
+import { useRole } from '@/app/providers/use-role';
 import { Button, buttonVariants } from '@/shared/ui/button';
 import { EmptyState } from '@/shared/ui/empty-state';
 import { FailureAlert } from '@/shared/ui/failure-alert';
@@ -40,6 +42,10 @@ function AssetsFailure({ error, onRetry }: { readonly error: Error; readonly onR
 
 function AssetsEmpty({ onAdd }: { readonly onAdd: () => void }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
+    const { canEdit } = useRole();
+    if (!canEdit) {
+        return <EmptyState title={t('empty.viewerTitle')} description={t('empty.viewerDescription')} />;
+    }
     return (
         <EmptyState
             title={t('empty.title')}
@@ -99,10 +105,12 @@ function AssetsHeader({ empty, onAdd }: { readonly empty: boolean; readonly onAd
                 <BaseCurrencySwitch />
                 <ExportMenu />
                 {empty ? null : (
-                    <Button onClick={onAdd}>
-                        <Plus className="size-4" aria-hidden="true" />
-                        {t('addButton')}
-                    </Button>
+                    <RoleGate min="editor">
+                        <Button onClick={onAdd}>
+                            <Plus className="size-4" aria-hidden="true" />
+                            {t('addButton')}
+                        </Button>
+                    </RoleGate>
                 )}
             </div>
         </div>
@@ -125,7 +133,9 @@ export function AssetsPage(): ReactElement {
             <AssetsHeader empty={holdings.data?.data.length === 0} onAdd={openModal} />
             <AssetsBody holdings={holdings} classes={classes} onAdd={openModal} />
             <DataSourcesNote />
-            <AddAssetModal open={search.add === true} onOpenChange={setOpen} initialClassId={search.classId} />
+            <RoleGate min="editor">
+                <AddAssetModal open={search.add === true} onOpenChange={setOpen} initialClassId={search.classId} />
+            </RoleGate>
         </section>
     );
 }

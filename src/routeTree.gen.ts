@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthAppRouteImport } from './routes/_auth/_app'
 import { Route as AuthOnboardingRouteImport } from './routes/_auth/onboarding'
 import { Route as DevUiRouteImport } from './routes/_dev/ui'
+import { Route as ConviteTokenRouteImport } from './routes/convite.$token'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/_app/index'
 import { Route as AuthAppAccountRouteImport } from './routes/_auth/_app/account'
 import { Route as AuthAppPlansRouteImport } from './routes/_auth/_app/plans'
@@ -59,6 +60,11 @@ const AuthOnboardingRoute = AuthOnboardingRouteImport.update({
 const DevUiRoute = DevUiRouteImport.update({
   id: '/_dev/ui',
   path: '/ui',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConviteTokenRoute = ConviteTokenRouteImport.update({
+  id: '/convite/$token',
+  path: '/convite/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthAppIndexRoute = AuthAppIndexRouteImport.update({
@@ -187,6 +193,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/onboarding': typeof AuthOnboardingRouteWithChildren
   '/ui': typeof DevUiRoute
+  '/convite/$token': typeof ConviteTokenRoute
   '/account': typeof AuthAppAccountRoute
   '/plans': typeof AuthAppPlansRoute
   '/portfolio': typeof AuthAppPortfolioRouteWithChildren
@@ -214,6 +221,7 @@ export interface FileRoutesByTo {
   '/': typeof AuthAppIndexRoute
   '/login': typeof LoginRoute
   '/ui': typeof DevUiRoute
+  '/convite/$token': typeof ConviteTokenRoute
   '/account': typeof AuthAppAccountRoute
   '/plans': typeof AuthAppPlansRoute
   '/onboarding/assets': typeof AuthOnboardingAssetsRoute
@@ -241,6 +249,7 @@ export interface FileRoutesById {
   '/_auth/_app': typeof AuthAppRouteWithChildren
   '/_auth/onboarding': typeof AuthOnboardingRouteWithChildren
   '/_dev/ui': typeof DevUiRoute
+  '/convite/$token': typeof ConviteTokenRoute
   '/_auth/_app/account': typeof AuthAppAccountRoute
   '/_auth/_app/plans': typeof AuthAppPlansRoute
   '/_auth/_app/portfolio': typeof AuthAppPortfolioRouteWithChildren
@@ -272,6 +281,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/onboarding'
     | '/ui'
+    | '/convite/$token'
     | '/account'
     | '/plans'
     | '/portfolio'
@@ -299,6 +309,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/ui'
+    | '/convite/$token'
     | '/account'
     | '/plans'
     | '/onboarding/assets'
@@ -325,6 +336,7 @@ export interface FileRouteTypes {
     | '/_auth/_app'
     | '/_auth/onboarding'
     | '/_dev/ui'
+    | '/convite/$token'
     | '/_auth/_app/account'
     | '/_auth/_app/plans'
     | '/_auth/_app/portfolio'
@@ -354,6 +366,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
   DevUiRoute: typeof DevUiRoute
+  ConviteTokenRoute: typeof ConviteTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -391,6 +404,13 @@ declare module '@tanstack/react-router' {
       path: '/ui'
       fullPath: '/ui'
       preLoaderRoute: typeof DevUiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/convite/$token': {
+      id: '/convite/$token'
+      path: '/convite/$token'
+      fullPath: '/convite/$token'
+      preLoaderRoute: typeof ConviteTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/_app/': {
@@ -667,6 +687,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
   DevUiRoute: DevUiRoute,
+  ConviteTokenRoute: ConviteTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

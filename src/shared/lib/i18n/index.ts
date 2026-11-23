@@ -5,7 +5,9 @@ import enCommon from './resources/en/common.json';
 import ptBRAuth from './resources/pt-BR/auth.json';
 import enAuth from './resources/en/auth.json';
 import ptBRAccount from './resources/pt-BR/account.json';
+import ptBRMembers from './resources/pt-BR/members.json';
 import enAccount from './resources/en/account.json';
+import enMembers from './resources/en/members.json';
 import ptBRPortfolio from './resources/pt-BR/portfolio.json';
 import enPortfolio from './resources/en/portfolio.json';
 import ptBRPortfolioOverview from './resources/pt-BR/portfolioOverview.json';
@@ -43,6 +45,7 @@ type LocaleResources = {
     readonly common: CommonResource;
     readonly auth: AuthResource;
     readonly account: typeof ptBRAccount;
+    readonly members: typeof ptBRMembers;
     readonly portfolio: typeof ptBRPortfolio;
     readonly portfolioOverview: typeof ptBRPortfolioOverview;
     readonly portfolioAssets: typeof ptBRPortfolioAssets;
@@ -64,6 +67,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         common: ptBRCommon,
         auth: ptBRAuth,
         account: ptBRAccount,
+        members: ptBRMembers,
         portfolio: ptBRPortfolio,
         portfolioOverview: ptBRPortfolioOverview,
         portfolioAssets: ptBRPortfolioAssets,
@@ -83,6 +87,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         common: enCommon,
         auth: enAuth,
         account: enAccount,
+        members: enMembers,
         portfolio: enPortfolio,
         portfolioOverview: enPortfolioOverview,
         portfolioAssets: enPortfolioAssets,
@@ -113,6 +118,7 @@ void i18next.use(initReactI18next).init({
         'common',
         'auth',
         'account',
+        'members',
         'portfolio',
         'portfolioOverview',
         'portfolioAssets',

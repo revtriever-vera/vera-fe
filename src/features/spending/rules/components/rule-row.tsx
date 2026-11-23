@@ -1,3 +1,5 @@
+import { CategoryReadOnly } from '../../components/category-read-only';
+import { useRole } from '@/app/providers/use-role';
 import type { UseMutationResult } from '@tanstack/react-query';
 import type { ApiError } from '@/shared/lib/api/api-error';
 import type { UpdateRuleInput } from '../api/use-update-rule.mutation';
@@ -41,6 +43,7 @@ export function RuleCategoryCell({ rule }: { readonly rule: RuleView }): ReactEl
     const { t: ts }: UseTranslationResponse<'spending', undefined> = useTranslation('spending');
     const toast: ToastApi = useToast();
     const update: UseMutationResult<RuleResult, ApiError, UpdateRuleInput> = useUpdateRule();
+    const { canEdit } = useRole();
     const change = (id: string | null): void => {
         if (id === null || id === rule.categoryId) {
             return;
@@ -57,6 +60,9 @@ export function RuleCategoryCell({ rule }: { readonly rule: RuleView }): ReactEl
             }
         );
     };
+    if (!canEdit) {
+        return <CategoryReadOnly categoryId={rule.categoryId} />;
+    }
     return (
         <div className="min-w-48">
             <CategoryPicker
@@ -69,8 +75,12 @@ export function RuleCategoryCell({ rule }: { readonly rule: RuleView }): ReactEl
     );
 }
 
-export function RuleDeleteButton({ rule, onDelete }: RuleActionProps): ReactElement {
+export function RuleDeleteButton({ rule, onDelete }: RuleActionProps): ReactElement | null {
     const { t }: UseTranslationResponse<'spendingRules', undefined> = useTranslation('spendingRules');
+    const { canEdit } = useRole();
+    if (!canEdit) {
+        return null;
+    }
     return (
         <button
             type="button"

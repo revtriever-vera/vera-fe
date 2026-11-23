@@ -1,7 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import { renderInRouter, sampleControls } from '../../../../test/helpers/render-in-router';
 import { SpendingEmptyState } from './spending-empty-state';
+
+vi.mock('@/app/providers/use-role', () => ({
+    useRole: (): { role: string; canEdit: boolean; isOwner: boolean } => ({ role: 'owner', canEdit: true, isOwner: true })
+}));
 
 describe('SpendingEmptyState', () => {
     it('explica o estado vazio e oferece as três ações', async () => {

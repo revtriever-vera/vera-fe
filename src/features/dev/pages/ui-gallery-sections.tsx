@@ -221,6 +221,7 @@ function SampleDataDemo(): ReactElement {
     const [active, setActive] = useState<boolean>(false);
     const controls: SampleDataControls = {
         available: true,
+        canManage: true,
         active,
         isLoading: false,
         load: (): Promise<void> => {

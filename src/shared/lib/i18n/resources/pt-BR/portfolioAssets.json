@@ -270,7 +270,9 @@
   "empty": {
     "title": "Você ainda não tem ativos",
     "description": "Adicione o primeiro ativo ou siga o passo a passo para montar sua carteira.",
-    "guide": "Começar pelo passo a passo"
+    "guide": "Começar pelo passo a passo",
+    "viewerTitle": "Nenhum ativo cadastrado",
+    "viewerDescription": "Peça a quem edita a conta para cadastrar."
   },
   "toasts": {
     "added": "{{name}} adicionado em {{className}}",

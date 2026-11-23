@@ -33,7 +33,8 @@
     "errors": {
       "invalid": "Enter a value between 0% and 100%.",
       "sumMustBe100": "Targets must add up to exactly 100%."
-    }
+    },
+    "viewerDescription": "Portfolio targets by class. Only whoever edits the account changes them."
   },
   "classDetail": {
     "back": "Overview",

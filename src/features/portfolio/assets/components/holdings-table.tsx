@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
+import { useRole } from '@/app/providers/use-role';
 import { Table, type TableColumn } from '@/shared/ui/table';
 import type { AssetClassView, HoldingView } from '../../types';
 import { AssetCell, QuantityOrTitle } from './asset-cell';
@@ -67,14 +68,19 @@ function valueColumns(
     ];
 }
 
+function withoutActions(columns: readonly TableColumn<HoldingView>[], canEdit: boolean): readonly TableColumn<HoldingView>[] {
+    return canEdit ? columns : columns.filter((column: TableColumn<HoldingView>): boolean => column.key !== 'actions');
+}
+
 const MIN_WIDTH: string = 'min-w-[60rem]';
 
 export function HoldingsTable({ holdings, classes, baseCurrency, onEdit, onCompleteIssuer, onRemove }: HoldingsListProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
-    const columns: readonly TableColumn<HoldingView>[] = [
-        ...identityColumns(t, classes, onCompleteIssuer),
-        ...valueColumns(t, { baseCurrency, onEdit, onRemove })
-    ];
+    const { canEdit } = useRole();
+    const columns: readonly TableColumn<HoldingView>[] = withoutActions(
+        [...identityColumns(t, classes, onCompleteIssuer), ...valueColumns(t, { baseCurrency, onEdit, onRemove })],
+        canEdit
+    );
     return (
         <Table
             label={t('page.tableLabel')}

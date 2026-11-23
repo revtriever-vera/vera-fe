@@ -1,4 +1,5 @@
 export type AuthProviderName = 'google' | 'facebook';
+export type MemberRoleName = 'owner' | 'editor' | 'viewer';
 export type OnboardingStepName = 'welcome' | 'assets' | 'banks' | 'done';
 export type AssetTypeName = 'fixed_income' | 'tesouro' | 'acoes_br' | 'fii' | 'acoes_eua' | 'reits' | 'cripto';
 export type AddAssetSource = 'search' | 'fixed_income';
@@ -68,6 +69,13 @@ export interface AnalyticsEventMap {
     spending_cuts_viewed: { status: SpendingCutsStatusName };
     spending_contribution_shortcut: undefined;
     spending_export_downloaded: { format: ExportFormatName };
+    member_invited: { role: MemberRoleName };
+    member_role_changed: { from: MemberRoleName; to: MemberRoleName };
+    member_removed: undefined;
+    member_left: undefined;
+    invite_viewed: undefined;
+    invite_accepted: { provider: AuthProviderName };
+    invite_failed: { code: string };
 }
 
 export type AnalyticsEventName = keyof AnalyticsEventMap;

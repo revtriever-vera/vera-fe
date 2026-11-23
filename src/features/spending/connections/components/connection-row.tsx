@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import { RefreshCw } from 'lucide-react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
+import { useRole } from '@/app/providers/use-role';
 import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { Button } from '@/shared/ui/button';
@@ -66,22 +67,26 @@ function Help({
 }): ReactElement {
     const { t }: UseTranslationResponse<'spendingConnections', undefined> = useTranslation('spendingConnections');
     const target: HelpTarget = helpTarget(helpKey);
+    const { canEdit, isOwner } = useRole();
+    const allowed: boolean = target.kind === 'step' ? canEdit : isOwner;
     return (
         <p className="flex flex-wrap items-center gap-x-2 text-sm text-content">
             <span>{t(helpKey)}</span>
-            <button
-                type="button"
-                className="font-semibold text-accent-strong underline underline-offset-2"
-                onClick={(): void => {
-                    if (target.kind === 'step') {
-                        onShowStep(target.step);
-                        return;
-                    }
-                    onRotate();
-                }}
-            >
-                {t(target.label)}
-            </button>
+            {allowed ? (
+                <button
+                    type="button"
+                    className="font-semibold text-accent-strong underline underline-offset-2"
+                    onClick={(): void => {
+                        if (target.kind === 'step') {
+                            onShowStep(target.step);
+                            return;
+                        }
+                        onRotate();
+                    }}
+                >
+                    {t(target.label)}
+                </button>
+            ) : null}
         </p>
     );
 }
@@ -117,8 +122,12 @@ interface RowActionsProps {
     readonly onRemove: (connection: ConnectionView) => void;
 }
 
-function RowActions({ connection, syncPending, onSync, onRemove }: RowActionsProps): ReactElement {
+function RowActions({ connection, syncPending, onSync, onRemove }: RowActionsProps): ReactElement | null {
     const { t }: UseTranslationResponse<'spendingConnections', undefined> = useTranslation('spendingConnections');
+    const { canEdit } = useRole();
+    if (!canEdit) {
+        return null;
+    }
     const bank: string = connection.connectorName ?? t('banks.unknownBank');
     return (
         <div className="flex flex-wrap gap-2">

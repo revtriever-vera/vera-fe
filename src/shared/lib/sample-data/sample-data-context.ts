@@ -3,6 +3,7 @@ import { createContext, use, type Context } from 'react';
 export interface SampleDataControls {
     readonly available: boolean;
     readonly active: boolean;
+    readonly canManage: boolean;
     readonly isLoading: boolean;
     readonly load: () => Promise<void>;
     readonly clear: () => Promise<void>;

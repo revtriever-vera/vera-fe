@@ -8,6 +8,7 @@ import { SampleDataButton } from './sample-data-button';
 function controls(overrides: Partial<SampleDataControls> = {}): SampleDataControls {
     return {
         available: true,
+        canManage: true,
         active: false,
         isLoading: false,
         load: vi.fn((): Promise<void> => Promise.resolve()),

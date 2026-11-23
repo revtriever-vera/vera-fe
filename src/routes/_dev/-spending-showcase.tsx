@@ -41,6 +41,7 @@ const SAMPLE_CATEGORIES: readonly CategoryView[] = [
 
 const SAMPLE_CONTROLS: SampleDataControls = {
     available: true,
+    canManage: true,
     active: false,
     isLoading: false,
     load: (): Promise<void> => Promise.resolve(),

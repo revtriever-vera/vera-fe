@@ -270,7 +270,9 @@
   "empty": {
     "title": "You have no assets yet",
     "description": "Add your first asset or follow the step-by-step guide to build your portfolio.",
-    "guide": "Start with the step-by-step guide"
+    "guide": "Start with the step-by-step guide",
+    "viewerTitle": "No assets yet",
+    "viewerDescription": "Ask whoever edits the account to add them."
   },
   "toasts": {
     "added": "{{name}} added to {{className}}",

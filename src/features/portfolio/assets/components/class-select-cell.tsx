@@ -3,6 +3,7 @@ import { useId, type ReactElement } from 'react';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
+import { useRole } from '@/app/providers/use-role';
 import { track } from '@/shared/lib/analytics';
 import type { ApiError } from '@/shared/lib/api/api-error';
 import { SelectMenu, type SelectChoice } from '@/shared/ui/select-menu';
@@ -53,7 +54,7 @@ function useReclassifyAction(holding: HoldingView, classes: readonly AssetClassV
     return { pending: mutation.isPending, change };
 }
 
-export function ClassSelectCell({ holding, classes }: ClassSelectCellProps): ReactElement {
+function EditableClassSelect({ holding, classes }: ClassSelectCellProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const classLabel: ClassLabel = useClassLabel();
     const labelId: string = useId();
@@ -80,4 +81,14 @@ export function ClassSelectCell({ holding, classes }: ClassSelectCellProps): Rea
             />
         </div>
     );
+}
+
+export function ClassSelectCell({ holding, classes }: ClassSelectCellProps): ReactElement {
+    const { canEdit } = useRole();
+    const classLabel: ClassLabel = useClassLabel();
+    if (canEdit) {
+        return <EditableClassSelect holding={holding} classes={classes} />;
+    }
+    const current: AssetClassView | undefined = classes.find((item: AssetClassView): boolean => item.id === holding.classId);
+    return <span className="text-sm text-content">{current === undefined ? '' : classLabel(current.systemKey, current.name)}</span>;
 }

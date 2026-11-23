@@ -97,7 +97,8 @@
     "title": "Nenhum gasto por aqui ainda",
     "description": "Conecte seus bancos pelo Meu Pluggy ou importe um extrato do banco. A partir daí, os gastos chegam já categorizados.",
     "connect": "Conectar bancos",
-    "import": "Importar extrato"
+    "import": "Importar extrato",
+    "viewerDescription": "Peça a quem edita a conta para conectar os bancos ou importar um extrato."
   },
   "flexibility": {
     "toggleLabel": "Natureza de {{name}}: {{state}}",

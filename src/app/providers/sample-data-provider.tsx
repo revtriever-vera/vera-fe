@@ -10,6 +10,7 @@ import { useOnboardingCache, type OnboardingCache } from '@/features/onboarding/
 import { useOnboardingState } from '@/features/onboarding/api/use-onboarding-state.query';
 import { onboardingErrorMessage } from '@/features/onboarding/lib/onboarding-error-message';
 import type { OnboardingState } from '@/features/onboarding/types';
+import { useRole } from './use-role';
 import type { ApiError } from '@/shared/lib/api/api-error';
 import { track } from '@/shared/lib/analytics';
 import { SampleDataContext, type SampleDataControls } from '@/shared/lib/sample-data/sample-data-context';
@@ -45,6 +46,7 @@ export function SampleDataProvider({ children }: { readonly children: ReactNode 
     const state: OnboardingState | undefined = useOnboardingState().data;
     const loadMutation: UseMutationResult<OnboardingState, ApiError, void> = useLoadSample();
     const clearMutation: UseMutationResult<OnboardingState, ApiError, void> = useClearSample();
+    const { canEdit } = useRole();
     const trackLoaded: () => void = useTrackLoaded();
     const isLoading: boolean = loadMutation.isPending || clearMutation.isPending;
 
@@ -67,11 +69,12 @@ export function SampleDataProvider({ children }: { readonly children: ReactNode 
         return {
             available: state?.sample.available ?? false,
             active: state?.sample.active ?? false,
+            canManage: canEdit,
             isLoading,
             load: async (): Promise<void> => run(async () => loadMutation.mutateAsync(), t('sampleLoaded'), trackLoaded),
             clear: async (): Promise<void> => run(async () => clearMutation.mutateAsync(), t('sampleCleared'), trackCleared)
         };
-    }, [state, trackLoaded, isLoading, cache, queryClient, toast, t, tOnboarding, loadMutation, clearMutation]);
+    }, [state, canEdit, trackLoaded, isLoading, cache, queryClient, toast, t, tOnboarding, loadMutation, clearMutation]);
 
     return <SampleDataContext value={value}>{children}</SampleDataContext>;
 }
