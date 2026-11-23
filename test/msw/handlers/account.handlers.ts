@@ -18,5 +18,6 @@ export const accountHandlers: RequestHandler[] = [
                 }
             })
     ),
+    http.get('*/account/support-access', (): Response => HttpResponse.json({ items: [] })),
     http.delete('*/account', (): Response => new HttpResponse(null, { status: 204 }))
 ];

@@ -6,6 +6,7 @@ import { Alert } from '@/shared/ui/alert';
 import { AccountSection } from '../components/account-section';
 import { DeleteAccountCard } from '../components/delete-account-card';
 import { ExportCard } from '../components/export-card';
+import { SupportAccessCard } from '../components/support-access-card';
 
 export interface PrivacyTabProps {
     readonly summariesSlot?: ReactNode;
@@ -28,6 +29,9 @@ export function PrivacyTab({ summariesSlot = null }: PrivacyTabProps): ReactElem
                     <DeleteAccountCard user={user} />
                 </RoleGate>
             </AccountSection>
+            <RoleGate min="owner">
+                <SupportAccessCard />
+            </RoleGate>
         </>
     );
 }
