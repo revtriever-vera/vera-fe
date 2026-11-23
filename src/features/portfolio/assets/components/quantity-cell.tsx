@@ -2,6 +2,7 @@ import { useState, type ChangeEvent, type KeyboardEvent, type ReactElement } fro
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
+import { useRole } from '@/app/providers/use-role';
 import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { cn } from '@/shared/lib/cn';
@@ -90,7 +91,7 @@ function useQuantityEditor(holding: HoldingView): QuantityEditor {
     return { draft, error, busy, change, commit, onKeyDown };
 }
 
-export function QuantityCell({ holding }: QuantityCellProps): ReactElement {
+function EditableQuantityCell({ holding }: QuantityCellProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const editor: QuantityEditor = useQuantityEditor(holding);
     return (
@@ -122,4 +123,13 @@ export function QuantityCell({ holding }: QuantityCellProps): ReactElement {
             ) : null}
         </div>
     );
+}
+
+export function QuantityCell({ holding }: QuantityCellProps): ReactElement {
+    const { canEdit } = useRole();
+    const locale: SupportedLocale = useLocale();
+    if (canEdit) {
+        return <EditableQuantityCell holding={holding} />;
+    }
+    return <span className="numeric text-sm text-content">{displayQuantity(holding.quantity ?? '0', locale)}</span>;
 }

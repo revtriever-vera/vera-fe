@@ -50,7 +50,7 @@ describe('/portfolio/assets: abas', () => {
         renderRouterAt('/portfolio/assets', { signedIn: true });
 
         expect(await screen.findByRole('tab', { name: 'Ativos', selected: true })).toBeInTheDocument();
-        expect(screen.queryByRole('tab', { name: 'Emissores e setores' })).not.toBeInTheDocument();
+        expect(screen.getByRole('tab', { name: 'Renda fixa', selected: false })).toBeInTheDocument();
         expect(track).toHaveBeenCalledWith('assets_tab_viewed', { tab: 'list' });
     });
 
@@ -64,12 +64,6 @@ describe('/portfolio/assets: abas', () => {
         expect(track).toHaveBeenCalledWith('assets_tab_viewed', { tab: 'fixed-income' });
 
         router.history.back();
-
-        expect(await screen.findByRole('tab', { name: 'Ativos', selected: true })).toBeInTheDocument();
-    });
-
-    it('uma aba que não existe cai na lista', async () => {
-        renderRouterAt('/portfolio/assets?tab=concentration', { signedIn: true });
 
         expect(await screen.findByRole('tab', { name: 'Ativos', selected: true })).toBeInTheDocument();
     });

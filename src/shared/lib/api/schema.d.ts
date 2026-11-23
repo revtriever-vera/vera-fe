@@ -821,7 +821,7 @@ export interface paths {
         };
         /**
          * FGC coverage by conglomerate
-         * @description Groups the CDB, LCI, LCA and LC in BRL of banks associated with the FGC by prudential conglomerate and applies the limit of R$ 250,000 per CPF per conglomerate to the value today (gross of income tax). Matured securities do not count. Holdings the FGC does not cover come back in `outside` with the reason (`not_calculated` is the "Outro emissor" option, not a pending registration). The R$ 1,000,000 cap is a reference only: the real rule is about guarantees paid in 4 years. Amounts are always in BRL.
+         * @description Groups the CDB, LCI, LCA and LC in BRL of banks associated with the FGC by prudential conglomerate and applies the limit of R$ 250,000 per CPF per conglomerate to the value today (gross of income tax), computed per holder ("Conta toda" is a holder on its own). Filter with `holder=any|all|<userId>`: a single holder answers with its groups; `any` with two or more holders answers a block per holder in `byHolder` and the total. Matured securities do not count. Holdings the FGC does not cover come back in `outside` with the reason (`not_calculated` is the "Outro emissor" option, not a pending registration). The R$ 1,000,000 cap is a reference only: the real rule is about guarantees paid in 4 years. Amounts are always in BRL.
          */
         get: operations["FgcController_get"];
         put?: never;
@@ -1594,6 +1594,26 @@ export interface paths {
          * @description Queues a synchronization for the connection. The answer only says it was queued: poll `GET /spending/connections` while `syncing` is true to follow it.
          */
         post: operations["SyncController_syncOne"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/billing/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Plan, paid features and monthly usage of the signed-in company
+         * @description Single source of truth for the front: deployment mode, effective plan, subscription and open invoice (hosted), the state of each paid feature and the monthly usage. Any member can read it; `canManage` tells whether the user can change the plan.
+         */
+        get: operations["BillingMeController_me"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -6445,6 +6465,11 @@ export interface operations {
                      * @description Class of the security; omitted uses the class suggested by the indexer
                      */
                     classId?: string;
+                    /**
+                     * Format: uuid
+                     * @description Holder of the security: id of an active person of the account; null is the whole account ("Conta toda")
+                     */
+                    holderUserId?: string | null;
                 };
             };
         };
@@ -6491,6 +6516,11 @@ export interface operations {
                          * @description Asset class the security belongs to
                          */
                         classId: string;
+                        /**
+                         * Format: uuid
+                         * @description Holder of the security; null is the whole account
+                         */
+                        holderUserId: string | null;
                         /** @description Issuer with its conglomerate; null for securities registered without one */
                         issuer: {
                             /** @description Slug of the issuer */
@@ -6502,10 +6532,10 @@ export interface operations {
                             /** @description Name of the conglomerate or group */
                             groupName: string;
                             /**
-                             * @description `bank`, `company` or `sovereign`
+                             * @description `bank`, `company`, `sovereign` or `other` (the "Outro emissor" option)
                              * @enum {string}
                              */
-                            kind: "bank" | "company" | "sovereign";
+                            kind: "bank" | "company" | "sovereign" | "other";
                             /** @description Whether the issuer is associated to the FGC */
                             fgcAssociated: boolean;
                         } | null;
@@ -6707,6 +6737,11 @@ export interface operations {
                          * @description Asset class the security belongs to
                          */
                         classId: string;
+                        /**
+                         * Format: uuid
+                         * @description Holder of the security; null is the whole account
+                         */
+                        holderUserId: string | null;
                         /** @description Issuer with its conglomerate; null for securities registered without one */
                         issuer: {
                             /** @description Slug of the issuer */
@@ -6718,10 +6753,10 @@ export interface operations {
                             /** @description Name of the conglomerate or group */
                             groupName: string;
                             /**
-                             * @description `bank`, `company` or `sovereign`
+                             * @description `bank`, `company`, `sovereign` or `other` (the "Outro emissor" option)
                              * @enum {string}
                              */
-                            kind: "bank" | "company" | "sovereign";
+                            kind: "bank" | "company" | "sovereign" | "other";
                             /** @description Whether the issuer is associated to the FGC */
                             fgcAssociated: boolean;
                         } | null;
@@ -6930,6 +6965,11 @@ export interface operations {
                     appliedAt?: string;
                     /** @description Maturity date, YYYY-MM-DD, after the application date and at most 50 years ahead of it */
                     maturityDate?: string;
+                    /**
+                     * Format: uuid
+                     * @description Holder of the security: id of an active person of the account; null is the whole account ("Conta toda")
+                     */
+                    holderUserId?: string | null;
                 };
             };
         };
@@ -6976,6 +7016,11 @@ export interface operations {
                          * @description Asset class the security belongs to
                          */
                         classId: string;
+                        /**
+                         * Format: uuid
+                         * @description Holder of the security; null is the whole account
+                         */
+                        holderUserId: string | null;
                         /** @description Issuer with its conglomerate; null for securities registered without one */
                         issuer: {
                             /** @description Slug of the issuer */
@@ -6987,10 +7032,10 @@ export interface operations {
                             /** @description Name of the conglomerate or group */
                             groupName: string;
                             /**
-                             * @description `bank`, `company` or `sovereign`
+                             * @description `bank`, `company`, `sovereign` or `other` (the "Outro emissor" option)
                              * @enum {string}
                              */
-                            kind: "bank" | "company" | "sovereign";
+                            kind: "bank" | "company" | "sovereign" | "other";
                             /** @description Whether the issuer is associated to the FGC */
                             fgcAssociated: boolean;
                         } | null;
@@ -7320,8 +7365,8 @@ export interface operations {
     FgcController_get: {
         parameters: {
             query?: {
-                /** @description Holder (person) of the securities. Not supported yet: answers 400 fgc.holder_not_supported */
-                holderId?: string;
+                /** @description Holder filter: `any` (default) is everything, `all` is only what belongs to the whole account ("Conta toda"), or the id of a person to see only what is theirs */
+                holder?: ("any" | "all") | string;
             };
             header?: never;
             path?: never;
@@ -7342,21 +7387,21 @@ export interface operations {
                          */
                         currency: "BRL";
                         /**
-                         * @description Whole account; per-holder blocks arrive with the holders
+                         * @description `holder` when the request named one holder (`all` or a person); `account` for `any`
                          * @enum {string}
                          */
-                        scope: "account";
+                        scope: "account" | "holder";
                         /** @description Number of people on the account; the FGC limit is per CPF */
                         peopleCount: number;
                         /** @description FGC limit per CPF per conglomerate, in BRL minor units */
                         limitPerGroupMinor: number;
                         /** @description Reference cap of the guarantees paid to one person every 4 years, in BRL minor units */
                         capMinor: number;
-                        /** @description Sum of the covered amounts of every group */
+                        /** @description Covered amount: of the holder asked for, or the sum of every holder when `byHolder` is filled */
                         coveredMinor: number;
-                        /** @description coveredMinor over capMinor in basis points; may be above 10000 */
+                        /** @description coveredMinor over capMinor in basis points; with `byHolder` filled, the highest share among the holders */
                         capShareBps: number;
-                        /** @description Groups by totalMinor, largest first */
+                        /** @description Groups of the single holder in the answer; empty when `byHolder` is filled */
                         groups: {
                             /** @description Prudential conglomerate id */
                             groupId: string;
@@ -7380,7 +7425,7 @@ export interface operations {
                                 estimated: boolean;
                             }[];
                         }[];
-                        /** @description Holdings that the FGC does not cover, with the reason */
+                        /** @description Holdings outside the FGC of the single holder in the answer; empty when `byHolder` is filled */
                         outside: {
                             id: string;
                             /** @description Untrusted text */
@@ -7390,12 +7435,63 @@ export interface operations {
                             /** @description Value today in the holding currency */
                             valueMinor: number;
                         }[];
+                        /** @description One block per holder ("Conta toda" apart), only when holder is `any` and two or more holders have securities */
+                        byHolder: {
+                            /** @description Holder of the block; null is the whole account ("Conta toda"), a holder on its own */
+                            holder: {
+                                /**
+                                 * Format: uuid
+                                 * @description Id of the person
+                                 */
+                                userId: string;
+                                /** @description Name of the person. Untrusted text */
+                                name: string;
+                            } | null;
+                            /** @description Sum of the covered amounts of every group of the holder */
+                            coveredMinor: number;
+                            /** @description coveredMinor over capMinor in basis points; may be above 10000 */
+                            capShareBps: number;
+                            /** @description Groups by totalMinor, largest first */
+                            groups: {
+                                /** @description Prudential conglomerate id */
+                                groupId: string;
+                                /** @description Conglomerate name */
+                                groupName: string;
+                                /** @description Value today (gross) of the eligible securities of the group */
+                                totalMinor: number;
+                                /** @description min(totalMinor, limit) */
+                                coveredMinor: number;
+                                /** @description max(0, totalMinor - limit) */
+                                overMinor: number;
+                                titles: {
+                                    id: string;
+                                    /** @description Security name given by the user. Untrusted text */
+                                    name: string;
+                                    issuerName: string;
+                                    kind: string;
+                                    /** @description Value today, gross of income tax */
+                                    valueMinor: number;
+                                    /** @description True when the value is the applied amount or rests on an assumption */
+                                    estimated: boolean;
+                                }[];
+                            }[];
+                            /** @description Holdings that the FGC does not cover, with the reason */
+                            outside: {
+                                id: string;
+                                /** @description Untrusted text */
+                                name: string;
+                                /** @enum {string} */
+                                reason: "tesouro" | "not_covered_kind" | "not_associated" | "foreign" | "missing_issuer" | "not_calculated";
+                                /** @description Value today in the holding currency */
+                                valueMinor: number;
+                            }[];
+                        }[];
                         /** @description Reference date, YYYY-MM-DD */
                         asOf: string;
                     };
                 };
             };
-            /** @description holderId informed (fgc.holder_not_supported) */
+            /** @description Invalid query (zod validation details in meta.errors) */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -7838,6 +7934,11 @@ export interface operations {
                      * @description Class of the position; omitted uses the class suggested by the catalog for the asset
                      */
                     classId?: string;
+                    /**
+                     * Format: uuid
+                     * @description Holder of the position: id of an active person of the account; null is the whole account ("Conta toda")
+                     */
+                    holderUserId?: string | null;
                 };
             };
         };
@@ -7868,6 +7969,11 @@ export interface operations {
                          * @description Class the position belongs to
                          */
                         classId: string;
+                        /**
+                         * Format: uuid
+                         * @description Holder of the position; null is the whole account
+                         */
+                        holderUserId: string | null;
                         /**
                          * Format: date-time
                          * @description Creation instant, ISO 8601
@@ -8042,6 +8148,11 @@ export interface operations {
                          */
                         classId: string;
                         /**
+                         * Format: uuid
+                         * @description Holder of the position; null is the whole account
+                         */
+                        holderUserId: string | null;
+                        /**
                          * Format: date-time
                          * @description Creation instant, ISO 8601
                          */
@@ -8190,6 +8301,11 @@ export interface operations {
                     quantity?: string;
                     /** @description Average price paid, decimal string zero or more, in the currency of the asset; null when unknown. Informational only */
                     averagePrice?: string | null;
+                    /**
+                     * Format: uuid
+                     * @description Holder of the position: id of an active person of the account; null is the whole account ("Conta toda")
+                     */
+                    holderUserId?: string | null;
                 };
             };
         };
@@ -8220,6 +8336,11 @@ export interface operations {
                          * @description Class the position belongs to
                          */
                         classId: string;
+                        /**
+                         * Format: uuid
+                         * @description Holder of the position; null is the whole account
+                         */
+                        holderUserId: string | null;
                         /**
                          * Format: date-time
                          * @description Creation instant, ISO 8601
@@ -8553,7 +8674,10 @@ export interface operations {
     };
     PortfolioController_holdings: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Holder filter: `any` (default) is everything, `all` is only what belongs to the whole account ("Conta toda"), or the id of a person to see only what is theirs */
+                holder?: ("any" | "all") | string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -8652,6 +8776,16 @@ export interface operations {
                             matured: boolean;
                             /** @description The exchange rate needed to convert to the base currency is missing: value is 0 */
                             missingRate: boolean;
+                            /** @description Holder of the holding; null is the whole account ("Conta toda") */
+                            holder: {
+                                /**
+                                 * Format: uuid
+                                 * @description Id of the person who holds it
+                                 */
+                                userId: string;
+                                /** @description Name of the person. Untrusted text */
+                                name: string;
+                            } | null;
                         }[];
                     };
                 };
@@ -8684,7 +8818,10 @@ export interface operations {
     };
     PortfolioController_overview: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Holder filter: `any` (default) is everything, `all` is only what belongs to the whole account ("Conta toda"), or the id of a person to see only what is theirs */
+                holder?: ("any" | "all") | string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -8823,7 +8960,10 @@ export interface operations {
     };
     PortfolioController_classDetail: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Holder filter: `any` (default) is everything, `all` is only what belongs to the whole account ("Conta toda"), or the id of a person to see only what is theirs */
+                holder?: ("any" | "all") | string;
+            };
             header?: never;
             path: {
                 /** @description Asset class id */
@@ -8921,6 +9061,16 @@ export interface operations {
                             missingQuote: boolean;
                             /** @description The quote is old */
                             stale: boolean;
+                            /** @description Holder of the holding; null is the whole account ("Conta toda") */
+                            holder: {
+                                /**
+                                 * Format: uuid
+                                 * @description Id of the person who holds it
+                                 */
+                                userId: string;
+                                /** @description Name of the person. Untrusted text */
+                                name: string;
+                            } | null;
                         }[];
                     };
                 };
@@ -13845,6 +13995,161 @@ export interface operations {
             };
             /** @description The synchronization could not be queued (connections.sync_unavailable) */
             503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    BillingMeController_me: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Billing state. Hosted free example shown; the self-hosted example has plan self_hosted, no methods and no price. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Deployment mode of this installation
+                         * @enum {string}
+                         */
+                        mode: "hosted" | "self_hosted";
+                        /**
+                         * @description Effective plan of the signed-in company
+                         * @enum {string}
+                         */
+                        plan: "free" | "premium" | "self_hosted";
+                        /** @description True when the signed-in user is the owner and can change the plan */
+                        canManage: boolean;
+                        /** @description Payment methods offered; empty when self-hosted */
+                        methods: ("card" | "pix")[];
+                        /** @description Premium monthly price in cents of BRL; null when self-hosted */
+                        priceCents: number | null;
+                        /**
+                         * @description Currency of the price
+                         * @enum {string}
+                         */
+                        currency: "BRL";
+                        /** @description Subscription summary; null when there is none */
+                        subscription: {
+                            /**
+                             * @description Subscription status
+                             * @enum {string}
+                             */
+                            status: "pending" | "active" | "past_due" | "canceled" | "expired";
+                            /**
+                             * @description Chosen payment method
+                             * @enum {string}
+                             */
+                            method: "card" | "pix";
+                            /** @description When the subscription started (ISO 8601) */
+                            since: string | null;
+                            /** @description End of the paid cycle (ISO 8601) */
+                            paidThrough: string | null;
+                            /** @description Next charge (ISO 8601); null once canceled */
+                            nextChargeAt: string | null;
+                            /** @description Saved card, when there is one */
+                            card: {
+                                /** @description Card brand */
+                                brand: string;
+                                /** @description Last four digits */
+                                last4: string;
+                            } | null;
+                            /** @description End of the grace period after an overdue invoice (ISO 8601) */
+                            graceEndsAt: string | null;
+                            /** @description End of the 7-day withdrawal window (ISO 8601) */
+                            withdrawalEndsAt: string | null;
+                            /** @description True when a canceled subscription can be resumed */
+                            canResume: boolean;
+                        } | null;
+                        /** @description Invoice waiting for payment; null when there is none */
+                        openInvoice: {
+                            /** @description Invoice id */
+                            id: string;
+                            /**
+                             * @description Invoice status
+                             * @enum {string}
+                             */
+                            status: "issued" | "overdue";
+                            /** @description Invoice total in cents of BRL */
+                            totalCents: number;
+                            /** @description Due date (ISO 8601) */
+                            dueDate: string;
+                        } | null;
+                        /** @description State of each paid feature */
+                        features: {
+                            /**
+                             * @description Text summaries and the assistant
+                             * @enum {string}
+                             */
+                            ai: "available" | "premium_required" | "paused" | "disabled";
+                            /**
+                             * @description Vera on WhatsApp
+                             * @enum {string}
+                             */
+                            whatsapp: "available" | "premium_required" | "paused" | "disabled";
+                            /**
+                             * @description Google Calendar and reminders
+                             * @enum {string}
+                             */
+                            calendar: "available" | "premium_required" | "paused" | "disabled";
+                        };
+                        /** @description Paid usage of the month; null when nothing meters it */
+                        usage: {
+                            /** @description Share of the monthly cap used, in basis points */
+                            usedBps: number;
+                            /**
+                             * @description ok, warning from 80%, paused at 100%
+                             * @enum {string}
+                             */
+                            state: "ok" | "warning" | "paused";
+                            /** @description When the period turns (ISO 8601) */
+                            resetsAt: string;
+                            /** @description Usage by feature */
+                            byFeature: {
+                                ai: {
+                                    /** @description Share of the monthly cap used, in basis points */
+                                    usedBps: number;
+                                };
+                                whatsapp: {
+                                    /** @description Share of the monthly cap used, in basis points */
+                                    usedBps: number;
+                                };
+                            };
+                            /** @description Cap in micros of BRL; only for self-hosted with a cap */
+                            capMicros: number | null;
+                        } | null;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };

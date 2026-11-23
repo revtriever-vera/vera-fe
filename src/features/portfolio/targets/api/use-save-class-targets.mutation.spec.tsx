@@ -17,6 +17,7 @@ function invalidatedKeys(spy: MockInstance): unknown[] {
 const EXPECTED: unknown[] = [
     portfolioKeys.holdings(),
     portfolioKeys.overview(),
+    portfolioKeys.concentration(),
     portfolioKeys.classes(),
     portfolioKeys.classDetails(),
     portfolioKeys.contributions()

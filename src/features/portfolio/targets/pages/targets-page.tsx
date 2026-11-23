@@ -1,6 +1,7 @@
 import { useState, type ReactElement } from 'react';
 import { useQueryClient, type QueryClient, type UseQueryResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
+import { useRole } from '@/app/providers/use-role';
 import { FailureAlert } from '@/shared/ui/failure-alert';
 import { Button } from '@/shared/ui/button';
 import { Loading, Skeleton } from '@/shared/ui/skeleton';
@@ -12,6 +13,7 @@ import type { ClassesResponse, Overview, PortfolioSettings } from '../../types';
 import { ClassManagerDialog } from '../components/class-manager-dialog';
 import { ClassTargetsCard } from '../components/class-targets-card';
 import { ManageClassesCard } from '../components/manage-classes-card';
+import { ReadOnlyTargetsCard } from '../components/read-only-targets-card';
 import { ToleranceCard } from '../components/tolerance-card';
 
 function TargetsLoading(): ReactElement {
@@ -47,6 +49,10 @@ interface ContentProps {
 }
 
 function TargetsContent({ classes, settings, overview, onManage }: ContentProps): ReactElement {
+    const { canEdit } = useRole();
+    if (!canEdit) {
+        return <ReadOnlyTargetsCard classes={classes.data} />;
+    }
     return (
         <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
             <ClassTargetsCard classes={classes.data} overview={overview} />

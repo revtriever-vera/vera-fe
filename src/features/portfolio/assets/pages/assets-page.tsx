@@ -4,21 +4,25 @@ import type { UseQueryResult } from '@tanstack/react-query';
 import { Link, useNavigate, useSearch, type UseNavigateResult } from '@tanstack/react-router';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { track } from '@/shared/lib/analytics';
+import { RoleGate } from '@/app/providers/role-gate';
+import { useRole } from '@/app/providers/use-role';
 import { Button, buttonVariants } from '@/shared/ui/button';
 import { EmptyState } from '@/shared/ui/empty-state';
 import { FailureAlert } from '@/shared/ui/failure-alert';
 import { SkeletonTable } from '@/shared/ui/skeleton-table';
 import { BaseCurrencySwitch } from '../../components/base-currency-switch';
 import { DataSourcesNote } from '../../components/data-sources-note';
+import { FixedIncomeTab } from '../../fixed-income/components/fixed-income-tab';
+import { ConcentrationTab } from '../../concentration/components/concentration-tab';
 import { useClasses } from '../../api/use-classes.query';
 import { useHoldings } from '../../api/use-holdings.query';
 import type { ClassesResponse, HoldingsResponse } from '../../types';
 import { AddAssetModal } from '../components/add-asset-modal';
+import { AssetsTabs } from '../components/assets-tabs';
 import { ExportMenu } from '../components/export-menu';
 import { HoldingsSection } from '../components/holdings-section';
-import { AssetsTabPanel, AssetsTabs } from '../components/assets-tabs';
-import { FixedIncomeTab } from '../../fixed-income/components/fixed-income-tab';
-import { resolveAssetsTab, type AssetsTab } from '../lib/assets-tab';
+import { DEFAULT_ASSETS_TAB } from '../lib/assets-tab';
+import type { AssetsTab } from '../types';
 
 function AssetsLoading(): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
@@ -44,6 +48,10 @@ function AssetsFailure({ error, onRetry }: { readonly error: Error; readonly onR
 
 function AssetsEmpty({ onAdd }: { readonly onAdd: () => void }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
+    const { canEdit } = useRole();
+    if (!canEdit) {
+        return <EmptyState title={t('empty.viewerTitle')} description={t('empty.viewerDescription')} />;
+    }
     return (
         <EmptyState
             title={t('empty.title')}
@@ -103,54 +111,31 @@ function AssetsHeader({ empty, onAdd }: { readonly empty: boolean; readonly onAd
                 <BaseCurrencySwitch />
                 <ExportMenu />
                 {empty ? null : (
-                    <Button onClick={onAdd}>
-                        <Plus className="size-4" aria-hidden="true" />
-                        {t('addButton')}
-                    </Button>
+                    <RoleGate min="editor">
+                        <Button onClick={onAdd}>
+                            <Plus className="size-4" aria-hidden="true" />
+                            {t('addButton')}
+                        </Button>
+                    </RoleGate>
                 )}
             </div>
         </div>
     );
 }
 
-interface AssetsSearch {
-    readonly add?: boolean;
-    readonly classId?: string;
-    readonly tab?: AssetsTab;
-}
-
-interface TabContentProps {
-    readonly tab: AssetsTab;
-    readonly holdings: UseQueryResult<HoldingsResponse>;
-    readonly classes: UseQueryResult<ClassesResponse>;
-    readonly onAdd: () => void;
-}
-
-function TabContent({ tab, holdings, classes, onAdd }: TabContentProps): ReactElement {
-    if (tab === 'fixed-income') {
-        return <FixedIncomeTab />;
-    }
-    return (
-        <>
-            <AssetsBody holdings={holdings} classes={classes} onAdd={onAdd} />
-            <DataSourcesNote />
-        </>
-    );
-}
-
 export function AssetsPage(): ReactElement {
-    const search: AssetsSearch = useSearch({ from: '/_auth/_app/portfolio/assets' });
+    const search: { add?: boolean; classId?: string; tab?: AssetsTab } = useSearch({ from: '/_auth/_app/portfolio/assets' });
     const navigate: UseNavigateResult<string> = useNavigate();
-    const tab: AssetsTab = resolveAssetsTab(search.tab);
     const holdings: UseQueryResult<HoldingsResponse> = useHoldings();
     const classes: UseQueryResult<ClassesResponse> = useClasses();
+    const tab: AssetsTab = search.tab ?? DEFAULT_ASSETS_TAB;
     useEffect((): void => {
         track('assets_tab_viewed', { tab });
     }, [tab]);
     const setOpen = (open: boolean): void => {
         void navigate({
             to: '/portfolio/assets',
-            search: { ...(open ? { add: true, classId: search.classId } : {}), ...(tab === 'list' ? {} : { tab }) },
+            search: open ? { add: true, classId: search.classId, tab: search.tab } : { tab: search.tab },
             replace: true
         });
     };
@@ -158,16 +143,24 @@ export function AssetsPage(): ReactElement {
         setOpen(true);
     };
     const changeTab = (next: AssetsTab): void => {
-        void navigate({ to: '/portfolio/assets', search: next === 'list' ? {} : { tab: next } });
+        void navigate({ to: '/portfolio/assets', search: { tab: next === DEFAULT_ASSETS_TAB ? undefined : next } });
     };
     return (
         <section className="flex flex-col gap-4">
             <AssetsHeader empty={holdings.data?.data.length === 0} onAdd={openModal} />
-            <AssetsTabs tab={tab} onChange={changeTab} />
-            <AssetsTabPanel tab={tab}>
-                <TabContent tab={tab} holdings={holdings} classes={classes} onAdd={openModal} />
-            </AssetsTabPanel>
-            <AddAssetModal open={search.add === true} onOpenChange={setOpen} initialClassId={search.classId} />
+            <AssetsTabs
+                value={tab}
+                onValueChange={changeTab}
+                panels={{
+                    list: <AssetsBody holdings={holdings} classes={classes} onAdd={openModal} />,
+                    'fixed-income': <FixedIncomeTab />,
+                    concentration: <ConcentrationTab />
+                }}
+            />
+            <DataSourcesNote />
+            <RoleGate min="editor">
+                <AddAssetModal open={search.add === true} onOpenChange={setOpen} initialClassId={search.classId} />
+            </RoleGate>
         </section>
     );
 }

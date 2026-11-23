@@ -22,6 +22,7 @@ export const portfolioKeys: {
     classes: () => readonly ['portfolio', 'classes'];
     holdings: () => readonly ['portfolio', 'holdings'];
     overview: () => readonly ['portfolio', 'overview'];
+    concentration: () => readonly ['portfolio', 'concentration'];
     classDetails: () => readonly ['portfolio', 'class-detail'];
     classDetail: (classId: string) => readonly ['portfolio', 'class-detail', string];
     catalogSearch: (params: CatalogSearchParams) => readonly ['portfolio', 'catalog-search', CatalogSearchParams];
@@ -40,6 +41,7 @@ export const portfolioKeys: {
     classes: (): readonly ['portfolio', 'classes'] => [...portfolioKeys.all, 'classes'] as const,
     holdings: (): readonly ['portfolio', 'holdings'] => [...portfolioKeys.all, 'holdings'] as const,
     overview: (): readonly ['portfolio', 'overview'] => [...portfolioKeys.all, 'overview'] as const,
+    concentration: (): readonly ['portfolio', 'concentration'] => [...portfolioKeys.all, 'concentration'] as const,
     classDetails: (): readonly ['portfolio', 'class-detail'] => [...portfolioKeys.all, 'class-detail'] as const,
     classDetail: (classId: string): readonly ['portfolio', 'class-detail', string] => [...portfolioKeys.classDetails(), classId] as const,
     catalogSearch: (params: CatalogSearchParams): readonly ['portfolio', 'catalog-search', CatalogSearchParams] =>

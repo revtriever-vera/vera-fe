@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
-import { ASSETS_TABS } from '@/features/portfolio/assets/lib/assets-tab';
+import { ASSETS_TABS } from '@/features/portfolio/assets/types';
 import { AssetsPage } from '@/features/portfolio/assets/pages/assets-page';
 
 const assetsSearchSchema = z.object({

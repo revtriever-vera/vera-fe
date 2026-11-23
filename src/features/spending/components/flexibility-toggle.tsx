@@ -1,3 +1,4 @@
+import { useRole } from '@/app/providers/use-role';
 import type { ReactElement } from 'react';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
@@ -58,11 +59,21 @@ export function FlexibilityToggle({ category, size = 'sm' }: FlexibilityTogglePr
     const { t }: UseTranslationResponse<'spending', undefined> = useTranslation('spending');
     const label: CategoryLabel = useCategoryLabel();
     const change: FlexibilityChange = useFlexibilityChange(category);
+    const { canEdit } = useRole();
     if (category.kind !== CATEGORY_KIND.expense) {
         return null;
     }
     const flexible: boolean = category.flexibility === FLEXIBILITY.flexible;
     const state: string = t(`categories.flexibility.${flexible ? FLEXIBILITY.flexible : FLEXIBILITY.fixed}`);
+    if (!canEdit) {
+        return (
+            <span
+                className={cn('rounded-control border border-border bg-surface-muted font-semibold text-content-muted', SIZE_CLASS[size])}
+            >
+                {state}
+            </span>
+        );
+    }
     return (
         <button
             type="button"

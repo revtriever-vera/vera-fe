@@ -221,6 +221,7 @@ function SampleDataDemo(): ReactElement {
     const [active, setActive] = useState<boolean>(false);
     const controls: SampleDataControls = {
         available: true,
+        canManage: true,
         active,
         isLoading: false,
         load: (): Promise<void> => {
@@ -312,17 +313,6 @@ export function SelectionSection(): ReactElement {
                 options={[
                     { value: 'BRL', label: 'R$' },
                     { value: 'USD', label: 'US$' }
-                ]}
-                value={currency}
-                onChange={setCurrency}
-            />
-            <SegmentedControl
-                mode="tablist"
-                idPrefix="gallery"
-                label="Seções em abas"
-                options={[
-                    { value: 'BRL', label: 'Ativos' },
-                    { value: 'USD', label: 'Renda fixa' }
                 ]}
                 value={currency}
                 onChange={setCurrency}

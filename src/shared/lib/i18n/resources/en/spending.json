@@ -97,7 +97,8 @@
     "title": "No spending here yet",
     "description": "Connect your banks through Meu Pluggy or import a bank statement. From then on, spending arrives already categorized.",
     "connect": "Connect banks",
-    "import": "Import statement"
+    "import": "Import statement",
+    "viewerDescription": "Ask whoever edits the account to connect the banks or import a statement."
   },
   "flexibility": {
     "toggleLabel": "Nature of {{name}}: {{state}}",

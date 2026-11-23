@@ -1,3 +1,4 @@
+import { useRole } from '@/app/providers/use-role';
 import { useRouterState } from '@tanstack/react-router';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useOnboardingCache, type OnboardingCache } from '../api/use-apply-onboarding-state';
@@ -21,11 +22,13 @@ export function useOnboardingGate(): OnboardingGate {
     const pathname: string = useRouterState({ select: (state): string => state.location.pathname });
     const query: UseQueryResult<OnboardingState> = useOnboardingState();
     const cache: OnboardingCache = useOnboardingCache();
+    const { canEdit } = useRole();
     if (query.isError) {
         return { kind: 'open' };
     }
     if (query.data === undefined) {
         return { kind: 'loading' };
     }
-    return decideGate(query.data, pathname, cache.exitPath());
+    const state: OnboardingState = canEdit ? query.data : { ...query.data, status: 'closed' };
+    return decideGate(state, pathname, cache.exitPath());
 }

@@ -5,3 +5,4 @@ export type LoginSession = paths['/auth/google']['post']['responses']['200']['co
 export type LoginProvider = SessionIdentity['loginProvider'];
 export type SessionRole = SessionIdentity['role'];
 export type SessionLocale = SessionIdentity['locale'];
+export type InvitePreview = paths['/invites/{token}']['get']['responses']['200']['content']['application/json'];

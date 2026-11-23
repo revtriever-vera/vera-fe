@@ -1,10 +1,4 @@
 {
-  "tabs": {
-    "label": "My assets sections",
-    "list": "Assets",
-    "fixedIncome": "Fixed income",
-    "concentration": "Issuers and sectors"
-  },
   "common": {
     "loadError": "Could not load this right now.",
     "retry": "Try again",

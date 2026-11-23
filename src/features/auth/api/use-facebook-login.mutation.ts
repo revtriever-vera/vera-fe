@@ -4,11 +4,11 @@ import type { LoginSession } from '../types';
 import { authKeys } from './auth-keys';
 import { completeSignIn, type CompletedSignIn } from './complete-sign-in';
 
-export function useFacebookLogin(): UseMutationResult<CompletedSignIn, Error, string> {
+export function useFacebookLogin(inviteToken?: string): UseMutationResult<CompletedSignIn, Error, string> {
     return useMutation({
         mutationKey: authKeys.login('facebook'),
         mutationFn: async (accessToken: string): Promise<CompletedSignIn> => {
-            const session: LoginSession = unwrap<LoginSession>(await apiClient.POST('/auth/facebook', { body: { accessToken } }));
+            const session: LoginSession = unwrap<LoginSession>(await apiClient.POST('/auth/facebook', { body: { accessToken, ...(inviteToken === undefined ? {} : { inviteToken }) } }));
             return completeSignIn(session);
         }
     });

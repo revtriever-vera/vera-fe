@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { PreferencesTab } from '@/features/account/pages/preferences-tab';
 import { PrivacyTab } from '@/features/account/pages/privacy-tab';
+import { MembersPage } from '@/features/members/pages/members-page';
 import { SettingsPlaceholder } from '@/features/settings/components/settings-placeholder';
 import { currentSettingsMode, resolveSettingsTab } from '@/features/settings/lib/settings-tabs';
 import { useTrackSettingsViewed } from '@/features/settings/lib/use-track-settings-viewed';
@@ -12,7 +13,7 @@ import { layoutSearchSchema } from '@/features/spending/schemas/spending-search.
 const TAB_CONTENT: Readonly<Record<SettingsTabId, () => ReactElement>> = {
     plan: (): ReactElement => <SettingsPlaceholder title="tabs.plan" tab={SETTINGS_TAB.plan} />,
     integrations: (): ReactElement => <SettingsPlaceholder title="tabs.integrations" tab={SETTINGS_TAB.integrations} />,
-    people: (): ReactElement => <SettingsPlaceholder title="tabs.people" tab={SETTINGS_TAB.people} />,
+    people: (): ReactElement => <MembersPage />,
     whatsapp: (): ReactElement => <SettingsPlaceholder title="tabs.whatsapp" tab={SETTINGS_TAB.whatsapp} />,
     calendar: (): ReactElement => <SettingsPlaceholder title="tabs.calendar" tab={SETTINGS_TAB.calendar} />,
     banks: (): ReactElement => <ConnectionsPage />,
