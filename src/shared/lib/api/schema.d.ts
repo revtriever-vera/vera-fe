@@ -448,6 +448,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/platform/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Platform numbers
+         * @description Counts of customer accounts and plans. Metadata only; the platform company is never counted.
+         */
+        get: operations["PlatformAccountsController_overview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/platform/accounts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List customer accounts
+         * @description Newest first, with an optional name search. Metadata only: opening what is inside an account goes through the access route, which asks for a reason.
+         */
+        get: operations["PlatformAccountsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/platform/accounts/{id}/access": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Open an account, with a reason
+         * @description Returns the layers asked for: `summary` (plan, subscription and invoices, offer, quota, people) and `data` (portfolio, goals, spending, transactions and connected banks, read only). The reason is mandatory and `account.viewed` is recorded, with the reason and the layers, in the same transaction as the read: no audit entry, no data. Keys, credentials, tokens, card data and WhatsApp conversations never come out. The account owner sees the access in "Support accesses".
+         */
+        post: operations["PlatformAccountsController_access"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/account/support-access": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Who from the support opened this account
+         * @description Every time someone from the platform team opens the account data they must give a reason. This lists each opening, newest first: when, the operator name, the reason and the layers. Only the owner sees it.
+         */
+        get: operations["SupportAccessController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/platform/signup-links": {
         parameters: {
             query?: never;
@@ -5405,6 +5485,508 @@ export interface operations {
             };
             /** @description Self-hosted deployment, there is no admin (identity.platform_disabled) */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PlatformAccountsController_overview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The numbers */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        accounts: {
+                            /** @description Customer accounts alive; the platform company is not counted */
+                            total: number;
+                            /** @description Accounts created in the last 30 days */
+                            createdLast30Days: number;
+                        };
+                        plans: {
+                            /** @description Accounts without an open Premium line */
+                            free: number;
+                            /** @description Accounts with an open Premium line, trials included */
+                            premium: number;
+                            /** @description Accounts whose open Premium line is a trial */
+                            trials: number;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Not of the platform company (identity.platform_only) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Self-hosted deployment (identity.platform_disabled) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PlatformAccountsController_list: {
+        parameters: {
+            query?: {
+                /** @description Page number, starting at 1 */
+                page?: number;
+                /** @description Accounts per page */
+                pageSize?: number;
+                /** @description Part of the account name */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description One page of accounts */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Accounts, newest first. Metadata only: no customer data is opened here */
+                        items: {
+                            /**
+                             * Format: uuid
+                             * @description Account id
+                             */
+                            id: string;
+                            /** @description Account name */
+                            name: string;
+                            /**
+                             * Format: date-time
+                             * @description When the account was created
+                             */
+                            createdAt: string;
+                            /**
+                             * @description `premium` while a Premium contract line is open (a trial counts), otherwise `free`
+                             * @enum {string}
+                             */
+                            plan: "free" | "premium";
+                            /** @description Source of the open Premium line (`subscription`, `trial`, `card_trial`, `manual`); null on Free */
+                            planSource: string | null;
+                            /**
+                             * Format: date-time
+                             * @description End of the trial, when the open line is one
+                             */
+                            trialEndsAt: string | null;
+                        }[];
+                        page: number;
+                        pageSize: number;
+                        /** @description Accounts matching the search */
+                        total: number;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Not of the platform company (identity.platform_only) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Self-hosted deployment (identity.platform_disabled) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PlatformAccountsController_access: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Why the operator opens this account. Recorded in the audit trail and shown to the account owner */
+                    reason: string;
+                    /** @description `summary` for plan, subscription, offer, quota and people; `data` for the account data (read only) */
+                    layers: ("summary" | "data")[];
+                };
+            };
+        };
+        responses: {
+            /** @description The layers asked for */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        accountId: string;
+                        /** @description Present when the `summary` layer was asked */
+                        summary?: {
+                            account: {
+                                /**
+                                 * Format: uuid
+                                 * @description Account id
+                                 */
+                                id: string;
+                                /** @description Account name */
+                                name: string;
+                                /**
+                                 * Format: date-time
+                                 * @description When the account was created
+                                 */
+                                createdAt: string;
+                                /**
+                                 * @description `premium` while a Premium contract line is open (a trial counts), otherwise `free`
+                                 * @enum {string}
+                                 */
+                                plan: "free" | "premium";
+                                /** @description Source of the open Premium line (`subscription`, `trial`, `card_trial`, `manual`); null on Free */
+                                planSource: string | null;
+                                /**
+                                 * Format: date-time
+                                 * @description End of the trial, when the open line is one
+                                 */
+                                trialEndsAt: string | null;
+                            };
+                            locale: string;
+                            timezone: string;
+                            /** @description People of the account */
+                            people: {
+                                /** Format: uuid */
+                                id: string;
+                                name: string;
+                                email: string;
+                                role: string;
+                                /** Format: date-time */
+                                joinedAt: string;
+                            }[];
+                            /** @description Subscriptions and invoices, without any card data */
+                            billing: unknown;
+                            /** @description Signup link offer the account redeemed; null when none */
+                            offer: unknown;
+                            /** @description Paid usage per period and feature */
+                            usage: unknown;
+                        };
+                        /** @description Present when the `data` layer was asked: one entry per area. Keys, credentials, tokens and WhatsApp conversations never appear */
+                        data?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing reason or layers (core.validation_failed) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Not of the platform company (identity.platform_only) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No such customer account (platform.account_not_found) or self-hosted deployment (identity.platform_disabled) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    SupportAccessController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The openings, most recent first */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Most recent first */
+                        items: {
+                            /** Format: uuid */
+                            id: string;
+                            /**
+                             * Format: date-time
+                             * @description When the account was opened
+                             */
+                            at: string;
+                            /** @description Name of the operator; null when that person no longer exists */
+                            operatorName: string | null;
+                            /** @description Reason the operator gave */
+                            reason: string;
+                            /** @description Which layers were opened */
+                            layers: string[];
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Only the owner can see it (members.forbidden_role) */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
