@@ -1,6 +1,7 @@
 import { http, HttpResponse, type RequestHandler } from 'msw';
 import { accountHandlers } from './handlers/account.handlers';
 import { authHandlers } from './handlers/auth.handlers';
+import { calendarHandlers } from './handlers/calendar.handlers';
 import { billingHandlers } from './handlers/billing.handlers';
 import { integrationsHandlers } from './handlers/integrations.handlers';
 import { membersHandlers } from './handlers/members.handlers';
@@ -21,5 +22,6 @@ export const handlers: RequestHandler[] = [
     ...onboardingHandlers(),
     ...portfolioHandlers(),
     ...spendingHandlers(),
-    ...whatsappHandlers
+    ...whatsappHandlers,
+    ...calendarHandlers
 ];

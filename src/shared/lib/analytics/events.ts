@@ -112,6 +112,10 @@ export interface AnalyticsEventMap {
     whatsapp_unlinked: undefined;
     whatsapp_open_clicked: undefined;
     reminder_deleted: undefined;
+    calendar_connect_started: undefined;
+    calendar_connected: undefined;
+    calendar_connect_failed: { code: string };
+    calendar_disconnected: undefined;
 }
 
 export type AnalyticsEventName = keyof AnalyticsEventMap;

@@ -95,9 +95,9 @@ describe('rota /settings', () => {
     });
 
     it('as abas ainda sem dono mostram o espaço reservado', async () => {
-        renderRouterAt('/settings/calendar', { signedIn: true });
+        renderRouterAt('/settings/plan', { signedIn: true });
 
-        const region: HTMLElement = await screen.findByRole('region', { name: 'Google Agenda' });
+        const region: HTMLElement = await screen.findByRole('region', { name: 'Plano e uso' });
 
         expect(within(region).getByText('Esta seção chega em breve.')).toBeInTheDocument();
     });
