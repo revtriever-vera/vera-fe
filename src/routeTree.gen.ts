@@ -10,10 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as PlatformRouteImport } from './routes/_platform'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthAppRouteImport } from './routes/_auth/_app'
 import { Route as AuthOnboardingRouteImport } from './routes/_auth/onboarding'
 import { Route as DevUiRouteImport } from './routes/_dev/ui'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as ConviteTokenRouteImport } from './routes/convite.$token'
 import { Route as AuthAppIndexRouteImport } from './routes/_auth/_app/index'
 import { Route as AuthAppAccountRouteImport } from './routes/_auth/_app/account'
@@ -25,6 +27,10 @@ import { Route as AuthOnboardingIndexRouteImport } from './routes/_auth/onboardi
 import { Route as AuthOnboardingAssetsRouteImport } from './routes/_auth/onboarding/assets'
 import { Route as AuthOnboardingBanksRouteImport } from './routes/_auth/onboarding/banks'
 import { Route as AuthOnboardingDoneRouteImport } from './routes/_auth/onboarding/done'
+import { Route as PlatformAdminIndexRouteImport } from './routes/_platform/admin.index'
+import { Route as PlatformAdminAccountsRouteImport } from './routes/_platform/admin.accounts'
+import { Route as PlatformAdminAuditRouteImport } from './routes/_platform/admin.audit'
+import { Route as PlatformAdminLinksRouteImport } from './routes/_platform/admin.links'
 import { Route as AuthAppPortfolioIndexRouteImport } from './routes/_auth/_app/portfolio.index'
 import { Route as AuthAppPortfolioAssetsRouteImport } from './routes/_auth/_app/portfolio.assets'
 import { Route as AuthAppPortfolioContributionRouteImport } from './routes/_auth/_app/portfolio.contribution'
@@ -45,6 +51,10 @@ const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlatformRoute = PlatformRouteImport.update({
+  id: '/_platform',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -62,6 +72,11 @@ const AuthOnboardingRoute = AuthOnboardingRouteImport.update({
 const DevUiRoute = DevUiRouteImport.update({
   id: '/_dev/ui',
   path: '/ui',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConviteTokenRoute = ConviteTokenRouteImport.update({
@@ -118,6 +133,26 @@ const AuthOnboardingDoneRoute = AuthOnboardingDoneRouteImport.update({
   id: '/done',
   path: '/done',
   getParentRoute: () => AuthOnboardingRoute,
+} as any)
+const PlatformAdminIndexRoute = PlatformAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => PlatformRoute,
+} as any)
+const PlatformAdminAccountsRoute = PlatformAdminAccountsRouteImport.update({
+  id: '/admin/accounts',
+  path: '/admin/accounts',
+  getParentRoute: () => PlatformRoute,
+} as any)
+const PlatformAdminAuditRoute = PlatformAdminAuditRouteImport.update({
+  id: '/admin/audit',
+  path: '/admin/audit',
+  getParentRoute: () => PlatformRoute,
+} as any)
+const PlatformAdminLinksRoute = PlatformAdminLinksRouteImport.update({
+  id: '/admin/links',
+  path: '/admin/links',
+  getParentRoute: () => PlatformRoute,
 } as any)
 const AuthAppPortfolioIndexRoute = AuthAppPortfolioIndexRouteImport.update({
   id: '/',
@@ -206,6 +241,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/onboarding': typeof AuthOnboardingRouteWithChildren
   '/ui': typeof DevUiRoute
+  '/admin/login': typeof AdminLoginRoute
   '/convite/$token': typeof ConviteTokenRoute
   '/account': typeof AuthAppAccountRoute
   '/plans': typeof AuthAppPlansRoute
@@ -215,7 +251,11 @@ export interface FileRoutesByFullPath {
   '/onboarding/assets': typeof AuthOnboardingAssetsRoute
   '/onboarding/banks': typeof AuthOnboardingBanksRoute
   '/onboarding/done': typeof AuthOnboardingDoneRoute
+  '/admin/accounts': typeof PlatformAdminAccountsRoute
+  '/admin/audit': typeof PlatformAdminAuditRoute
+  '/admin/links': typeof PlatformAdminLinksRoute
   '/onboarding/': typeof AuthOnboardingIndexRoute
+  '/admin/': typeof PlatformAdminIndexRoute
   '/portfolio/assets': typeof AuthAppPortfolioAssetsRoute
   '/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
@@ -236,13 +276,18 @@ export interface FileRoutesByTo {
   '/': typeof AuthAppIndexRoute
   '/login': typeof LoginRoute
   '/ui': typeof DevUiRoute
+  '/admin/login': typeof AdminLoginRoute
   '/convite/$token': typeof ConviteTokenRoute
   '/account': typeof AuthAppAccountRoute
   '/plans': typeof AuthAppPlansRoute
   '/onboarding/assets': typeof AuthOnboardingAssetsRoute
   '/onboarding/banks': typeof AuthOnboardingBanksRoute
   '/onboarding/done': typeof AuthOnboardingDoneRoute
+  '/admin/accounts': typeof PlatformAdminAccountsRoute
+  '/admin/audit': typeof PlatformAdminAuditRoute
+  '/admin/links': typeof PlatformAdminLinksRoute
   '/onboarding': typeof AuthOnboardingIndexRoute
+  '/admin': typeof PlatformAdminIndexRoute
   '/portfolio/assets': typeof AuthAppPortfolioAssetsRoute
   '/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
@@ -262,10 +307,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth': typeof AuthRouteWithChildren
+  '/_platform': typeof PlatformRouteWithChildren
   '/login': typeof LoginRoute
   '/_auth/_app': typeof AuthAppRouteWithChildren
   '/_auth/onboarding': typeof AuthOnboardingRouteWithChildren
   '/_dev/ui': typeof DevUiRoute
+  '/admin/login': typeof AdminLoginRoute
   '/convite/$token': typeof ConviteTokenRoute
   '/_auth/_app/account': typeof AuthAppAccountRoute
   '/_auth/_app/plans': typeof AuthAppPlansRoute
@@ -275,8 +322,12 @@ export interface FileRoutesById {
   '/_auth/onboarding/assets': typeof AuthOnboardingAssetsRoute
   '/_auth/onboarding/banks': typeof AuthOnboardingBanksRoute
   '/_auth/onboarding/done': typeof AuthOnboardingDoneRoute
+  '/_platform/admin/accounts': typeof PlatformAdminAccountsRoute
+  '/_platform/admin/audit': typeof PlatformAdminAuditRoute
+  '/_platform/admin/links': typeof PlatformAdminLinksRoute
   '/_auth/_app/': typeof AuthAppIndexRoute
   '/_auth/onboarding/': typeof AuthOnboardingIndexRoute
+  '/_platform/admin/': typeof PlatformAdminIndexRoute
   '/_auth/_app/portfolio/assets': typeof AuthAppPortfolioAssetsRoute
   '/_auth/_app/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/_auth/_app/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
@@ -300,6 +351,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/onboarding'
     | '/ui'
+    | '/admin/login'
     | '/convite/$token'
     | '/account'
     | '/plans'
@@ -309,7 +361,11 @@ export interface FileRouteTypes {
     | '/onboarding/assets'
     | '/onboarding/banks'
     | '/onboarding/done'
+    | '/admin/accounts'
+    | '/admin/audit'
+    | '/admin/links'
     | '/onboarding/'
+    | '/admin/'
     | '/portfolio/assets'
     | '/portfolio/contribution'
     | '/portfolio/get-started'
@@ -330,13 +386,18 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/ui'
+    | '/admin/login'
     | '/convite/$token'
     | '/account'
     | '/plans'
     | '/onboarding/assets'
     | '/onboarding/banks'
     | '/onboarding/done'
+    | '/admin/accounts'
+    | '/admin/audit'
+    | '/admin/links'
     | '/onboarding'
+    | '/admin'
     | '/portfolio/assets'
     | '/portfolio/contribution'
     | '/portfolio/get-started'
@@ -355,10 +416,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_auth'
+    | '/_platform'
     | '/login'
     | '/_auth/_app'
     | '/_auth/onboarding'
     | '/_dev/ui'
+    | '/admin/login'
     | '/convite/$token'
     | '/_auth/_app/account'
     | '/_auth/_app/plans'
@@ -368,8 +431,12 @@ export interface FileRouteTypes {
     | '/_auth/onboarding/assets'
     | '/_auth/onboarding/banks'
     | '/_auth/onboarding/done'
+    | '/_platform/admin/accounts'
+    | '/_platform/admin/audit'
+    | '/_platform/admin/links'
     | '/_auth/_app/'
     | '/_auth/onboarding/'
+    | '/_platform/admin/'
     | '/_auth/_app/portfolio/assets'
     | '/_auth/_app/portfolio/contribution'
     | '/_auth/_app/portfolio/get-started'
@@ -389,8 +456,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
+  PlatformRoute: typeof PlatformRouteWithChildren
   LoginRoute: typeof LoginRoute
   DevUiRoute: typeof DevUiRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   ConviteTokenRoute: typeof ConviteTokenRoute
 }
 
@@ -401,6 +470,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_platform': {
+      id: '/_platform'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PlatformRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -429,6 +505,13 @@ declare module '@tanstack/react-router' {
       path: '/ui'
       fullPath: '/ui'
       preLoaderRoute: typeof DevUiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/convite/$token': {
@@ -507,6 +590,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/onboarding/done'
       preLoaderRoute: typeof AuthOnboardingDoneRouteImport
       parentRoute: typeof AuthOnboardingRoute
+    }
+    '/_platform/admin/': {
+      id: '/_platform/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof PlatformAdminIndexRouteImport
+      parentRoute: typeof PlatformRoute
+    }
+    '/_platform/admin/accounts': {
+      id: '/_platform/admin/accounts'
+      path: '/admin/accounts'
+      fullPath: '/admin/accounts'
+      preLoaderRoute: typeof PlatformAdminAccountsRouteImport
+      parentRoute: typeof PlatformRoute
+    }
+    '/_platform/admin/audit': {
+      id: '/_platform/admin/audit'
+      path: '/admin/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof PlatformAdminAuditRouteImport
+      parentRoute: typeof PlatformRoute
+    }
+    '/_platform/admin/links': {
+      id: '/_platform/admin/links'
+      path: '/admin/links'
+      fullPath: '/admin/links'
+      preLoaderRoute: typeof PlatformAdminLinksRouteImport
+      parentRoute: typeof PlatformRoute
     }
     '/_auth/_app/portfolio/': {
       id: '/_auth/_app/portfolio/'
@@ -726,10 +837,30 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
+interface PlatformRouteChildren {
+  PlatformAdminAccountsRoute: typeof PlatformAdminAccountsRoute
+  PlatformAdminAuditRoute: typeof PlatformAdminAuditRoute
+  PlatformAdminLinksRoute: typeof PlatformAdminLinksRoute
+  PlatformAdminIndexRoute: typeof PlatformAdminIndexRoute
+}
+
+const PlatformRouteChildren: PlatformRouteChildren = {
+  PlatformAdminAccountsRoute: PlatformAdminAccountsRoute,
+  PlatformAdminAuditRoute: PlatformAdminAuditRoute,
+  PlatformAdminLinksRoute: PlatformAdminLinksRoute,
+  PlatformAdminIndexRoute: PlatformAdminIndexRoute,
+}
+
+const PlatformRouteWithChildren = PlatformRoute._addFileChildren(
+  PlatformRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
+  PlatformRoute: PlatformRouteWithChildren,
   LoginRoute: LoginRoute,
   DevUiRoute: DevUiRoute,
+  AdminLoginRoute: AdminLoginRoute,
   ConviteTokenRoute: ConviteTokenRoute,
 }
 export const routeTree = rootRouteImport

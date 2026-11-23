@@ -52,6 +52,8 @@ import ptBRBilling from './resources/pt-BR/billing.json';
 import enBilling from './resources/en/billing.json';
 import ptBRSummaries from './resources/pt-BR/summaries.json';
 import enSummaries from './resources/en/summaries.json';
+import ptBRAdmin from './resources/pt-BR/admin.json';
+import enAdmin from './resources/en/admin.json';
 import { DEFAULT_LOCALE, resolveLocale, type SupportedLocale } from './resolve-locale';
 
 type CommonResource = typeof ptBRCommon;
@@ -84,6 +86,7 @@ type LocaleResources = {
     readonly settings: typeof ptBRSettings;
     readonly billing: typeof ptBRBilling;
     readonly summaries: typeof ptBRSummaries;
+    readonly admin: typeof ptBRAdmin;
 };
 
 const resources: Record<SupportedLocale, LocaleResources> = {
@@ -113,7 +116,8 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         spendingRules: ptBRSpendingRules,
         settings: ptBRSettings,
         billing: ptBRBilling,
-        summaries: ptBRSummaries
+        summaries: ptBRSummaries,
+        admin: ptBRAdmin
     },
     en: {
         common: enCommon,
@@ -141,7 +145,8 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         spendingRules: enSpendingRules,
         settings: enSettings,
         billing: enBilling,
-        summaries: enSummaries
+        summaries: enSummaries,
+        admin: enAdmin
     }
 };
 
@@ -180,7 +185,8 @@ void i18next.use(initReactI18next).init({
         'spendingRules',
         'settings',
         'billing',
-        'summaries'
+        'summaries',
+        'admin'
     ],
     defaultNS: 'common',
     interpolation: { escapeValue: false },

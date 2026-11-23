@@ -1,8 +1,10 @@
 import { z } from 'zod';
+import { APP_TARGET } from './app-target';
 
 const optionalUrl = z.union([z.literal(''), z.string().url()]).default('');
 
 const schema = z.object({
+    VITE_APP_TARGET: z.enum([APP_TARGET.unified, APP_TARGET.tenant, APP_TARGET.admin]).default(APP_TARGET.unified),
     VITE_API_URL: z.string().url().default('http://localhost:3333'),
     VITE_POSTHOG_KEY: z.string().default(''),
     VITE_POSTHOG_HOST: z.string().url().default('https://us.i.posthog.com'),

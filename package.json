@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:admin": "VITE_APP_TARGET=admin vite",
     "build": "tsc -b && vite build",
+    "build:tenant": "tsc -b && VITE_APP_TARGET=tenant vite build",
+    "build:admin": "tsc -b && VITE_APP_TARGET=admin vite build",
     "lint": "eslint .",
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run --config vitest.config.ts",
