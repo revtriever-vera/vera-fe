@@ -16,6 +16,8 @@ describe('keepsIssuer', () => {
         expect(keepsIssuer('lci', { kind: 'bank' })).toBe(true);
         expect(keepsIssuer('debenture', { kind: 'bank' })).toBe(false);
         expect(keepsIssuer('cri', { kind: 'sovereign' })).toBe(false);
+        expect(keepsIssuer('cri', { kind: 'other' })).toBe(true);
+        expect(keepsIssuer('cdb', { kind: 'other' })).toBe(true);
     });
 
     it('sem emissor não há o que manter', () => {

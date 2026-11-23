@@ -25,7 +25,8 @@ const ICONS: Readonly<Record<FgcVerdict, LucideIcon>> = {
     covered: ShieldCheck,
     over_limit: ShieldAlert,
     not_covered_kind: ShieldOff,
-    not_associated: ShieldOff
+    not_associated: ShieldOff,
+    not_calculated: ShieldOff
 };
 
 function useDebouncedFgcBody(values: FixedIncomeFormInput, excludeTitleId: string | undefined): FgcSimulationBody | null {

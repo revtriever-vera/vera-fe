@@ -7,5 +7,5 @@ export function issuerKindFor(kind: FixedIncomeKind): IssuerKind {
 }
 
 export function keepsIssuer(kind: FixedIncomeKind, issuer: { readonly kind: string } | null): boolean {
-    return issuer !== null && issuer.kind === issuerKindFor(kind);
+    return issuer !== null && (issuer.kind === 'other' || issuer.kind === issuerKindFor(kind));
 }

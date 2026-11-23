@@ -22,6 +22,8 @@ export function catalogAsset(overrides: Partial<CatalogAsset> = {}): CatalogAsse
         dollarExposure: false,
         quantityDecimals: 0,
         maturityDate: null,
+        sector: null,
+        issuerGroupId: null,
         ...overrides
     };
 }

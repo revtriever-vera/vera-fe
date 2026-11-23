@@ -84,7 +84,8 @@ export function mockAssetsApi({
             const q: string = (url.searchParams.get('q') ?? '').toLowerCase();
             api.issuerSearches.push(`${kind}|${q}`);
             const items: IssuerItem[] = issuers.filter(
-                (item: IssuerItem): boolean => item.kind === kind && `${item.name} ${item.groupName}`.toLowerCase().includes(q)
+                (item: IssuerItem): boolean =>
+                    (item.kind === kind || item.kind === 'other') && `${item.name} ${item.groupName}`.toLowerCase().includes(q)
             );
             return HttpResponse.json({ items });
         }),

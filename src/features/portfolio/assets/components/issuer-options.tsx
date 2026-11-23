@@ -48,7 +48,9 @@ function Option({ listId, item, active, onPick }: OptionProps): ReactElement {
             )}
         >
             <span className="truncate">{item.name}</span>
-            <span className="truncate text-xs text-content-muted">{t('fixedIncome.issuer.groupShort', { group: item.groupName })}</span>
+            {item.kind === 'other' ? null : (
+                <span className="truncate text-xs text-content-muted">{t('fixedIncome.issuer.groupShort', { group: item.groupName })}</span>
+            )}
         </button>
     );
 }
