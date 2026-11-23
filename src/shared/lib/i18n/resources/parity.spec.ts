@@ -55,6 +55,8 @@ interface NamespaceFixture {
     readonly ptBR: TranslationNode;
     readonly en: TranslationNode;
 }
+import ptBRSettings from './pt-BR/settings.json';
+import enSettings from './en/settings.json';
 
 const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'common', ptBR: ptBRCommon, en: enCommon },
@@ -73,7 +75,8 @@ const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'spendingCuts', ptBR: ptBRSpendingCuts, en: enSpendingCuts },
     { name: 'spendingConnections', ptBR: ptBRSpendingConnections, en: enSpendingConnections },
     { name: 'spendingImports', ptBR: ptBRSpendingImports, en: enSpendingImports },
-    { name: 'spendingRules', ptBR: ptBRSpendingRules, en: enSpendingRules }
+    { name: 'spendingRules', ptBR: ptBRSpendingRules, en: enSpendingRules },
+    { name: 'settings', ptBR: ptBRSettings, en: enSettings }
 ];
 
 describe('paridade de chaves entre os namespaces de tradução', () => {

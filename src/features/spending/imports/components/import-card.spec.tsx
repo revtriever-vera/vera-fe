@@ -22,10 +22,8 @@ describe('ImportCard', () => {
     it('explica o que aceita e mostra o histórico vazio', async () => {
         renderInRouter(<ImportCard />);
 
-        expect(await screen.findByRole('heading', { name: 'Importar arquivo' })).toBeInTheDocument();
-        expect(
-            screen.getByText('Funciona com qualquer banco: OFX ou CSV do seu banco (inclusive da fatura do cartão).')
-        ).toBeInTheDocument();
+        expect(await screen.findByRole('heading', { name: 'Importar extrato' })).toBeInTheDocument();
+        expect(screen.getByText('Funciona com qualquer banco: exporte o extrato ou a fatura em OFX ou CSV.')).toBeInTheDocument();
         expect(await screen.findByText('Nenhum extrato importado ainda.')).toBeInTheDocument();
     });
 
@@ -133,7 +131,7 @@ describe('ImportCard', () => {
         mockList(emptyImports());
         renderInRouter(<ImportCard />);
 
-        expect(await screen.findByRole('heading', { name: 'Import a file' })).toBeInTheDocument();
+        expect(await screen.findByRole('heading', { name: 'Import a statement' })).toBeInTheDocument();
         expect(await screen.findByText('No statements imported yet.')).toBeInTheDocument();
     });
 });

@@ -1,11 +1,11 @@
 {
   "layout": {
-    "title": "Net worth",
-    "tabsLabel": "Net worth sections",
+    "title": "Portfolio",
+    "tabsLabel": "Portfolio sections",
     "tabs": {
       "overview": "Overview",
       "targets": "Target portfolio",
-      "contribution": "Smart contribution",
+      "contribution": "Where to invest",
       "assets": "My assets"
     }
   },

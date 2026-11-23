@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { formatCurrency } from './currency';
+import { formatCurrency, formatCurrencyCompact } from './currency';
 
 describe('formatCurrency', () => {
     it('formata reais com o separador de pt-BR', () => {
@@ -49,5 +49,15 @@ describe('formatCurrency', () => {
         expect(formatCurrency(123456, 'BRL', 'pt-BR')).toMatch(/R\$\s*1\.234,56/);
 
         vi.restoreAllMocks();
+    });
+});
+
+describe('formatCurrencyCompact', () => {
+    it('abrevia reais em pt-BR', () => {
+        expect(formatCurrencyCompact(25000000, 'BRL', 'pt-BR').replace(/\s/g, ' ')).toBe('R$ 250 mil');
+    });
+
+    it('abrevia reais em en', () => {
+        expect(formatCurrencyCompact(25000000, 'BRL', 'en').replace(/\s/g, ' ')).toBe('R$250K');
     });
 });

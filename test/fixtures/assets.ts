@@ -1,4 +1,13 @@
-import type { CatalogAsset, ExchangeRateView, FixedIncomePreview, PositionView, Quote, TitleView } from '@/features/portfolio/assets/types';
+import type {
+    CatalogAsset,
+    ExchangeRateView,
+    FgcSimulation,
+    FixedIncomePreview,
+    IssuerItem,
+    PositionView,
+    Quote,
+    TitleView
+} from '@/features/portfolio/assets/types';
 
 export function catalogAsset(overrides: Partial<CatalogAsset> = {}): CatalogAsset {
     return {
@@ -109,9 +118,35 @@ export function titleView(overrides: Partial<TitleView> = {}): TitleView {
         appliedAt: '2025-03-10',
         maturityDate: '2028-03-10',
         classId: 'class-rf-pos',
+        issuer: {
+            id: 'banco-xp',
+            name: 'Banco XP',
+            groupId: 'xp',
+            groupName: 'XP',
+            kind: 'bank',
+            fgcAssociated: true
+        },
+        needsIssuer: false,
         createdAt: '2026-10-09T12:00:00.000Z',
         updatedAt: '2026-10-09T12:00:00.000Z',
         valuation: previewResult(),
         ...overrides
     };
+}
+
+export function issuerItem(overrides: Partial<IssuerItem> = {}): IssuerItem {
+    return {
+        id: 'banco-xp',
+        name: 'Banco XP',
+        groupId: 'xp',
+        groupName: 'XP',
+        kind: 'bank',
+        fgcAssociated: true,
+        status: 'active',
+        ...overrides
+    };
+}
+
+export function fgcSimulation(overrides: Partial<FgcSimulation> = {}): FgcSimulation {
+    return { verdict: 'covered', groupId: 'xp', groupName: 'XP', totalAfterMinor: 5000000, overMinor: 0, ...overrides };
 }

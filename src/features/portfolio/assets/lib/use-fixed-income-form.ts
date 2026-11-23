@@ -18,6 +18,7 @@ import { toTitleBody } from './fixed-income-body';
 import { defaultRateText, indexerClassKey, localTodayIso } from './fixed-income-defaults';
 import { defaultClassId } from './position-defaults';
 import { termsAreValid } from './terms-valid';
+import { useIssuerHandlers, type IssuerHandlers } from './use-issuer-handlers';
 import { useFailureReporter } from './use-failure-reporter';
 
 export interface FixedIncomeFormParams {
@@ -26,7 +27,7 @@ export interface FixedIncomeFormParams {
     readonly onSaved: () => void;
 }
 
-export interface FixedIncomeFormState {
+export interface FixedIncomeFormState extends IssuerHandlers {
     readonly form: UseFormReturn<FixedIncomeFormInput>;
     readonly values: FixedIncomeFormInput;
     readonly today: string;
@@ -45,6 +46,7 @@ export function fixedIncomeDefaults(
 ): FixedIncomeFormInput {
     return {
         kind: 'cdb',
+        issuer: null,
         name: '',
         indexer: 'cdi_percent',
         rate: defaultRateText('cdi_percent', locale),
@@ -113,7 +115,7 @@ export function useFixedIncomeForm({ classes, initialClassId, onSaved }: FixedIn
     const [alertMessage, setAlertMessage] = useState<string | null>(null);
     const today: string = useMemo((): string => localTodayIso(), []);
     const schema: z.ZodType<FixedIncomeFormInput> = useMemo(
-        (): z.ZodType<FixedIncomeFormInput> => createFixedIncomeSchema(t, today),
+        (): z.ZodType<FixedIncomeFormInput> => createFixedIncomeSchema(t, today, true),
         [t, today]
     );
     const form: UseFormReturn<FixedIncomeFormInput> = useForm<FixedIncomeFormInput>({
@@ -123,6 +125,7 @@ export function useFixedIncomeForm({ classes, initialClassId, onSaved }: FixedIn
     });
     const values: FixedIncomeFormInput = useWatch({ control: form.control }) as FixedIncomeFormInput;
     const changeIndexer: (indexer: FixedIncomeIndexer) => void = useIndexerChange(form, classes, initialClassId);
+    const issuerHandlers: IssuerHandlers = useIssuerHandlers(form, 'create');
     const { submit, busy } = useTitleSubmit({ form, classes, onSaved, setAlertMessage });
     return {
         form,
@@ -133,6 +136,7 @@ export function useFixedIncomeForm({ classes, initialClassId, onSaved }: FixedIn
         busy,
         alertMessage,
         submit,
-        changeIndexer
+        changeIndexer,
+        ...issuerHandlers
     };
 }

@@ -6,7 +6,6 @@
       "summary": "Month summary",
       "transactions": "Transactions",
       "cuts": "Where to cut",
-      "connections": "Connections",
       "rules": "Rules"
     }
   },
@@ -56,7 +55,7 @@
       "none": "uncategorized"
     },
     "tips": {
-      "user": "You picked this category by hand. It never changes on its own.",
+      "user": "You picked this category by hand. Vera no longer changes this category.",
       "rule": "This category came from a rule you created.",
       "dictionary": "This category came from the Vera merchant dictionary.",
       "provider": "This category came from Pluggy itself, which reads the bank.",
@@ -96,7 +95,7 @@
   },
   "emptyState": {
     "title": "No spending here yet",
-    "description": "Connect your banks through Meu Pluggy or import a bank statement. From then on, spending arrives on its own and already categorized.",
+    "description": "Connect your banks through Meu Pluggy or import a bank statement. From then on, spending arrives already categorized.",
     "connect": "Connect banks",
     "import": "Import statement"
   },

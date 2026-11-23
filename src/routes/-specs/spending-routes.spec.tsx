@@ -21,7 +21,6 @@ describe('rotas de /spending', () => {
         ['/spending', 'Resumo do mês'],
         ['/spending/transactions', 'Transações'],
         ['/spending/cuts', 'Onde cortar'],
-        ['/spending/connections', 'Conexões'],
         ['/spending/rules', 'Regras']
     ])('%s abre sob o título Gastos e só a aba %s fica marcada', async (path: string, active: string) => {
         renderRouterAt(path, { signedIn: true });
@@ -43,11 +42,12 @@ describe('rotas de /spending', () => {
         expect(await markedTabs()).toEqual(['Regras']);
     });
 
-    it('a página de Conexões monta o cartão de importação', async () => {
-        renderRouterAt('/spending/connections', { signedIn: true });
+    it('/spending/connections redireciona para Configurações, Bancos, mantendo o import', async () => {
+        const router: AnyRouter = renderRouterAt('/spending/connections?import=true', { signedIn: true });
 
         expect(await screen.findByRole('region', { name: 'Suas credenciais' })).toBeInTheDocument();
-        expect(await screen.findByRole('heading', { name: 'Importar arquivo' })).toBeInTheDocument();
+        expect(router.state.location.pathname).toBe('/settings/banks');
+        expect(router.state.location.search).toEqual({ import: true });
     });
 
     it('lê o mês no resumo e nos cortes', async () => {
@@ -74,7 +74,7 @@ describe('rotas de /spending', () => {
     });
 
     it('aceita ?import=true em qualquer tela de gastos', async () => {
-        const router: AnyRouter = renderRouterAt('/spending/connections?import=true', { signedIn: true });
+        const router: AnyRouter = renderRouterAt('/spending/transactions?import=true', { signedIn: true });
         await screen.findByRole('heading', { name: 'Gastos', level: 1 });
 
         expect(router.state.location.search).toEqual({ import: true });
@@ -88,13 +88,13 @@ async function menuLinks(): Promise<HTMLElement> {
 }
 
 describe('menu lateral do grupo Gastos', () => {
-    it('mostra o grupo com os quatro itens', async () => {
+    it('mostra o grupo com os três itens, sem Conexões', async () => {
         renderRouterAt('/spending', { signedIn: true });
 
         const nav: HTMLElement = await menuLinks();
 
         expect(within(nav).getByRole('heading', { name: 'Gastos' })).toBeInTheDocument();
-        for (const name of ['Resumo do mês', 'Transações', 'Onde cortar', 'Conexões']) {
+        for (const name of ['Resumo do mês', 'Transações', 'Onde cortar']) {
             expect(within(nav).getByRole('link', { name })).toBeInTheDocument();
         }
         expect(within(nav).getByRole('link', { name: 'Resumo do mês' })).toHaveAttribute('aria-current', 'page');

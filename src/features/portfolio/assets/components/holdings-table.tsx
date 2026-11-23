@@ -13,7 +13,11 @@ import { ValueCell } from './value-cell';
 
 type Translate = UseTranslationResponse<'portfolioAssets', undefined>['t'];
 
-function identityColumns(t: Translate, classes: readonly AssetClassView[]): readonly TableColumn<HoldingView>[] {
+function identityColumns(
+    t: Translate,
+    classes: readonly AssetClassView[],
+    onCompleteIssuer: HoldingsListProps['onCompleteIssuer']
+): readonly TableColumn<HoldingView>[] {
     const classOf = (holding: HoldingView): AssetClassView | undefined =>
         classes.find((item: AssetClassView): boolean => item.id === holding.classId);
     return [
@@ -31,7 +35,11 @@ function identityColumns(t: Translate, classes: readonly AssetClassView[]): read
             key: 'quantity',
             header: t('columns.quantity'),
             render: (holding: HoldingView): ReactElement => (
-                <QuantityOrTitle holding={holding} quantity={<QuantityCell key={holding.quantity} holding={holding} />} />
+                <QuantityOrTitle
+                    holding={holding}
+                    quantity={<QuantityCell key={holding.quantity} holding={holding} />}
+                    onCompleteIssuer={onCompleteIssuer}
+                />
             )
         }
     ];
@@ -66,11 +74,11 @@ function withoutActions(columns: readonly TableColumn<HoldingView>[], canEdit: b
 
 const MIN_WIDTH: string = 'min-w-[60rem]';
 
-export function HoldingsTable({ holdings, classes, baseCurrency, onEdit, onRemove }: HoldingsListProps): ReactElement {
+export function HoldingsTable({ holdings, classes, baseCurrency, onEdit, onCompleteIssuer, onRemove }: HoldingsListProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const { canEdit } = useRole();
     const columns: readonly TableColumn<HoldingView>[] = withoutActions(
-        [...identityColumns(t, classes), ...valueColumns(t, { baseCurrency, onEdit, onRemove })],
+        [...identityColumns(t, classes, onCompleteIssuer), ...valueColumns(t, { baseCurrency, onEdit, onRemove })],
         canEdit
     );
     return (

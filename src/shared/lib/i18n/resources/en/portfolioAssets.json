@@ -125,6 +125,17 @@
       "cri": "CRI",
       "cra": "CRA"
     },
+    "issuer": {
+      "label": "Issuer",
+      "placeholder": "Search by issuer name",
+      "group": "{{issuer}} · conglomerate {{group}}",
+      "groupShort": "Conglomerate {{group}}",
+      "listLabel": "Issuers found",
+      "loading": "Searching…",
+      "failed": "We could not search right now. Try again.",
+      "empty": "No issuer with that name. Check the spelling or ask for it to be added to the repository.",
+      "listLink": "See the list of issuers"
+    },
     "name": "Security name",
     "namePlaceholder": "E.g. CDB Banco XP",
     "indexer": "Indexer",
@@ -156,7 +167,8 @@
       "maturityRequired": "Enter the maturity.",
       "maturityBeforeApplied": "The maturity must be after the investment date.",
       "usdRequiresPrefixed": "In dollars, only fixed-rate securities.",
-      "classRequired": "Choose the security's class."
+      "classRequired": "Choose the security's class.",
+      "issuerRequired": "Choose the issuer of the security."
     },
     "preview": {
       "empty": "Fill in the security details to see what it is worth today.",
@@ -178,6 +190,12 @@
       },
       "note": "The system recalculates this value every day with the Central Bank series. You never need to update the balance by hand.",
       "indexMissing": "We do not have the Central Bank series for this whole period yet. We show the amount invested until it is updated."
+    },
+    "fgcPreview": {
+      "covered": "Covered by the FGC. With this security you will have {{total}} in the {{group}} conglomerate, against a limit of {{limit}}.",
+      "over_limit": "With this security you will have {{total}} in the {{group}} conglomerate: {{over}} above the FGC limit of {{limit}}.",
+      "not_covered_kind": "{{kind}} is not covered by the FGC: the risk is only the issuing company.",
+      "not_associated": "This issuer is not an FGC member."
     }
   },
   "description": "Manual entry. Stocks, funds and crypto update from market quotes; fixed income is calculated from its index. The class comes suggested and you can change it.",
@@ -277,9 +295,9 @@
     "why2Title": "Compare with your target",
     "why2Detail": "E.g. \"you hold 18% in US stocks and wanted 25%\". Without knowing what you own, there is nothing to compare.",
     "why3Title": "Know where to invest next",
-    "why3Detail": "Smart contribution splits each new deposit to bring the portfolio closer to the target, without selling anything.",
+    "why3Detail": "The Where to invest screen splits each new deposit to bring the portfolio closer to the target, without selling anything.",
     "noteTitle": "Why is it manual?",
-    "noteText": "There is no free, reliable way to pull positions from every broker, foreign bank and exchange. You only enter the quantity; values update on their own every day from market quotes or the index.",
+    "noteText": "There is no free, reliable way to pull positions from every broker, foreign bank and exchange. You only enter the quantity; values update every day from market quotes or the index.",
     "cardTitle": "Add your assets",
     "cardDetail": "Pick an investment type. Start with the biggest ones; you can finish later in \"My assets\".",
     "seeOverview": "See my overview",
@@ -299,5 +317,9 @@
       "bonds": "bonds"
     },
     "loadFailed": "Could not load the portfolio."
+  },
+  "issuer": {
+    "complete": "Complete the registration",
+    "completeLabel": "Complete the registration of {{name}}: add the issuer"
   }
 }

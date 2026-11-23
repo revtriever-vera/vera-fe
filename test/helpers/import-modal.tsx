@@ -48,7 +48,7 @@ export function renderImportModal(options: ImportApiOptions = {}): ImportModalSe
     const api: ImportApi = mockImportApi(options);
     const onClose: () => void = vi.fn();
     const rendered: RenderedInRouter = renderInRouter(<ImportStatementModal onClose={onClose} />, {
-        path: '/spending/connections?import=true'
+        path: '/settings/banks?import=true'
     });
     return { ...rendered, user: userEvent.setup(), onClose, api };
 }

@@ -27,6 +27,24 @@ describe('FileDrop', () => {
         });
     });
 
+    it('usa o título recebido no lugar do texto padrão', () => {
+        render(
+            <FileDrop
+                label="Arquivo"
+                title="Arraste o extrato aqui"
+                hint="OFX ou CSV"
+                accept={ACCEPT}
+                maxSizeBytes={1024}
+                fileName={null}
+                onPicked={vi.fn()}
+                onClear={vi.fn()}
+            />
+        );
+
+        expect(screen.getByText('Arraste o extrato aqui')).toBeInTheDocument();
+        expect(screen.queryByText('Arraste o arquivo aqui')).not.toBeInTheDocument();
+    });
+
     it('avisa quando o arquivo é recusado pelo formato', async () => {
         const { container } = render(
             <FileDrop label="Arquivo" hint="PNG" accept={ACCEPT} maxSizeBytes={1024} fileName={null} onPicked={vi.fn()} onClear={vi.fn()} />

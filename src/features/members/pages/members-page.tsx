@@ -34,11 +34,10 @@ export function MembersPage(): ReactElement {
     const members: UseQueryResult<MembersList> = useMembers();
 
     return (
-        <main className="mx-auto flex w-full max-w-2xl flex-col gap-4 px-4 py-6 min-[861px]:py-10">
-            <h1 className="text-xl font-semibold tracking-tight text-content">{t('title')}</h1>
+        <div className="flex flex-col gap-4">
             {members.isPending ? <SkeletonPanel label={t('loading')} lines={4} /> : null}
             {members.error ? <Alert title={membersErrorMessage(t, members.error)} /> : null}
             {members.data ? <MembersContent list={members.data} /> : null}
-        </main>
+        </div>
     );
 }

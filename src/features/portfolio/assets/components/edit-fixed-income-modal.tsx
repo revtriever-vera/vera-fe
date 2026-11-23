@@ -20,6 +20,7 @@ export interface EditFixedIncomeModalProps {
     readonly titleId: string;
     readonly name: string;
     readonly classes: readonly AssetClassView[];
+    readonly focusIssuer?: boolean;
     readonly onClose: () => void;
 }
 
@@ -35,6 +36,7 @@ function CancelButton({ onClose }: { readonly onClose: () => void }): ReactEleme
 interface LoadedProps {
     readonly title: TitleDetail;
     readonly classes: readonly AssetClassView[];
+    readonly focusIssuer: boolean;
     readonly onClose: () => void;
 }
 
@@ -50,44 +52,58 @@ function EditFooter({ state, onClose }: { readonly state: FixedIncomeFormState; 
     );
 }
 
-function LoadedModal({ title, classes, onClose }: LoadedProps): ReactElement {
+interface EditBodyProps extends Omit<LoadedProps, 'onClose'> {
+    readonly state: FixedIncomeFormState;
+}
+
+function EditBody({ title, classes, focusIssuer, state }: EditBodyProps): ReactElement {
+    return (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <FixedIncomeForm
+                form={state.form}
+                classes={classes}
+                today={state.today}
+                formId={FORM_ID}
+                alertMessage={state.alertMessage}
+                showClass={false}
+                issuerAutoFocus={focusIssuer}
+                onIndexerChange={state.changeIndexer}
+                onKindChange={state.changeKind}
+                onIssuerChange={state.changeIssuer}
+                onNameEdit={state.markNameTouched}
+                onSubmit={(): void => {
+                    void state.submit();
+                }}
+            />
+            <div className="flex min-w-0 flex-col gap-4">
+                <FixedIncomePreviewPanel values={state.values} termsValid={state.termsValid} classes={classes} excludeTitleId={title.id} />
+                <FixedIncomeDetail title={title} />
+            </div>
+        </div>
+    );
+}
+
+function LoadedModal(props: LoadedProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
-    const state: FixedIncomeFormState = useEditFixedIncomeForm({ title, onSaved: onClose });
+    const state: FixedIncomeFormState = useEditFixedIncomeForm({ title: props.title, onSaved: props.onClose });
     return (
         <Modal
-            title={t('edit.title', { name: title.name })}
+            title={t('edit.title', { name: props.title.name })}
             size="wide"
             fullOnMobile
-            onClose={onClose}
-            footer={<EditFooter state={state} onClose={onClose} />}
+            onClose={props.onClose}
+            footer={<EditFooter state={state} onClose={props.onClose} />}
         >
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                <FixedIncomeForm
-                    form={state.form}
-                    classes={classes}
-                    today={state.today}
-                    formId={FORM_ID}
-                    alertMessage={state.alertMessage}
-                    showClass={false}
-                    onIndexerChange={state.changeIndexer}
-                    onSubmit={(): void => {
-                        void state.submit();
-                    }}
-                />
-                <div className="flex min-w-0 flex-col gap-4">
-                    <FixedIncomePreviewPanel values={state.values} termsValid={state.termsValid} classes={classes} />
-                    <FixedIncomeDetail title={title} />
-                </div>
-            </div>
+            <EditBody {...props} state={state} />
         </Modal>
     );
 }
 
-export function EditFixedIncomeModal({ titleId, name, classes, onClose }: EditFixedIncomeModalProps): ReactElement {
+export function EditFixedIncomeModal({ titleId, name, classes, focusIssuer = false, onClose }: EditFixedIncomeModalProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const title: UseQueryResult<TitleDetail> = useFixedIncomeTitle(titleId);
     if (title.data !== undefined) {
-        return <LoadedModal title={title.data} classes={classes} onClose={onClose} />;
+        return <LoadedModal title={title.data} classes={classes} focusIssuer={focusIssuer} onClose={onClose} />;
     }
     return (
         <Modal title={t('edit.title', { name })} onClose={onClose} footer={<CancelButton onClose={onClose} />}>

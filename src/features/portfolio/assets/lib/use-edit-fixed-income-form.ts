@@ -15,12 +15,14 @@ import type { FixedIncomeIndexer, TitleDetail, UpdateTitleBody } from '../types'
 import { toPreviewBody } from './fixed-income-body';
 import { defaultRateText, localTodayIso } from './fixed-income-defaults';
 import { termsAreValid } from './terms-valid';
+import { useIssuerHandlers, type IssuerHandlers } from './use-issuer-handlers';
 import { useFailureReporter } from './use-failure-reporter';
 import type { FixedIncomeFormState } from './use-fixed-income-form';
 
 export function titleFormValues(title: TitleDetail, locale: SupportedLocale): FixedIncomeFormInput {
     return {
         kind: title.kind,
+        issuer: title.issuer,
         name: title.name,
         indexer: title.indexer,
         rate: bpsToInput(title.rateBps, locale),
@@ -34,7 +36,7 @@ export function titleFormValues(title: TitleDetail, locale: SupportedLocale): Fi
 
 export function toUpdateBody(input: FixedIncomeFormInput): UpdateTitleBody | null {
     const terms: ReturnType<typeof toPreviewBody> = toPreviewBody(input);
-    return terms === null ? null : { ...terms, name: input.name.trim() };
+    return terms === null ? null : { ...terms, name: input.name.trim(), issuerId: input.issuer?.id ?? null };
 }
 
 export interface EditFixedIncomeParams {
@@ -85,6 +87,7 @@ export function useEditFixedIncomeForm({ title, onSaved }: EditFixedIncomeParams
         defaultValues: titleFormValues(title, locale)
     });
     const values: FixedIncomeFormInput = useWatch({ control: form.control }) as FixedIncomeFormInput;
+    const issuerHandlers: IssuerHandlers = useIssuerHandlers(form, 'edit');
     const { submit, busy, alertMessage }: TitleSubmit = useTitleSubmit(form, title.id, onSaved);
     const changeIndexer = (indexer: FixedIncomeIndexer): void => {
         form.setValue('indexer', indexer, { shouldValidate: form.formState.isSubmitted });
@@ -102,6 +105,7 @@ export function useEditFixedIncomeForm({ title, onSaved }: EditFixedIncomeParams
         busy,
         alertMessage,
         submit,
-        changeIndexer
+        changeIndexer,
+        ...issuerHandlers
     };
 }

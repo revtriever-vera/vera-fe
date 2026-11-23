@@ -23,12 +23,12 @@ import { AssetsStep, type AssetsStepSlots } from './assets-step';
 import { BanksStep } from './banks-step';
 
 const NOW: string = '2026-10-01T12:00:00.000Z';
-const CONNECTIONS: string = '/spending/connections';
-const IMPORT: string = '/spending/connections';
+const CONNECTIONS: string = '/settings/banks';
+const IMPORT: string = '/settings/banks';
 
 function renderStep(path: string, element: ReactElement): AnyRouter {
     const root: AnyRoute = createRootRoute();
-    const paths: readonly string[] = [path, '/onboarding/banks', '/onboarding/done', '/spending/connections', '/'];
+    const paths: readonly string[] = [path, '/onboarding/banks', '/onboarding/done', '/settings/banks', '/'];
     const routes: AnyRoute[] = [...new Set(paths)].map((p: string) =>
         createRoute({
             getParentRoute: () => root,
@@ -182,33 +182,33 @@ describe('BanksStep', () => {
         expect(document.querySelector('input')).toBeNull();
     });
 
-    it('Ir para Conexões navega sem chamar complete nem skip', async () => {
+    it('Ir para Bancos navega sem chamar complete nem skip', async () => {
         const complete: Tracker = track('banks', 'complete');
         const skip: Tracker = track('banks', 'skip');
         const router: AnyRouter = renderStep('/onboarding/banks', <BanksStep connectionsLink={CONNECTIONS} importLink={IMPORT} />);
 
-        await userEvent.click(await screen.findByRole('link', { name: /Ir para Conexões/ }));
+        await userEvent.click(await screen.findByRole('link', { name: /Ir para Bancos/ }));
 
         await waitFor(() => {
-            expect(router.state.location.pathname).toBe('/spending/connections');
+            expect(router.state.location.pathname).toBe('/settings/banks');
         });
         expect(complete.calls()).toBe(0);
         expect(skip.calls()).toBe(0);
         expect(trackEvent).toHaveBeenCalledWith('onboarding_connections_opened');
     });
 
-    it('o link de importação aponta para Conexões com import=true e emite o evento', async () => {
+    it('o link de importação aponta para Bancos com import=true e emite o evento', async () => {
         const complete: Tracker = track('banks', 'complete');
         const skip: Tracker = track('banks', 'skip');
         const router: AnyRouter = renderStep('/onboarding/banks', <BanksStep connectionsLink={CONNECTIONS} importLink={IMPORT} />);
 
         const link: HTMLElement = await screen.findByRole('link', { name: /Importe um extrato do seu banco/ });
         expect(screen.getByText(/Prefere não conectar\?/)).toBeInTheDocument();
-        expect(link).toHaveAttribute('href', '/spending/connections?import=true');
+        expect(link).toHaveAttribute('href', '/settings/banks?import=true');
         await userEvent.click(link);
 
         await waitFor(() => {
-            expect(router.state.location.pathname).toBe('/spending/connections');
+            expect(router.state.location.pathname).toBe('/settings/banks');
         });
         expect(router.state.location.search).toEqual({ import: true });
         expect(trackEvent).toHaveBeenCalledWith('onboarding_import_opened');
@@ -220,7 +220,7 @@ describe('BanksStep', () => {
         const skip: Tracker = track('banks', 'skip');
         const router: AnyRouter = renderStep('/onboarding/banks', <BanksStep connectionsLink={null} importLink={null} />);
 
-        const button: HTMLElement = await screen.findByRole('button', { name: 'Ir para Conexões' });
+        const button: HTMLElement = await screen.findByRole('button', { name: 'Ir para Bancos' });
         expect(button).toBeDisabled();
         expect(button).toHaveAccessibleDescription('Disponível em breve');
         expect(screen.queryByRole('link', { name: /Importe um extrato/ })).not.toBeInTheDocument();

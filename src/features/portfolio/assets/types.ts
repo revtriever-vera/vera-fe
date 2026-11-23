@@ -34,3 +34,14 @@ export type TitleValuation = TitleDetail['valuation'];
 export type ExportFormat = paths['/portfolio/export']['get']['parameters']['query']['format'];
 
 export const EXPORT_FORMATS = ['xlsx', 'csv'] as const satisfies readonly ExportFormat[];
+
+export type IssuerSearchResponse = paths['/issuers']['get']['responses']['200']['content']['application/json'];
+export type IssuerItem = IssuerSearchResponse['items'][number];
+export type IssuerKind = NonNullable<NonNullable<paths['/issuers']['get']['parameters']['query']>['kind']>;
+export type TitleIssuer = NonNullable<TitleDetail['issuer']>;
+
+export type FgcSimulationBody = paths['/portfolio/fgc/simulate']['post']['requestBody']['content']['application/json'];
+export type FgcSimulation = paths['/portfolio/fgc/simulate']['post']['responses']['200']['content']['application/json'];
+export type FgcVerdict = FgcSimulation['verdict'];
+
+export const FGC_LIMIT_MINOR: number = 25000000;

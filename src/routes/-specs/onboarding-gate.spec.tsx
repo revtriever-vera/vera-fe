@@ -16,7 +16,7 @@ describe('guarda do onboarding', () => {
         serveState(onboardingState());
         const router = renderRouterAt('/', { signedIn: true });
 
-        expect(await screen.findByRole('heading', { level: 1, name: /Seu patrimônio e seus gastos/ })).toBeInTheDocument();
+        expect(await screen.findByRole('heading', { level: 1, name: /Some seus investimentos/ })).toBeInTheDocument();
         expect(router.state.location.pathname).toBe('/onboarding');
         expect(screen.queryByRole('navigation', { name: 'Navegação principal' })).not.toBeInTheDocument();
         expect(screen.getByRole('main', { name: 'Configuração inicial' })).toBeInTheDocument();
