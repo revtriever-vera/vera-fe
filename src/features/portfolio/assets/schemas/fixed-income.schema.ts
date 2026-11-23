@@ -26,6 +26,7 @@ export interface FixedIncomeFormInput {
     appliedAt: string | null;
     maturityDate: string | null;
     classId: string;
+    holder: string;
 }
 
 function rateIsValid(input: FixedIncomeFormInput): boolean {
@@ -101,7 +102,8 @@ export function createFixedIncomeSchema(
             currency: z.enum(ASSET_CURRENCIES),
             appliedAt: z.string().nullable(),
             maturityDate: z.string().nullable(),
-            classId: z.string().min(1, t('fixedIncome.errors.classRequired'))
+            classId: z.string().min(1, t('fixedIncome.errors.classRequired')),
+            holder: z.string()
         })
         .superRefine((input: FixedIncomeFormInput, ctx: z.RefinementCtx): void => {
             checkDates(input, today, t, ctx);

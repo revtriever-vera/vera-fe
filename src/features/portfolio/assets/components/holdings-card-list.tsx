@@ -3,6 +3,7 @@ import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import type { AssetClassView, HoldingView } from '../../types';
 import { AssetCell, QuantityOrTitle } from './asset-cell';
 import { ClassSelectCell } from './class-select-cell';
+import { HolderCell } from './holder-cell';
 import { HoldingRowActions } from './holding-row-actions';
 import type { HoldingsListProps } from './holdings-list.types';
 import { QuantityCell } from './quantity-cell';
@@ -22,6 +23,7 @@ function HoldingCard({ holding, classes, baseCurrency, onEdit, onCompleteIssuer,
                 <ValueCell holding={holding} baseCurrency={baseCurrency} />
             </div>
             <ClassSelectCell holding={holding} classes={classes} />
+            <HolderCell holding={holding} />
             <div className="flex items-center justify-between gap-2">
                 <QuantityOrTitle
                     holding={holding}

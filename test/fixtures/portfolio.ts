@@ -96,6 +96,7 @@ export function holding(overrides: Partial<HoldingView> = {}): HoldingView {
         estimated: false,
         matured: false,
         missingRate: false,
+        holder: null,
         ...overrides
     };
 }

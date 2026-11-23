@@ -5,6 +5,8 @@ import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import type { z } from 'zod';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
 import { track } from '@/shared/lib/analytics';
+import { holderBody, trackHolder } from '../../lib/holder-filter';
+import { usePeople, type PeopleState } from '../../lib/people-context';
 import { useClassLabel, type ClassLabel } from '../../lib/use-class-label';
 import type { AssetClassView } from '../../types';
 import type { UseMutationResult } from '@tanstack/react-query';
@@ -35,12 +37,13 @@ export interface PositionFormState {
     readonly select: (asset: CatalogAsset) => void;
 }
 
-export function toPositionBody(asset: CatalogAsset, input: PositionFormInput): CreatePositionBody {
+export function toPositionBody(asset: CatalogAsset, input: PositionFormInput, multi: boolean): CreatePositionBody {
     const averagePrice: string = normalizeDecimalInput(input.averagePrice);
     return {
         assetId: asset.id,
         quantity: input.quantity,
         classId: input.classId,
+        ...holderBody(input.holder, multi),
         ...(averagePrice === '' ? {} : { averagePrice })
     };
 }
@@ -92,6 +95,7 @@ function usePositionSubmit(params: SubmitParams): { submit: () => Promise<void>;
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const toast: ToastApi = useToast();
     const classLabel: ClassLabel = useClassLabel();
+    const { multi }: PeopleState = usePeople();
     const create: UseMutationResult<PositionView, ApiError, CreatePositionBody> = useCreatePosition();
     const report: (error: Error) => void = usePositionFailure(params);
     const submit: () => Promise<void> = form.handleSubmit(async (input: PositionFormInput): Promise<void> => {
@@ -100,8 +104,9 @@ function usePositionSubmit(params: SubmitParams): { submit: () => Promise<void>;
         }
         setAlertMessage(null);
         try {
-            await create.mutateAsync(toPositionBody(asset, input));
+            await create.mutateAsync(toPositionBody(asset, input, multi));
             track('portfolio_asset_added', { type, source: 'search' });
+            trackHolder(input.holder, multi, 'add');
             const className: string = classNameOf(classes, input.classId, classLabel);
             toast.show({ tone: 'positive', title: t('toasts.added', { name: asset.symbol, className }) });
             onSaved();

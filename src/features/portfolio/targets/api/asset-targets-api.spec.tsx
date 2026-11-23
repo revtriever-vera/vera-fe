@@ -32,7 +32,7 @@ describe('useClassDetail', () => {
         });
 
         expect(result.current.data).toEqual(classDetail());
-        expect(client.getQueryData(portfolioKeys.classDetail('class-acoes-br'))).toEqual(classDetail());
+        expect(client.getQueryData(portfolioKeys.classDetailOf('class-acoes-br', undefined))).toEqual(classDetail());
     });
 
     it('expõe o 404 allocation.class_not_found como ApiError', async () => {

@@ -34,4 +34,12 @@ describe('portfolioKeys', () => {
         expect(portfolioKeys.classDetail('c-1').slice(0, 2)).toEqual(portfolioKeys.classDetails());
         expect(portfolioKeys.contribution(1).slice(0, 2)).toEqual(portfolioKeys.contributions());
     });
+
+    it('o titular entra na chave de leitura, sob o prefixo geral', () => {
+        expect(portfolioKeys.holdingsOf(undefined)).toEqual(['portfolio', 'holdings', 'any']);
+        expect(portfolioKeys.overviewOf('all')).toEqual(['portfolio', 'overview', 'all']);
+        expect(portfolioKeys.classDetailOf('c-1', 'u-1')).toEqual(['portfolio', 'class-detail', 'c-1', 'u-1']);
+        expect(portfolioKeys.holdingsOf('u-1').slice(0, 2)).toEqual(portfolioKeys.holdings());
+        expect(portfolioKeys.classDetailOf('c-1', 'u-1').slice(0, 3)).toEqual(portfolioKeys.classDetail('c-1'));
+    });
 });

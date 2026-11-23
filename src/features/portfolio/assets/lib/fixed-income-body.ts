@@ -1,5 +1,6 @@
 import type { FixedIncomeFormInput } from '../schemas/fixed-income.schema';
 import type { CreateTitleBody, FixedIncomePreviewBody } from '../types';
+import { holderBody } from '../../lib/holder-filter';
 import { parseRateBps } from './rate-input';
 
 export function toPreviewBody(input: FixedIncomeFormInput): FixedIncomePreviewBody | null {
@@ -18,11 +19,11 @@ export function toPreviewBody(input: FixedIncomeFormInput): FixedIncomePreviewBo
     };
 }
 
-export function toTitleBody(input: FixedIncomeFormInput): CreateTitleBody | null {
+export function toTitleBody(input: FixedIncomeFormInput, multi: boolean): CreateTitleBody | null {
     const preview: FixedIncomePreviewBody | null = toPreviewBody(input);
     if (preview === null) {
         return null;
     }
-    const base: CreateTitleBody = { ...preview, name: input.name.trim(), classId: input.classId };
+    const base: CreateTitleBody = { ...preview, name: input.name.trim(), classId: input.classId, ...holderBody(input.holder, multi) };
     return input.issuer === null ? base : { ...base, issuerId: input.issuer.id };
 }

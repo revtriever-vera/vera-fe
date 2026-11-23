@@ -12,6 +12,10 @@ import { FailureAlert } from '@/shared/ui/failure-alert';
 import { SkeletonTable } from '@/shared/ui/skeleton-table';
 import { BaseCurrencySwitch } from '../../components/base-currency-switch';
 import { DataSourcesNote } from '../../components/data-sources-note';
+import { HolderEmpty } from '../../components/holder-empty';
+import { HolderFilter } from '../../components/holder-filter';
+import type { HolderParam } from '../../lib/holder-filter';
+import { useHolderParam } from '../../lib/use-holder-param';
 import { FixedIncomeTab } from '../../fixed-income/components/fixed-income-tab';
 import { ConcentrationTab } from '../../concentration/components/concentration-tab';
 import { useClasses } from '../../api/use-classes.query';
@@ -49,6 +53,10 @@ function AssetsFailure({ error, onRetry }: { readonly error: Error; readonly onR
 function AssetsEmpty({ onAdd }: { readonly onAdd: () => void }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const { canEdit } = useRole();
+    const holder: HolderParam = useHolderParam();
+    if (holder !== undefined) {
+        return <HolderEmpty holder={holder} />;
+    }
     if (!canEdit) {
         return <EmptyState title={t('empty.viewerTitle')} description={t('empty.viewerDescription')} />;
     }
@@ -107,7 +115,8 @@ function AssetsHeader({ empty, onAdd }: { readonly empty: boolean; readonly onAd
                 <h2 className="text-xl font-extrabold">{t('title')}</h2>
                 <p className="max-w-xl text-sm text-content-muted">{t('description')}</p>
             </div>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2">
+                <HolderFilter />
                 <BaseCurrencySwitch />
                 <ExportMenu />
                 {empty ? null : (
@@ -123,28 +132,49 @@ function AssetsHeader({ empty, onAdd }: { readonly empty: boolean; readonly onAd
     );
 }
 
-export function AssetsPage(): ReactElement {
-    const search: { add?: boolean; classId?: string; tab?: AssetsTab } = useSearch({ from: '/_auth/_app/portfolio/assets' });
+interface AssetsSearch {
+    readonly add?: boolean;
+    readonly classId?: string;
+    readonly tab?: AssetsTab;
+    readonly holder?: string;
+}
+
+interface AssetsNavigation {
+    readonly setOpen: (open: boolean) => void;
+    readonly openModal: () => void;
+    readonly changeTab: (next: AssetsTab) => void;
+}
+
+function useAssetsNavigation({ classId, tab, holder }: AssetsSearch): AssetsNavigation {
     const navigate: UseNavigateResult<string> = useNavigate();
-    const holdings: UseQueryResult<HoldingsResponse> = useHoldings();
+    const setOpen = (open: boolean): void => {
+        void navigate({
+            to: '/portfolio/assets',
+            search: open ? { add: true, classId, tab, holder } : { tab, holder },
+            replace: true
+        });
+    };
+    const changeTab = (next: AssetsTab): void => {
+        void navigate({ to: '/portfolio/assets', search: { tab: next === DEFAULT_ASSETS_TAB ? undefined : next, holder } });
+    };
+    return {
+        setOpen,
+        openModal: (): void => {
+            setOpen(true);
+        },
+        changeTab
+    };
+}
+
+export function AssetsPage(): ReactElement {
+    const search: AssetsSearch = useSearch({ from: '/_auth/_app/portfolio/assets' });
+    const { setOpen, openModal, changeTab }: AssetsNavigation = useAssetsNavigation(search);
+    const holdings: UseQueryResult<HoldingsResponse> = useHoldings(search.holder);
     const classes: UseQueryResult<ClassesResponse> = useClasses();
     const tab: AssetsTab = search.tab ?? DEFAULT_ASSETS_TAB;
     useEffect((): void => {
         track('assets_tab_viewed', { tab });
     }, [tab]);
-    const setOpen = (open: boolean): void => {
-        void navigate({
-            to: '/portfolio/assets',
-            search: open ? { add: true, classId: search.classId, tab: search.tab } : { tab: search.tab },
-            replace: true
-        });
-    };
-    const openModal = (): void => {
-        setOpen(true);
-    };
-    const changeTab = (next: AssetsTab): void => {
-        void navigate({ to: '/portfolio/assets', search: { tab: next === DEFAULT_ASSETS_TAB ? undefined : next } });
-    };
     return (
         <section className="flex flex-col gap-4">
             <AssetsHeader empty={holdings.data?.data.length === 0} onAdd={openModal} />

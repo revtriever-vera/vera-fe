@@ -56,16 +56,19 @@ describe('createPositionSchema', () => {
         const result: z.SafeParseReturnType<PositionFormInput, PositionFormInput> = schema.safeParse({
             quantity: '10',
             averagePrice: '',
-            classId: ''
+            classId: '',
+            holder: 'all'
         });
 
         expect(messages(result)).toEqual(['Escolha a classe do ativo.']);
     });
 
     it('aceita preço médio vazio ou válido e recusa inválido', () => {
-        expect(schema.safeParse({ quantity: '10', averagePrice: '', classId: 'c' }).success).toBe(true);
-        expect(schema.safeParse({ quantity: '10', averagePrice: '37,8', classId: 'c' }).success).toBe(true);
-        expect(messages(schema.safeParse({ quantity: '10', averagePrice: 'x', classId: 'c' }))).toEqual(['Informe um preço válido.']);
-        expect(schema.safeParse({ quantity: '10', averagePrice: '1.123456789', classId: 'c' }).success).toBe(false);
+        expect(schema.safeParse({ quantity: '10', averagePrice: '', classId: 'c', holder: 'all' }).success).toBe(true);
+        expect(schema.safeParse({ quantity: '10', averagePrice: '37,8', classId: 'c', holder: 'all' }).success).toBe(true);
+        expect(messages(schema.safeParse({ quantity: '10', averagePrice: 'x', classId: 'c', holder: 'all' }))).toEqual([
+            'Informe um preço válido.'
+        ]);
+        expect(schema.safeParse({ quantity: '10', averagePrice: '1.123456789', classId: 'c', holder: 'all' }).success).toBe(false);
     });
 });

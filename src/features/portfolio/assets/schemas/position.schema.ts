@@ -10,6 +10,7 @@ export interface PositionFormInput {
     quantity: string;
     averagePrice: string;
     classId: string;
+    holder: string;
 }
 
 export interface QuantityFormInput {
@@ -56,6 +57,7 @@ export function createPositionSchema(t: TFunction<'portfolioAssets'>, allowedDec
             .refine((value: string): boolean => value === '' || isPriceText(normalizeDecimalInput(value)), {
                 message: t('position.errors.priceInvalid')
             }),
-        classId: z.string().min(1, t('position.errors.classRequired'))
+        classId: z.string().min(1, t('position.errors.classRequired')),
+        holder: z.string()
     });
 }

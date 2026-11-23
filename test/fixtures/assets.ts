@@ -85,6 +85,7 @@ export function positionView(overrides: Partial<PositionView> = {}): PositionVie
         quantity: '2000',
         averagePrice: null,
         classId: 'class-acoes-br',
+        holderUserId: null,
         createdAt: '2026-10-01T12:00:00.000Z',
         updatedAt: '2026-10-01T12:00:00.000Z',
         ...overrides
@@ -120,6 +121,7 @@ export function titleView(overrides: Partial<TitleView> = {}): TitleView {
         appliedAt: '2025-03-10',
         maturityDate: '2028-03-10',
         classId: 'class-rf-pos',
+        holderUserId: null,
         issuer: {
             id: 'banco-xp',
             name: 'Banco XP',

@@ -48,3 +48,11 @@ export type SaveClassTargetsBody = paths['/allocation/targets/classes']['put']['
 export type Assignment =
     paths['/allocation/assignments/{subjectType}/{subjectId}']['put']['responses']['200']['content']['application/json'];
 export type AssignmentSubjectType = Assignment['subjectType'];
+
+export const HOLDER_KINDS = {
+    any: 'any',
+    all: 'all',
+    person: 'person'
+} as const;
+
+export type HolderKind = (typeof HOLDER_KINDS)[keyof typeof HOLDER_KINDS];

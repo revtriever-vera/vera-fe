@@ -5,6 +5,7 @@ export interface TabItem {
     readonly to: string;
     readonly label: string;
     readonly exact?: boolean;
+    readonly search?: Readonly<Record<string, string | undefined>>;
 }
 
 interface TabNavProps {
@@ -22,6 +23,7 @@ export function TabNav({ label, tabs }: TabNavProps): ReactElement {
                 <Link
                     key={tab.to}
                     to={tab.to}
+                    search={tab.search}
                     className={TAB_CLASS}
                     activeOptions={{ exact: tab.exact === true }}
                     activeProps={{ className: TAB_ACTIVE_CLASS }}

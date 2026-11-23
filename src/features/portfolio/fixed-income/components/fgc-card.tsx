@@ -4,6 +4,8 @@ import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { Money } from '@/shared/ui/money';
 import type { TableColumn } from '@/shared/ui/table';
 import { useFgc } from '../api/use-fgc.query';
+import type { HolderParam } from '../../lib/holder-filter';
+import { useHolderParam } from '../../lib/use-holder-param';
 import type { FgcCoverage, FgcGroup, FgcHolderBlock, FgcOutside } from '../types';
 import { GroupNameCell, OverLimitCell } from './fgc-group-cells';
 import { FgcMeter } from './fgc-meter';
@@ -116,7 +118,8 @@ function FgcContent({ coverage }: { readonly coverage: FgcCoverage }): ReactElem
 
 export function FgcCard({ showBrlNote }: { readonly showBrlNote: boolean }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioFixedIncome', undefined> = useTranslation('portfolioFixedIncome');
-    const query: UseQueryResult<FgcCoverage> = useFgc();
+    const holder: HolderParam = useHolderParam();
+    const query: UseQueryResult<FgcCoverage> = useFgc(holder);
     return (
         <FixedIncomeCard title={t('fgc.title')} description={t('fgc.description')} showBrlNote={showBrlNote}>
             <QueryBody query={query} loadingLabel={t('fgc.loading')}>

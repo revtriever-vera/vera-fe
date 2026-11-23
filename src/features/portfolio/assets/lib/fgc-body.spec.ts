@@ -15,7 +15,8 @@ const VALID: FixedIncomeFormInput = {
     currency: 'BRL',
     appliedAt: '2025-03-10',
     maturityDate: '2028-03-10',
-    classId: 'class-rf-pos'
+    classId: 'class-rf-pos',
+    holder: 'all'
 };
 
 describe('toFgcBody', () => {

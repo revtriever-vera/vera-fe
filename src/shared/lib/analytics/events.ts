@@ -54,6 +54,8 @@ export interface AnalyticsEventMap {
     portfolio_contribution_calculated: { classesFunded: number; currency: CurrencyCode };
     portfolio_onboarding_assets_step: { count: number };
     assets_tab_viewed: { tab: AssetsTabName };
+    holder_filter_changed: { kind: 'any' | 'all' | 'person' };
+    holder_set: { kind: 'all' | 'person'; source: 'add' | 'edit' | 'inline' };
     maturity_reallocate_clicked: { daysBucket: MaturityDaysBucket };
     overview_alert_clicked: { kind: OverviewAlertKind };
     spending_credentials_saved: undefined;

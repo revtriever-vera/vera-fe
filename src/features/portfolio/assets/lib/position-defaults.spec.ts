@@ -8,7 +8,12 @@ describe('position-defaults', () => {
     const classes: AssetClassView[] = defaultClasses().data;
 
     it('pré-seleciona a classe sugerida', () => {
-        expect(positionDefaults(classes, IVVB11, undefined)).toEqual({ quantity: '', averagePrice: '', classId: 'class-acoes-eua' });
+        expect(positionDefaults(classes, IVVB11, undefined)).toEqual({
+            quantity: '',
+            averagePrice: '',
+            classId: 'class-acoes-eua',
+            holder: 'all'
+        });
     });
 
     it('deixa a classe vazia quando não há sugestão', () => {
