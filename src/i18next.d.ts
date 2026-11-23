@@ -3,6 +3,7 @@ import type ptBRAuth from './shared/lib/i18n/resources/pt-BR/auth.json';
 import type ptBRAccount from './shared/lib/i18n/resources/pt-BR/account.json';
 import type ptBRMembers from './shared/lib/i18n/resources/pt-BR/members.json';
 import type ptBRIntegrations from './shared/lib/i18n/resources/pt-BR/integrations.json';
+import type ptBRWhatsapp from './shared/lib/i18n/resources/pt-BR/whatsapp.json';
 import type ptBRPortfolio from './shared/lib/i18n/resources/pt-BR/portfolio.json';
 import type ptBRPortfolioOverview from './shared/lib/i18n/resources/pt-BR/portfolioOverview.json';
 import type ptBRPortfolioAssets from './shared/lib/i18n/resources/pt-BR/portfolioAssets.json';
@@ -31,6 +32,7 @@ declare module 'i18next' {
             account: typeof ptBRAccount;
             members: typeof ptBRMembers;
             integrations: typeof ptBRIntegrations;
+            whatsapp: typeof ptBRWhatsapp;
             portfolio: typeof ptBRPortfolio;
             portfolioOverview: typeof ptBRPortfolioOverview;
             portfolioAssets: typeof ptBRPortfolioAssets;

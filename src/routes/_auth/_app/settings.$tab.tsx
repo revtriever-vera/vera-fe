@@ -9,6 +9,7 @@ import { resolveSettingsTab } from '@/features/settings/lib/settings-tabs';
 import { useSettingsMode, type SettingsModeState } from '@/features/settings/lib/use-settings-mode';
 import { useTrackSettingsViewed } from '@/features/settings/lib/use-track-settings-viewed';
 import { SETTINGS_TAB, type SettingsTabId } from '@/features/settings/types';
+import { WhatsAppTab } from '@/features/whatsapp/components/whatsapp-tab';
 import { ConnectionsPage } from '@/features/spending/connections/pages/connections-page';
 import { SummariesPrivacyCard } from '@/features/summaries/components/summaries-privacy-card';
 import { layoutSearchSchema } from '@/features/spending/schemas/spending-search.schema';
@@ -17,7 +18,7 @@ const TAB_CONTENT: Readonly<Record<SettingsTabId, () => ReactElement>> = {
     plan: (): ReactElement => <SettingsPlaceholder title="tabs.plan" tab={SETTINGS_TAB.plan} />,
     integrations: (): ReactElement => <IntegrationsTab />,
     people: (): ReactElement => <MembersPage />,
-    whatsapp: (): ReactElement => <SettingsPlaceholder title="tabs.whatsapp" tab={SETTINGS_TAB.whatsapp} />,
+    whatsapp: (): ReactElement => <WhatsAppTab />,
     calendar: (): ReactElement => <SettingsPlaceholder title="tabs.calendar" tab={SETTINGS_TAB.calendar} />,
     banks: (): ReactElement => <ConnectionsPage />,
     preferences: (): ReactElement => <PreferencesTab />,
