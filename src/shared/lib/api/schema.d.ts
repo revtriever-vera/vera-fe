@@ -17839,6 +17839,8 @@ export interface operations {
                             } | null;
                             /** @description True for example data created during onboarding */
                             isSample: boolean;
+                            /** @description True when the transaction is a charge of a confirmed recurring series (subscription or bill) */
+                            isRecurring: boolean;
                         }[];
                         pagination: {
                             page: number;
@@ -18041,6 +18043,8 @@ export interface operations {
                             } | null;
                             /** @description True for example data created during onboarding */
                             isSample: boolean;
+                            /** @description True when the transaction is a charge of a confirmed recurring series (subscription or bill) */
+                            isRecurring: boolean;
                         };
                         /** @description The rule created or updated; null when the request asked for none */
                         rule: {

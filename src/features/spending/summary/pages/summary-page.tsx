@@ -8,6 +8,7 @@ import { Loading, Skeleton } from '@/shared/ui/skeleton';
 import { IncomeModeDialog } from '../../components/income-mode-dialog';
 import { SpendingEmptyState } from '../../components/spending-empty-state';
 import type { MonthlySummary } from '../../types';
+import { RecurringSummaryCard } from '../../recurring/components/recurring-summary-card';
 import { useSummary } from '../api/use-summary.query';
 import { SpendingBars } from '../components/spending-bars';
 import { SummaryHeader } from '../components/summary-header';
@@ -62,6 +63,7 @@ function SummaryContent({ summary, onMonthChange, onChangeIncome, renderSummary 
             <SummaryHeader summary={summary} onMonthChange={onMonthChange} />
             <SummaryKpis summary={summary} onChangeIncome={onChangeIncome} />
             {renderSummary?.(summary.month)}
+            <RecurringSummaryCard />
             <SpendingBars summary={summary} />
             <SummaryNotes summary={summary} onChangeIncome={onChangeIncome} />
         </div>
