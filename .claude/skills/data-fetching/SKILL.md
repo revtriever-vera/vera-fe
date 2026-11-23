@@ -12,10 +12,11 @@ description: >
 
 ## The client is generated, never hand-written
 
-`npm run api:types` downloads the OpenAPI document from the running API (`http://localhost:3333/docs-json`)
-and regenerates `src/shared/lib/api/schema.d.ts` with `openapi-typescript`. The file is committed and
+`npm run api:types` reads the OpenAPI document that `npm run openapi:dump` writes in `vera-api` (default `../vera-api/openapi.json`;
+no server needed) and regenerates `src/shared/lib/api/schema.d.ts` with `openapi-typescript`. The file is committed and
 excluded from lint. Run it whenever the API contract changes; a breaking change then fails the typecheck at
-the exact call site. A missing `.describe()` on the API side becomes a wrong type here.
+the exact call site. The only hand-written path is the one marked `MANUAL` (injected by
+`scripts/api-types.mjs` until the API exposes it); everything else comes from the dump. A missing `.describe()` on the API side becomes a wrong type here.
 
 `src/shared/lib/api/client.ts` exports:
 
