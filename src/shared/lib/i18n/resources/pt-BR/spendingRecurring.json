@@ -64,7 +64,9 @@
     "stopLabel": "{{name}}: cancelei",
     "stopTitle": "Marcar {{name}} como cancelada?",
     "stopDescription": "A Vera para de prever essa cobrança e avisa se ela voltar. A Vera não cancela nada: cancele no app ou no site do serviço.",
-    "stopConfirm": "Marcar como cancelada"
+    "stopConfirm": "Marcar como cancelada",
+    "details": "Detalhes",
+    "detailsLabel": "Detalhes de {{name}}"
   },
   "inactive": {
     "title": "Paradas e descartadas ({{count}})",
@@ -100,7 +102,10 @@
     "dismissed": "{{name}} saiu das sugestões. Ela fica em Paradas e descartadas, com Desfazer.",
     "snoozed": "{{name}} fica oculta por 30 dias",
     "stopped": "{{name}} marcada como cancelada",
-    "restored": "{{name}} voltou"
+    "restored": "{{name}} voltou",
+    "seen": "Alerta marcado como visto",
+    "updated": "{{name}} atualizada",
+    "chargeRemoved": "Cobrança tirada de {{name}}"
   },
   "empty": {
     "noTransactionsTitle": "Nenhuma transação importada",
@@ -118,6 +123,83 @@
     "notFound": "Essa assinatura ou conta não existe mais. Atualize a tela.",
     "invalidState": "Essa assinatura ou conta já mudou de situação. Atualize a tela.",
     "categoryKindMismatch": "Escolha uma categoria de gasto.",
-    "validationFailed": "Confira os campos e tente de novo."
+    "validationFailed": "Confira os campos e tente de novo.",
+    "chargeNotFound": "Essa cobrança já não faz parte da série. Atualize a tela."
+  },
+  "alerts": {
+    "title": "Para olhar ({{count}})",
+    "listLabel": "Alertas das assinaturas e contas",
+    "view": "Ver cobranças",
+    "viewLabel": "{{name}}: ver cobranças",
+    "seen": "Visto",
+    "seenLabel": "{{name}}: visto",
+    "stop": "Cancelei",
+    "stopLabel": "{{name}}: cancelei",
+    "dismiss": "Não é recorrente",
+    "dismissLabel": "{{name}}: não é recorrente",
+    "note": "A Vera não cancela assinaturas. Cancele no app do serviço ou do banco.",
+    "text": {
+      "priceIncrease": "{{name}} subiu de {{from}} para {{to}} em {{month}} (+{{percent}}%)",
+      "duplicateCharge": "{{name}} cobrou 2 vezes em {{month}}: {{firstAmount}} em {{firstDate}} e {{secondAmount}} em {{secondDate}}",
+      "duplicateAccount": "{{name}} parece a mesma assinatura em duas contas: {{account}} e {{other}}",
+      "trialConverted": "O teste de {{name}} virou cobrança: {{amount}} em {{date}}",
+      "returned_one": "{{name}} voltou a cobrar {{amount}} em {{date}}, {{count}} dia depois da última cobrança",
+      "returned_other": "{{name}} voltou a cobrar {{amount}} em {{date}}, {{count}} dias depois da última cobrança",
+      "stillUsing_one": "{{name}} cobrou {{count}} vez ({{amount}}) e ficou sem revisão. Você ainda usa?",
+      "stillUsing_other": "{{name}} cobrou {{count}} vezes ({{amount}}) e ficou sem revisão. Você ainda usa?",
+      "renewal_one": "{{name}} renova em {{count}} dia: {{amount}}",
+      "renewal_other": "{{name}} renova em {{count}} dias: {{amount}}"
+    }
+  },
+  "calendar": {
+    "title": "Próximos 60 dias",
+    "description": "Débitos previstos das séries confirmadas e das sugestões.",
+    "loading": "Carregando o calendário de débitos",
+    "loadError": "Não foi possível carregar o calendário de débitos",
+    "viewLabel": "Forma de ver o calendário",
+    "list": "Lista",
+    "month": "Mês",
+    "weekTitle": "Semana de {{from}} a {{to}}",
+    "tableLabel": "Débitos previstos de {{from}} a {{to}}",
+    "date": "Data",
+    "name": "Cobrança",
+    "account": "Conta",
+    "amount": "Valor",
+    "suggestion": "Sugestão",
+    "onCard": "no cartão {{name}}",
+    "missed": "Não cobrou em {{date}}",
+    "empty": "Nenhum débito previsto nos próximos 60 dias.",
+    "monthTable": "Débitos previstos em {{month}}",
+    "openLabel": "Ver {{name}}, {{date}}"
+  },
+  "detail": {
+    "close": "Fechar",
+    "edit": "Editar",
+    "account": "Conta",
+    "nextDate": "Próxima cobrança",
+    "noNextDate": "Sem data prevista",
+    "status": {
+      "confirmed": "Confirmada",
+      "suggested": "Sugestão",
+      "stopped": "Parada",
+      "dismissed": "Descartada"
+    },
+    "charges": "Últimas cobranças",
+    "noCharges": "Nenhuma cobrança nesta série.",
+    "removeCharge": "Não é desta assinatura",
+    "removeChargeLabel": "{{date}}, {{amount}}: não é desta assinatura",
+    "removeTitle": "Tirar essa cobrança de {{name}}?",
+    "removeDescription": "A cobrança sai da série e não volta. A transação continua no extrato.",
+    "removeConfirm": "Tirar da série"
+  },
+  "edit": {
+    "title": "Editar {{name}}",
+    "description": "Mude o que a Vera mostra desta série. As cobranças não mudam.",
+    "valueMode": "Valor",
+    "fixed": "Fixo",
+    "variable": "Variável",
+    "valueModeHint": "Variável mostra a média e a faixa das últimas cobranças.",
+    "submit": "Salvar",
+    "cancel": "Cancelar"
   }
 }

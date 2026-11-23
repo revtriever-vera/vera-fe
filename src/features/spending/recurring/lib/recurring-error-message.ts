@@ -7,6 +7,7 @@ export type RecurringErrorKey =
     | 'errors.notFound'
     | 'errors.invalidState'
     | 'errors.categoryKindMismatch'
+    | 'errors.chargeNotFound'
     | 'errors.validationFailed';
 
 export const RECURRING_ERROR_KEYS: Readonly<Record<string, RecurringErrorKey>> = {
@@ -14,7 +15,8 @@ export const RECURRING_ERROR_KEYS: Readonly<Record<string, RecurringErrorKey>> =
     'identity.forbidden': 'errors.forbidden',
     'recurring.series_not_found': 'errors.notFound',
     'recurring.invalid_state': 'errors.invalidState',
-    'recurring.category_kind_mismatch': 'errors.categoryKindMismatch'
+    'recurring.category_kind_mismatch': 'errors.categoryKindMismatch',
+    'recurring.charge_not_found': 'errors.chargeNotFound'
 };
 
 export function recurringErrorMessage(t: TFunction<'spendingRecurring'>, error: Error | null): string {

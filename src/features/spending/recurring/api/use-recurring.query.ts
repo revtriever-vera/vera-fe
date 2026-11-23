@@ -1,6 +1,6 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { apiClient, unwrap } from '@/shared/lib/api/client';
-import type { RecurringOverview } from '../types';
+import type { CalendarEntry, RecurringOverview } from '../types';
 import { recurringKeys } from './recurring-keys';
 
 async function fetchOverview(signal: AbortSignal): Promise<RecurringOverview> {
@@ -26,4 +26,12 @@ export function useRecurringReviewCount({ enabled = true }: RecurringReviewCount
         select: (data: RecurringOverview): number => data.totals.suggestions.count
     });
     return count.data;
+}
+
+export function useRecurringCalendar(days: number): UseQueryResult<readonly CalendarEntry[]> {
+    return useQuery({
+        queryKey: recurringKeys.calendar(days),
+        queryFn: async ({ signal }): Promise<readonly CalendarEntry[]> =>
+            unwrap(await apiClient.GET('/spending/recurring/calendar', { params: { query: { days } }, signal }))
+    });
 }
