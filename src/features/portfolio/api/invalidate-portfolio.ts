@@ -5,6 +5,7 @@ export async function invalidatePortfolio(queryClient: QueryClient): Promise<voi
     await Promise.all([
         queryClient.invalidateQueries({ queryKey: portfolioKeys.holdings() }),
         queryClient.invalidateQueries({ queryKey: portfolioKeys.overview() }),
+        queryClient.invalidateQueries({ queryKey: portfolioKeys.concentration() }),
         queryClient.invalidateQueries({ queryKey: portfolioKeys.classes() }),
         queryClient.invalidateQueries({ queryKey: portfolioKeys.classDetails() })
     ]);

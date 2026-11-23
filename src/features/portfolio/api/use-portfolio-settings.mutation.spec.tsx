@@ -61,13 +61,19 @@ describe('useUpdatePortfolioSettings', () => {
 });
 
 describe('invalidatePortfolio', () => {
-    it('invalida carteira, visão geral, classes e detalhes de classe', async () => {
+    it('invalida carteira, visão geral, concentração, classes e detalhes de classe', async () => {
         const { client }: QueryWrapper = createQueryWrapper();
         const invalidate: MockInstance = vi.spyOn(client, 'invalidateQueries');
 
         await invalidatePortfolio(client);
 
         const keys: unknown[] = invalidatedKeys(invalidate);
-        expect(keys).toEqual([portfolioKeys.holdings(), portfolioKeys.overview(), portfolioKeys.classes(), portfolioKeys.classDetails()]);
+        expect(keys).toEqual([
+            portfolioKeys.holdings(),
+            portfolioKeys.overview(),
+            portfolioKeys.concentration(),
+            portfolioKeys.classes(),
+            portfolioKeys.classDetails()
+        ]);
     });
 });

@@ -7,6 +7,7 @@ describe('portfolioKeys', () => {
         expect(portfolioKeys.classes()).toEqual(['portfolio', 'classes']);
         expect(portfolioKeys.holdings()).toEqual(['portfolio', 'holdings']);
         expect(portfolioKeys.overview()).toEqual(['portfolio', 'overview']);
+        expect(portfolioKeys.concentration()).toEqual(['portfolio', 'concentration']);
     });
 
     it('o detalhe de classe e o aporte carregam o parâmetro', () => {

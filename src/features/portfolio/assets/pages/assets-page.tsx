@@ -1,8 +1,9 @@
 import { Plus } from 'lucide-react';
-import type { ReactElement } from 'react';
+import { useEffect, type ReactElement } from 'react';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { Link, useNavigate, useSearch, type UseNavigateResult } from '@tanstack/react-router';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
+import { track } from '@/shared/lib/analytics';
 import { RoleGate } from '@/app/providers/role-gate';
 import { useRole } from '@/app/providers/use-role';
 import { Button, buttonVariants } from '@/shared/ui/button';
@@ -11,12 +12,16 @@ import { FailureAlert } from '@/shared/ui/failure-alert';
 import { SkeletonTable } from '@/shared/ui/skeleton-table';
 import { BaseCurrencySwitch } from '../../components/base-currency-switch';
 import { DataSourcesNote } from '../../components/data-sources-note';
+import { ConcentrationTab } from '../../concentration/components/concentration-tab';
 import { useClasses } from '../../api/use-classes.query';
 import { useHoldings } from '../../api/use-holdings.query';
 import type { ClassesResponse, HoldingsResponse } from '../../types';
 import { AddAssetModal } from '../components/add-asset-modal';
+import { AssetsTabs } from '../components/assets-tabs';
 import { ExportMenu } from '../components/export-menu';
 import { HoldingsSection } from '../components/holdings-section';
+import { DEFAULT_ASSETS_TAB } from '../lib/assets-tab';
+import type { AssetsTab } from '../types';
 
 function AssetsLoading(): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
@@ -118,20 +123,38 @@ function AssetsHeader({ empty, onAdd }: { readonly empty: boolean; readonly onAd
 }
 
 export function AssetsPage(): ReactElement {
-    const search: { add?: boolean; classId?: string } = useSearch({ from: '/_auth/_app/portfolio/assets' });
+    const search: { add?: boolean; classId?: string; tab?: AssetsTab } = useSearch({ from: '/_auth/_app/portfolio/assets' });
     const navigate: UseNavigateResult<string> = useNavigate();
     const holdings: UseQueryResult<HoldingsResponse> = useHoldings();
     const classes: UseQueryResult<ClassesResponse> = useClasses();
+    const tab: AssetsTab = search.tab ?? DEFAULT_ASSETS_TAB;
+    useEffect((): void => {
+        track('assets_tab_viewed', { tab });
+    }, [tab]);
     const setOpen = (open: boolean): void => {
-        void navigate({ to: '/portfolio/assets', search: open ? { add: true, classId: search.classId } : {}, replace: true });
+        void navigate({
+            to: '/portfolio/assets',
+            search: open ? { add: true, classId: search.classId, tab: search.tab } : { tab: search.tab },
+            replace: true
+        });
     };
     const openModal = (): void => {
         setOpen(true);
     };
+    const changeTab = (next: AssetsTab): void => {
+        void navigate({ to: '/portfolio/assets', search: { tab: next === DEFAULT_ASSETS_TAB ? undefined : next }, replace: true });
+    };
     return (
         <section className="flex flex-col gap-4">
             <AssetsHeader empty={holdings.data?.data.length === 0} onAdd={openModal} />
-            <AssetsBody holdings={holdings} classes={classes} onAdd={openModal} />
+            <AssetsTabs
+                value={tab}
+                onValueChange={changeTab}
+                panels={{
+                    list: <AssetsBody holdings={holdings} classes={classes} onAdd={openModal} />,
+                    concentration: <ConcentrationTab />
+                }}
+            />
             <DataSourcesNote />
             <RoleGate min="editor">
                 <AddAssetModal open={search.add === true} onOpenChange={setOpen} initialClassId={search.classId} />
