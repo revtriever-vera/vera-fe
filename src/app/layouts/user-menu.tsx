@@ -5,7 +5,7 @@ import { Crown, LogOut, Settings } from 'lucide-react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useSession } from '@/app/providers/session-provider';
 import type { SessionContext, SessionUser } from '@/app/providers/session-context';
-import { currentSettingsMode } from '@/features/settings/lib/settings-tabs';
+import { useSettingsMode } from '@/features/settings/lib/use-settings-mode';
 import { SETTINGS_MODE, SETTINGS_TAB } from '@/features/settings/types';
 import { track } from '@/shared/lib/analytics';
 import { Avatar } from '@/shared/ui/avatar';
@@ -66,7 +66,7 @@ function PlanChip(): ReactElement | null {
 
 function MenuLinks(): ReactElement {
     const { t }: UseTranslationResponse<'common', undefined> = useTranslation();
-    const hosted: boolean = currentSettingsMode() === SETTINGS_MODE.hosted;
+    const hosted: boolean = useSettingsMode().mode === SETTINGS_MODE.hosted;
     return (
         <>
             {hosted ? (

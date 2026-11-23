@@ -11,7 +11,6 @@ const TOO_MANY_REQUESTS: number = 429;
 export type AccountErrorScope = 'export' | 'delete' | 'language';
 
 const ERROR_KEYS: Readonly<Record<string, AccountKey>> = {
-    'identity.confirmation_mismatch': 'errorConfirmationMismatch',
     'identity.forbidden': 'errorForbidden',
     'identity.export_failed': 'errorExportFailed',
     'identity.erasure_failed': 'errorErasureFailed',

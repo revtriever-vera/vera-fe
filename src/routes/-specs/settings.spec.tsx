@@ -90,8 +90,8 @@ describe('rota /settings', () => {
         await waitFor(() => {
             expect(router.state.location.pathname).toBe('/settings/privacy');
         });
-        expect(await screen.findByRole('button', { name: 'Baixar meus dados (JSON)' })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: 'Excluir minha conta' })).toBeInTheDocument();
+        expect(await screen.findByRole('button', { name: 'Exportar' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Excluir conta' })).toBeInTheDocument();
     });
 
     it('as abas ainda sem dono mostram o espaço reservado', async () => {

@@ -7,7 +7,12 @@ import { Button } from '@/shared/ui/button';
 import { useExportData } from '../api/use-export-data.mutation';
 import { accountErrorMessage } from '../lib/account-error-message';
 
-export function ExportButton({ variant = 'secondary' }: { readonly variant?: 'primary' | 'secondary' }): ReactElement {
+interface ExportButtonProps {
+    readonly variant?: 'primary' | 'secondary';
+    readonly size?: 'sm' | 'md';
+}
+
+export function ExportButton({ variant = 'secondary', size = 'md' }: ExportButtonProps): ReactElement {
     const { t }: UseTranslationResponse<'account', undefined> = useTranslation('account');
     const toast: ToastApi = useToast();
     const exportData: UseMutationResult<void, Error, void> = useExportData();
@@ -19,6 +24,7 @@ export function ExportButton({ variant = 'secondary' }: { readonly variant?: 'pr
         track('account_export_requested');
         exportData.mutate(undefined, {
             onSuccess: (): void => {
+                track('export_all_downloaded');
                 toast.show({ tone: 'positive', title: t('exportDone') });
             },
             onError: (error: Error): void => {
@@ -28,7 +34,7 @@ export function ExportButton({ variant = 'secondary' }: { readonly variant?: 'pr
     };
 
     return (
-        <Button type="button" variant={variant} loading={exportData.isPending} onClick={handleClick}>
+        <Button type="button" variant={variant} size={size} loading={exportData.isPending} onClick={handleClick}>
             {exportData.isPending ? t('exportDownloading') : t('exportButton')}
         </Button>
     );

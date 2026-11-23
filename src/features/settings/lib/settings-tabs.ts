@@ -1,4 +1,4 @@
-import { SETTINGS_MODE, SETTINGS_TAB, type SettingsMode, type SettingsTab, type SettingsTabContext, type SettingsTabId } from '../types';
+import { SETTINGS_MODE, SETTINGS_TAB, type SettingsTab, type SettingsTabContext, type SettingsTabId } from '../types';
 
 const always = (): boolean => true;
 
@@ -20,10 +20,6 @@ export const SETTINGS_TABS: readonly SettingsTab[] = [
     { id: SETTINGS_TAB.preferences, labelKey: 'tabs.preferences', visible: always },
     { id: SETTINGS_TAB.privacy, labelKey: 'tabs.privacy', visible: always }
 ];
-
-export function currentSettingsMode(): SettingsMode {
-    return SETTINGS_MODE.hosted;
-}
 
 export function visibleSettingsTabs(context: SettingsTabContext): readonly SettingsTab[] {
     return SETTINGS_TABS.filter((tab: SettingsTab): boolean => tab.visible(context));

@@ -1,0 +1,85 @@
+{
+  "title": "Integrações",
+  "description": "Nesta instalação não há planos nem cota: cada pessoa cadastra as próprias chaves e paga direto a cada serviço. O que não tem chave não aparece no app.",
+  "loading": "Carregando as integrações",
+  "ownerOnly": "Só o Dono da conta cadastra, troca e remove as chaves.",
+  "configured": "configurada",
+  "notConfigured": "sem chave",
+  "register": "Cadastrar",
+  "replace": "Trocar",
+  "remove": "Remover",
+  "registerAria": "Cadastrar a chave de {{name}}",
+  "replaceAria": "Trocar a chave de {{name}}",
+  "removeAria": "Remover a chave de {{name}}",
+  "needsModel": "Precisa também do modelo de linguagem",
+  "copyUrl": "Copiar a URL",
+  "modalNote": "{{note}} As chaves ficam cifradas no seu servidor.",
+  "currentHint": "A chave atual termina em {{tail}}. Digite de novo para trocar.",
+  "cancel": "Cancelar",
+  "saveAndTest": "Salvar e testar",
+  "testing": "Testando…",
+  "fields": {
+    "baseUrl": "URL da API",
+    "apiKey": "Chave",
+    "model": "Modelo",
+    "accessToken": "Token de acesso",
+    "phoneNumberId": "ID do número",
+    "verifyToken": "Token de verificação do webhook",
+    "appSecret": "App secret",
+    "clientId": "Client ID",
+    "clientSecret": "Client Secret"
+  },
+  "kinds": {
+    "llm": {
+      "title": "Modelo de linguagem",
+      "description": "Escreve os resumos e as respostas do WhatsApp. Qualquer provedor compatível com a API da OpenAI, inclusive um modelo local.",
+      "note": "Qualquer provedor compatível com a API da OpenAI, inclusive um modelo local.",
+      "removeWarning": "Os resumos em texto somem das telas."
+    },
+    "whatsapp": {
+      "title": "WhatsApp",
+      "description": "WhatsApp Business Cloud API, da Meta.",
+      "note": "Crie um app no Meta for Developers e aponte o webhook para a URL abaixo.",
+      "urlLabel": "URL do webhook",
+      "removeWarning": "O WhatsApp para de responder e os lembretes são cancelados."
+    },
+    "google": {
+      "title": "Google Agenda",
+      "description": "Cliente OAuth do Google Cloud.",
+      "note": "No Google Cloud, crie um cliente OAuth com o redirecionamento da URL abaixo.",
+      "urlLabel": "URL de redirecionamento",
+      "removeWarning": "A agenda é desconectada."
+    }
+  },
+  "removeDialog": {
+    "title": "Remover a chave de {{name}}?",
+    "confirm": "Remover a chave"
+  },
+  "toasts": {
+    "saved": "{{name}}: conectado",
+    "removed": "Chave removida: a função some do app"
+  },
+  "validation": {
+    "required": "Preencha este campo.",
+    "secret": "Use de 8 a 512 caracteres, sem espaços.",
+    "tooLong": "Use no máximo 256 caracteres.",
+    "baseUrl": "Use um endereço que comece com https:// (ou http:// em rede local).",
+    "model": "Esse nome de modelo não é válido.",
+    "phoneNumberId": "Use só números, de 5 a 20 dígitos.",
+    "clientId": "O Client ID termina em .apps.googleusercontent.com."
+  },
+  "errors": {
+    "unauthorized": "A chave foi recusada.",
+    "invalidModel": "Modelo não encontrado nesse provedor.",
+    "notFound": "Não encontramos esse recurso no provedor. Confira a URL da API.",
+    "phoneNotFound": "O ID do número não foi encontrado na Meta.",
+    "unreachable": "Não foi possível chegar à URL da API.",
+    "unreachableWhatsApp": "Não foi possível chegar à API da Meta.",
+    "phoneInUse": "Esse número já está ligado a outra conta.",
+    "notAvailable": "As chaves só se cadastram em uma instalação auto-hospedada.",
+    "forbidden": "Só o Dono da conta mexe nas chaves.",
+    "validation": "Confira os campos e tente de novo.",
+    "tooManyAttempts": "Muitas tentativas. Aguarde alguns minutos e tente de novo.",
+    "generic": "Não foi possível concluir agora. Tente novamente em instantes."
+  }
+}

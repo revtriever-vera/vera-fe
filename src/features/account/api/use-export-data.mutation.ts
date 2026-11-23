@@ -4,6 +4,8 @@ import { downloadBlob } from '../lib/download-blob';
 import { exportFilename } from '../lib/export-filename';
 import { accountKeys } from './account-keys';
 
+const SPREADSHEETS_PATH: '/account/export' = '/account/export/spreadsheets' as '/account/export';
+
 interface ExportResult {
     readonly data?: Blob;
     readonly error?: unknown;
@@ -14,7 +16,7 @@ export function useExportData(): UseMutationResult<void, Error, void> {
     return useMutation({
         mutationKey: accountKeys.export(),
         mutationFn: async (): Promise<void> => {
-            const result: ExportResult = await apiClient.GET('/account/export', { parseAs: 'blob' });
+            const result: ExportResult = await apiClient.GET(SPREADSHEETS_PATH, { parseAs: 'blob' });
             const blob: Blob = unwrap<Blob>(result);
             downloadBlob(blob, exportFilename(result.response.headers.get('content-disposition')));
         }

@@ -12,25 +12,18 @@ const FORM_ID: string = 'delete-account-form';
 
 interface DeleteAccountModalProps {
     readonly email: string;
+    readonly premium: boolean;
     readonly onClose: () => void;
     readonly onDeleted: () => void;
 }
 
-function ErasureNotice(): ReactElement {
+function ErasureNotice({ premium }: { readonly premium: boolean }): ReactElement {
     const { t }: UseTranslationResponse<'account', undefined> = useTranslation('account');
 
     return (
         <>
-            <div className="flex flex-col gap-2 text-sm text-content">
-                <p>{t('deleteModalIntro')}</p>
-                <ul className="list-disc pl-5 text-content-muted">
-                    <li>{t('deleteItemPortfolio')}</li>
-                    <li>{t('deleteItemSpending')}</li>
-                    <li>{t('deleteItemRest')}</li>
-                </ul>
-                <p className="font-medium">{t('deleteIrreversible')}</p>
-            </div>
-            <div className="flex flex-col items-start gap-2 text-sm text-content-muted">
+            <p className="text-sm text-content">{t(premium ? 'deleteModalBodyPremium' : 'deleteModalBody')}</p>
+            <div className="flex flex-col items-start gap-2 rounded-control bg-surface-muted p-3 text-sm text-content-muted">
                 <p>{t('deleteExportInvite')}</p>
                 <ExportButton />
             </div>
@@ -38,7 +31,7 @@ function ErasureNotice(): ReactElement {
     );
 }
 
-export function DeleteAccountModal({ email, onClose, onDeleted }: DeleteAccountModalProps): ReactElement {
+export function DeleteAccountModal({ email, premium, onClose, onDeleted }: DeleteAccountModalProps): ReactElement {
     const { t }: UseTranslationResponse<'account', undefined> = useTranslation('account');
     const { form, matches, busy, failure, submit }: DeleteAccountForm = useDeleteAccountForm(t, email, onDeleted);
 
@@ -58,17 +51,15 @@ export function DeleteAccountModal({ email, onClose, onDeleted }: DeleteAccountM
             }
         >
             <div className="flex flex-col gap-4">
-                <ErasureNotice />
+                <ErasureNotice premium={premium} />
                 <form id={FORM_ID} noValidate onSubmit={(event): void => void submit(event)} className="flex flex-col gap-3">
                     <Field
-                        label={t('deleteConfirmLabel')}
-                        type="email"
+                        label={t('deleteConfirmLabel', { word: t('deleteWord') })}
                         autoComplete="off"
-                        autoCapitalize="none"
+                        autoCapitalize="characters"
                         spellCheck={false}
-                        hint={t('deleteConfirmHint', { email })}
-                        error={form.formState.errors.confirmEmail?.message}
-                        {...form.register('confirmEmail')}
+                        error={form.formState.errors.confirmation?.message}
+                        {...form.register('confirmation')}
                     />
                     {failure === null ? null : <Alert title={accountErrorMessage(t, failure, 'delete')} />}
                 </form>

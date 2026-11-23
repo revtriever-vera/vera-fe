@@ -348,6 +348,106 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/integrations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the integrations of a self-hosted installation
+         * @description Whether each integration has a key saved, plus the URLs to register in the provider consoles. No route returns a key, token or secret: only the last 4 characters (`hint`).
+         */
+        get: operations["IntegrationsController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/integrations/llm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Save and test the language model key
+         * @description Calls the provider with the key first and saves it sealed only when the test passes. No route returns a key, token or secret: only the last 4 characters (`hint`).
+         */
+        put: operations["IntegrationsController_saveLlm"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/integrations/whatsapp": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Save and test the WhatsApp Cloud API key
+         * @description Reads the phone number from the Graph API with the token first and saves it sealed only when the test passes. No route returns a key, token or secret: only the last 4 characters (`hint`).
+         */
+        put: operations["IntegrationsController_saveWhatsApp"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/integrations/google": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Save the Google OAuth client
+         * @description Validates the client ID format and saves the pair sealed. Google only checks the secret when the code is exchanged, so the real test is the first connection of Google Agenda. No route returns a key, token or secret: only the last 4 characters (`hint`).
+         */
+        put: operations["IntegrationsController_saveGoogle"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/integrations/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Remove an integration key
+         * @description Hard deletes the sealed key. The feature becomes disabled at once; removing WhatsApp unlinks the number and cancels reminders, removing Google disconnects the calendar.
+         */
+        delete: operations["IntegrationsController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/allocation/classes": {
         parameters: {
             query?: never;
@@ -3607,6 +3707,622 @@ export interface operations {
             };
             /** @description Too many lookups from this IP (core.too_many_attempts) */
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    IntegrationsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Integrations state */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description One item per integration kind */
+                        items: {
+                            /**
+                             * @description Integration kind: `llm`, `whatsapp` or `google`
+                             * @enum {string}
+                             */
+                            kind: "llm" | "whatsapp" | "google";
+                            /** @description Whether this installation has a key saved for the integration */
+                            configured: boolean;
+                            /** @description Last 4 characters of the key or token, null when not configured */
+                            hint: string | null;
+                            /** @description Non secret fields saved with the key */
+                            public: {
+                                /** @description Base URL of the language model API */
+                                baseUrl?: string;
+                                /** @description Model name */
+                                model?: string;
+                                /** @description WhatsApp phone number ID */
+                                phoneNumberId?: string;
+                                /** @description Google OAuth client ID */
+                                clientId?: string;
+                            };
+                            /** @description When the key last passed the test, ISO 8601 */
+                            verifiedAt: string | null;
+                        }[];
+                        /** @description URL to register as the WhatsApp webhook */
+                        webhookUrl: string;
+                        /** @description Redirect URI to register in the Google OAuth client */
+                        googleRedirectUri: string;
+                    };
+                };
+            };
+            /** @description Only the owner (identity.forbidden) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Hosted deployment: the installation owns the keys */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    IntegrationsController_saveLlm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Base URL of an OpenAI-compatible API. `https`, or `http` only for localhost and private networks */
+                    baseUrl: string;
+                    /** @description API key of the provider. Never returned by any route */
+                    apiKey: string;
+                    /** @description Model name as the provider lists it */
+                    model: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Integration saved */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Integration kind: `llm`, `whatsapp` or `google`
+                         * @enum {string}
+                         */
+                        kind: "llm" | "whatsapp" | "google";
+                        /** @description Whether this installation has a key saved for the integration */
+                        configured: boolean;
+                        /** @description Last 4 characters of the key or token, null when not configured */
+                        hint: string | null;
+                        /** @description Non secret fields saved with the key */
+                        public: {
+                            /** @description Base URL of the language model API */
+                            baseUrl?: string;
+                            /** @description Model name */
+                            model?: string;
+                            /** @description WhatsApp phone number ID */
+                            phoneNumberId?: string;
+                            /** @description Google OAuth client ID */
+                            clientId?: string;
+                        };
+                        /** @description When the key last passed the test, ISO 8601 */
+                        verifiedAt: string | null;
+                    };
+                };
+            };
+            /** @description Invalid payload (only the field path and the rule are reported) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Hosted deployment */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The provider test failed (`meta.reason`). Nothing was saved */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 10 tests in 1 hour for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    IntegrationsController_saveWhatsApp: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Access token of the WhatsApp Cloud API. Never returned by any route */
+                    accessToken: string;
+                    /** @description Phone number ID of the WhatsApp Business number, digits only */
+                    phoneNumberId: string;
+                    /** @description Token the webhook verification handshake compares. Never returned by any route */
+                    verifyToken: string;
+                    /** @description App secret of the Meta app, used to validate the webhook signature. Never returned by any route */
+                    appSecret: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Integration saved */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Integration kind: `llm`, `whatsapp` or `google`
+                         * @enum {string}
+                         */
+                        kind: "llm" | "whatsapp" | "google";
+                        /** @description Whether this installation has a key saved for the integration */
+                        configured: boolean;
+                        /** @description Last 4 characters of the key or token, null when not configured */
+                        hint: string | null;
+                        /** @description Non secret fields saved with the key */
+                        public: {
+                            /** @description Base URL of the language model API */
+                            baseUrl?: string;
+                            /** @description Model name */
+                            model?: string;
+                            /** @description WhatsApp phone number ID */
+                            phoneNumberId?: string;
+                            /** @description Google OAuth client ID */
+                            clientId?: string;
+                        };
+                        /** @description When the key last passed the test, ISO 8601 */
+                        verifiedAt: string | null;
+                    };
+                };
+            };
+            /** @description Invalid payload (only the field path and the rule are reported) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Hosted deployment */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The number is linked to another account (integrations.phone_in_use) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The provider test failed (`meta.reason`). Nothing was saved */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 10 tests in 1 hour for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    IntegrationsController_saveGoogle: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description OAuth client ID, ends with `.apps.googleusercontent.com` */
+                    clientId: string;
+                    /** @description OAuth client secret. Never returned by any route */
+                    clientSecret: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Integration saved */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Integration kind: `llm`, `whatsapp` or `google`
+                         * @enum {string}
+                         */
+                        kind: "llm" | "whatsapp" | "google";
+                        /** @description Whether this installation has a key saved for the integration */
+                        configured: boolean;
+                        /** @description Last 4 characters of the key or token, null when not configured */
+                        hint: string | null;
+                        /** @description Non secret fields saved with the key */
+                        public: {
+                            /** @description Base URL of the language model API */
+                            baseUrl?: string;
+                            /** @description Model name */
+                            model?: string;
+                            /** @description WhatsApp phone number ID */
+                            phoneNumberId?: string;
+                            /** @description Google OAuth client ID */
+                            clientId?: string;
+                        };
+                        /** @description When the key last passed the test, ISO 8601 */
+                        verifiedAt: string | null;
+                    };
+                };
+            };
+            /** @description Invalid payload (only the field path and the rule are reported) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Hosted deployment */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 10 attempts in 1 hour for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    IntegrationsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kind: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Integration removed */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unknown kind */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Hosted deployment */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
