@@ -47,6 +47,6 @@ export type FgcVerdict = FgcSimulation['verdict'];
 
 export const FGC_LIMIT_MINOR: number = 25000000;
 
-export const ASSETS_TABS = ['list', 'concentration'] as const satisfies readonly AssetsTabName[];
+export const ASSETS_TABS = ['list', 'fixed-income', 'concentration'] as const satisfies readonly AssetsTabName[];
 
 export type AssetsTab = (typeof ASSETS_TABS)[number];

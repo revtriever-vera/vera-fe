@@ -21,6 +21,7 @@ import type { Overview } from '../../types';
 import { ActualVsTargetCard } from '../components/actual-vs-target-card';
 import { ClassCardList } from '../components/class-card-list';
 import { ClassTable } from '../components/class-table';
+import { OverviewAlerts } from '../components/overview-alerts';
 import { QualityNotice } from '../components/quality-notice';
 import { TotalCard } from '../components/total-card';
 import { buildOverviewViewModel, type OverviewViewModel } from '../lib/overview-view-model';
@@ -151,6 +152,7 @@ export function OverviewPage(): ReactElement {
     return (
         <section className="flex flex-col gap-4">
             <OverviewHeader />
+            <OverviewAlerts />
             <OverviewBody />
             <DataSourcesNote />
         </section>

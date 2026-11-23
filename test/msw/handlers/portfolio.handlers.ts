@@ -1,6 +1,7 @@
 import { http, HttpResponse, type RequestHandler } from 'msw';
 import type { UpdatePortfolioSettings } from '@/features/portfolio/types';
 import { exchangeRate, fgcSimulation, positionView, previewResult, titleView } from '../../fixtures/assets';
+import { emptyFgc, emptyMaturities, realRates } from '../../fixtures/fixed-income';
 import { sampleSuggestion } from '../../fixtures/contribution';
 import { defaultClasses, emptyConcentration, emptyHoldings, emptyOverview, portfolioSettings } from '../../fixtures/portfolio';
 
@@ -9,6 +10,9 @@ export function portfolioHandlers(): RequestHandler[] {
         http.get('*/portfolio/holdings', () => HttpResponse.json(emptyHoldings())),
         http.get('*/portfolio/concentration', () => HttpResponse.json(emptyConcentration())),
         http.get('*/portfolio/overview', () => HttpResponse.json(emptyOverview())),
+        http.get('*/portfolio/fgc', () => HttpResponse.json(emptyFgc())),
+        http.get('*/portfolio/maturities', () => HttpResponse.json(emptyMaturities())),
+        http.get('*/portfolio/real-rates', () => HttpResponse.json(realRates([]))),
         http.get('*/allocation/classes', () => HttpResponse.json(defaultClasses())),
         http.get('*/allocation/settings', () => HttpResponse.json(portfolioSettings())),
         http.post('*/portfolio/contributions/suggest', () => HttpResponse.json(sampleSuggestion())),

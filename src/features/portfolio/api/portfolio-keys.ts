@@ -40,6 +40,10 @@ export const portfolioKeys: {
     fixedIncomeTitle: (id: string) => readonly ['portfolio', 'fixed-income-title', string];
     contributions: () => readonly ['portfolio', 'contribution'];
     contribution: (amount: number) => readonly ['portfolio', 'contribution', number];
+    fgc: () => readonly ['portfolio', 'fgc'];
+    fgcOf: (holder: string | undefined) => readonly ['portfolio', 'fgc', string];
+    maturities: () => readonly ['portfolio', 'maturities'];
+    realRates: () => readonly ['portfolio', 'real-rates'];
 } = {
     all: ['portfolio'] as const,
     settings: (): readonly ['portfolio', 'settings'] => [...portfolioKeys.all, 'settings'] as const,
@@ -70,5 +74,9 @@ export const portfolioKeys: {
     fixedIncomeTitle: (id: string): readonly ['portfolio', 'fixed-income-title', string] =>
         [...portfolioKeys.all, 'fixed-income-title', id] as const,
     contributions: (): readonly ['portfolio', 'contribution'] => [...portfolioKeys.all, 'contribution'] as const,
-    contribution: (amount: number): readonly ['portfolio', 'contribution', number] => [...portfolioKeys.contributions(), amount] as const
+    contribution: (amount: number): readonly ['portfolio', 'contribution', number] => [...portfolioKeys.contributions(), amount] as const,
+    fgc: (): readonly ['portfolio', 'fgc'] => [...portfolioKeys.all, 'fgc'] as const,
+    fgcOf: (holder: string | undefined): readonly ['portfolio', 'fgc', string] => [...portfolioKeys.fgc(), holder ?? ANY_HOLDER] as const,
+    maturities: (): readonly ['portfolio', 'maturities'] => [...portfolioKeys.all, 'maturities'] as const,
+    realRates: (): readonly ['portfolio', 'real-rates'] => [...portfolioKeys.all, 'real-rates'] as const
 };

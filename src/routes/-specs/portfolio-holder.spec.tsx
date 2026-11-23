@@ -5,6 +5,8 @@ import userEvent, { type UserEvent } from '@testing-library/user-event';
 import type { AnyRouter } from '@tanstack/react-router';
 import { track } from '@/shared/lib/analytics';
 import { sessionIdentity } from '../../../test/fixtures/auth';
+import type { FgcHolderBlock } from '@/features/portfolio/fixed-income/types';
+import { fgcCoverage } from '../../../test/fixtures/fixed-income';
 import { member, membersList } from '../../../test/fixtures/members';
 import { ANA } from '../../../test/fixtures/people';
 import { holding, sampleHoldings, sampleOverview } from '../../../test/fixtures/portfolio';
@@ -243,5 +245,46 @@ describe('titular: edição do título', () => {
         });
         expect(api.titlePatched[0]).toMatchObject({ id: 'fi-cdb', body: { holderUserId: ANA.userId } });
         expect(track).toHaveBeenCalledWith('holder_set', { kind: 'person', source: 'edit' });
+    });
+});
+
+describe('titular: FGC na aba Renda fixa', () => {
+    it('pede a cobertura do titular filtrado e mostra o bloco dele', async () => {
+        mockHoldingsApi();
+        const holders: string[] = [];
+        server.use(
+            http.get('*/portfolio/fgc', ({ request }): Response => {
+                holders.push(new URL(request.url).searchParams.get('holder') ?? '');
+                return HttpResponse.json(fgcCoverage({ scope: 'holder', peopleCount: 2 }));
+            })
+        );
+        renderRouterAt(`/portfolio/assets?tab=fixed-income&holder=${ANA.userId}`, { signedIn: true });
+
+        expect(await screen.findByText('Conglomerado Alfa')).toBeInTheDocument();
+        expect(holders).toEqual([ANA.userId]);
+        expect(screen.getByText(/O limite do FGC vale por CPF/)).toHaveTextContent('para ver só a cobertura de uma pessoa');
+    });
+
+    it('sem filtro pede Todos e mostra um bloco por titular', async () => {
+        mockHoldingsApi();
+        const holders: string[] = [];
+        const block = (name: string | null): FgcHolderBlock => ({
+            holder: name === null ? null : { userId: ANA.userId, name },
+            coveredMinor: 0,
+            capShareBps: 0,
+            groups: [],
+            outside: []
+        });
+        server.use(
+            http.get('*/portfolio/fgc', ({ request }): Response => {
+                holders.push(new URL(request.url).searchParams.get('holder') ?? '');
+                return HttpResponse.json(fgcCoverage({ peopleCount: 2, groups: [], byHolder: [block('Ana Souza'), block(null)] }));
+            })
+        );
+        renderRouterAt('/portfolio/assets?tab=fixed-income', { signedIn: true });
+
+        expect(await screen.findByRole('region', { name: 'Ana Souza' })).toBeInTheDocument();
+        expect(screen.getByRole('region', { name: 'Conta toda' })).toBeInTheDocument();
+        expect(holders).toEqual(['']);
     });
 });

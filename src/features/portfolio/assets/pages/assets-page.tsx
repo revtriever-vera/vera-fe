@@ -16,6 +16,7 @@ import { HolderEmpty } from '../../components/holder-empty';
 import { HolderFilter } from '../../components/holder-filter';
 import type { HolderParam } from '../../lib/holder-filter';
 import { useHolderParam } from '../../lib/use-holder-param';
+import { FixedIncomeTab } from '../../fixed-income/components/fixed-income-tab';
 import { ConcentrationTab } from '../../concentration/components/concentration-tab';
 import { useClasses } from '../../api/use-classes.query';
 import { useHoldings } from '../../api/use-holdings.query';
@@ -154,7 +155,7 @@ function useAssetsNavigation({ classId, tab, holder }: AssetsSearch): AssetsNavi
         });
     };
     const changeTab = (next: AssetsTab): void => {
-        void navigate({ to: '/portfolio/assets', search: { tab: next === DEFAULT_ASSETS_TAB ? undefined : next, holder }, replace: true });
+        void navigate({ to: '/portfolio/assets', search: { tab: next === DEFAULT_ASSETS_TAB ? undefined : next, holder } });
     };
     return {
         setOpen,
@@ -182,6 +183,7 @@ export function AssetsPage(): ReactElement {
                 onValueChange={changeTab}
                 panels={{
                     list: <AssetsBody holdings={holdings} classes={classes} onAdd={openModal} />,
+                    'fixed-income': <FixedIncomeTab />,
                     concentration: <ConcentrationTab />
                 }}
             />
