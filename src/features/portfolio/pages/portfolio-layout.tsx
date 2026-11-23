@@ -13,6 +13,7 @@ export function PortfolioLayout(): ReactElement {
         { to: '/portfolio', label: t('layout.tabs.overview'), exact: true, search },
         { to: '/portfolio/targets', label: t('layout.tabs.targets') },
         { to: '/portfolio/contribution', label: t('layout.tabs.contribution') },
+        { to: '/portfolio/goals', label: t('layout.tabs.goals'), search },
         { to: '/portfolio/assets', label: t('layout.tabs.assets'), search }
     ];
     return (

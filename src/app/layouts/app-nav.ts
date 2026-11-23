@@ -1,5 +1,5 @@
 import type ptBRCommon from '@/shared/lib/i18n/resources/pt-BR/common.json';
-import { List, PieChart, Receipt, Scissors, Target, Wallet, Zap, type LucideIcon } from 'lucide-react';
+import { Flag, List, PieChart, Receipt, Scissors, Target, Wallet, Zap, type LucideIcon } from 'lucide-react';
 
 export type NavGroup = 'portfolio' | 'spending';
 
@@ -21,6 +21,7 @@ export const APP_NAV_ITEMS: readonly NavItem[] = [
     { id: 'portfolio-overview', to: '/portfolio', labelKey: 'navPortfolioOverview', icon: PieChart, group: 'portfolio' },
     { id: 'portfolio-targets', to: '/portfolio/targets', labelKey: 'navPortfolioTargets', icon: Target, group: 'portfolio' },
     { id: 'portfolio-contribution', to: '/portfolio/contribution', labelKey: 'navPortfolioContribution', icon: Zap, group: 'portfolio' },
+    { id: 'portfolio-goals', to: '/portfolio/goals', labelKey: 'navPortfolioGoals', icon: Flag, group: 'portfolio' },
     { id: 'portfolio-assets', to: '/portfolio/assets', labelKey: 'navPortfolioAssets', icon: Wallet, group: 'portfolio' },
     { id: 'spending-summary', to: '/spending', labelKey: 'navSpendingSummary', icon: Receipt, group: 'spending', exact: true },
     {

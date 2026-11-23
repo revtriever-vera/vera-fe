@@ -49,19 +49,24 @@ describe('grupo Gastos', () => {
 });
 
 describe('grupo Carteira', () => {
-    it('tem os quatro itens, na ordem do menu', () => {
+    it('tem os cinco itens, com Objetivos depois de Onde aportar', () => {
         const portfolio: readonly NavItem[] = APP_NAV_ITEMS.filter((item: NavItem): boolean => item.group === 'portfolio');
 
         expect(portfolio.map((item: NavItem): string => item.to)).toEqual([
             '/portfolio',
             '/portfolio/targets',
             '/portfolio/contribution',
+            '/portfolio/goals',
             '/portfolio/assets'
         ]);
     });
 
-    it('o menu tem só os dois grupos e sete itens', () => {
+    it('marca Objetivos em /portfolio/goals', () => {
+        expect(activeNavId('/portfolio/goals', APP_NAV_ITEMS)).toBe('portfolio-goals');
+    });
+
+    it('o menu tem só os dois grupos e oito itens', () => {
         expect(new Set(APP_NAV_ITEMS.map((item: NavItem) => item.group))).toEqual(new Set(['portfolio', 'spending']));
-        expect(APP_NAV_ITEMS).toHaveLength(7);
+        expect(APP_NAV_ITEMS).toHaveLength(8);
     });
 });

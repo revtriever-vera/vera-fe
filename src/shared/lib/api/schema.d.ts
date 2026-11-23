@@ -1548,6 +1548,53 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/goals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the goals with balance, what is missing and the monthly amount
+         */
+        get: operations["GoalsController_list"];
+        put?: never;
+        /**
+         * Create a goal
+         */
+        post: operations["GoalsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/goals/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read a goal
+         */
+        get: operations["GoalsController_get"];
+        put?: never;
+        post?: never;
+        /**
+         * Remove a goal
+         */
+        delete: operations["GoalsController_remove"];
+        options?: never;
+        head?: never;
+        /**
+         * Edit a goal
+         */
+        patch: operations["GoalsController_update"];
+        trace?: never;
+    };
     "/spending/settings": {
         parameters: {
             query?: never;
@@ -2004,6 +2051,729 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    GoalsController_list: {
+        parameters: {
+            query?: {
+                /** @description Holder filter: `any` (default) is everything, `all` is only what belongs to the whole account ("Conta toda"), or the id of a person to see only what is theirs */
+                holder?: ("any" | "all") | string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Goals and totals */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                items: {
+                    id: string;
+                    kind: "emergency_reserve" | "travel" | "home_down_payment" | "other";
+                    name: string;
+                    /** @description Amount to reach, BRL cents */
+                    targetMinor: number;
+                    /** @description Target date, YYYY-MM-DD */
+                    targetDate: string;
+                    /** @description Holder of the goal; null is the whole account */
+                    holderUserId: string | null;
+                    /** @description Money outside the portfolio, BRL cents */
+                    manualMinor: number;
+                    /** @description When the manual value last changed */
+                    manualUpdatedAt: string | null;
+                    /** @description Manual value plus the linked part of each holding, BRL cents */
+                    balanceMinor: number;
+                    /** @description What is missing to reach the target, never negative */
+                    remainingMinor: number;
+                    /** @description Remaining divided by the calendar months left (current month not counted), rounded up */
+                    monthlyMinor: number;
+                    /** @description Calendar months from the current one to the one of the target date, at least 1 */
+                    monthsRemaining: number;
+                    /** @description `done`, `overdue` (date passed), `behind` (below the reference plan) or `on_track` */
+                    status: "done" | "overdue" | "behind" | "on_track";
+                    /** @description Balance the reference plan expects for the current month */
+                    expectedMinor: number;
+                    /** @description Monthly amount of the reference plan */
+                    planMonthlyMinor: number;
+                    /** @description Change since the start of the month; null when the start of month is unknown */
+                    monthDeltaMinor: number | null;
+                    /** @description How many linked holdings were removed from the portfolio */
+                    removedHoldings: number;
+                    holdings: {
+                        kind: "position" | "fixed_income";
+                        holdingId: string;
+                        /** @description Linked part, in basis points */
+                        shareBps: number;
+                        /** @description True when the holding is no longer in the portfolio; it adds nothing to the balance */
+                        removed: boolean;
+                        /** @description Symbol of the asset; null for fixed income or a removed holding */
+                        symbol: string | null;
+                        /** @description Name of the holding; null when it was removed */
+                        name: string | null;
+                        /** @description Part of the holding that counts for the goal today, in BRL cents; null when removed */
+                        valueMinor: number | null;
+                    }[];
+                    createdAt: string;
+                    updatedAt: string;
+                }[];
+                totals: {
+                    count: number;
+                    /** @description Sum of the monthly amount of the goals not yet done, BRL cents */
+                    monthlyNeededMinor: number;
+                    onTrackCount: number;
+                    /** @description Goals `behind` or `overdue` */
+                    behindCount: number;
+                    doneCount: number;
+                };
+            };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    GoalsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+            /** @description Template of the goal */
+            kind: "emergency_reserve" | "travel" | "home_down_payment" | "other";
+            /** @description Name of the goal, up to 60 characters */
+            name: string;
+            /** @description Amount to reach, in BRL cents (positive integer) */
+            targetMinor: number;
+            /** @description Target date, YYYY-MM-DD, a calendar date without time zone. Must be after today in the company time zone */
+            targetDate: string;
+            /** @description Holder of the goal: id of an active person of the account; null is the whole account ("Conta toda") */
+            holderUserId?: string | null;
+            /** @description Money kept outside the portfolio for this goal, in BRL cents (0 or more) */
+            manualMinor?: number;
+            /** @description Holdings linked to the goal. The sum of the shares of one holding across all goals is at most 10000 bps */
+            holdings: {
+                /** @description `position` (asset of the portfolio) or `fixed_income` (fixed income title) */
+                kind: "position" | "fixed_income";
+                /** @description Id of the position or of the fixed income title */
+                holdingId: string;
+                /** @description Part of the holding that counts for this goal, in basis points (10000 = 100%) */
+                shareBps: number;
+            }[];
+        };
+            };
+        };
+        responses: {
+            /** @description Goal created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                id: string;
+                kind: "emergency_reserve" | "travel" | "home_down_payment" | "other";
+                name: string;
+                /** @description Amount to reach, BRL cents */
+                targetMinor: number;
+                /** @description Target date, YYYY-MM-DD */
+                targetDate: string;
+                /** @description Holder of the goal; null is the whole account */
+                holderUserId: string | null;
+                /** @description Money outside the portfolio, BRL cents */
+                manualMinor: number;
+                /** @description When the manual value last changed */
+                manualUpdatedAt: string | null;
+                /** @description Manual value plus the linked part of each holding, BRL cents */
+                balanceMinor: number;
+                /** @description What is missing to reach the target, never negative */
+                remainingMinor: number;
+                /** @description Remaining divided by the calendar months left (current month not counted), rounded up */
+                monthlyMinor: number;
+                /** @description Calendar months from the current one to the one of the target date, at least 1 */
+                monthsRemaining: number;
+                /** @description `done`, `overdue` (date passed), `behind` (below the reference plan) or `on_track` */
+                status: "done" | "overdue" | "behind" | "on_track";
+                /** @description Balance the reference plan expects for the current month */
+                expectedMinor: number;
+                /** @description Monthly amount of the reference plan */
+                planMonthlyMinor: number;
+                /** @description Change since the start of the month; null when the start of month is unknown */
+                monthDeltaMinor: number | null;
+                /** @description How many linked holdings were removed from the portfolio */
+                removedHoldings: number;
+                holdings: {
+                    kind: "position" | "fixed_income";
+                    holdingId: string;
+                    /** @description Linked part, in basis points */
+                    shareBps: number;
+                    /** @description True when the holding is no longer in the portfolio; it adds nothing to the balance */
+                    removed: boolean;
+                    /** @description Symbol of the asset; null for fixed income or a removed holding */
+                    symbol: string | null;
+                    /** @description Name of the holding; null when it was removed */
+                    name: string | null;
+                    /** @description Part of the holding that counts for the goal today, in BRL cents; null when removed */
+                    valueMinor: number | null;
+                }[];
+                createdAt: string;
+                updatedAt: string;
+            };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description A linked holding is not in the portfolio (goals.holding_not_found) or the holder is not a person of the account */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The shares of a holding would pass 100% (goals.holding_overallocated, meta.freeBps) or the holder already has an emergency reserve (goals.emergency_reserve_exists) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The date is not after today (goals.target_date_in_past) or the limit was reached (goals.limit_reached) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    GoalsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Goal id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Goal */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                id: string;
+                kind: "emergency_reserve" | "travel" | "home_down_payment" | "other";
+                name: string;
+                /** @description Amount to reach, BRL cents */
+                targetMinor: number;
+                /** @description Target date, YYYY-MM-DD */
+                targetDate: string;
+                /** @description Holder of the goal; null is the whole account */
+                holderUserId: string | null;
+                /** @description Money outside the portfolio, BRL cents */
+                manualMinor: number;
+                /** @description When the manual value last changed */
+                manualUpdatedAt: string | null;
+                /** @description Manual value plus the linked part of each holding, BRL cents */
+                balanceMinor: number;
+                /** @description What is missing to reach the target, never negative */
+                remainingMinor: number;
+                /** @description Remaining divided by the calendar months left (current month not counted), rounded up */
+                monthlyMinor: number;
+                /** @description Calendar months from the current one to the one of the target date, at least 1 */
+                monthsRemaining: number;
+                /** @description `done`, `overdue` (date passed), `behind` (below the reference plan) or `on_track` */
+                status: "done" | "overdue" | "behind" | "on_track";
+                /** @description Balance the reference plan expects for the current month */
+                expectedMinor: number;
+                /** @description Monthly amount of the reference plan */
+                planMonthlyMinor: number;
+                /** @description Change since the start of the month; null when the start of month is unknown */
+                monthDeltaMinor: number | null;
+                /** @description How many linked holdings were removed from the portfolio */
+                removedHoldings: number;
+                holdings: {
+                    kind: "position" | "fixed_income";
+                    holdingId: string;
+                    /** @description Linked part, in basis points */
+                    shareBps: number;
+                    /** @description True when the holding is no longer in the portfolio; it adds nothing to the balance */
+                    removed: boolean;
+                    /** @description Symbol of the asset; null for fixed income or a removed holding */
+                    symbol: string | null;
+                    /** @description Name of the holding; null when it was removed */
+                    name: string | null;
+                    /** @description Part of the holding that counts for the goal today, in BRL cents; null when removed */
+                    valueMinor: number | null;
+                }[];
+                createdAt: string;
+                updatedAt: string;
+            };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The goal does not exist in this company (goals.goal_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    GoalsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Goal id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+            /** @description Name of the goal, up to 60 characters */
+            name?: string;
+            /** @description Amount to reach, in BRL cents (positive integer) */
+            targetMinor?: number;
+            /** @description Target date, YYYY-MM-DD */
+            targetDate?: string;
+            /** @description Holder of the goal: id of an active person of the account; null is the whole account ("Conta toda") */
+            holderUserId?: string | null;
+            /** @description Money kept outside the portfolio for this goal, in BRL cents (0 or more) */
+            manualMinor?: number;
+            /** @description When present, replaces every link of the goal */
+            holdings?: {
+                /** @description `position` (asset of the portfolio) or `fixed_income` (fixed income title) */
+                kind: "position" | "fixed_income";
+                /** @description Id of the position or of the fixed income title */
+                holdingId: string;
+                /** @description Part of the holding that counts for this goal, in basis points (10000 = 100%) */
+                shareBps: number;
+            }[];
+        };
+            };
+        };
+        responses: {
+            /** @description Goal after the change */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                id: string;
+                kind: "emergency_reserve" | "travel" | "home_down_payment" | "other";
+                name: string;
+                /** @description Amount to reach, BRL cents */
+                targetMinor: number;
+                /** @description Target date, YYYY-MM-DD */
+                targetDate: string;
+                /** @description Holder of the goal; null is the whole account */
+                holderUserId: string | null;
+                /** @description Money outside the portfolio, BRL cents */
+                manualMinor: number;
+                /** @description When the manual value last changed */
+                manualUpdatedAt: string | null;
+                /** @description Manual value plus the linked part of each holding, BRL cents */
+                balanceMinor: number;
+                /** @description What is missing to reach the target, never negative */
+                remainingMinor: number;
+                /** @description Remaining divided by the calendar months left (current month not counted), rounded up */
+                monthlyMinor: number;
+                /** @description Calendar months from the current one to the one of the target date, at least 1 */
+                monthsRemaining: number;
+                /** @description `done`, `overdue` (date passed), `behind` (below the reference plan) or `on_track` */
+                status: "done" | "overdue" | "behind" | "on_track";
+                /** @description Balance the reference plan expects for the current month */
+                expectedMinor: number;
+                /** @description Monthly amount of the reference plan */
+                planMonthlyMinor: number;
+                /** @description Change since the start of the month; null when the start of month is unknown */
+                monthDeltaMinor: number | null;
+                /** @description How many linked holdings were removed from the portfolio */
+                removedHoldings: number;
+                holdings: {
+                    kind: "position" | "fixed_income";
+                    holdingId: string;
+                    /** @description Linked part, in basis points */
+                    shareBps: number;
+                    /** @description True when the holding is no longer in the portfolio; it adds nothing to the balance */
+                    removed: boolean;
+                    /** @description Symbol of the asset; null for fixed income or a removed holding */
+                    symbol: string | null;
+                    /** @description Name of the holding; null when it was removed */
+                    name: string | null;
+                    /** @description Part of the holding that counts for the goal today, in BRL cents; null when removed */
+                    valueMinor: number | null;
+                }[];
+                createdAt: string;
+                updatedAt: string;
+            };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The goal does not exist in this company (goals.goal_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The shares of a holding would pass 100% (goals.holding_overallocated) or the new holder already has a reserve */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The new date is not after today (goals.target_date_in_past) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    GoalsController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Goal id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Goal removed */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The goal does not exist in this company (goals.goal_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
     AiConsentController_get: {
         parameters: {
             query?: never;
