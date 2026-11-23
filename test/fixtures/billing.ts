@@ -72,6 +72,8 @@ export function billingSubscription(overrides: Partial<BillingSubscription> = {}
         graceEndsAt: null,
         withdrawalEndsAt: null,
         canResume: false,
+        discount: null,
+        nextChargeAmountMinor: 1490,
         ...overrides
     };
 }

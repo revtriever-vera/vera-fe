@@ -114,7 +114,8 @@
         "pixNote": "the Pix charge arrives by e-mail",
         "none": "None. Premium lasts until {{date}}; then the account goes back to Free without losing anything.",
         "noneNoDate": "None. After the paid period, the account goes back to Free without losing anything.",
-        "trialing": "{{date}}, at the end of the trial."
+        "trialing": "{{date}}, at the end of the trial · {{price}}",
+        "discount": "{{percent}}% off until {{date}}"
       },
       "method": {
         "title": "Payment method",

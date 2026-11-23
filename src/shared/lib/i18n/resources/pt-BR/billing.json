@@ -114,7 +114,8 @@
         "pixNote": "a cobrança Pix chega por e-mail",
         "none": "Nenhuma. O Premium vale até {{date}}; depois a conta volta ao Free sem perder nada.",
         "noneNoDate": "Nenhuma. Depois do período pago, a conta volta ao Free sem perder nada.",
-        "trialing": "{{date}}, no fim do teste."
+        "trialing": "{{date}}, no fim do teste · {{price}}",
+        "discount": "{{percent}}% de desconto até {{date}}"
       },
       "method": {
         "title": "Forma de pagamento",

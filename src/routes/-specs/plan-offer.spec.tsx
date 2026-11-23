@@ -107,17 +107,24 @@ describe('aba Plano: teste', () => {
         expect(await screen.findByText('Nada é cobrado hoje. Em 1 de dezembro de 2026 cobramos R$ 7,45.')).toBeInTheDocument();
     });
 
-    it('com cartão em teste: diz quando a primeira cobrança acontece, sem inventar o valor', async () => {
+    it('com cartão em teste: diz quando e quanto: valor e desconto vêm da API', async () => {
         mockMe(
             billingMe({
                 trial: { kind: 'card', endsAt: '2026-12-01T12:00:00.000Z', daysLeft: 8 },
-                subscription: billingSubscription({ status: 'trialing', nextChargeAt: '2026-12-01T12:00:00.000Z' })
+                subscription: billingSubscription({
+                    status: 'trialing',
+                    nextChargeAt: '2026-12-01T12:00:00.000Z',
+                    nextChargeAmountMinor: 745,
+                    discount: { percent: 50, cycle: 1, endsAt: '2027-03-01T12:00:00.000Z' }
+                })
             })
         );
         await openPlan();
 
         expect(await screen.findByText('Em teste')).toBeInTheDocument();
         expect(screen.getByText('Nada é cobrado até 1 de dezembro de 2026. Nesse dia cobramos no cartão salvo.')).toBeInTheDocument();
-        expect(screen.getByText('1 de dezembro de 2026, no fim do teste.')).toBeInTheDocument();
+        expect(
+            screen.getByText(/1 de dezembro de 2026, no fim do teste · R\$\s7,45 · 50% de desconto até 1 de março de 2027/)
+        ).toBeInTheDocument();
     });
 });

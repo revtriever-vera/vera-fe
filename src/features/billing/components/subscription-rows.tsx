@@ -5,7 +5,8 @@ import type { BillingState } from '@/shared/lib/billing/billing-context';
 import { useBilling } from '@/shared/lib/billing/use-billing';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { Button, buttonVariants } from '@/shared/ui/button';
-import { longDate, priceText } from '../lib/billing-format';
+import { formatCurrency } from '@/shared/lib/format/currency';
+import { longDate } from '../lib/billing-format';
 import { useCardSwap, type CardSwap } from '../lib/use-card-swap';
 import type { BillingMe, BillingSubscription } from '../types';
 import { CardRedirectDialog } from './checkout-card';
@@ -51,21 +52,37 @@ export function PeopleRow({ count }: { readonly count: number }): ReactElement |
     );
 }
 
+function nextPriceOf(me: BillingMe, subscription: BillingSubscription, locale: SupportedLocale): string {
+    return formatCurrency(subscription.nextChargeAmountMinor ?? me.priceCents ?? 0, me.currency, locale);
+}
+
+function discountNote(t: Translate, subscription: BillingSubscription, locale: SupportedLocale): string | null {
+    return subscription.discount === null
+        ? null
+        : t('planTab.subscription.next.discount', {
+              percent: subscription.discount.percent,
+              date: longDate(subscription.discount.endsAt, locale)
+          });
+}
+
 export function nextChargeText(t: Translate, me: BillingMe, subscription: BillingSubscription, locale: SupportedLocale): string {
     if (subscription.status === 'canceled') {
         return subscription.paidThrough === null
             ? t('planTab.subscription.next.noneNoDate')
             : t('planTab.subscription.next.none', { date: longDate(subscription.paidThrough, locale) });
     }
+    const price: string = nextPriceOf(me, subscription, locale);
+    const discount: string | null = discountNote(t, subscription, locale);
+    const withDiscount = (line: string): string => (discount === null ? line : `${line} · ${discount}`);
     if (subscription.status === 'trialing' && subscription.nextChargeAt !== null) {
-        return t('planTab.subscription.next.trialing', { date: longDate(subscription.nextChargeAt, locale) });
+        return withDiscount(t('planTab.subscription.next.trialing', { date: longDate(subscription.nextChargeAt, locale), price }));
     }
-    const price: string = priceText(me, locale);
     const line: string =
         subscription.nextChargeAt === null
             ? t('planTab.subscription.next.lineNoDate', { price })
             : t('planTab.subscription.next.line', { date: longDate(subscription.nextChargeAt, locale), price });
-    return subscription.method === 'pix' ? `${line} · ${t('planTab.subscription.next.pixNote')}` : line;
+    const withNote: string = withDiscount(line);
+    return subscription.method === 'pix' ? `${withNote} · ${t('planTab.subscription.next.pixNote')}` : withNote;
 }
 
 function methodText(t: Translate, subscription: BillingSubscription): string {
