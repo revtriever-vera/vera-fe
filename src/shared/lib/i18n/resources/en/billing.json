@@ -41,10 +41,194 @@
     "premiumRequired": "This feature is part of the Premium plan.",
     "featureDisabled": "This feature is not turned on in this installation.",
     "capReached": "The month's quota is used up. It comes back on {{date}}.",
-    "capReachedNoDate": "The month's quota is used up. It comes back when the month turns."
+    "capReachedNoDate": "The month's quota is used up. It comes back when the month turns.",
+    "alreadySubscribed": "This account is already Premium.",
+    "notAvailable": "Plans do not exist on this installation.",
+    "notResumable": "This subscription can no longer be resumed. Subscribe again.",
+    "engineRejected": "Revtriever refused the operation. Try again or use another payment method.",
+    "providerUnavailable": "The payment page is down. Try again in a few minutes.",
+    "invoiceNotFound": "That invoice is no longer open.",
+    "tooManyAttempts": "Too many attempts. Try again in an hour.",
+    "action": "Could not finish. Try again."
   },
   "plan": {
     "free": "Free",
     "premium": "Premium"
+  },
+  "planTab": {
+    "loading": "Loading the plan",
+    "loadFailed": "Could not load your plan. Try again.",
+    "ownerOnly": "Only the account Owner changes the plan.",
+    "free": {
+      "title": "Your plan",
+      "description": "Free: full portfolio and spending, no cost and no time limit.",
+      "chip": "Free",
+      "openInvoice": "There is an open charge.",
+      "openInvoicePay": "Pay"
+    },
+    "cards": {
+      "freeText": "Everything Vera has today.",
+      "current": "Current plan",
+      "premiumText": "Everything in Free, plus written summaries and Vera on WhatsApp with meetings and reminders.",
+      "subscribe": "Subscribe to Premium",
+      "hint": "Pix or card · cancel anytime, no fee",
+      "perMonth": "/month",
+      "freeLabel": "Free",
+      "premiumLabel": "Premium"
+    },
+    "compare": {
+      "title": "What changes",
+      "label": "Free and Premium side by side",
+      "feature": "Feature",
+      "included": "Included",
+      "notIncluded": "Not included",
+      "rows": {
+        "wallet": "Portfolio, target portfolio and where to invest",
+        "spending": "Spending through Open Finance, categories and rules",
+        "cuts": "Where to cut",
+        "export": "Export portfolio and transactions",
+        "summaries": "Written summaries of the month, the cuts and the portfolio",
+        "whatsapp": "Vera on WhatsApp: questions about portfolio and spending",
+        "calendar": "Google Calendar meetings and WhatsApp reminders"
+      },
+      "note": "Premium includes a monthly usage quota for the summaries and WhatsApp. When it runs out, those two features pause until the month turns; there is no extra charge."
+    },
+    "subscription": {
+      "title": "Subscription",
+      "description": "{{price}}/month · subscriber since {{date}}",
+      "descriptionNoDate": "{{price}}/month",
+      "chipActive": "Premium active",
+      "chipCanceled": "canceled",
+      "chipPastDue": "overdue",
+      "people": {
+        "title": "People",
+        "text": "Covers the {{count}} people on the account.",
+        "action": "See people"
+      },
+      "next": {
+        "title": "Next charge",
+        "line": "{{date}} · {{price}}",
+        "lineNoDate": "{{price}}",
+        "pixNote": "the Pix charge arrives by e-mail",
+        "none": "None. Premium lasts until {{date}}; then the account goes back to Free without losing anything.",
+        "noneNoDate": "None. After the paid period, the account goes back to Free without losing anything."
+      },
+      "method": {
+        "title": "Payment method",
+        "pix": "Pix, one charge per month",
+        "card": "{{brand}} card ending in {{last4}}, renews automatically",
+        "cardNoDetails": "Card, renews automatically",
+        "useCard": "Use card",
+        "changeCard": "Change card",
+        "pay": "Pay",
+        "openInvoice": "There is an open charge."
+      },
+      "trial": {
+        "title": "Trial without a card",
+        "text": "{{days}} days left. The trial ends on {{date}}."
+      },
+      "pastDue": "We could not charge you. Your Premium continues until {{date}}.",
+      "pastDueNoDate": "We could not charge you. Your Premium continues for now.",
+      "cancel": "Cancel subscription",
+      "resume": "Resume subscription",
+      "resuming": "Resuming"
+    },
+    "history": {
+      "title": "History",
+      "label": "Charge history",
+      "loading": "Loading the history",
+      "empty": "No charges yet.",
+      "failed": "Could not load the history. Try again.",
+      "date": "Date",
+      "amount": "Amount",
+      "method": "Method",
+      "status": "Status",
+      "view": "View invoice",
+      "opening": "Opening",
+      "methods": {
+        "card": "Card",
+        "pix": "Pix"
+      },
+      "statuses": {
+        "issued": "Open",
+        "overdue": "Overdue",
+        "paid": "Paid"
+      }
+    },
+    "usage": {
+      "title": "Usage this month",
+      "description": "Only the written summaries and WhatsApp use the quota."
+    }
+  },
+  "checkout": {
+    "title": "Subscribe to Premium",
+    "method": "Payment method",
+    "pix": {
+      "generating": "Creating the charge…",
+      "pay": "Pay with Pix",
+      "instruction": "On the payment page, choose Pix and scan the QR Code in your bank app.",
+      "slow": "The charge is taking a while. Close this window and open it again in a moment.",
+      "reopen": "Open the payment page again"
+    },
+    "card": "Credit card",
+    "pixHint": "One charge per month, paid on the Revtriever page.",
+    "cardHint": "Renews automatically every month.",
+    "processed": "Payment processed by Revtriever.",
+    "cardPrivacy": "Vera does not see or store the card data.",
+    "pixPrivacy": "Vera only receives the confirmation.",
+    "summary": {
+      "label": "Vera Premium",
+      "perMonth": "per month",
+      "quota": "Monthly usage quota included",
+      "cancelNote": "Cancel anytime, no fee: Premium lasts until the end of the paid period and the account goes back to Free without losing anything."
+    },
+    "subscribeCard": "Subscribe for {{price}}/month",
+    "subscribePix": "Subscribe with Pix",
+    "subscribing": "Preparing",
+    "cancel": "Cancel",
+    "redirect": {
+      "title": "Go to the payment page?",
+      "text": "You are going to the secure payment page. Vera does not see or store the card data.",
+      "confirm": "Go to payment",
+      "cancel": "Back"
+    },
+    "wait": {
+      "text": "Confirming the payment…",
+      "slow": "We have not received the confirmation yet. If you already paid, it arrives in a few minutes and Premium opens as soon as it does.",
+      "close": "Close"
+    },
+    "done": {
+      "title": "Premium active",
+      "descriptionPix": "Payment confirmed by Pix.",
+      "descriptionCard": "Payment confirmed on the card.",
+      "intro": "Where to start. Each feature asks for its own permission before turning on.",
+      "summary": "See the month summary",
+      "summaryText": "A short text in the Month summary.",
+      "summaryAction": "Open",
+      "whatsapp": "Link WhatsApp",
+      "whatsappText": "With a verification code.",
+      "whatsappAction": "Link",
+      "later": "Do it later"
+    },
+    "cardCanceled": "Card not saved. Nothing was charged.",
+    "cardUpdated": "Card updated."
+  },
+  "cancelDialog": {
+    "title": "Cancel Premium?",
+    "intro": "There will be no new charge. Premium stays active until {{date}}. After that:",
+    "introNoDate": "There will be no new charge. Premium stays active until the end of the paid period. After that:",
+    "item1": "The written summaries and Vera on WhatsApp stop; the number and Google Calendar are disconnected.",
+    "item2": "Portfolio, goals, spending and rules stay as they are, on Free.",
+    "item3": "You can subscribe again anytime.",
+    "withdrawal": "You are within the 7 days: Premium ends now and the amount is returned to you within {{days}} business days.",
+    "confirm": "Cancel subscription",
+    "keep": "Keep Premium"
+  },
+  "toasts": {
+    "canceled": "Subscription canceled. Premium lasts until {{date}}.",
+    "canceledNoDate": "Subscription canceled. Premium lasts until the end of the paid period.",
+    "canceledNow": "Subscription canceled. Premium ended and the amount is returned to you.",
+    "resumed": "Subscription resumed. The next charge is on {{date}}.",
+    "resumedNoDate": "Subscription resumed."
   }
 }

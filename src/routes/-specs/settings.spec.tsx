@@ -94,14 +94,6 @@ describe('rota /settings', () => {
         expect(screen.getByRole('button', { name: 'Excluir conta' })).toBeInTheDocument();
     });
 
-    it('as abas ainda sem dono mostram o espaço reservado', async () => {
-        renderRouterAt('/settings/plan', { signedIn: true });
-
-        const region: HTMLElement = await screen.findByRole('region', { name: 'Plano e uso' });
-
-        expect(within(region).getByText('Esta seção chega em breve.')).toBeInTheDocument();
-    });
-
     it('Preferências mostra o idioma da interface', async () => {
         renderRouterAt('/settings/preferences', { signedIn: true });
 

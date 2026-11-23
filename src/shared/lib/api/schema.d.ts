@@ -4,22 +4,6 @@
  */
 
 export interface paths {
-    // MANUAL (vera#110): path ainda fora do documento da API; é o único enxerto à mão deste arquivo.
-    "/billing/invoices/{id}/payment-link": {
-        parameters: { query?: never; header?: never; path?: never; cookie?: never };
-        /**
-         * Payment page of an invoice
-         * @description Asked on click and never stored: only an open (issued or overdue) invoice of the signed-in company.
-         */
-        get: operations["BillingInvoicesController_paymentLink"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/health": {
         parameters: {
             query?: never;
@@ -479,7 +463,7 @@ export interface paths {
         put?: never;
         /**
          * Create a signup link
-         * @description Creates a link with a label, a validity, a redemption limit and an offer: a trial (none, with card or without card) and a discount scale by paid cycle. A `no_card` trial requires both a limit and a validity of at most 90 days. Records `signup_link.created` in the audit trail in the same transaction.
+         * @description Creates a link with a label, a validity, a redemption limit and an offer: a trial (none, with card or without card) a discount scale by paid cycle and the days the offer stays usable after a redemption (30 by default). A `no_card` trial requires both a limit and a validity of at most 90 days. Records `signup_link.created` in the audit trail in the same transaction.
          */
         post: operations["PlatformSignupLinksController_create"];
         delete?: never;
@@ -505,7 +489,11 @@ export interface paths {
         delete: operations["PlatformSignupLinksController_revoke"];
         options?: never;
         head?: never;
-        patch?: never;
+        /**
+         * Edit a signup link
+         * @description Changes the label, the trial, the discount scale, the redemption limit, the validity of the link and the days the offer stays usable after a redemption. Every field is optional; what is omitted stays. The merged offer goes through the same rules as the creation (a `no_card` trial requires a limit and a validity of at most 90 days). The change applies to new redemptions and to redeemed offers that were not applied yet and have not expired; a subscription that already recorded its scale keeps it, and a started no-card trial keeps its terms. Records `signup_link.updated` in the audit trail, with the offer before and after, in the same transaction; a request that changes nothing leaves no entry.
+         */
+        patch: operations["PlatformSignupLinksController_update"];
         trace?: never;
     };
     "/signup-links/{token}": {
@@ -539,7 +527,7 @@ export interface paths {
         put?: never;
         /**
          * Redeem a signup link in the signed-in account
-         * @description For an account that already exists: it must be Free, never have paid for Premium nor had a trial, and not have redeemed another link. A no-card trial opens Premium right away; a card trial and the discount scale start when the owner subscribes, within 30 days. Trial offers need an email verified by the sign-in provider and that never redeemed a trial before. Limited per IP per day.
+         * @description For an account that already exists: it must be Free, never have paid for Premium nor had a trial, and not have redeemed another link. A no-card trial opens Premium right away; a card trial and the discount scale start when the owner subscribes, within the validity set by the link (30 days by default). Trial offers need an email verified by the sign-in provider and that never redeemed a trial before. Limited per IP per day.
          */
         post: operations["BillingOfferController_redeem"];
         delete?: never;
@@ -877,7 +865,7 @@ export interface paths {
         };
         /**
          * The written summary of the month, of the savings cuts or of the portfolio
-         * @description Returns the stored text when the figures did not change (`cached`). When they changed, writes a new one, at most once per hour automatically: inside the hour it returns the stored text with `stale: true`. A savings goal already met gets a fixed text (`source: fixed`) with no model call and no permission. Needs the permission of the account for the model text. 204 when there is no data (the card does not appear).
+         * @description Returns the stored text when the figures did not change (`cached`). When they changed, writes a new one, at most once per hour automatically: inside the hour it returns the stored text with `stale: true`. With the monthly cap reached the stored text is still returned (`stale: true` when the figures changed, with `usage.state: paused`); only a new text is blocked (429).  A savings goal already met gets a fixed text (`source: fixed`) with no model call and no permission. Needs the permission of the account for the model text. 204 when there is no data (the card does not appear).
          */
         get: operations["SummariesController_get"];
         put?: never;
@@ -1551,6 +1539,46 @@ export interface paths {
          * @description The transaction goes to the exclusion list of the series and never comes back. The series is recalculated before the answer.
          */
         delete: operations["RecurringController_removeCharge"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/recurring/notice-before": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Series with the day-before e-mail turned on by the signed-in person
+         * @description The "Avisar antes" choice is personal: each person turns it on series by series, and it works for any role, including viewer.
+         */
+        get: operations["RecurringNoticesController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/spending/recurring/{id}/notice-before": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Turn the day-before e-mail of a series on or off for the signed-in person
+         * @description At 09:00 in the company time zone on the day before each charge, the person gets an e-mail with the merchant and the amount. Only confirmed series can be turned on. Turning off a series that was never on changes nothing. Idempotent.
+         */
+        put: operations["RecurringNoticesController_update"];
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -2304,6 +2332,146 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/billing/subscription": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Subscribe to Premium
+         * @description Owner only. Creates the subscription in two phases (a pending row, then the billing provider) and answers the next step: `card_capture` with the page where the card is saved, or `pay_invoice` for Pix. Refused when the plan is already Premium or the installation is self-hosted. With a redeemed card-trial offer the subscription is card only and the first charge waits for the end of the trial; Premium opens when the saved card is confirmed. Limited to 10 per hour per company.
+         */
+        post: operations["SubscriptionController_subscribe"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/billing/subscription/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cancel the subscription
+         * @description Owner only. Premium goes on until the end of the paid cycle. Within the withdrawal window of the first payment Premium ends at once and a manual refund request is recorded (the API does not refund). Canceled during the card trial, Premium goes on until the trial ends with no charge and no refund request.
+         */
+        post: operations["SubscriptionController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/billing/subscription/resume": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Resume a canceled subscription
+         * @description Owner only. Only while the paid cycle of a canceled subscription (or the card trial) is still running: creates a new subscription with the same method and the first charge on the day the paid cycle or the trial ends.
+         */
+        post: operations["SubscriptionController_resume"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/billing/payment-method/capture-session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Open a new card capture page
+         * @description Owner only. Opens a new session to save a card, replacing the current one when it is saved. Limited to 5 per hour per company.
+         */
+        post: operations["PaymentMethodController_captureSession"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/billing/payment-method/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirm the card was saved
+         * @description Owner only. Called when the person returns from the card page: reads the saved card (brand and last four digits) and asks the provider to price again the invoices that waited for the card.
+         */
+        post: operations["PaymentMethodController_confirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/billing/invoices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Invoice history
+         * @description Mirror of the invoices of the signed-in company, newest first, 12 per page.
+         */
+        get: operations["InvoicesController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/billing/invoices/{id}/payment-link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Link to pay an invoice
+         * @description Asks the billing provider for the payment page of an invoice of the signed-in company, at the moment of the click. The link is never stored or logged. For a paid invoice it answers only the gateway receipt (`kind: gateway`) when the provider has one.
+         */
+        get: operations["InvoicesController_paymentLink"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/whatsapp/webhook": {
         parameters: {
             query?: never;
@@ -2476,46 +2644,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/spending/recurring/notice-before": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Series with the day-before e-mail turned on by the signed-in person
-         * @description The "Avisar antes" choice is personal: each person turns it on series by series, and it works for any role, including viewer.
-         */
-        get: operations["RecurringNoticesController_list"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/spending/recurring/{id}/notice-before": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /**
-         * Turn the day-before e-mail of a series on or off for the signed-in person
-         * @description At 09:00 in the company time zone on the day before each charge, the person gets an e-mail with the merchant and the amount. Only confirmed series can be turned on. Turning off a series that was never on changes nothing. Idempotent.
-         */
-        put: operations["RecurringNoticesController_update"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/notifications/preferences": {
         parameters: {
             query?: never;
@@ -2572,24 +2700,6 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    // MANUAL (vera#110): ver o path "/billing/invoices/{id}/payment-link".
-    BillingInvoicesController_paymentLink: {
-        parameters: { query?: never; header?: never; path: { id: string }; cookie?: never };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: { [name: string]: unknown };
-                content: {
-                    "application/json": {
-                        /** @description Payment page of the invoice */
-                        url: string;
-                        /** @description Kind of page the url opens */
-                        kind: string;
-                    };
-                };
-            };
-        };
-    };
     HealthController_check: {
         parameters: {
             query?: never;
@@ -5376,6 +5486,8 @@ export interface operations {
                              * @description When the link stops accepting redemptions; null never expires
                              */
                             expiresAt: string | null;
+                            /** @description Days the offer stays usable after a redemption */
+                            offerValidityDays: number;
                             /**
                              * @description Whether the link still accepts redemptions
                              * @enum {string}
@@ -5520,6 +5632,11 @@ export interface operations {
                      * @default null
                      */
                     expiresAt?: string | null;
+                    /**
+                     * @description Days the offer stays usable after an account redeems the link (1 to 365)
+                     * @default 30
+                     */
+                    offerValidityDays?: number;
                 };
             };
         };
@@ -5570,6 +5687,8 @@ export interface operations {
                          * @description When the link stops accepting redemptions; null never expires
                          */
                         expiresAt: string | null;
+                        /** @description Days the offer stays usable after a redemption */
+                        offerValidityDays: number;
                         /**
                          * @description Whether the link still accepts redemptions
                          * @enum {string}
@@ -5761,6 +5880,247 @@ export interface operations {
             };
             /** @description Self-hosted deployment (identity.platform_disabled) or no link with this id (signup_links.not_found) */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PlatformSignupLinksController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Signup link id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Internal name of the link, for the operators only */
+                    label?: string;
+                    /** @description The trial part of the offer; omit to keep it */
+                    trial?: {
+                        /**
+                         * @description `none`: no trial. `card`: trial with the card saved and the first charge at the end. `no_card`: Premium for N days without a card; the account goes back to Free if it does not subscribe
+                         * @enum {string}
+                         */
+                        kind: "none" | "card" | "no_card";
+                        /** @description Trial length in days (1 to 60); null when there is no trial */
+                        days: number | null;
+                    };
+                    /** @description Discount scale by paid cycle, 0 to 20 rules; the first rule that matches the cycle wins */
+                    rules?: {
+                        /** @description Discount on the Premium price, from 1 to 90 percent */
+                        percent: number;
+                        /** @description First paid cycle the rule covers (the first paid cycle is 1; trial days do not count) */
+                        fromCycle: number;
+                        /** @description Last paid cycle the rule covers, inclusive */
+                        toCycle: number;
+                    }[];
+                    /** @description How many accounts can redeem the link; null is unlimited; omit to keep it */
+                    maxUses?: number | null;
+                    /**
+                     * Format: date-time
+                     * @description When the link stops accepting new redemptions; null never expires; omit to keep it
+                     */
+                    expiresAt?: string | null;
+                    /** @description Days the offer stays usable after an account redeems the link (1 to 365) */
+                    offerValidityDays?: number;
+                };
+            };
+        };
+        responses: {
+            /** @description The link after the change */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Link id
+                         */
+                        id: string;
+                        /** @description Token that goes in the signup URL */
+                        token: string;
+                        /**
+                         * Format: uri
+                         * @description Signup URL to share
+                         */
+                        url: string;
+                        /** @description Internal name of the link */
+                        label: string;
+                        trial: {
+                            /**
+                             * @description `none`: no trial. `card`: trial with the card saved and the first charge at the end. `no_card`: Premium for N days without a card; the account goes back to Free if it does not subscribe
+                             * @enum {string}
+                             */
+                            kind: "none" | "card" | "no_card";
+                            /** @description Trial length in days (1 to 60); null when there is no trial */
+                            days: number | null;
+                        };
+                        /** @description Discount scale by paid cycle */
+                        rules: {
+                            /** @description Discount on the Premium price, from 1 to 90 percent */
+                            percent: number;
+                            /** @description First paid cycle the rule covers (the first paid cycle is 1; trial days do not count) */
+                            fromCycle: number;
+                            /** @description Last paid cycle the rule covers, inclusive */
+                            toCycle: number;
+                        }[];
+                        /** @description Redemption limit; null is unlimited */
+                        maxUses: number | null;
+                        /**
+                         * Format: date-time
+                         * @description When the link stops accepting redemptions; null never expires
+                         */
+                        expiresAt: string | null;
+                        /** @description Days the offer stays usable after a redemption */
+                        offerValidityDays: number;
+                        /**
+                         * @description Whether the link still accepts redemptions
+                         * @enum {string}
+                         */
+                        status: "active" | "revoked" | "expired" | "exhausted";
+                        /** @description Accounts that redeemed the link (uses) */
+                        redemptionCount: number;
+                        /** @description Redemptions that started a trial */
+                        trialCount: number;
+                        /** @description Redemptions that ended up subscribing */
+                        subscriptionCount: number;
+                        /**
+                         * Format: date-time
+                         * @description When an operator revoked the link
+                         */
+                        revokedAt: string | null;
+                        /**
+                         * Format: date-time
+                         * @description When the link was created
+                         */
+                        createdAt: string;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Not a person of the platform company (identity.platform_only) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Self-hosted deployment (identity.platform_disabled) or no link with this id (signup_links.not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The resulting offer breaks a rule of the platform (signup_links.invalid_offer) */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -15314,6 +15674,160 @@ export interface operations {
             };
         };
     };
+    RecurringNoticesController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Ids of the series with the day-before e-mail on */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Series for which the signed-in person turned the day-before e-mail on */
+                        seriesIds: string[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    RecurringNoticesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Series id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description true to receive an e-mail the day before each charge of the series, false to stop */
+                    enabled: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description The choice after the change */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        seriesId: string;
+                        /** @description Whether the signed-in person gets the day-before e-mail for this series */
+                        enabled: boolean;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The series does not exist or is not confirmed (recurring_notices.series_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
     PositionsController_create: {
         parameters: {
             query?: never;
@@ -21522,10 +22036,10 @@ export interface operations {
                         /** @description Subscription summary; null when there is none */
                         subscription: {
                             /**
-                             * @description Subscription status
+                             * @description Subscription status; `trialing` while the card trial runs and nothing was charged yet
                              * @enum {string}
                              */
-                            status: "pending" | "active" | "past_due" | "canceled" | "expired";
+                            status: "pending" | "active" | "trialing" | "past_due" | "canceled" | "expired";
                             /**
                              * @description Chosen payment method
                              * @enum {string}
@@ -21565,19 +22079,19 @@ export interface operations {
                             /** @description Due date (ISO 8601) */
                             dueDate: string;
                         } | null;
-                        /** @description Free Premium trial in course; null when there is none */
+                        /** @description Premium trial in course; null when there is none */
                         trial: {
                             /**
-                             * @description Trial opened without a card
+                             * @description `no_card`: opened without a card; `card`: the card is saved and the first charge waits for the end of the trial
                              * @enum {string}
                              */
-                            kind: "no_card";
-                            /** @description When the trial ends (ISO 8601) */
+                            kind: "no_card" | "card";
+                            /** @description When the trial ends (ISO 8601); with a card it is the day of the first charge */
                             endsAt: string;
                             /** @description Whole days left, rounded up */
                             daysLeft: number;
                         } | null;
-                        /** @description Signup-link offer redeemed by this account and still within its 30 days; null when there is none */
+                        /** @description Signup-link offer redeemed by this account and still within the validity set by its link (30 days by default); null when there is none */
                         offer: {
                             /** @description The trial part of the redeemed offer */
                             trial: {
@@ -21720,6 +22234,906 @@ export interface operations {
             };
             /** @description Missing or invalid access token (identity.unauthorized) */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    SubscriptionController_subscribe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * @description Payment method of the subscription
+                     * @enum {string}
+                     */
+                    method: "card" | "pix";
+                };
+            };
+        };
+        responses: {
+            /** @description Next step of the checkout */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description The person must save the card on the payment page
+                         * @enum {string}
+                         */
+                        next: "card_capture";
+                        /** @description Page where the card is saved; open it right away, it is never stored */
+                        captureUrl: string;
+                    } | {
+                        /**
+                         * @description The first invoice arrives by event; pay it from the open invoice
+                         * @enum {string}
+                         */
+                        next: "pay_invoice";
+                    };
+                };
+            };
+            /** @description Already Premium or self-hosted (billing.already_subscribed, billing.not_available) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The redeemed offer has a card trial and the method is not card (billing.trial_requires_card) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The billing provider rejected the subscription (billing.engine_rejected) */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The billing provider is unavailable; retry (billing.provider_unavailable) */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    SubscriptionController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Billing state after the cancellation, with `endedNow` */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Deployment mode of this installation
+                         * @enum {string}
+                         */
+                        mode: "hosted" | "self_hosted";
+                        /**
+                         * @description Effective plan of the signed-in company
+                         * @enum {string}
+                         */
+                        plan: "free" | "premium" | "self_hosted";
+                        /** @description True when the signed-in user is the owner and can change the plan */
+                        canManage: boolean;
+                        /** @description Payment methods offered; empty when self-hosted */
+                        methods: ("card" | "pix")[];
+                        /** @description Premium monthly price in cents of BRL; null when self-hosted */
+                        priceCents: number | null;
+                        /**
+                         * @description Currency of the price
+                         * @enum {string}
+                         */
+                        currency: "BRL";
+                        /** @description Subscription summary; null when there is none */
+                        subscription: {
+                            /**
+                             * @description Subscription status; `trialing` while the card trial runs and nothing was charged yet
+                             * @enum {string}
+                             */
+                            status: "pending" | "active" | "trialing" | "past_due" | "canceled" | "expired";
+                            /**
+                             * @description Chosen payment method
+                             * @enum {string}
+                             */
+                            method: "card" | "pix";
+                            /** @description When the subscription started (ISO 8601) */
+                            since: string | null;
+                            /** @description End of the paid cycle (ISO 8601) */
+                            paidThrough: string | null;
+                            /** @description Next charge (ISO 8601); null once canceled */
+                            nextChargeAt: string | null;
+                            /** @description Saved card, when there is one */
+                            card: {
+                                /** @description Card brand */
+                                brand: string;
+                                /** @description Last four digits */
+                                last4: string;
+                            } | null;
+                            /** @description End of the grace period after an overdue invoice (ISO 8601) */
+                            graceEndsAt: string | null;
+                            /** @description End of the 7-day withdrawal window (ISO 8601) */
+                            withdrawalEndsAt: string | null;
+                            /** @description True when a canceled subscription can be resumed */
+                            canResume: boolean;
+                        } | null;
+                        /** @description Invoice waiting for payment; null when there is none */
+                        openInvoice: {
+                            /** @description Invoice id */
+                            id: string;
+                            /**
+                             * @description Invoice status
+                             * @enum {string}
+                             */
+                            status: "issued" | "overdue";
+                            /** @description Invoice total in cents of BRL */
+                            totalCents: number;
+                            /** @description Due date (ISO 8601) */
+                            dueDate: string;
+                        } | null;
+                        /** @description Premium trial in course; null when there is none */
+                        trial: {
+                            /**
+                             * @description `no_card`: opened without a card; `card`: the card is saved and the first charge waits for the end of the trial
+                             * @enum {string}
+                             */
+                            kind: "no_card" | "card";
+                            /** @description When the trial ends (ISO 8601); with a card it is the day of the first charge */
+                            endsAt: string;
+                            /** @description Whole days left, rounded up */
+                            daysLeft: number;
+                        } | null;
+                        /** @description Signup-link offer redeemed by this account and still within the validity set by its link (30 days by default); null when there is none */
+                        offer: {
+                            /** @description The trial part of the redeemed offer */
+                            trial: {
+                                /**
+                                 * @description `none`: no trial; `card`: trial with the card saved; `no_card`: Premium for N days without a card
+                                 * @enum {string}
+                                 */
+                                kind: "none" | "card" | "no_card";
+                                /** @description Trial length in days; null when there is no trial */
+                                days: number | null;
+                            };
+                            /** @description Discount scale by paid cycle; the first rule that matches wins */
+                            rules: {
+                                /** @description Discount on the Premium price, in percent */
+                                percent: number;
+                                /** @description First paid cycle the rule covers */
+                                fromCycle: number;
+                                /** @description Last paid cycle the rule covers, inclusive */
+                                toCycle: number;
+                            }[];
+                            /** @description When the account redeemed the link (ISO 8601) */
+                            redeemedAt: string;
+                            /** @description Until when the offer can still start (ISO 8601); after it, full price and no trial */
+                            expiresAt: string;
+                        } | null;
+                        /** @description State of each paid feature */
+                        features: {
+                            /**
+                             * @description Text summaries and the assistant
+                             * @enum {string}
+                             */
+                            ai: "available" | "premium_required" | "paused" | "disabled";
+                            /**
+                             * @description Vera on WhatsApp
+                             * @enum {string}
+                             */
+                            whatsapp: "available" | "premium_required" | "paused" | "disabled";
+                            /**
+                             * @description Google Calendar and reminders
+                             * @enum {string}
+                             */
+                            calendar: "available" | "premium_required" | "paused" | "disabled";
+                        };
+                        /** @description Paid usage of the month; null when nothing meters it */
+                        usage: {
+                            /** @description Share of the monthly cap used, in basis points */
+                            usedBps: number;
+                            /**
+                             * @description ok, warning from 80%, paused at 100%
+                             * @enum {string}
+                             */
+                            state: "ok" | "warning" | "paused";
+                            /** @description When the period turns (ISO 8601) */
+                            resetsAt: string;
+                            /** @description Usage by feature */
+                            byFeature: {
+                                ai: {
+                                    /** @description Share of the monthly cap used, in basis points */
+                                    usedBps: number;
+                                };
+                                whatsapp: {
+                                    /** @description Share of the monthly cap used, in basis points */
+                                    usedBps: number;
+                                };
+                            };
+                            /** @description Cap in micros of BRL; only for self-hosted with a cap */
+                            capMicros: number | null;
+                        } | null;
+                        /** @description True when the withdrawal window ended Premium at once */
+                        endedNow: boolean;
+                    };
+                };
+            };
+            /** @description There is no active subscription (billing.subscription_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    SubscriptionController_resume: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Billing state after resuming */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Deployment mode of this installation
+                         * @enum {string}
+                         */
+                        mode: "hosted" | "self_hosted";
+                        /**
+                         * @description Effective plan of the signed-in company
+                         * @enum {string}
+                         */
+                        plan: "free" | "premium" | "self_hosted";
+                        /** @description True when the signed-in user is the owner and can change the plan */
+                        canManage: boolean;
+                        /** @description Payment methods offered; empty when self-hosted */
+                        methods: ("card" | "pix")[];
+                        /** @description Premium monthly price in cents of BRL; null when self-hosted */
+                        priceCents: number | null;
+                        /**
+                         * @description Currency of the price
+                         * @enum {string}
+                         */
+                        currency: "BRL";
+                        /** @description Subscription summary; null when there is none */
+                        subscription: {
+                            /**
+                             * @description Subscription status; `trialing` while the card trial runs and nothing was charged yet
+                             * @enum {string}
+                             */
+                            status: "pending" | "active" | "trialing" | "past_due" | "canceled" | "expired";
+                            /**
+                             * @description Chosen payment method
+                             * @enum {string}
+                             */
+                            method: "card" | "pix";
+                            /** @description When the subscription started (ISO 8601) */
+                            since: string | null;
+                            /** @description End of the paid cycle (ISO 8601) */
+                            paidThrough: string | null;
+                            /** @description Next charge (ISO 8601); null once canceled */
+                            nextChargeAt: string | null;
+                            /** @description Saved card, when there is one */
+                            card: {
+                                /** @description Card brand */
+                                brand: string;
+                                /** @description Last four digits */
+                                last4: string;
+                            } | null;
+                            /** @description End of the grace period after an overdue invoice (ISO 8601) */
+                            graceEndsAt: string | null;
+                            /** @description End of the 7-day withdrawal window (ISO 8601) */
+                            withdrawalEndsAt: string | null;
+                            /** @description True when a canceled subscription can be resumed */
+                            canResume: boolean;
+                        } | null;
+                        /** @description Invoice waiting for payment; null when there is none */
+                        openInvoice: {
+                            /** @description Invoice id */
+                            id: string;
+                            /**
+                             * @description Invoice status
+                             * @enum {string}
+                             */
+                            status: "issued" | "overdue";
+                            /** @description Invoice total in cents of BRL */
+                            totalCents: number;
+                            /** @description Due date (ISO 8601) */
+                            dueDate: string;
+                        } | null;
+                        /** @description Premium trial in course; null when there is none */
+                        trial: {
+                            /**
+                             * @description `no_card`: opened without a card; `card`: the card is saved and the first charge waits for the end of the trial
+                             * @enum {string}
+                             */
+                            kind: "no_card" | "card";
+                            /** @description When the trial ends (ISO 8601); with a card it is the day of the first charge */
+                            endsAt: string;
+                            /** @description Whole days left, rounded up */
+                            daysLeft: number;
+                        } | null;
+                        /** @description Signup-link offer redeemed by this account and still within the validity set by its link (30 days by default); null when there is none */
+                        offer: {
+                            /** @description The trial part of the redeemed offer */
+                            trial: {
+                                /**
+                                 * @description `none`: no trial; `card`: trial with the card saved; `no_card`: Premium for N days without a card
+                                 * @enum {string}
+                                 */
+                                kind: "none" | "card" | "no_card";
+                                /** @description Trial length in days; null when there is no trial */
+                                days: number | null;
+                            };
+                            /** @description Discount scale by paid cycle; the first rule that matches wins */
+                            rules: {
+                                /** @description Discount on the Premium price, in percent */
+                                percent: number;
+                                /** @description First paid cycle the rule covers */
+                                fromCycle: number;
+                                /** @description Last paid cycle the rule covers, inclusive */
+                                toCycle: number;
+                            }[];
+                            /** @description When the account redeemed the link (ISO 8601) */
+                            redeemedAt: string;
+                            /** @description Until when the offer can still start (ISO 8601); after it, full price and no trial */
+                            expiresAt: string;
+                        } | null;
+                        /** @description State of each paid feature */
+                        features: {
+                            /**
+                             * @description Text summaries and the assistant
+                             * @enum {string}
+                             */
+                            ai: "available" | "premium_required" | "paused" | "disabled";
+                            /**
+                             * @description Vera on WhatsApp
+                             * @enum {string}
+                             */
+                            whatsapp: "available" | "premium_required" | "paused" | "disabled";
+                            /**
+                             * @description Google Calendar and reminders
+                             * @enum {string}
+                             */
+                            calendar: "available" | "premium_required" | "paused" | "disabled";
+                        };
+                        /** @description Paid usage of the month; null when nothing meters it */
+                        usage: {
+                            /** @description Share of the monthly cap used, in basis points */
+                            usedBps: number;
+                            /**
+                             * @description ok, warning from 80%, paused at 100%
+                             * @enum {string}
+                             */
+                            state: "ok" | "warning" | "paused";
+                            /** @description When the period turns (ISO 8601) */
+                            resetsAt: string;
+                            /** @description Usage by feature */
+                            byFeature: {
+                                ai: {
+                                    /** @description Share of the monthly cap used, in basis points */
+                                    usedBps: number;
+                                };
+                                whatsapp: {
+                                    /** @description Share of the monthly cap used, in basis points */
+                                    usedBps: number;
+                                };
+                            };
+                            /** @description Cap in micros of BRL; only for self-hosted with a cap */
+                            capMicros: number | null;
+                        } | null;
+                    };
+                };
+            };
+            /** @description Nothing to resume (billing.not_resumable) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PaymentMethodController_captureSession: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page where the card is saved */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Page where the card is saved; open it right away, it is never stored */
+                        captureUrl: string;
+                    };
+                };
+            };
+            /** @description There is no active subscription (billing.subscription_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Too many sessions in the last hour (core.too_many_attempts) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PaymentMethodController_confirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Billing state with the saved card */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Deployment mode of this installation
+                         * @enum {string}
+                         */
+                        mode: "hosted" | "self_hosted";
+                        /**
+                         * @description Effective plan of the signed-in company
+                         * @enum {string}
+                         */
+                        plan: "free" | "premium" | "self_hosted";
+                        /** @description True when the signed-in user is the owner and can change the plan */
+                        canManage: boolean;
+                        /** @description Payment methods offered; empty when self-hosted */
+                        methods: ("card" | "pix")[];
+                        /** @description Premium monthly price in cents of BRL; null when self-hosted */
+                        priceCents: number | null;
+                        /**
+                         * @description Currency of the price
+                         * @enum {string}
+                         */
+                        currency: "BRL";
+                        /** @description Subscription summary; null when there is none */
+                        subscription: {
+                            /**
+                             * @description Subscription status; `trialing` while the card trial runs and nothing was charged yet
+                             * @enum {string}
+                             */
+                            status: "pending" | "active" | "trialing" | "past_due" | "canceled" | "expired";
+                            /**
+                             * @description Chosen payment method
+                             * @enum {string}
+                             */
+                            method: "card" | "pix";
+                            /** @description When the subscription started (ISO 8601) */
+                            since: string | null;
+                            /** @description End of the paid cycle (ISO 8601) */
+                            paidThrough: string | null;
+                            /** @description Next charge (ISO 8601); null once canceled */
+                            nextChargeAt: string | null;
+                            /** @description Saved card, when there is one */
+                            card: {
+                                /** @description Card brand */
+                                brand: string;
+                                /** @description Last four digits */
+                                last4: string;
+                            } | null;
+                            /** @description End of the grace period after an overdue invoice (ISO 8601) */
+                            graceEndsAt: string | null;
+                            /** @description End of the 7-day withdrawal window (ISO 8601) */
+                            withdrawalEndsAt: string | null;
+                            /** @description True when a canceled subscription can be resumed */
+                            canResume: boolean;
+                        } | null;
+                        /** @description Invoice waiting for payment; null when there is none */
+                        openInvoice: {
+                            /** @description Invoice id */
+                            id: string;
+                            /**
+                             * @description Invoice status
+                             * @enum {string}
+                             */
+                            status: "issued" | "overdue";
+                            /** @description Invoice total in cents of BRL */
+                            totalCents: number;
+                            /** @description Due date (ISO 8601) */
+                            dueDate: string;
+                        } | null;
+                        /** @description Premium trial in course; null when there is none */
+                        trial: {
+                            /**
+                             * @description `no_card`: opened without a card; `card`: the card is saved and the first charge waits for the end of the trial
+                             * @enum {string}
+                             */
+                            kind: "no_card" | "card";
+                            /** @description When the trial ends (ISO 8601); with a card it is the day of the first charge */
+                            endsAt: string;
+                            /** @description Whole days left, rounded up */
+                            daysLeft: number;
+                        } | null;
+                        /** @description Signup-link offer redeemed by this account and still within the validity set by its link (30 days by default); null when there is none */
+                        offer: {
+                            /** @description The trial part of the redeemed offer */
+                            trial: {
+                                /**
+                                 * @description `none`: no trial; `card`: trial with the card saved; `no_card`: Premium for N days without a card
+                                 * @enum {string}
+                                 */
+                                kind: "none" | "card" | "no_card";
+                                /** @description Trial length in days; null when there is no trial */
+                                days: number | null;
+                            };
+                            /** @description Discount scale by paid cycle; the first rule that matches wins */
+                            rules: {
+                                /** @description Discount on the Premium price, in percent */
+                                percent: number;
+                                /** @description First paid cycle the rule covers */
+                                fromCycle: number;
+                                /** @description Last paid cycle the rule covers, inclusive */
+                                toCycle: number;
+                            }[];
+                            /** @description When the account redeemed the link (ISO 8601) */
+                            redeemedAt: string;
+                            /** @description Until when the offer can still start (ISO 8601); after it, full price and no trial */
+                            expiresAt: string;
+                        } | null;
+                        /** @description State of each paid feature */
+                        features: {
+                            /**
+                             * @description Text summaries and the assistant
+                             * @enum {string}
+                             */
+                            ai: "available" | "premium_required" | "paused" | "disabled";
+                            /**
+                             * @description Vera on WhatsApp
+                             * @enum {string}
+                             */
+                            whatsapp: "available" | "premium_required" | "paused" | "disabled";
+                            /**
+                             * @description Google Calendar and reminders
+                             * @enum {string}
+                             */
+                            calendar: "available" | "premium_required" | "paused" | "disabled";
+                        };
+                        /** @description Paid usage of the month; null when nothing meters it */
+                        usage: {
+                            /** @description Share of the monthly cap used, in basis points */
+                            usedBps: number;
+                            /**
+                             * @description ok, warning from 80%, paused at 100%
+                             * @enum {string}
+                             */
+                            state: "ok" | "warning" | "paused";
+                            /** @description When the period turns (ISO 8601) */
+                            resetsAt: string;
+                            /** @description Usage by feature */
+                            byFeature: {
+                                ai: {
+                                    /** @description Share of the monthly cap used, in basis points */
+                                    usedBps: number;
+                                };
+                                whatsapp: {
+                                    /** @description Share of the monthly cap used, in basis points */
+                                    usedBps: number;
+                                };
+                            };
+                            /** @description Cap in micros of BRL; only for self-hosted with a cap */
+                            capMicros: number | null;
+                        } | null;
+                    };
+                };
+            };
+            /** @description There is no active subscription (billing.subscription_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    InvoicesController_list: {
+        parameters: {
+            query?: {
+                /** @description Page number, 12 invoices per page */
+                page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description One page of invoices */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Invoices of this page, newest first */
+                        items: {
+                            /** @description Invoice id */
+                            id: string;
+                            /** @description Start of the cycle the invoice pays (ISO 8601) */
+                            cycleStart: string | null;
+                            /** @description End of the cycle the invoice pays (ISO 8601) */
+                            cycleEnd: string | null;
+                            /** @description Invoice total in cents of BRL; null while the price is pending */
+                            totalCents: number | null;
+                            /**
+                             * @description Payment method of the invoice
+                             * @enum {string|null}
+                             */
+                            method: "card" | "pix" | null;
+                            /**
+                             * @description Invoice status
+                             * @enum {string}
+                             */
+                            status: "issued" | "overdue" | "paid";
+                            /** @description Due date (ISO 8601) */
+                            dueDate: string | null;
+                            /** @description When it was paid (ISO 8601) */
+                            paidAt: string | null;
+                        }[];
+                        /** @description Current page */
+                        page: number;
+                        /** @description Total of invoices */
+                        total: number;
+                    };
+                };
+            };
+        };
+    };
+    InvoicesController_paymentLink: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Invoice id from the history or from `openInvoice` of GET /billing/me */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page to pay the invoice */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Page to pay the invoice, or the receipt of a paid one; never stored */
+                        url: string;
+                        /**
+                         * @description payment_page: pay here; gateway: receipt of the gateway
+                         * @enum {string}
+                         */
+                        kind: "payment_page" | "gateway";
+                    };
+                };
+            };
+            /** @description The invoice does not exist for this company (billing.invoice_not_found) */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -22662,160 +24076,6 @@ export interface operations {
                 };
             };
             /** @description The reminder does not exist for this person (reminders.not_found) */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    RecurringNoticesController_list: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Ids of the series with the day-before e-mail on */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Series for which the signed-in person turned the day-before e-mail on */
-                        seriesIds: string[];
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    RecurringNoticesController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Series id */
-                id: unknown;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description true to receive an e-mail the day before each charge of the series, false to stop */
-                    enabled: boolean;
-                };
-            };
-        };
-        responses: {
-            /** @description The choice after the change */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** Format: uuid */
-                        seriesId: string;
-                        /** @description Whether the signed-in person gets the day-before e-mail for this series */
-                        enabled: boolean;
-                    };
-                };
-            };
-            /** @description Invalid payload (zod validation details in meta.errors) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description The series does not exist or is not confirmed (recurring_notices.series_not_found) */
             404: {
                 headers: {
                     [name: string]: unknown;
