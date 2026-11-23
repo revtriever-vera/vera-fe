@@ -25,6 +25,7 @@ export default tseslint.config(
             'node_modules/**',
             '.claude/**',
             'eslint-rules/**',
+            'scripts/**',
             'src/routeTree.gen.ts',
             'src/shared/lib/api/schema.d.ts',
             '*.config.mjs',

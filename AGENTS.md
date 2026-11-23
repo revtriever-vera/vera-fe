@@ -103,7 +103,7 @@ Scripts live in `package.json`; the ones that matter before a PR:
 - `npm run typecheck`.
 - `npm test` runs Vitest; `npx vitest run --config vitest.config.ts <file>` runs one spec. `npm run test:cov` applies the 85% coverage gate and `npm run test:types` the type specs.
 - `npm run build` runs `tsc -b` and the Vite build.
-- `npm run api:types` regenerates `src/shared/lib/api/schema.d.ts` from the `/docs-json` of a running local `vera-api`. Run it when the API contract changes and commit the result.
+- `npm run api:types` regenerates `src/shared/lib/api/schema.d.ts` from the `openapi.json` that `npm run openapi:dump` writes in `vera-api` (default `../vera-api/openapi.json`, or pass a path: `npm run api:types -- <file>`). No server needed. Run it when the API contract changes and commit the result.
 
 CI (`.github/workflows/ci.yml`) runs lint, format check, typecheck, `test:cov` and build, on PRs into `main` and on `main`. The husky pre-push runs typecheck and the whole test suite; push with `--no-verify` when you already ran the checks above for the change.
 

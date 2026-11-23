@@ -19,7 +19,7 @@ npm run dev
 | `npm run lint`      | ESLint (inclui as fronteiras de camada)                                                         |
 | `npm run typecheck` | TypeScript sem emitir                                                                           |
 | `npm test`          | Vitest; `npm run test:cov` aplica o mínimo de 85% de cobertura                                  |
-| `npm run api:types` | Gera `src/shared/lib/api/schema.d.ts` a partir do `/docs-json` do `vera-api` local (porta 3333) |
+| `npm run api:types` | Gera `src/shared/lib/api/schema.d.ts` a partir do `openapi.json` gerado por `npm run openapi:dump` no `vera-api` (padrão `../vera-api/openapi.json`; outro caminho: `npm run api:types -- <arquivo>`) |
 
 ## Variáveis de ambiente
 

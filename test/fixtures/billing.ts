@@ -23,6 +23,7 @@ export function billingMe(overrides: Partial<BillingMe> = {}): BillingMe {
         currency: 'BRL',
         subscription: null,
         openInvoice: null,
+        trial: null,
         features: { ai: 'available', whatsapp: 'available', calendar: 'available' },
         usage: null,
         ...overrides
