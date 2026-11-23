@@ -8,14 +8,12 @@ export interface HoldingGoalLink {
 }
 
 export function holdingGoalLinks(goals: readonly GoalView[], kind: GoalHoldingView['kind'], holdingId: string): readonly HoldingGoalLink[] {
-    return goals.flatMap((goal: GoalView): readonly HoldingGoalLink[] =>
-        goal.holdings
-            .filter((holding: GoalHoldingView): boolean => !holding.removed && holding.kind === kind && holding.holdingId === holdingId)
-            .map((holding: GoalHoldingView): HoldingGoalLink => ({
-                goalId: goal.id,
-                name: goal.name,
-                kind: goal.kind,
-                shareBps: holding.shareBps
-            }))
-    );
+    const links: HoldingGoalLink[] = [];
+    for (const goal of goals) {
+        for (const holding of goal.holdings) {
+            if (holding.removed || holding.kind !== kind || holding.holdingId !== holdingId) continue;
+            links.push({ goalId: goal.id, name: goal.name, kind: goal.kind, shareBps: holding.shareBps });
+        }
+    }
+    return links;
 }

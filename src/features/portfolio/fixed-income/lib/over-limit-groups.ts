@@ -13,8 +13,10 @@ function fromBlock(block: FgcHolderBlock): readonly OverLimitGroup[] {
 }
 
 export function overLimitGroups(coverage: FgcCoverage): readonly OverLimitGroup[] {
-    const own: readonly OverLimitGroup[] = coverage.groups.map(
-        (group: FgcGroup): OverLimitGroup => ({ key: group.groupId, group, holderName: null })
-    );
+    const own: readonly OverLimitGroup[] = coverage.groups.map((group: FgcGroup): OverLimitGroup => ({
+        key: group.groupId,
+        group,
+        holderName: null
+    }));
     return [...own, ...coverage.byHolder.flatMap(fromBlock)].filter((item: OverLimitGroup): boolean => item.group.overMinor > 0);
 }

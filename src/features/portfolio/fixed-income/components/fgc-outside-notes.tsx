@@ -14,7 +14,13 @@ const NOTE_REASONS: readonly Exclude<FgcOutsideReason, 'missing_issuer'>[] = [
     'not_calculated'
 ];
 
-function OutsideNote({ reason, items }: { readonly reason: Exclude<FgcOutsideReason, 'missing_issuer'>; readonly items: readonly FgcOutside[] }): ReactElement | null {
+function OutsideNote({
+    reason,
+    items
+}: {
+    readonly reason: Exclude<FgcOutsideReason, 'missing_issuer'>;
+    readonly items: readonly FgcOutside[];
+}): ReactElement | null {
     const { t }: UseTranslationResponse<'portfolioFixedIncome', undefined> = useTranslation('portfolioFixedIncome');
     if (items.length === 0) {
         return null;
