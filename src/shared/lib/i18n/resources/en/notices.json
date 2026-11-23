@@ -1,0 +1,42 @@
+{
+  "title": "E-mail notices",
+  "description": "Choose what Vera sends to your e-mail. The choice is yours alone.",
+  "loading": "Loading your notices",
+  "types": {
+    "goal_behind": {
+      "title": "Goal behind",
+      "description": "An e-mail when a goal falls behind its pace."
+    },
+    "recurring_week": {
+      "title": "Debits of the week",
+      "description": "On Monday, what will be charged in the next 7 days, with the name and the amount."
+    },
+    "recurring_due": {
+      "title": "Day before a debit",
+      "description": "An e-mail the day before each charge of the series where you turned the notice on."
+    },
+    "other": {
+      "title": "Other notices",
+      "description": "Vera notices by e-mail."
+    }
+  },
+  "toast": {
+    "on": "You will get this notice.",
+    "off": "You will no longer get this notice."
+  },
+  "unsubscribe": {
+    "title": "Stop getting this notice?",
+    "body": "You stop getting this notice by e-mail. You can turn it back on in Settings, Preferences.",
+    "confirm": "Stop getting it",
+    "doneTitle": "Done, stopped",
+    "doneBody": "You no longer get the \"{{notice}}\" notice by e-mail.",
+    "openApp": "Open Vera"
+  },
+  "errors": {
+    "generic": "Could not finish. Try again.",
+    "load": "Could not load the notices.",
+    "invalidToken": "This link is no longer valid. Change the notice in Settings, Preferences.",
+    "rateLimited": "Too many tries right now. Try again in a moment.",
+    "unknownType": "This notice no longer exists."
+  }
+}

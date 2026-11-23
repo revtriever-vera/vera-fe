@@ -13,6 +13,7 @@ import { seriesAccountText, seriesDayText, seriesValueText } from '../lib/series
 import { useRemoveChargeAction, type RemoveChargeAction } from '../lib/use-detail-actions';
 import { RECURRING_CURRENCY, RECURRING_STATUS, type RecurringCharge, type RecurringSeriesView } from '../types';
 import { EditSeriesDialog } from './edit-series-dialog';
+import { NoticeBeforeSwitch } from './notice-before-switch';
 
 export interface SeriesDetailDialogProps {
     readonly series: RecurringSeriesView;
@@ -132,6 +133,7 @@ function DetailModal({ series, editable, canRemove, onClose, onEdit, onRemove }:
         >
             <div className="flex flex-col gap-4">
                 <Summary series={series} />
+                {series.status === RECURRING_STATUS.confirmed ? <NoticeBeforeSwitch seriesId={series.id} /> : null}
                 <h3 className="text-sm font-semibold text-content">{t('detail.charges')}</h3>
                 <ChargeList series={series} canRemove={canRemove} onRemove={onRemove} />
             </div>
