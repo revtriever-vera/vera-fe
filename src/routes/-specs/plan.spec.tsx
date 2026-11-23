@@ -78,6 +78,7 @@ function focusWindow(): void {
 afterEach((): void => {
     tracked.length = 0;
     vi.restoreAllMocks();
+    Reflect.deleteProperty(window, 'matchMedia');
 });
 
 describe('aba Plano: Free', () => {
@@ -415,5 +416,22 @@ describe('histórico de cobranças', () => {
             expect(tab.location.href).toBe('https://pay.example/inv');
         });
         expect(tracked).toContainEqual({ name: 'invoice_viewed', props: undefined });
+    });
+
+    it('a 390 px vira lista de cartões com Ver fatura visível', async () => {
+        window.matchMedia = (query: string): MediaQueryList =>
+            ({
+                matches: true,
+                media: query,
+                addEventListener: (): void => undefined,
+                removeEventListener: (): void => undefined
+            }) as unknown as MediaQueryList;
+        mockBilling(premiumMe(), { invoices: { items: [invoiceRow()], page: 1, total: 1 } });
+        await openPlan();
+
+        const list: HTMLElement = await screen.findByRole('list', { name: 'Histórico de cobranças' });
+        expect(screen.queryByRole('table', { name: 'Histórico de cobranças' })).not.toBeInTheDocument();
+        expect(within(list).getByRole('button', { name: 'Ver fatura' })).toBeInTheDocument();
+        expect(within(list).getByText('Paga')).toBeInTheDocument();
     });
 });

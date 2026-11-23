@@ -12,7 +12,8 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Pager } from '@/shared/ui/pager';
 import { SkeletonPanel } from '@/shared/ui/skeleton-form';
-import { Table, type TableColumn } from '@/shared/ui/table';
+import { ResponsiveRows } from '@/shared/ui/responsive-rows';
+import type { TableColumn } from '@/shared/ui/table';
 import { useInvoicePaymentLink } from '../api/use-invoice-payment-link.mutation';
 import { useInvoices } from '../api/use-invoices.query';
 import { shortDate } from '../lib/billing-format';
@@ -114,7 +115,7 @@ function InvoicesTable({
             {data.items.length === 0 ? (
                 <p className="m-0 text-sm text-content-muted">{t('planTab.history.empty')}</p>
             ) : (
-                <Table
+                <ResponsiveRows
                     label={t('planTab.history.label')}
                     columns={columnsOf(t, locale, busy, view)}
                     rows={data.items}
