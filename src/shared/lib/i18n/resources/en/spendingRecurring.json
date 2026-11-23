@@ -190,7 +190,11 @@
     "removeChargeLabel": "{{date}}, {{amount}}: not from this subscription",
     "removeTitle": "Take this charge out of {{name}}?",
     "removeDescription": "The charge leaves the series and does not come back. The transaction stays in your statement.",
-    "removeConfirm": "Take out of series"
+    "removeConfirm": "Take out of series",
+    "noticeBefore": "E-mail me the day before",
+    "noticeBeforeHint": "An e-mail at 9 a.m. the day before each charge of this series, with the name and the amount. It applies only to you.",
+    "noticeBeforeOn": "You will get the notice the day before.",
+    "noticeBeforeOff": "You will no longer get the notice the day before."
   },
   "edit": {
     "title": "Edit {{name}}",

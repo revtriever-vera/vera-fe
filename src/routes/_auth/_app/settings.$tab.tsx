@@ -3,6 +3,7 @@ import { Navigate, createFileRoute, useNavigate, type UseNavigateResult } from '
 import { CalendarTab } from '@/features/calendar/components/calendar-tab';
 import { calendarSearchSchema, type CalendarSearch } from '@/features/calendar/schemas/calendar-search.schema';
 import { IntegrationsTab } from '@/features/integrations/components/integrations-tab';
+import { NoticePreferencesCard } from '@/features/notices/components/notice-preferences-card';
 import { PreferencesTab } from '@/features/account/pages/preferences-tab';
 import { PrivacyTab } from '@/features/account/pages/privacy-tab';
 import { MembersPage } from '@/features/members/pages/members-page';
@@ -23,7 +24,7 @@ const TAB_CONTENT: Readonly<Record<SettingsTabId, () => ReactElement>> = {
     whatsapp: (): ReactElement => <WhatsAppTab />,
     calendar: (): ReactElement => <CalendarRoute />,
     banks: (): ReactElement => <ConnectionsPage />,
-    preferences: (): ReactElement => <PreferencesTab />,
+    preferences: (): ReactElement => <PreferencesTab noticesSlot={<NoticePreferencesCard />} />,
     privacy: (): ReactElement => <PrivacyTab summariesSlot={<SummariesPrivacyCard />} />
 };
 

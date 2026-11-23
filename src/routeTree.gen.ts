@@ -31,6 +31,7 @@ import { Route as PlatformAdminIndexRouteImport } from './routes/_platform/admin
 import { Route as PlatformAdminAccountsRouteImport } from './routes/_platform/admin.accounts'
 import { Route as PlatformAdminAuditRouteImport } from './routes/_platform/admin.audit'
 import { Route as PlatformAdminLinksRouteImport } from './routes/_platform/admin.links'
+import { Route as AvisosSairTokenRouteImport } from './routes/avisos.sair.$token'
 import { Route as AuthAppPortfolioIndexRouteImport } from './routes/_auth/_app/portfolio.index'
 import { Route as AuthAppPortfolioAssetsRouteImport } from './routes/_auth/_app/portfolio.assets'
 import { Route as AuthAppPortfolioContributionRouteImport } from './routes/_auth/_app/portfolio.contribution'
@@ -154,6 +155,11 @@ const PlatformAdminLinksRoute = PlatformAdminLinksRouteImport.update({
   path: '/admin/links',
   getParentRoute: () => PlatformRoute,
 } as any)
+const AvisosSairTokenRoute = AvisosSairTokenRouteImport.update({
+  id: '/avisos/sair/$token',
+  path: '/avisos/sair/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthAppPortfolioIndexRoute = AuthAppPortfolioIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -254,6 +260,7 @@ export interface FileRoutesByFullPath {
   '/admin/accounts': typeof PlatformAdminAccountsRoute
   '/admin/audit': typeof PlatformAdminAuditRoute
   '/admin/links': typeof PlatformAdminLinksRoute
+  '/avisos/sair/$token': typeof AvisosSairTokenRoute
   '/onboarding/': typeof AuthOnboardingIndexRoute
   '/admin/': typeof PlatformAdminIndexRoute
   '/portfolio/assets': typeof AuthAppPortfolioAssetsRoute
@@ -286,6 +293,7 @@ export interface FileRoutesByTo {
   '/admin/accounts': typeof PlatformAdminAccountsRoute
   '/admin/audit': typeof PlatformAdminAuditRoute
   '/admin/links': typeof PlatformAdminLinksRoute
+  '/avisos/sair/$token': typeof AvisosSairTokenRoute
   '/onboarding': typeof AuthOnboardingIndexRoute
   '/admin': typeof PlatformAdminIndexRoute
   '/portfolio/assets': typeof AuthAppPortfolioAssetsRoute
@@ -325,6 +333,7 @@ export interface FileRoutesById {
   '/_platform/admin/accounts': typeof PlatformAdminAccountsRoute
   '/_platform/admin/audit': typeof PlatformAdminAuditRoute
   '/_platform/admin/links': typeof PlatformAdminLinksRoute
+  '/avisos/sair/$token': typeof AvisosSairTokenRoute
   '/_auth/_app/': typeof AuthAppIndexRoute
   '/_auth/onboarding/': typeof AuthOnboardingIndexRoute
   '/_platform/admin/': typeof PlatformAdminIndexRoute
@@ -364,6 +373,7 @@ export interface FileRouteTypes {
     | '/admin/accounts'
     | '/admin/audit'
     | '/admin/links'
+    | '/avisos/sair/$token'
     | '/onboarding/'
     | '/admin/'
     | '/portfolio/assets'
@@ -396,6 +406,7 @@ export interface FileRouteTypes {
     | '/admin/accounts'
     | '/admin/audit'
     | '/admin/links'
+    | '/avisos/sair/$token'
     | '/onboarding'
     | '/admin'
     | '/portfolio/assets'
@@ -434,6 +445,7 @@ export interface FileRouteTypes {
     | '/_platform/admin/accounts'
     | '/_platform/admin/audit'
     | '/_platform/admin/links'
+    | '/avisos/sair/$token'
     | '/_auth/_app/'
     | '/_auth/onboarding/'
     | '/_platform/admin/'
@@ -461,6 +473,7 @@ export interface RootRouteChildren {
   DevUiRoute: typeof DevUiRoute
   AdminLoginRoute: typeof AdminLoginRoute
   ConviteTokenRoute: typeof ConviteTokenRoute
+  AvisosSairTokenRoute: typeof AvisosSairTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -618,6 +631,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/links'
       preLoaderRoute: typeof PlatformAdminLinksRouteImport
       parentRoute: typeof PlatformRoute
+    }
+    '/avisos/sair/$token': {
+      id: '/avisos/sair/$token'
+      path: '/avisos/sair/$token'
+      fullPath: '/avisos/sair/$token'
+      preLoaderRoute: typeof AvisosSairTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_auth/_app/portfolio/': {
       id: '/_auth/_app/portfolio/'
@@ -862,6 +882,7 @@ const rootRouteChildren: RootRouteChildren = {
   DevUiRoute: DevUiRoute,
   AdminLoginRoute: AdminLoginRoute,
   ConviteTokenRoute: ConviteTokenRoute,
+  AvisosSairTokenRoute: AvisosSairTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

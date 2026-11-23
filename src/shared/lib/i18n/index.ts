@@ -4,6 +4,8 @@ import ptBRCommon from './resources/pt-BR/common.json';
 import enCommon from './resources/en/common.json';
 import ptBRAuth from './resources/pt-BR/auth.json';
 import enAuth from './resources/en/auth.json';
+import ptBRNotices from './resources/pt-BR/notices.json';
+import enNotices from './resources/en/notices.json';
 import ptBRAccount from './resources/pt-BR/account.json';
 import ptBRMembers from './resources/pt-BR/members.json';
 import ptBRIntegrations from './resources/pt-BR/integrations.json';
@@ -63,6 +65,7 @@ type LocaleResources = {
     readonly common: CommonResource;
     readonly auth: AuthResource;
     readonly account: typeof ptBRAccount;
+    readonly notices: typeof ptBRNotices;
     readonly members: typeof ptBRMembers;
     readonly integrations: typeof ptBRIntegrations;
     readonly whatsapp: typeof ptBRWhatsapp;
@@ -94,6 +97,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         common: ptBRCommon,
         auth: ptBRAuth,
         account: ptBRAccount,
+        notices: ptBRNotices,
         members: ptBRMembers,
         integrations: ptBRIntegrations,
         whatsapp: ptBRWhatsapp,
@@ -123,6 +127,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         common: enCommon,
         auth: enAuth,
         account: enAccount,
+        notices: enNotices,
         members: enMembers,
         integrations: enIntegrations,
         whatsapp: enWhatsapp,
@@ -163,6 +168,7 @@ void i18next.use(initReactI18next).init({
         'common',
         'auth',
         'account',
+        'notices',
         'members',
         'integrations',
         'whatsapp',

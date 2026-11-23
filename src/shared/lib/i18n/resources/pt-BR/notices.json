@@ -1,0 +1,42 @@
+{
+  "title": "Avisos por e-mail",
+  "description": "Escolha o que a Vera manda para o seu e-mail. A escolha vale só para você.",
+  "loading": "Carregando seus avisos",
+  "types": {
+    "goal_behind": {
+      "title": "Objetivo atrasado",
+      "description": "Um e-mail quando um objetivo ficar para trás do ritmo."
+    },
+    "recurring_week": {
+      "title": "Débitos da semana",
+      "description": "Na segunda-feira, o que vai ser cobrado nos próximos 7 dias, com o nome e o valor."
+    },
+    "recurring_due": {
+      "title": "Véspera do débito",
+      "description": "Um e-mail na véspera de cada cobrança das séries em que você ligou o aviso."
+    },
+    "other": {
+      "title": "Outros avisos",
+      "description": "Avisos da Vera por e-mail."
+    }
+  },
+  "toast": {
+    "on": "Você vai receber este aviso.",
+    "off": "Você não vai mais receber este aviso."
+  },
+  "unsubscribe": {
+    "title": "Parar de receber este aviso?",
+    "body": "Você deixa de receber este aviso por e-mail. Dá para ligar de novo em Configurações, Preferências.",
+    "confirm": "Parar de receber",
+    "doneTitle": "Pronto, parou",
+    "doneBody": "Você não recebe mais o aviso \"{{notice}}\" por e-mail.",
+    "openApp": "Abrir a Vera"
+  },
+  "errors": {
+    "generic": "Não foi possível concluir. Tente de novo.",
+    "load": "Não foi possível carregar os avisos.",
+    "invalidToken": "Este link não vale mais. Mude o aviso em Configurações, Preferências.",
+    "rateLimited": "Muitas tentativas agora. Tente de novo em instantes.",
+    "unknownType": "Este aviso não existe mais."
+  }
+}
