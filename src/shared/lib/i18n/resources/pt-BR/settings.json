@@ -3,7 +3,6 @@
   "description": "Plano, integrações e os seus dados.",
   "descriptionSelfHosted": "Instalação auto-hospedada.",
   "navLabel": "Seções de configurações",
-  "placeholder": "Esta seção chega em breve.",
   "tabs": {
     "plan": "Plano e uso",
     "integrations": "Integrações",

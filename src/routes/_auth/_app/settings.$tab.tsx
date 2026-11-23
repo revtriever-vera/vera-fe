@@ -1,5 +1,10 @@
 import { useCallback, type ReactElement } from 'react';
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { MembersList } from '@/features/members/types';
 import { Navigate, createFileRoute, useNavigate, type UseNavigateResult } from '@tanstack/react-router';
+import { useMembers } from '@/features/members/api/use-members.query';
+import { PlanTab } from '@/features/billing/components/plan-tab';
+import { billingSearchSchema, type BillingSearch } from '@/features/billing/schemas/billing-search.schema';
 import { CalendarTab } from '@/features/calendar/components/calendar-tab';
 import { calendarSearchSchema, type CalendarSearch } from '@/features/calendar/schemas/calendar-search.schema';
 import { IntegrationsTab } from '@/features/integrations/components/integrations-tab';
@@ -7,18 +12,17 @@ import { NoticePreferencesCard } from '@/features/notices/components/notice-pref
 import { PreferencesTab } from '@/features/account/pages/preferences-tab';
 import { PrivacyTab } from '@/features/account/pages/privacy-tab';
 import { MembersPage } from '@/features/members/pages/members-page';
-import { SettingsPlaceholder } from '@/features/settings/components/settings-placeholder';
 import { resolveSettingsTab } from '@/features/settings/lib/settings-tabs';
 import { useSettingsMode, type SettingsModeState } from '@/features/settings/lib/use-settings-mode';
 import { useTrackSettingsViewed } from '@/features/settings/lib/use-track-settings-viewed';
-import { SETTINGS_TAB, type SettingsTabId } from '@/features/settings/types';
+import type { SettingsTabId } from '@/features/settings/types';
 import { WhatsAppTab } from '@/features/whatsapp/components/whatsapp-tab';
 import { ConnectionsPage } from '@/features/spending/connections/pages/connections-page';
 import { SummariesPrivacyCard } from '@/features/summaries/components/summaries-privacy-card';
 import { layoutSearchSchema } from '@/features/spending/schemas/spending-search.schema';
 
 const TAB_CONTENT: Readonly<Record<SettingsTabId, () => ReactElement>> = {
-    plan: (): ReactElement => <SettingsPlaceholder title="tabs.plan" tab={SETTINGS_TAB.plan} />,
+    plan: (): ReactElement => <PlanRoute />,
     integrations: (): ReactElement => <IntegrationsTab />,
     people: (): ReactElement => <MembersPage />,
     whatsapp: (): ReactElement => <WhatsAppTab />,
@@ -27,6 +31,16 @@ const TAB_CONTENT: Readonly<Record<SettingsTabId, () => ReactElement>> = {
     preferences: (): ReactElement => <PreferencesTab noticesSlot={<NoticePreferencesCard />} />,
     privacy: (): ReactElement => <PrivacyTab summariesSlot={<SummariesPrivacyCard />} />
 };
+
+function PlanRoute(): ReactElement {
+    const search: BillingSearch = Route.useSearch();
+    const navigate: UseNavigateResult<'/settings/$tab'> = useNavigate({ from: '/settings/$tab' });
+    const clear = useCallback((): void => {
+        void navigate({ search: {}, replace: true });
+    }, [navigate]);
+    const members: UseQueryResult<MembersList> = useMembers();
+    return <PlanTab cardResult={search.card} onCardHandled={clear} peopleCount={members.data?.members.length ?? 1} />;
+}
 
 function CalendarRoute(): ReactElement {
     const search: CalendarSearch = Route.useSearch();
@@ -52,6 +66,6 @@ function SettingsTabRoute(): ReactElement | null {
 }
 
 export const Route = createFileRoute('/_auth/_app/settings/$tab')({
-    validateSearch: layoutSearchSchema.extend(calendarSearchSchema.shape),
+    validateSearch: layoutSearchSchema.extend(calendarSearchSchema.shape).extend(billingSearchSchema.shape),
     component: SettingsTabRoute
 });

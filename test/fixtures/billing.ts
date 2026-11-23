@@ -1,4 +1,4 @@
-import type { BillingMe, BillingUsage } from '@/features/billing/types';
+import type { BillingMe, BillingSubscription, BillingUsage, InvoiceRow } from '@/features/billing/types';
 import type { BillingState } from '@/shared/lib/billing/billing-context';
 import type { FeatureAccess } from '@/shared/lib/billing/billing-types';
 
@@ -56,6 +56,35 @@ export function billingState(overrides: Partial<BillingState> = {}): BillingStat
         featureState: (): FeatureAccess => 'available',
         refresh: async (): Promise<void> => Promise.resolve(),
         payInvoice: async (): Promise<void> => Promise.resolve(),
+        ...overrides
+    };
+}
+
+export function billingSubscription(overrides: Partial<BillingSubscription> = {}): BillingSubscription {
+    return {
+        status: 'active',
+        method: 'card',
+        since: '2026-09-09T12:00:00.000Z',
+        paidThrough: '2026-12-09T12:00:00.000Z',
+        nextChargeAt: '2026-12-09T12:00:00.000Z',
+        card: { brand: 'visa', last4: '4242' },
+        graceEndsAt: null,
+        withdrawalEndsAt: null,
+        canResume: false,
+        ...overrides
+    };
+}
+
+export function invoiceRow(overrides: Partial<InvoiceRow> = {}): InvoiceRow {
+    return {
+        id: 'inv_1',
+        cycleStart: '2026-10-09T12:00:00.000Z',
+        cycleEnd: '2026-11-09T12:00:00.000Z',
+        totalCents: 1490,
+        method: 'card',
+        status: 'paid',
+        dueDate: '2026-10-09T12:00:00.000Z',
+        paidAt: '2026-10-09T12:00:00.000Z',
         ...overrides
     };
 }
