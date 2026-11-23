@@ -4,7 +4,8 @@ import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { Money } from '@/shared/ui/money';
-import { Table, type TableColumn } from '@/shared/ui/table';
+import { ResponsiveRows } from '@/shared/ui/responsive-rows';
+import type { TableColumn } from '@/shared/ui/table';
 import { RichBalloon } from '@/shared/ui/tooltip';
 import { ClassName } from '../../components/class-name';
 import { ClassTile } from '../../components/class-tile';
@@ -92,7 +93,7 @@ export function ClassTable({ rows, currency }: ClassTableProps): ReactElement {
     const columns: readonly TableColumn<ClassRow>[] = useColumns(currency);
     const holder: HolderParam = useHolderParam();
     return (
-        <Table
+        <ResponsiveRows
             label={t('table.label')}
             columns={columns}
             rows={rows}

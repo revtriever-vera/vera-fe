@@ -12,7 +12,7 @@ import { FgcMeter } from './fgc-meter';
 import { FgcOutsideNotes } from './fgc-outside-notes';
 import { FixedIncomeCard } from './fixed-income-card';
 import { QueryBody } from './query-body';
-import { ResponsiveRows } from './responsive-rows';
+import { ResponsiveRows } from '@/shared/ui/responsive-rows';
 
 const PEOPLE_FOR_PER_CPF_NOTE: number = 2;
 const MIN_WIDTH: string = 'min-w-[620px]';

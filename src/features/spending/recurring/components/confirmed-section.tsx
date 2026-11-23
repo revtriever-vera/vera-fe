@@ -6,7 +6,8 @@ import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { Button } from '@/shared/ui/button';
 import { ConfirmDialog } from '@/shared/ui/confirm-dialog';
-import { Table, type TableColumn } from '@/shared/ui/table';
+import { ResponsiveRows } from '@/shared/ui/responsive-rows';
+import type { TableColumn } from '@/shared/ui/table';
 import { seriesAccountText, seriesDayText, seriesValueText } from '../lib/series-text';
 import { useStopAction, type SeriesAction } from '../lib/use-series-actions';
 import { RECURRING_CURRENCY, type RecurringSeriesView } from '../types';
@@ -125,7 +126,7 @@ export function ConfirmedSection({ series, onOpenSeries }: ConfirmedSectionProps
     return (
         <section className="flex flex-col gap-3">
             <h3 className="text-lg font-bold">{t('confirmed.title')}</h3>
-            <Table
+            <ResponsiveRows
                 label={t('confirmed.tableLabel')}
                 columns={columns}
                 rows={series}
