@@ -15,6 +15,7 @@ import { QueryBody } from './query-body';
 import { ResponsiveRows } from './responsive-rows';
 
 const PEOPLE_FOR_PER_CPF_NOTE: number = 2;
+const MIN_WIDTH: string = 'min-w-[620px]';
 
 function useColumns(): readonly TableColumn<FgcGroup>[] {
     const { t }: UseTranslationResponse<'portfolioFixedIncome', undefined> = useTranslation('portfolioFixedIncome');
@@ -53,7 +54,7 @@ function FgcGroups({ groups }: { readonly groups: readonly FgcGroup[] }): ReactE
             columns={columns}
             rows={groups}
             rowKey={(group: FgcGroup): string => group.groupId}
-            minWidthClass="min-w-[620px]"
+            minWidthClass={MIN_WIDTH}
         />
     );
 }

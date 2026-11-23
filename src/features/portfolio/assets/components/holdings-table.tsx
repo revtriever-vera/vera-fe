@@ -80,8 +80,8 @@ function valueColumns(
     ];
 }
 
-function withoutActions(columns: readonly TableColumn<HoldingView>[], canEdit: boolean): readonly TableColumn<HoldingView>[] {
-    return canEdit ? columns : columns.filter((column: TableColumn<HoldingView>): boolean => column.key !== 'actions');
+function withoutActions(columns: readonly TableColumn<HoldingView>[]): readonly TableColumn<HoldingView>[] {
+    return columns.filter((column: TableColumn<HoldingView>): boolean => column.key !== 'actions');
 }
 
 const MIN_WIDTH: string = 'min-w-[60rem]';
@@ -92,10 +92,11 @@ export function HoldingsTable({ holdings, classes, baseCurrency, onEdit, onCompl
     const { multi }: PeopleState = usePeople();
     const { t: tp }: UseTranslationResponse<'portfolio', undefined> = useTranslation('portfolio');
     const holder: readonly TableColumn<HoldingView>[] = multi ? [holderColumn(tp('holder.column'))] : [];
-    const columns: readonly TableColumn<HoldingView>[] = withoutActions(
-        [...identityColumns(t, classes, onCompleteIssuer, holder), ...valueColumns(t, { baseCurrency, onEdit, onRemove })],
-        canEdit
-    );
+    const allColumns: readonly TableColumn<HoldingView>[] = [
+        ...identityColumns(t, classes, onCompleteIssuer, holder),
+        ...valueColumns(t, { baseCurrency, onEdit, onRemove })
+    ];
+    const columns: readonly TableColumn<HoldingView>[] = canEdit ? allColumns : withoutActions(allColumns);
     return (
         <Table
             label={t('page.tableLabel')}
