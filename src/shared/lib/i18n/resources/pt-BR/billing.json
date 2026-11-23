@@ -29,7 +29,9 @@
     "pay": "Pagar",
     "payOpening": "Abrindo o pagamento",
     "tellOwner": "Avise o Dono da conta.",
-    "dismiss": "Dispensar o aviso"
+    "dismiss": "Dispensar o aviso",
+    "trialEndingTitle": "Seu teste acaba em {{date}}.",
+    "trialEnding": "Assine para não perder os resumos e o WhatsApp."
   },
   "toast": {
     "warning": "Você já usou {{percent}}% da cota do mês",
@@ -111,7 +113,8 @@
         "lineNoDate": "{{price}}",
         "pixNote": "a cobrança Pix chega por e-mail",
         "none": "Nenhuma. O Premium vale até {{date}}; depois a conta volta ao Free sem perder nada.",
-        "noneNoDate": "Nenhuma. Depois do período pago, a conta volta ao Free sem perder nada."
+        "noneNoDate": "Nenhuma. Depois do período pago, a conta volta ao Free sem perder nada.",
+        "trialing": "{{date}}, no fim do teste."
       },
       "method": {
         "title": "Forma de pagamento",
@@ -125,13 +128,16 @@
       },
       "trial": {
         "title": "Teste sem cartão",
-        "text": "Faltam {{days}} dias. O teste termina em {{date}}."
+        "text": "Faltam {{days}} dias. O teste termina em {{date}}.",
+        "cardTitle": "Teste com cartão",
+        "cardText": "Nada é cobrado até {{date}}. Nesse dia cobramos no cartão salvo."
       },
       "pastDue": "Não conseguimos cobrar. Seu Premium continua até {{date}}.",
       "pastDueNoDate": "Não conseguimos cobrar. Seu Premium continua por enquanto.",
       "cancel": "Cancelar assinatura",
       "resume": "Reativar assinatura",
-      "resuming": "Reativando"
+      "resuming": "Reativando",
+      "chipTrialing": "Em teste"
     },
     "history": {
       "title": "Histórico",
@@ -158,6 +164,16 @@
     "usage": {
       "title": "Uso do mês",
       "description": "Só os resumos em texto e o WhatsApp usam a cota."
+    },
+    "offer": {
+      "title": "Sua oferta",
+      "expires": "Para usar, assine até {{date}}. Depois disso, preço cheio e sem teste."
+    },
+    "trialStrip": {
+      "title": "Premium grátis até {{date}}",
+      "detail": "Se você não assinar, a conta volta ao Free nessa data.",
+      "endingTitle": "Seu teste acaba em {{date}}.",
+      "endingDetail": "Assine para não perder os resumos e o WhatsApp."
     }
   },
   "checkout": {
@@ -180,7 +196,8 @@
       "label": "Vera Premium",
       "perMonth": "por mês",
       "quota": "Cota mensal de uso inclusa",
-      "cancelNote": "Cancele quando quiser, sem multa: o Premium vale até o fim do período pago e a conta volta ao Free sem perder nada."
+      "cancelNote": "Cancele quando quiser, sem multa: o Premium vale até o fim do período pago e a conta volta ao Free sem perder nada.",
+      "deferred": "Nada é cobrado hoje. Em {{date}} cobramos {{price}}."
     },
     "subscribeCard": "Assinar por {{price}}/mês",
     "subscribePix": "Assinar com Pix",
@@ -211,7 +228,9 @@
       "later": "Fazer depois"
     },
     "cardCanceled": "Cartão não salvo. Nada foi cobrado.",
-    "cardUpdated": "Cartão atualizado."
+    "cardUpdated": "Cartão atualizado.",
+    "cardOnly": "Com o teste, o pagamento é só no cartão.",
+    "saveCard": "Salvar o cartão"
   },
   "cancelDialog": {
     "title": "Cancelar o Premium?",
@@ -230,5 +249,14 @@
     "canceledNow": "Assinatura cancelada. O Premium terminou e o valor volta para você.",
     "resumed": "Assinatura reativada. A próxima cobrança é em {{date}}.",
     "resumedNoDate": "Assinatura reativada."
+  },
+  "offer": {
+    "trialCard_one": "{{count}} dia grátis. Você salva o cartão agora e a primeira cobrança vem só no fim do teste.",
+    "trialCard_other": "{{count}} dias grátis. Você salva o cartão agora e a primeira cobrança vem só no fim do teste.",
+    "trialNoCard_one": "{{count}} dia de Premium grátis, sem cartão. Se você não assinar, a conta volta ao Free.",
+    "trialNoCard_other": "{{count}} dias de Premium grátis, sem cartão. Se você não assinar, a conta volta ao Free.",
+    "rule": "{{percent}}% de desconto nos ciclos {{from}} a {{to}}",
+    "ruleSingle": "{{percent}}% de desconto no ciclo {{cycle}}",
+    "afterRules": "Depois, preço cheio."
   }
 }

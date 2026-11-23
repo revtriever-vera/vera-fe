@@ -22,7 +22,6 @@ export function signupLink(overrides: Partial<SignupLink> = {}): SignupLink {
         rules: [{ percent: 50, fromCycle: 1, toCycle: 3 }],
         maxUses: 100,
         expiresAt: '2026-12-31T23:59:59.000Z',
-        offerValidityDays: 30,
         status: 'active',
         redemptionCount: 12,
         trialCount: 10,

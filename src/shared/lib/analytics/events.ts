@@ -11,7 +11,7 @@ export type MaturityDaysBucket = 'up_to_60' | 'up_to_90' | 'over_90';
 export type OverviewAlertKind = 'maturity' | 'fgc';
 export type PaidFeatureName = 'ai' | 'whatsapp' | 'calendar';
 export type PremiumGateStateName = 'premium_required' | 'paused' | 'disabled';
-export type BillingBannerKindName = 'past_due' | 'paused' | 'warning';
+export type BillingBannerKindName = 'past_due' | 'paused' | 'trial_ending' | 'warning';
 export type CheckoutMethodName = 'card' | 'pix';
 export type CardCaptureResultName = 'saved' | 'canceled';
 export type InvoicePayOriginName = 'banner' | 'plan';
@@ -101,6 +101,9 @@ export interface AnalyticsEventMap {
     invite_viewed: undefined;
     invite_accepted: { provider: AuthProviderName };
     invite_failed: { code: string };
+    offer_viewed: undefined;
+    offer_redeemed: { via: 'signup' | 'session' };
+    offer_failed: { code: string };
     premium_gate_viewed: { feature: PaidFeatureName; state: PremiumGateStateName };
     premium_gate_clicked: { feature: PaidFeatureName };
     billing_banner_viewed: { kind: BillingBannerKindName };

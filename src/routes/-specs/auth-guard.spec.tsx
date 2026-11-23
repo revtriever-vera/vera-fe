@@ -39,12 +39,13 @@ describe('authenticated routes guard', () => {
         expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
     });
 
-    it('keeps every route except the logins, the invite, the unsubscribe page and the dev gallery behind a guard', () => {
+    it('keeps every route except the logins, the offer, the invite, the unsubscribe page and the dev gallery behind a guard', () => {
         const ids: string[] = Object.keys(createRouter({ routeTree }).routesById).filter((id: string): boolean => id !== '__root__');
 
         const exposed: string[] = ids.filter(
             (id: string): boolean =>
                 id !== '/login' &&
+                id !== '/entrar' &&
                 id !== '/admin/login' &&
                 !id.startsWith('/convite') &&
                 !id.startsWith('/avisos/sair') &&

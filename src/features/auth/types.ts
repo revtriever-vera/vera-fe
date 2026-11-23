@@ -10,3 +10,6 @@ export type LoginProvider = SessionIdentity['loginProvider'];
 export type SessionRole = SessionIdentity['role'];
 export type SessionLocale = SessionIdentity['locale'];
 export type InvitePreview = paths['/invites/{token}']['get']['responses']['200']['content']['application/json'];
+export type OfferPreview = paths['/signup-links/{token}']['get']['responses']['200']['content']['application/json'];
+export type RedeemedOffer = paths['/billing/offer/redeem']['post']['responses']['200']['content']['application/json'];
+export type OfferOutcome = NonNullable<LoginSession['offer']>;

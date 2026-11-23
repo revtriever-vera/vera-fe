@@ -8,6 +8,7 @@ import { useInvoicePaymentLink } from '../api/use-invoice-payment-link.mutation'
 import { useSubscribe } from '../api/use-subscribe.mutation';
 import type { BillingMe, CheckoutMethod, PaymentLink, SubscribeResult } from '../types';
 import { billingErrorCode, billingErrorMessage } from './billing-error-message';
+import { isCardTrialOffer } from './checkout-offer';
 import { usePremiumArrival, type PremiumWatch } from './use-payment-return';
 
 export type CheckoutStage = 'form' | 'pix' | 'wait' | 'done';
@@ -26,6 +27,10 @@ export interface Checkout {
     readonly paying: boolean;
     readonly watch: PremiumWatch;
     readonly doneMethod: CheckoutMethod;
+}
+
+function initialMethod(me: BillingMe): CheckoutMethod {
+    return me.methods.includes('pix') && !isCardTrialOffer(me) ? 'pix' : 'card';
 }
 
 function usePayment(
@@ -78,7 +83,7 @@ function useSubmit(
 
 export function useCheckout(me: BillingMe, startWaiting: boolean): Checkout {
     const subscribe: UseMutationResult<SubscribeResult, Error, CheckoutMethod> = useSubscribe();
-    const [method, setMethod] = useState<CheckoutMethod>(me.methods.includes('pix') ? 'pix' : 'card');
+    const [method, setMethod] = useState<CheckoutMethod>(initialMethod(me));
     const [stage, setStage] = useState<CheckoutStage>(startWaiting ? 'wait' : 'form');
     const [captureUrl, setCaptureUrl] = useState<string | null>(null);
     const [paymentUrl, setPaymentUrl] = useState<string | null>(null);

@@ -57,6 +57,9 @@ export function nextChargeText(t: Translate, me: BillingMe, subscription: Billin
             ? t('planTab.subscription.next.noneNoDate')
             : t('planTab.subscription.next.none', { date: longDate(subscription.paidThrough, locale) });
     }
+    if (subscription.status === 'trialing' && subscription.nextChargeAt !== null) {
+        return t('planTab.subscription.next.trialing', { date: longDate(subscription.nextChargeAt, locale) });
+    }
     const price: string = priceText(me, locale);
     const line: string =
         subscription.nextChargeAt === null

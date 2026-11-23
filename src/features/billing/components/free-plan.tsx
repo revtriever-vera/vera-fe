@@ -7,6 +7,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import type { BillingMe } from '../types';
+import { OfferCard } from './offer-card';
 import { PlanCards } from './plan-cards';
 import { PlanCompareTable } from './plan-compare-table';
 
@@ -44,6 +45,7 @@ export function FreePlan({ me, onSubscribe }: FreePlanProps): ReactElement {
                     }
                 />
             ) : null}
+            <OfferCard me={me} />
             <PlanCards me={me} onSubscribe={onSubscribe} />
             <PlanCompareTable />
         </div>

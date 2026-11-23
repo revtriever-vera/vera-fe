@@ -5,6 +5,7 @@ import type { SupportedLocale } from '@/shared/lib/locale';
 import { Button } from '@/shared/ui/button';
 import { Modal } from '@/shared/ui/modal';
 import { priceText } from '../lib/billing-format';
+import { checkoutOfferOf, type CheckoutOffer } from '../lib/checkout-offer';
 import { useCheckout, type Checkout } from '../lib/use-checkout';
 import type { BillingMe } from '../types';
 import { CardRedirectDialog } from './checkout-card';
@@ -34,8 +35,10 @@ function CheckoutFooter({
         return <Button onClick={onClose}>{t('checkout.done.later')}</Button>;
     }
     const form: boolean = checkout.stage === 'form';
-    const label: string =
-        checkout.method === 'card' ? t('checkout.subscribeCard', { price: priceText(me, locale) }) : t('checkout.subscribePix');
+    const offer: CheckoutOffer = checkoutOfferOf(me, new Date());
+    const price: string = priceText(offer.firstCents === null ? me : { ...me, priceCents: offer.firstCents }, locale);
+    const cardLabel: string = offer.cardOnly ? t('checkout.saveCard') : t('checkout.subscribeCard', { price });
+    const label: string = checkout.method === 'card' ? cardLabel : t('checkout.subscribePix');
     return (
         <>
             <Button variant="ghost" onClick={onClose}>

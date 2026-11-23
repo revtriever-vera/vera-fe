@@ -29,7 +29,9 @@
     "pay": "Pay",
     "payOpening": "Opening the payment",
     "tellOwner": "Let the account Owner know.",
-    "dismiss": "Dismiss the notice"
+    "dismiss": "Dismiss the notice",
+    "trialEndingTitle": "Your trial ends on {{date}}.",
+    "trialEnding": "Subscribe to keep the summaries and WhatsApp."
   },
   "toast": {
     "warning": "You have used {{percent}}% of this month's quota",
@@ -111,7 +113,8 @@
         "lineNoDate": "{{price}}",
         "pixNote": "the Pix charge arrives by e-mail",
         "none": "None. Premium lasts until {{date}}; then the account goes back to Free without losing anything.",
-        "noneNoDate": "None. After the paid period, the account goes back to Free without losing anything."
+        "noneNoDate": "None. After the paid period, the account goes back to Free without losing anything.",
+        "trialing": "{{date}}, at the end of the trial."
       },
       "method": {
         "title": "Payment method",
@@ -125,13 +128,16 @@
       },
       "trial": {
         "title": "Trial without a card",
-        "text": "{{days}} days left. The trial ends on {{date}}."
+        "text": "{{days}} days left. The trial ends on {{date}}.",
+        "cardTitle": "Trial with card",
+        "cardText": "Nothing is charged until {{date}}. On that day we charge the saved card."
       },
       "pastDue": "We could not charge you. Your Premium continues until {{date}}.",
       "pastDueNoDate": "We could not charge you. Your Premium continues for now.",
       "cancel": "Cancel subscription",
       "resume": "Resume subscription",
-      "resuming": "Resuming"
+      "resuming": "Resuming",
+      "chipTrialing": "On trial"
     },
     "history": {
       "title": "History",
@@ -158,6 +164,16 @@
     "usage": {
       "title": "Usage this month",
       "description": "Only the written summaries and WhatsApp use the quota."
+    },
+    "offer": {
+      "title": "Your offer",
+      "expires": "To use it, subscribe by {{date}}. After that, full price and no trial."
+    },
+    "trialStrip": {
+      "title": "Premium for free until {{date}}",
+      "detail": "If you do not subscribe, the account goes back to Free on that date.",
+      "endingTitle": "Your trial ends on {{date}}.",
+      "endingDetail": "Subscribe to keep the summaries and WhatsApp."
     }
   },
   "checkout": {
@@ -180,7 +196,8 @@
       "label": "Vera Premium",
       "perMonth": "per month",
       "quota": "Monthly usage quota included",
-      "cancelNote": "Cancel anytime, no fee: Premium lasts until the end of the paid period and the account goes back to Free without losing anything."
+      "cancelNote": "Cancel anytime, no fee: Premium lasts until the end of the paid period and the account goes back to Free without losing anything.",
+      "deferred": "Nothing is charged today. On {{date}} we charge {{price}}."
     },
     "subscribeCard": "Subscribe for {{price}}/month",
     "subscribePix": "Subscribe with Pix",
@@ -211,7 +228,9 @@
       "later": "Do it later"
     },
     "cardCanceled": "Card not saved. Nothing was charged.",
-    "cardUpdated": "Card updated."
+    "cardUpdated": "Card updated.",
+    "cardOnly": "With the trial, payment is by card only.",
+    "saveCard": "Save the card"
   },
   "cancelDialog": {
     "title": "Cancel Premium?",
@@ -230,5 +249,14 @@
     "canceledNow": "Subscription canceled. Premium ended and the amount is returned to you.",
     "resumed": "Subscription resumed. The next charge is on {{date}}.",
     "resumedNoDate": "Subscription resumed."
+  },
+  "offer": {
+    "trialCard_one": "{{count}} free day. You save the card now and the first charge comes only at the end of the trial.",
+    "trialCard_other": "{{count}} free days. You save the card now and the first charge comes only at the end of the trial.",
+    "trialNoCard_one": "{{count}} day of Premium for free, no card. If you do not subscribe, the account goes back to Free.",
+    "trialNoCard_other": "{{count}} days of Premium for free, no card. If you do not subscribe, the account goes back to Free.",
+    "rule": "{{percent}}% off on cycles {{from}} to {{to}}",
+    "ruleSingle": "{{percent}}% off on cycle {{cycle}}",
+    "afterRules": "After that, full price."
   }
 }

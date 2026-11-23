@@ -55,13 +55,17 @@ function usePayInvoice(openInvoiceId: string | null): BillingState['payInvoice']
     );
 }
 
-type BillingData = Pick<BillingState, 'mode' | 'plan' | 'canManage' | 'usage' | 'subscriptionStatus' | 'graceEndsAt' | 'openInvoice'>;
+type BillingData = Pick<
+    BillingState,
+    'mode' | 'plan' | 'canManage' | 'usage' | 'trial' | 'subscriptionStatus' | 'graceEndsAt' | 'openInvoice'
+>;
 
 const EMPTY_DATA: BillingData = {
     mode: 'hosted',
     plan: 'free',
     canManage: false,
     usage: null,
+    trial: null,
     subscriptionStatus: null,
     graceEndsAt: null,
     openInvoice: null
@@ -76,6 +80,7 @@ function dataOf(me: BillingMe | undefined): BillingData {
         plan: me.plan,
         canManage: me.canManage,
         usage: me.usage,
+        trial: me.trial,
         subscriptionStatus: me.subscription?.status ?? null,
         graceEndsAt: me.subscription?.graceEndsAt ?? null,
         openInvoice: me.openInvoice

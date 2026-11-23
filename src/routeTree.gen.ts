@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as PlatformRouteImport } from './routes/_platform'
+import { Route as EntrarRouteImport } from './routes/entrar'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthAppRouteImport } from './routes/_auth/_app'
 import { Route as AuthOnboardingRouteImport } from './routes/_auth/onboarding'
@@ -54,6 +55,11 @@ const AuthRoute = AuthRouteImport.update({
 } as any)
 const PlatformRoute = PlatformRouteImport.update({
   id: '/_platform',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EntrarRoute = EntrarRouteImport.update({
+  id: '/entrar',
+  path: '/entrar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -244,6 +250,7 @@ const AuthAppPortfolioClassesClassIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthAppIndexRoute
+  '/entrar': typeof EntrarRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof AuthOnboardingRouteWithChildren
   '/ui': typeof DevUiRoute
@@ -281,6 +288,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof AuthAppIndexRoute
+  '/entrar': typeof EntrarRoute
   '/login': typeof LoginRoute
   '/ui': typeof DevUiRoute
   '/admin/login': typeof AdminLoginRoute
@@ -316,6 +324,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth': typeof AuthRouteWithChildren
   '/_platform': typeof PlatformRouteWithChildren
+  '/entrar': typeof EntrarRoute
   '/login': typeof LoginRoute
   '/_auth/_app': typeof AuthAppRouteWithChildren
   '/_auth/onboarding': typeof AuthOnboardingRouteWithChildren
@@ -357,6 +366,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/entrar'
     | '/login'
     | '/onboarding'
     | '/ui'
@@ -394,6 +404,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/entrar'
     | '/login'
     | '/ui'
     | '/admin/login'
@@ -428,6 +439,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_auth'
     | '/_platform'
+    | '/entrar'
     | '/login'
     | '/_auth/_app'
     | '/_auth/onboarding'
@@ -469,6 +481,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   PlatformRoute: typeof PlatformRouteWithChildren
+  EntrarRoute: typeof EntrarRoute
   LoginRoute: typeof LoginRoute
   DevUiRoute: typeof DevUiRoute
   AdminLoginRoute: typeof AdminLoginRoute
@@ -490,6 +503,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof PlatformRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/entrar': {
+      id: '/entrar'
+      path: '/entrar'
+      fullPath: '/entrar'
+      preLoaderRoute: typeof EntrarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -878,6 +898,7 @@ const PlatformRouteWithChildren = PlatformRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   PlatformRoute: PlatformRouteWithChildren,
+  EntrarRoute: EntrarRoute,
   LoginRoute: LoginRoute,
   DevUiRoute: DevUiRoute,
   AdminLoginRoute: AdminLoginRoute,
