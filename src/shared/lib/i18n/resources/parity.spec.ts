@@ -5,8 +5,10 @@ import ptBRAuth from './pt-BR/auth.json';
 import enAuth from './en/auth.json';
 import ptBRAccount from './pt-BR/account.json';
 import ptBRMembers from './pt-BR/members.json';
+import ptBRIntegrations from './pt-BR/integrations.json';
 import enAccount from './en/account.json';
 import enMembers from './en/members.json';
+import enIntegrations from './en/integrations.json';
 import ptBRPortfolio from './pt-BR/portfolio.json';
 import enPortfolio from './en/portfolio.json';
 import ptBRPortfolioOverview from './pt-BR/portfolioOverview.json';
@@ -67,6 +69,7 @@ const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'auth', ptBR: ptBRAuth, en: enAuth },
     { name: 'account', ptBR: ptBRAccount, en: enAccount },
     { name: 'members', ptBR: ptBRMembers, en: enMembers },
+    { name: 'integrations', ptBR: ptBRIntegrations, en: enIntegrations },
     { name: 'portfolio', ptBR: ptBRPortfolio, en: enPortfolio },
     { name: 'portfolioOverview', ptBR: ptBRPortfolioOverview, en: enPortfolioOverview },
     { name: 'portfolioAssets', ptBR: ptBRPortfolioAssets, en: enPortfolioAssets },

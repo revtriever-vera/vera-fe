@@ -13,3 +13,7 @@ export async function disposeRenderedClients(): Promise<void> {
         client.clear();
     });
 }
+
+export function lastRenderedClient(): QueryClient | undefined {
+    return activeClients.at(-1);
+}

@@ -4,13 +4,9 @@ import type { UseMutationResult } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { TFunction } from 'i18next';
 import { useForm, useWatch, type UseFormReturn } from 'react-hook-form';
-import { ApiError } from '@/shared/lib/api/api-error';
 import { useDeleteAccount } from '../api/use-delete-account.mutation';
 import { createDeleteAccountSchema, type DeleteAccountInput } from '../schemas/delete-account.schema';
-import { accountErrorMessage } from './account-error-message';
-import { emailsMatch } from './emails-match';
-
-const MISMATCH_CODE: string = 'identity.confirmation_mismatch';
+import { confirmWordMatches } from './confirm-word';
 
 export interface DeleteAccountForm {
     readonly form: UseFormReturn<DeleteAccountInput>;
@@ -22,26 +18,22 @@ export interface DeleteAccountForm {
 
 export function useDeleteAccountForm(t: TFunction<'account'>, email: string, onDeleted: () => void): DeleteAccountForm {
     const erase: UseMutationResult<void, Error, string> = useDeleteAccount();
+    const word: string = t('deleteWord');
     const schema: ReturnType<typeof createDeleteAccountSchema> = useMemo(
-        (): ReturnType<typeof createDeleteAccountSchema> => createDeleteAccountSchema(t, email),
-        [t, email]
+        (): ReturnType<typeof createDeleteAccountSchema> => createDeleteAccountSchema(t, word),
+        [t, word]
     );
     const form: UseFormReturn<DeleteAccountInput> = useForm<DeleteAccountInput>({
         resolver: zodResolver(schema),
         mode: 'onTouched',
-        defaultValues: { confirmEmail: '' }
+        defaultValues: { confirmation: '' }
     });
-    const typed: string = useWatch({ control: form.control, name: 'confirmEmail' });
-    const isMismatch: boolean = erase.error instanceof ApiError && erase.error.problem.type === MISMATCH_CODE;
+    const typed: string = useWatch({ control: form.control, name: 'confirmation' });
 
-    const submit: DeleteAccountForm['submit'] = form.handleSubmit(async (input: DeleteAccountInput): Promise<void> => {
+    const submit: DeleteAccountForm['submit'] = form.handleSubmit(async (): Promise<void> => {
         try {
-            await erase.mutateAsync(input.confirmEmail);
-        } catch (error: unknown) {
-            if (error instanceof ApiError && error.problem.type === MISMATCH_CODE) {
-                form.setError('confirmEmail', { message: accountErrorMessage(t, error, 'delete') });
-                form.setFocus('confirmEmail');
-            }
+            await erase.mutateAsync(email);
+        } catch {
             return;
         }
         onDeleted();
@@ -49,9 +41,9 @@ export function useDeleteAccountForm(t: TFunction<'account'>, email: string, onD
 
     return {
         form,
-        matches: emailsMatch(typed, email),
+        matches: confirmWordMatches(typed, word),
         busy: form.formState.isSubmitting || erase.isPending,
-        failure: isMismatch ? null : erase.error,
+        failure: erase.error,
         submit
     };
 }

@@ -13,6 +13,7 @@ export type PaidFeatureName = 'ai' | 'whatsapp' | 'calendar';
 export type PremiumGateStateName = 'premium_required' | 'paused' | 'disabled';
 export type BillingBannerKindName = 'past_due' | 'paused' | 'warning';
 export type InvoicePayOriginName = 'banner' | 'plan';
+export type IntegrationKindName = 'llm' | 'whatsapp' | 'google';
 export type CurrencyCode = 'BRL' | 'USD';
 export type SpendingImportFormatName = 'ofx' | 'csv_nubank_card' | 'csv_nubank_account' | 'csv_generic';
 export type SpendingFlexibilityName = 'fixed' | 'flexible';
@@ -27,6 +28,10 @@ export interface AnalyticsEventMap {
     auth_failed: { provider: AuthProviderName; code: string };
     auth_signed_out: undefined;
     account_export_requested: undefined;
+    export_all_downloaded: undefined;
+    integration_saved: { kind: IntegrationKindName };
+    integration_test_failed: { kind: IntegrationKindName; reason: string };
+    integration_removed: { kind: IntegrationKindName };
     account_delete_opened: undefined;
     account_deleted: undefined;
     settings_viewed: { tab: SettingsTabName };

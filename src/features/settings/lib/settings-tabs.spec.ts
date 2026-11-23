@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { SETTINGS_MODE, type SettingsTab, type SettingsTabId } from '../types';
-import { SETTINGS_TABS, currentSettingsMode, firstSettingsTab, resolveSettingsTab, visibleSettingsTabs } from './settings-tabs';
+import { SETTINGS_TABS, firstSettingsTab, resolveSettingsTab, visibleSettingsTabs } from './settings-tabs';
 
 function ids(mode: 'hosted' | 'self_hosted'): readonly SettingsTabId[] {
     return visibleSettingsTabs({ mode }).map((tab: SettingsTab): SettingsTabId => tab.id);
@@ -35,8 +35,7 @@ describe('abas de configurações', () => {
         expect(resolveSettingsTab('plan', { mode: SETTINGS_MODE.selfHosted })).toBe('integrations');
     });
 
-    it('tem ids únicos e assume hospedada enquanto o plano não existe', () => {
+    it('tem ids únicos', () => {
         expect(new Set(SETTINGS_TABS.map((tab: SettingsTab): string => tab.id)).size).toBe(SETTINGS_TABS.length);
-        expect(currentSettingsMode()).toBe(SETTINGS_MODE.hosted);
     });
 });

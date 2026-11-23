@@ -1,12 +1,12 @@
 import type { ReactElement, ReactNode } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { SettingsNav } from '../components/settings-nav';
-import { currentSettingsMode } from '../lib/settings-tabs';
+import { useSettingsMode } from '../lib/use-settings-mode';
 import { SETTINGS_MODE, type SettingsMode } from '../types';
 
 export function SettingsPage({ children }: { readonly children: ReactNode }): ReactElement {
     const { t }: UseTranslationResponse<'settings', undefined> = useTranslation('settings');
-    const mode: SettingsMode = currentSettingsMode();
+    const { mode }: { mode: SettingsMode } = useSettingsMode();
     return (
         <div className="mx-auto flex w-full max-w-5xl min-w-0 flex-col gap-4 px-page-x py-page-y">
             <header className="flex flex-col gap-1">

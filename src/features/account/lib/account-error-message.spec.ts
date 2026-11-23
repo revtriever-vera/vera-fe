@@ -8,7 +8,6 @@ import { problem } from '../../../../test/fixtures/auth';
 import { accountErrorMessage, type AccountErrorScope } from './account-error-message';
 
 const CODES: readonly (readonly [string, number, AccountErrorScope, keyof typeof ptBRAccount])[] = [
-    ['identity.confirmation_mismatch', 422, 'delete', 'errorConfirmationMismatch'],
     ['identity.forbidden', 403, 'delete', 'errorForbidden'],
     ['core.too_many_attempts', 429, 'delete', 'errorTooManyAttempts'],
     ['identity.erasure_failed', 500, 'delete', 'errorErasureFailed'],

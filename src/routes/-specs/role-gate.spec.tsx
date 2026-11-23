@@ -120,7 +120,7 @@ describe('owner keeps every control', () => {
 describe('settings by role', () => {
     it('hides Exportar tudo from an editor in Dados e privacidade', async () => {
         openAs('editor', '/settings/privacy');
-        await screen.findByText('Só quem criou a conta pode excluí-la.');
+        await screen.findByText('Só o Dono da conta exporta ou exclui os dados.');
 
         expect(screen.queryByRole('button', { name: /Exportar/ })).not.toBeInTheDocument();
     });
