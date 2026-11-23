@@ -1,4 +1,5 @@
 import { http, HttpResponse, type RequestHandler } from 'msw';
+import { adminHandlers } from './handlers/admin.handlers';
 import { accountHandlers } from './handlers/account.handlers';
 import { authHandlers } from './handlers/auth.handlers';
 import { calendarHandlers } from './handlers/calendar.handlers';
@@ -15,6 +16,7 @@ import { whatsappHandlers } from './handlers/whatsapp.handlers';
 export const handlers: RequestHandler[] = [
     http.get('*/health', () => HttpResponse.json({ status: 'ok' })),
     ...authHandlers,
+    ...adminHandlers,
     ...accountHandlers,
     ...membersHandlers,
     ...billingHandlers,

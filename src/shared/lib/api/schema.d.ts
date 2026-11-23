@@ -404,6 +404,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/platform/signup-links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the signup links
+         * @description The most recent links, newest first, with status, uses, trials started and subscriptions. It holds no customer data, so it leaves no audit entry.
+         */
+        get: operations["PlatformSignupLinksController_list"];
+        put?: never;
+        /**
+         * Create a signup link
+         * @description Creates a link with a label, a validity, a redemption limit and an offer: a trial (none, with card or without card) and a discount scale by paid cycle. A `no_card` trial requires both a limit and a validity of at most 90 days. Records `signup_link.created` in the audit trail in the same transaction.
+         */
+        post: operations["PlatformSignupLinksController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/platform/signup-links/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Revoke a signup link
+         * @description Stops the link from accepting new redemptions. Whoever already redeemed keeps the offer. Revoking a revoked link changes nothing. Records `signup_link.revoked` in the audit trail in the same transaction.
+         */
+        delete: operations["PlatformSignupLinksController_revoke"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/signup-links/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read the offer behind a signup link
+         * @description Public. Returns the trial and the discount scale of a usable link, so the signup page can show them before login. A link that does not exist, was revoked, expired or ran out of uses answers the same 404, and so does a self-hosted deployment. Limited per IP.
+         */
+        get: operations["PublicSignupLinksController_offer"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/integrations": {
         parameters: {
             query?: never;
@@ -1893,7 +1957,7 @@ export interface paths {
         };
         /**
          * Suggest where to cut to reach the savings goal
-         * @description Deterministic cut suggestion computed from the monthly summary (same `month` rules as `GET /spending/summary`; without `month`, the last closed month). Nothing is stored. `goalBps` simulates another goal in this response only; save it with `PUT /spending/settings`. Gap: `gapMinor` = max(0, goal - saved). Candidates: expense categories with `flexibility = flexible` and `spentMinor > 0`; `excessMinor` = max(0, spent - average), and 0 when there is no average. Ideal cut: when the gap is 0 it is 0; when the total excess covers the gap, `excess * gap / total excess`; otherwise `min(spent, excess + (gap - total excess) * spent / total flexible spent)`. Exact rounding: `totalCutMinor` is the sum of the ideal cuts rounded half up; each cut is floored and the missing cents go to the largest remainders (ties: higher spent, then `systemKey` or `categoryId` in lexical order). So the sum of `cutMinor` equals `totalCutMinor`, `0 <= cutMinor <= spentMinor` and `limitMinor = spentMinor - cutMinor`. `limitMonth` is the month after `month`; `isPartial` is true for the current month, which is not closed yet. `categoriesWithCut` counts cuts of at least 100 cents. `uncategorizedMinor` lowers what was saved but is left out of the cuts. Status: `no_data` (no transactions, empty list), `no_income` (income 0, empty list), `goal_met` (gap 0, all cuts 0, `surplusMinor` = saved - goal), `cut_suggested` (gap within the flexible total) and `exceeds_flexible` (gap above the flexible total: every category is cut to zero and the goal requires reviewing fixed spending or income). Sorted by cut descending, then spent descending, then category position.
+         * @description Deterministic cut suggestion computed from the monthly summary (same `month` rules as `GET /spending/summary`; without `month`, the last closed month). Nothing is stored. `goalBps` simulates another goal in this response only; save it with `PUT /spending/settings`. Gap: `gapMinor` = max(0, goal - saved). Candidates: expense categories with `flexibility = flexible` and `spentMinor > 0`; `excessMinor` = max(0, spent - average), and 0 when there is no average. Ideal cut: when the gap is 0 it is 0; when the total excess covers the gap, `excess * gap / total excess`; otherwise `min(spent, excess + (gap - total excess) * spent / total flexible spent)`. Exact rounding: `totalCutMinor` is the sum of the ideal cuts rounded half up; each cut is floored and the missing cents go to the largest remainders (ties: higher spent, then `systemKey` or `categoryId` in lexical order). So the sum of `cutMinor` equals `totalCutMinor`, `0 <= cutMinor <= spentMinor` and `limitMinor = spentMinor - cutMinor`. `limitMonth` is the month after `month`; `isPartial` is true for the current month, which is not closed yet. `categoriesWithCut` counts cuts of at least 100 cents. `uncategorizedMinor` lowers what was saved but is left out of the cuts. Status: `no_data` (no transactions, empty list), `no_income` (income 0, empty list), `goal_met` (gap 0, all cuts 0, `surplusMinor` = saved - goal), `cut_suggested` (gap within the flexible total) and `exceeds_flexible` (gap above the flexible total: every category is cut to zero and the goal requires reviewing fixed spending or income). Sorted by cut descending, then spent descending, then category position. `objectives` tells what the goals ask for: `monthlyNeededMinor` and `behindCount` are the totals of `GET /goals`, `asGoalBps` is that amount as basis points of the income of `month` (rounded up, capped at 9000, null without income); the client offers it as the savings goal through `PUT /spending/settings`. It never changes the goal alone.
          */
         get: operations["CutsController_get"];
         put?: never;
@@ -4655,6 +4719,567 @@ export interface operations {
             };
             /** @description Self-hosted deployment, there is no admin (identity.platform_disabled) */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PlatformSignupLinksController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The links */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Newest first, at most 200 */
+                        items: {
+                            /**
+                             * Format: uuid
+                             * @description Link id
+                             */
+                            id: string;
+                            /** @description Token that goes in the signup URL */
+                            token: string;
+                            /**
+                             * Format: uri
+                             * @description Signup URL to share
+                             */
+                            url: string;
+                            /** @description Internal name of the link */
+                            label: string;
+                            trial: {
+                                /**
+                                 * @description `none`: no trial. `card`: trial with the card saved and the first charge at the end. `no_card`: Premium for N days without a card; the account goes back to Free if it does not subscribe
+                                 * @enum {string}
+                                 */
+                                kind: "none" | "card" | "no_card";
+                                /** @description Trial length in days (1 to 60); null when there is no trial */
+                                days: number | null;
+                            };
+                            /** @description Discount scale by paid cycle */
+                            rules: {
+                                /** @description Discount on the Premium price, from 1 to 90 percent */
+                                percent: number;
+                                /** @description First paid cycle the rule covers (the first paid cycle is 1; trial days do not count) */
+                                fromCycle: number;
+                                /** @description Last paid cycle the rule covers, inclusive */
+                                toCycle: number;
+                            }[];
+                            /** @description Redemption limit; null is unlimited */
+                            maxUses: number | null;
+                            /**
+                             * Format: date-time
+                             * @description When the link stops accepting redemptions; null never expires
+                             */
+                            expiresAt: string | null;
+                            /**
+                             * @description Whether the link still accepts redemptions
+                             * @enum {string}
+                             */
+                            status: "active" | "revoked" | "expired" | "exhausted";
+                            /** @description Accounts that redeemed the link (uses) */
+                            redemptionCount: number;
+                            /** @description Redemptions that started a trial */
+                            trialCount: number;
+                            /** @description Redemptions that ended up subscribing */
+                            subscriptionCount: number;
+                            /**
+                             * Format: date-time
+                             * @description When an operator revoked the link
+                             */
+                            revokedAt: string | null;
+                            /**
+                             * Format: date-time
+                             * @description When the link was created
+                             */
+                            createdAt: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Not a person of the platform company (identity.platform_only) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Self-hosted deployment (identity.platform_disabled) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PlatformSignupLinksController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Internal name of the link, for the operators only */
+                    label: string;
+                    /** @description The trial part of the offer */
+                    trial: {
+                        /**
+                         * @description `none`: no trial. `card`: trial with the card saved and the first charge at the end. `no_card`: Premium for N days without a card; the account goes back to Free if it does not subscribe
+                         * @enum {string}
+                         */
+                        kind: "none" | "card" | "no_card";
+                        /** @description Trial length in days (1 to 60); null when there is no trial */
+                        days: number | null;
+                    };
+                    /**
+                     * @description Discount scale by paid cycle, 0 to 20 rules; the first rule that matches the cycle wins
+                     * @default []
+                     */
+                    rules?: {
+                        /** @description Discount on the Premium price, from 1 to 90 percent */
+                        percent: number;
+                        /** @description First paid cycle the rule covers (the first paid cycle is 1; trial days do not count) */
+                        fromCycle: number;
+                        /** @description Last paid cycle the rule covers, inclusive */
+                        toCycle: number;
+                    }[];
+                    /**
+                     * @description How many accounts can redeem the link; null is unlimited (required with `no_card`)
+                     * @default null
+                     */
+                    maxUses?: number | null;
+                    /**
+                     * Format: date-time
+                     * @description When the link stops accepting new redemptions (required with `no_card`, at most 90 days ahead)
+                     * @default null
+                     */
+                    expiresAt?: string | null;
+                };
+            };
+        };
+        responses: {
+            /** @description The link, with its token and URL */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Link id
+                         */
+                        id: string;
+                        /** @description Token that goes in the signup URL */
+                        token: string;
+                        /**
+                         * Format: uri
+                         * @description Signup URL to share
+                         */
+                        url: string;
+                        /** @description Internal name of the link */
+                        label: string;
+                        trial: {
+                            /**
+                             * @description `none`: no trial. `card`: trial with the card saved and the first charge at the end. `no_card`: Premium for N days without a card; the account goes back to Free if it does not subscribe
+                             * @enum {string}
+                             */
+                            kind: "none" | "card" | "no_card";
+                            /** @description Trial length in days (1 to 60); null when there is no trial */
+                            days: number | null;
+                        };
+                        /** @description Discount scale by paid cycle */
+                        rules: {
+                            /** @description Discount on the Premium price, from 1 to 90 percent */
+                            percent: number;
+                            /** @description First paid cycle the rule covers (the first paid cycle is 1; trial days do not count) */
+                            fromCycle: number;
+                            /** @description Last paid cycle the rule covers, inclusive */
+                            toCycle: number;
+                        }[];
+                        /** @description Redemption limit; null is unlimited */
+                        maxUses: number | null;
+                        /**
+                         * Format: date-time
+                         * @description When the link stops accepting redemptions; null never expires
+                         */
+                        expiresAt: string | null;
+                        /**
+                         * @description Whether the link still accepts redemptions
+                         * @enum {string}
+                         */
+                        status: "active" | "revoked" | "expired" | "exhausted";
+                        /** @description Accounts that redeemed the link (uses) */
+                        redemptionCount: number;
+                        /** @description Redemptions that started a trial */
+                        trialCount: number;
+                        /** @description Redemptions that ended up subscribing */
+                        subscriptionCount: number;
+                        /**
+                         * Format: date-time
+                         * @description When an operator revoked the link
+                         */
+                        revokedAt: string | null;
+                        /**
+                         * Format: date-time
+                         * @description When the link was created
+                         */
+                        createdAt: string;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Not a person of the platform company (identity.platform_only) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Self-hosted deployment (identity.platform_disabled) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The offer breaks a rule of the platform (signup_links.invalid_offer) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PlatformSignupLinksController_revoke: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Signup link id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Revoked */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Not a person of the platform company (identity.platform_only) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Self-hosted deployment (identity.platform_disabled) or no link with this id (signup_links.not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PublicSignupLinksController_offer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Token of the signup link, as it appears in the URL */
+                token: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The offer */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        trial: {
+                            /**
+                             * @description `none`: no trial. `card`: trial with the card saved and the first charge at the end. `no_card`: Premium for N days without a card; the account goes back to Free if it does not subscribe
+                             * @enum {string}
+                             */
+                            kind: "none" | "card" | "no_card";
+                            /** @description Trial length in days (1 to 60); null when there is no trial */
+                            days: number | null;
+                        };
+                        /** @description Discount scale by paid cycle */
+                        rules: {
+                            /** @description Discount on the Premium price, from 1 to 90 percent */
+                            percent: number;
+                            /** @description First paid cycle the rule covers (the first paid cycle is 1; trial days do not count) */
+                            fromCycle: number;
+                            /** @description Last paid cycle the rule covers, inclusive */
+                            toCycle: number;
+                        }[];
+                        /**
+                         * Format: date-time
+                         * @description When the link stops accepting redemptions; null never expires
+                         */
+                        expiresAt: string | null;
+                    };
+                };
+            };
+            /** @description No usable link with this token (signup_links.not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 30 lookups in a minute from this IP (core.too_many_attempts) */
+            429: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -17894,6 +18519,14 @@ export interface operations {
                             cutMinor: number;
                             limitMinor: number;
                         }[];
+                        objectives: {
+                            /** @description Sum of the monthly amount of the goals not yet done (`GET /goals` totals), BRL cents */
+                            monthlyNeededMinor: number;
+                            /** @description Goals `behind` or `overdue` */
+                            behindCount: number;
+                            /** @description `monthlyNeededMinor` as basis points of the income of `month`, rounded up and capped at 9000; null when the income is 0 */
+                            asGoalBps: number | null;
+                        };
                     };
                 };
             };

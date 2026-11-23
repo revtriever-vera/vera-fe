@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const DEFAULTED_KEYS: readonly string[] = [
+    'VITE_APP_TARGET',
     'VITE_API_URL',
     'VITE_POSTHOG_KEY',
     'VITE_POSTHOG_HOST',
@@ -23,6 +24,7 @@ describe('env', () => {
             vi.stubEnv(key, undefined);
         });
         const { env } = await import('./env');
+        expect(env.VITE_APP_TARGET).toBe('unified');
         expect(env.VITE_API_URL).toBe('http://localhost:3333');
         expect(env.VITE_POSTHOG_KEY).toBe('');
         expect(env.VITE_POSTHOG_HOST).toBe('https://us.i.posthog.com');
@@ -32,6 +34,15 @@ describe('env', () => {
         expect(env.VITE_PRIVACY_URL).toBe('');
         expect(env.VITE_LOGIN_PHOTO_URL).toBe('');
         expect(env.VITE_REPO_URL).toBe('');
+    });
+
+    it('reads the app target and rejects an unknown one', async () => {
+        vi.stubEnv('VITE_APP_TARGET', 'admin');
+        const { env } = await import('./env');
+        expect(env.VITE_APP_TARGET).toBe('admin');
+        vi.resetModules();
+        vi.stubEnv('VITE_APP_TARGET', 'other');
+        await expect(import('./env')).rejects.toThrow('VITE_APP_TARGET');
     });
 
     it('reads the identity provider variables', async () => {

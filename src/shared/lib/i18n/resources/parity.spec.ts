@@ -73,6 +73,8 @@ import ptBRBilling from './pt-BR/billing.json';
 import enBilling from './en/billing.json';
 import ptBRSummaries from './pt-BR/summaries.json';
 import enSummaries from './en/summaries.json';
+import ptBRAdmin from './pt-BR/admin.json';
+import enAdmin from './en/admin.json';
 
 const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'common', ptBR: ptBRCommon, en: enCommon },
@@ -100,7 +102,8 @@ const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'spendingRules', ptBR: ptBRSpendingRules, en: enSpendingRules },
     { name: 'settings', ptBR: ptBRSettings, en: enSettings },
     { name: 'billing', ptBR: ptBRBilling, en: enBilling },
-    { name: 'summaries', ptBR: ptBRSummaries, en: enSummaries }
+    { name: 'summaries', ptBR: ptBRSummaries, en: enSummaries },
+    { name: 'admin', ptBR: ptBRAdmin, en: enAdmin }
 ];
 
 describe('paridade de chaves entre os namespaces de tradução', () => {

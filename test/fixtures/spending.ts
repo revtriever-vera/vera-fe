@@ -544,6 +544,7 @@ function cutsBase(overrides: Partial<CutsResponse>): CutsResponse {
         uncategorizedMinor: CANONICAL_UNCATEGORIZED_MINOR,
         averageMonths: 3,
         suggestions: [],
+        objectives: { monthlyNeededMinor: 0, behindCount: 0, asGoalBps: null },
         ...overrides
     };
 }

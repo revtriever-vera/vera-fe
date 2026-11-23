@@ -24,6 +24,7 @@ import type ptBRSpendingRules from './shared/lib/i18n/resources/pt-BR/spendingRu
 import type ptBRSettings from './shared/lib/i18n/resources/pt-BR/settings.json';
 import type ptBRBilling from './shared/lib/i18n/resources/pt-BR/billing.json';
 import type ptBRSummaries from './shared/lib/i18n/resources/pt-BR/summaries.json';
+import type ptBRAdmin from './shared/lib/i18n/resources/pt-BR/admin.json';
 
 declare module 'i18next' {
     interface CustomTypeOptions {
@@ -56,6 +57,7 @@ declare module 'i18next' {
             settings: typeof ptBRSettings;
             billing: typeof ptBRBilling;
             summaries: typeof ptBRSummaries;
+            admin: typeof ptBRAdmin;
         };
     }
 }
