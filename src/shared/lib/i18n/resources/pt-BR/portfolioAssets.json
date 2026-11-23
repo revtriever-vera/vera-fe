@@ -322,5 +322,10 @@
   "issuer": {
     "complete": "Complete o cadastro",
     "completeLabel": "Complete o cadastro de {{name}}: informar o emissor"
+  },
+  "tabs": {
+    "label": "Seções de Meus ativos",
+    "list": "Ativos",
+    "concentration": "Emissores e setores"
   }
 }

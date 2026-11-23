@@ -21,6 +21,7 @@ type UseUpdateResult = UseMutationResult<AssetClassView, ApiError, UpdateClassIn
 const EXPECTED_KEYS: unknown[] = [
     portfolioKeys.holdings(),
     portfolioKeys.overview(),
+    portfolioKeys.concentration(),
     portfolioKeys.classes(),
     portfolioKeys.classDetails()
 ];

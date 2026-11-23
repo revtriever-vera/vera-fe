@@ -6,6 +6,7 @@ export type AddAssetSource = 'search' | 'fixed_income';
 export type IssuerKindName = 'bank' | 'company';
 export type FgcVerdictName = 'covered' | 'over_limit' | 'not_covered_kind' | 'not_associated' | 'not_calculated';
 export type ExportFormatName = 'csv' | 'xlsx';
+export type AssetsTabName = 'list' | 'fixed-income' | 'concentration';
 export type CurrencyCode = 'BRL' | 'USD';
 export type SpendingImportFormatName = 'ofx' | 'csv_nubank_card' | 'csv_nubank_account' | 'csv_generic';
 export type SpendingFlexibilityName = 'fixed' | 'flexible';
@@ -50,6 +51,7 @@ export interface AnalyticsEventMap {
     portfolio_asset_targets_saved: { assetCount: number };
     portfolio_contribution_calculated: { classesFunded: number; currency: CurrencyCode };
     portfolio_onboarding_assets_step: { count: number };
+    assets_tab_viewed: { tab: AssetsTabName };
     spending_credentials_saved: undefined;
     spending_credentials_removed: undefined;
     spending_items_added: { connected: number; failed: number };

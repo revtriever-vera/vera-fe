@@ -1,3 +1,4 @@
+import type { AssetsTabName } from '@/shared/lib/analytics/events';
 import type { paths } from '@/shared/lib/api/schema';
 
 type CatalogOperation = paths['/catalog/assets']['get'];
@@ -45,3 +46,7 @@ export type FgcSimulation = paths['/portfolio/fgc/simulate']['post']['responses'
 export type FgcVerdict = FgcSimulation['verdict'];
 
 export const FGC_LIMIT_MINOR: number = 25000000;
+
+export const ASSETS_TABS = ['list', 'concentration'] as const satisfies readonly AssetsTabName[];
+
+export type AssetsTab = (typeof ASSETS_TABS)[number];

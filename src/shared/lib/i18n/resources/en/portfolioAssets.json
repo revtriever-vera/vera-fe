@@ -322,5 +322,10 @@
   "issuer": {
     "complete": "Complete the registration",
     "completeLabel": "Complete the registration of {{name}}: add the issuer"
+  },
+  "tabs": {
+    "label": "My assets sections",
+    "list": "Assets",
+    "concentration": "Issuers and sectors"
   }
 }

@@ -1,3 +1,4 @@
+import type { ConcentrationResponse } from '@/features/portfolio/concentration/types';
 import type {
     AssetClassView,
     ClassesResponse,
@@ -446,4 +447,51 @@ export function usdOverview(): Overview {
         largestDeviation:
             base.largestDeviation === null ? null : { ...base.largestDeviation, gapMinor: convert(base.largestDeviation.gapMinor) }
     };
+}
+
+export function emptyConcentration(overrides: Partial<ConcentrationResponse> = {}): ConcentrationResponse {
+    return {
+        asOf: '2026-10-09',
+        baseCurrency: 'BRL',
+        totalMinor: 0,
+        equityTotalMinor: 0,
+        byIssuer: [],
+        byIssuerOthers: null,
+        bySector: [],
+        ...overrides
+    };
+}
+
+export function sampleConcentration(overrides: Partial<ConcentrationResponse> = {}): ConcentrationResponse {
+    return emptyConcentration({
+        totalMinor: 1000000,
+        equityTotalMinor: 400000,
+        byIssuer: [
+            {
+                key: 'itau',
+                kind: 'group',
+                name: 'Itaú Unibanco',
+                valueMinor: 500000,
+                shareBps: 5000,
+                assets: ['ITUB4', 'CDB Itaú'],
+                moreCount: 0
+            },
+            {
+                key: 'funds',
+                kind: 'bucket',
+                name: null,
+                valueMinor: 250000,
+                shareBps: 2500,
+                assets: ['IVVB11', 'HGLG11', 'BOVA11', 'XPML11'],
+                moreCount: 3
+            },
+            { key: 'crypto', kind: 'bucket', name: null, valueMinor: 100000, shareBps: 1000, assets: ['BTC'], moreCount: 0 }
+        ],
+        byIssuerOthers: { valueMinor: 150000, shareBps: 1500, groups: 4 },
+        bySector: [
+            { key: 'financeiro', valueMinor: 300000, shareBps: 7500, assets: ['ITUB4'], moreCount: 0 },
+            { key: 'imobiliario_logistica', valueMinor: 100000, shareBps: 2500, assets: ['HGLG11'], moreCount: 0 }
+        ],
+        ...overrides
+    });
 }

@@ -14,6 +14,7 @@ import { useUpdatePosition } from './use-update-position.mutation';
 const PORTFOLIO_KEYS: unknown[] = [
     portfolioKeys.holdings(),
     portfolioKeys.overview(),
+    portfolioKeys.concentration(),
     portfolioKeys.classes(),
     portfolioKeys.classDetails()
 ];
