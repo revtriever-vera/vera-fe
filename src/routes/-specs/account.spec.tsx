@@ -7,6 +7,7 @@ import type { AnyRouter } from '@tanstack/react-router';
 import { tokenStore } from '@/shared/lib/api/token-store';
 import { i18n } from '@/shared/lib/i18n';
 import type { BillingMe } from '@/features/billing/types';
+import { supportAccessItem } from '../../../test/fixtures/account';
 import { problem, sessionIdentity } from '../../../test/fixtures/auth';
 import { billingMe, selfHostedBilling } from '../../../test/fixtures/billing';
 import { signedInHandlers } from '../../../test/msw/handlers/auth.handlers';
@@ -304,6 +305,45 @@ describe('account deletion', () => {
         expect(screen.getByText('Só o Dono da conta exporta ou exclui os dados.')).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Excluir conta' })).not.toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Exportar' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('region', { name: 'Acessos do suporte' })).not.toBeInTheDocument();
+    });
+});
+
+describe('account support access', () => {
+    it('lists when, who, the reason and the layers of each opening', async () => {
+        server.use(
+            http.get('*/account/support-access', (): Response =>
+                HttpResponse.json({
+                    items: [
+                        supportAccessItem({ layers: ['summary', 'data'] }),
+                        supportAccessItem({ id: '55555555-5555-4555-8555-555555555555', operatorName: null, reason: 'Revisão de fatura' })
+                    ]
+                })
+            )
+        );
+        await openAccount();
+
+        const list: HTMLElement = await screen.findByRole('list', { name: 'Acessos do suporte, do mais recente ao mais antigo' });
+
+        expect(within(list).getAllByRole('listitem')).toHaveLength(2);
+        expect(within(list).getByText('Aberto por Marina Souza')).toBeInTheDocument();
+        expect(within(list).getByText('Motivo: Cliente pediu ajuda com a assinatura')).toBeInTheDocument();
+        expect(within(list).getAllByText('Resumo')).toHaveLength(2);
+        expect(within(list).getByText('Dados da conta')).toBeInTheDocument();
+        expect(within(list).getByText('Pessoa não identificada')).toBeInTheDocument();
+    });
+
+    it('says no one opened the account yet', async () => {
+        await openAccount();
+
+        expect(await screen.findByText(/Nenhum acesso até agora/)).toBeInTheDocument();
+    });
+
+    it('shows an error when the list fails to load', async () => {
+        failWith('get', '*/account/support-access', 'identity.unauthorized', 403);
+        await openAccount();
+
+        expect(await screen.findByText(/Não foi possível carregar os acessos do suporte/)).toBeInTheDocument();
     });
 });
 

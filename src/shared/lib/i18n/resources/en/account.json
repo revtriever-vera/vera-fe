@@ -40,5 +40,16 @@
   "deleteDescriptionPremium": "Erases the account and all the data and disconnects banks, WhatsApp and Google, and also cancels Premium.",
   "deleteModalBody": "This permanently erases the portfolio, targets, transactions, rules and reminders, and disconnects banks, WhatsApp and Google. It cannot be undone.",
   "deleteModalBodyPremium": "This permanently erases the portfolio, targets, transactions, rules and reminders, and disconnects banks, WhatsApp and Google. Premium is canceled, with no further charges. It cannot be undone.",
-  "deleteWord": "DELETE"
+  "deleteWord": "DELETE",
+  "supportTitle": "Support access",
+  "supportDescription": "Whenever someone from the Vera team opens the account data, they must give a reason. Each opening is logged here.",
+  "supportLoading": "Loading support access",
+  "supportFailed": "Could not load the support access list. Try again in a moment.",
+  "supportEmpty": "No access so far. If someone opens the account, the day, the person and the reason show up here.",
+  "supportListLabel": "Support access, newest first",
+  "supportOperator": "Opened by {{name}}",
+  "supportOperatorUnknown": "Unidentified person",
+  "supportReason": "Reason: {{reason}}",
+  "supportLayerSummary": "Summary",
+  "supportLayerData": "Account data"
 }

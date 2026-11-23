@@ -40,5 +40,16 @@
   "deleteDescriptionPremium": "Apaga a conta e todos os dados e desconecta bancos, WhatsApp e Google, além de cancelar o Premium.",
   "deleteModalBody": "Isso apaga para sempre a carteira, metas, transações, regras e lembretes, e desconecta bancos, WhatsApp e Google. Não dá para desfazer.",
   "deleteModalBodyPremium": "Isso apaga para sempre a carteira, metas, transações, regras e lembretes, e desconecta bancos, WhatsApp e Google. O Premium é cancelado, sem novas cobranças. Não dá para desfazer.",
-  "deleteWord": "EXCLUIR"
+  "deleteWord": "EXCLUIR",
+  "supportTitle": "Acessos do suporte",
+  "supportDescription": "Toda vez que alguém da equipe da Vera abre os dados da conta, precisa dar um motivo. Cada abertura fica registrada aqui.",
+  "supportLoading": "Carregando os acessos do suporte",
+  "supportFailed": "Não foi possível carregar os acessos do suporte. Tente novamente em instantes.",
+  "supportEmpty": "Nenhum acesso até agora. Se alguém abrir a conta, o dia, a pessoa e o motivo aparecem aqui.",
+  "supportListLabel": "Acessos do suporte, do mais recente ao mais antigo",
+  "supportOperator": "Aberto por {{name}}",
+  "supportOperatorUnknown": "Pessoa não identificada",
+  "supportReason": "Motivo: {{reason}}",
+  "supportLayerSummary": "Resumo",
+  "supportLayerData": "Dados da conta"
 }
