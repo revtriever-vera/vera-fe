@@ -1,5 +1,6 @@
 import { useState, type ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
+import { RoleGate } from '@/app/providers/role-gate';
 import { useSession } from '@/app/providers/session-provider';
 import { cn } from '@/shared/lib/cn';
 import { Alert } from '@/shared/ui/alert';
@@ -93,7 +94,9 @@ function ConnectionsContent({ data, state, companyId, isOwner }: ContentProps): 
                             setEditing('rotate');
                         }}
                     />
-                    <ImportCard />
+                    <RoleGate min="editor">
+                        <ImportCard />
+                    </RoleGate>
                 </div>
             </div>
         </div>

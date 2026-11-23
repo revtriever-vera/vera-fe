@@ -1,3 +1,4 @@
+import { useRole } from '@/app/providers/use-role';
 import type { ReactElement } from 'react';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
@@ -58,6 +59,7 @@ function useSaveGoal(draft: GoalDraftControls): { readonly save: () => Promise<v
 export function GoalCard({ cuts, draft }: GoalCardProps): ReactElement {
     const { t }: UseTranslationResponse<'spendingCuts', undefined> = useTranslation('spendingCuts');
     const { save, pending } = useSaveGoal(draft);
+    const { canEdit } = useRole();
     return (
         <section aria-labelledby="goal-card-title" className="surface-card flex flex-col gap-4 p-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -67,7 +69,7 @@ export function GoalCard({ cuts, draft }: GoalCardProps): ReactElement {
                 <GoalPills cuts={cuts} />
             </div>
             <GoalSlider valueBps={draft.draftBps} onChange={draft.set} />
-            {draft.dirty ? (
+            {draft.dirty && canEdit ? (
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <p className="text-sm text-content-muted">{t('goal.simulating')}</p>
                     <Button

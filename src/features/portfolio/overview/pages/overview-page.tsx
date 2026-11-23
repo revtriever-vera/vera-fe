@@ -1,3 +1,4 @@
+import { useRole } from '@/app/providers/use-role';
 import type { ReactElement } from 'react';
 import { Link } from '@tanstack/react-router';
 import type { UseQueryResult } from '@tanstack/react-query';
@@ -62,6 +63,12 @@ function OverviewFailure({ error, onRetry }: { readonly error: Error; readonly o
 
 function OverviewEmpty(): ReactElement {
     const { t }: UseTranslationResponse<'portfolioOverview', undefined> = useTranslation('portfolioOverview');
+    const { canEdit } = useRole();
+    if (!canEdit) {
+        return (
+            <EmptyState icon={<Wallet className="size-6" />} title={t('empty.viewerTitle')} description={t('empty.viewerDescription')} />
+        );
+    }
     return (
         <EmptyState
             icon={<Wallet className="size-6" />}

@@ -18,32 +18,26 @@ export function MembersCard({ rows, canManage }: MembersCardProps): ReactElement
     const [target, setTarget] = useState<PersonRow | null>(null);
 
     return (
-        <SectionCard
-            title={t('listTitle')}
-            description={t('listBody')}
-            aside={<Badge>{t('peopleCount', { count: rows.length })}</Badge>}
-        >
+        <SectionCard title={t('listTitle')} description={t('listBody')} aside={<Badge>{t('peopleCount', { count: rows.length })}</Badge>}>
             <ul className="divide-y divide-border">
-                {rows.map(
-                    (person: PersonRow): ReactElement => (
-                        <MemberRow
-                            key={person.id}
-                            person={person}
-                            canManage={canManage}
-                            roleLocked={person.isYou && isOnlyOwner(rows, person)}
-                            busy={actions.busy}
-                            onChangeRole={(role): void => {
-                                actions.changeRole(person, role);
-                            }}
-                            onResend={(): void => {
-                                actions.resend(person);
-                            }}
-                            onRemove={(): void => {
-                                setTarget(person);
-                            }}
-                        />
-                    )
-                )}
+                {rows.map((person: PersonRow): ReactElement => (
+                    <MemberRow
+                        key={person.id}
+                        person={person}
+                        canManage={canManage}
+                        roleLocked={person.isYou && isOnlyOwner(rows, person)}
+                        busy={actions.busy}
+                        onChangeRole={(role): void => {
+                            actions.changeRole(person, role);
+                        }}
+                        onResend={(): void => {
+                            actions.resend(person);
+                        }}
+                        onRemove={(): void => {
+                            setTarget(person);
+                        }}
+                    />
+                ))}
             </ul>
             {target === null ? null : (
                 <RemoveMemberDialog

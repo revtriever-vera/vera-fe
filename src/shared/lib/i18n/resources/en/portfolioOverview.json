@@ -67,6 +67,8 @@
   "empty": {
     "title": "No assets registered",
     "description": "Add your assets to see how your net worth is distributed against your target.",
-    "action": "Add my first asset"
+    "action": "Add my first asset",
+    "viewerTitle": "No assets yet",
+    "viewerDescription": "Ask whoever edits the account to add them."
   }
 }

@@ -11,6 +11,10 @@ import { categoryView, systemCategory } from '../../../../test/fixtures/spending
 import { spendingKeys } from '../api/spending-keys';
 import { FlexibilityToggle } from './flexibility-toggle';
 
+vi.mock('@/app/providers/use-role', () => ({
+    useRole: (): { role: string; canEdit: boolean; isOwner: boolean } => ({ role: 'owner', canEdit: true, isOwner: true })
+}));
+
 vi.mock('@/shared/lib/analytics', async (importOriginal) => ({
     ...(await importOriginal<typeof import('@/shared/lib/analytics')>()),
     track: vi.fn()

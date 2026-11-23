@@ -1,3 +1,5 @@
+import { CategoryReadOnly } from '../../components/category-read-only';
+import { useRole } from '@/app/providers/use-role';
 import { useState, type ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import type { UseQueryResult } from '@tanstack/react-query';
@@ -76,6 +78,10 @@ function CategorizedCell({ transaction }: TransactionProps): ReactElement {
 }
 
 export function TransactionCategory({ transaction }: TransactionProps): ReactElement {
+    const { canEdit } = useRole();
+    if (!canEdit) {
+        return <CategoryReadOnly categoryId={transaction.categoryId} />;
+    }
     if (transaction.categoryId === null) {
         return <InlineCategorize transaction={transaction} />;
     }

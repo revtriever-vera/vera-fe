@@ -1,3 +1,4 @@
+import { RoleGate } from '@/app/providers/role-gate';
 import { useEffect, useState, type ReactElement } from 'react';
 import { Link } from '@tanstack/react-router';
 import type { UseQueryResult } from '@tanstack/react-query';
@@ -103,10 +104,12 @@ function RulesHeader({ onNew }: { readonly onNew: () => void }): ReactElement {
                 </h2>
                 <p className="max-w-prose text-sm text-content-muted">{t('rules.description')}</p>
             </div>
-            <Button onClick={onNew}>
-                <Plus className="size-4" aria-hidden="true" />
-                {t('rules.new')}
-            </Button>
+            <RoleGate min="editor">
+                <Button onClick={onNew}>
+                    <Plus className="size-4" aria-hidden="true" />
+                    {t('rules.new')}
+                </Button>
+            </RoleGate>
         </header>
     );
 }

@@ -12,16 +12,18 @@ interface RoleSelectProps {
     readonly onChange: (role: MemberRole) => void;
 }
 
-function isRole(value: string): value is MemberRole {
-    return MEMBER_ROLES.some((role: MemberRole): boolean => role === value);
+function toRole(value: string): MemberRole | undefined {
+    return MEMBER_ROLES.find((role: MemberRole): boolean => role === value);
 }
 
 export function RoleSelect({ label, value, disabled, className, onChange }: RoleSelectProps): ReactElement {
     const { t }: UseTranslationResponse<'members', undefined> = useTranslation('members');
     const labelId: string = useId();
-    const choices: readonly SelectChoice[] = MEMBER_ROLES.map(
-        (role: MemberRole): SelectChoice => ({ value: role, label: t(ROLE_LABEL_KEYS[role]), warning: null })
-    );
+    const choices: readonly SelectChoice[] = MEMBER_ROLES.map((role: MemberRole): SelectChoice => ({
+        value: role,
+        label: t(ROLE_LABEL_KEYS[role]),
+        warning: null
+    }));
 
     return (
         <>
@@ -36,8 +38,9 @@ export function RoleSelect({ label, value, disabled, className, onChange }: Role
                 disabled={disabled}
                 className={className}
                 onChange={(next: string): void => {
-                    if (isRole(next)) {
-                        onChange(next);
+                    const role: MemberRole | undefined = toRole(next);
+                    if (role !== undefined) {
+                        onChange(role);
                     }
                 }}
             />

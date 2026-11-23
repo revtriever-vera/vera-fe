@@ -1,3 +1,4 @@
+import { RoleGate } from '@/app/providers/role-gate';
 import type { ReactElement } from 'react';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { Link, useNavigate, useSearch, type UseNavigateResult } from '@tanstack/react-router';
@@ -43,9 +44,15 @@ function PageHeader({ search, filters }: { readonly search: TransactionsSearch; 
                 <Link to="/spending/rules" className={buttonVariants({ variant: 'ghost' })}>
                     {t('actions.rules')}
                 </Link>
-                <Link to="/spending/transactions" search={{ ...search, import: true }} className={buttonVariants({ variant: 'secondary' })}>
-                    {t('actions.import')}
-                </Link>
+                <RoleGate min="editor">
+                    <Link
+                        to="/spending/transactions"
+                        search={{ ...search, import: true }}
+                        className={buttonVariants({ variant: 'secondary' })}
+                    >
+                        {t('actions.import')}
+                    </Link>
+                </RoleGate>
                 <ExportMenu filters={filters} />
             </div>
         </div>
