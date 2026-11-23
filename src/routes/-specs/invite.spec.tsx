@@ -104,7 +104,11 @@ describe('invite route', () => {
 
     it.each([
         ['invites.invalid', 410, 'Este convite expirou ou já foi usado. Peça um convite novo.'],
-        ['invites.email_mismatch', 409, 'Entre com a conta de l***@exemplo.com, o e-mail que recebeu o convite.'],
+        [
+            'invites.email_mismatch',
+            409,
+            'O convite precisa do login com Google no e-mail l***@exemplo.com. O Facebook não confirma o e-mail. Toque em Continuar com Google.'
+        ],
         [
             'members.account_not_empty',
             409,

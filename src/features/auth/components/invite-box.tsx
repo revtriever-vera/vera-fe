@@ -1,10 +1,11 @@
-import { useEffect, type ReactElement } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 import { Navigate, useNavigate, type UseNavigateResult } from '@tanstack/react-router';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useSession } from '@/app/providers/session-provider';
 import { useToast } from '@/app/providers/toast-provider';
 import { track } from '@/shared/lib/analytics';
+import type { AuthProviderName } from '@/shared/lib/analytics/events';
 import { Alert } from '@/shared/ui/alert';
 import { BrandLogo } from '@/shared/ui/brand-logo';
 import { Button } from '@/shared/ui/button';
@@ -28,6 +29,7 @@ function InviteSignIn({ token, invite }: InviteSignInProps): ReactElement {
     const toast = useToast();
     const navigate: UseNavigateResult<string> = useNavigate();
     const providers: ProviderAvailability = useProviderAvailability();
+    const [failedProvider, setFailedProvider] = useState<AuthProviderName | null>(null);
     const login: SocialLogin = useSocialLogin({
         inviteToken: token,
         onSignedIn: (_completed, provider): void => {
@@ -35,14 +37,15 @@ function InviteSignIn({ token, invite }: InviteSignInProps): ReactElement {
             toast.show({ tone: 'positive', title: t('inviteJoined', { name: invite.inviterName }) });
             void navigate({ to: '/', replace: true });
         },
-        onFailed: (failure: Error): void => {
+        onFailed: (failure: Error, provider: AuthProviderName): void => {
+            setFailedProvider(provider);
             track('invite_failed', { code: inviteFailureCode(failure) });
         }
     });
 
     return (
         <div className="flex flex-col gap-2.5">
-            {login.error ? <Alert title={inviteErrorMessage(t, login.error, invite.emailMasked)} /> : null}
+            {login.error ? <Alert title={inviteErrorMessage(t, login.error, invite.emailMasked, failedProvider)} /> : null}
             <SocialButtons providers={providers} login={login} />
         </div>
     );
