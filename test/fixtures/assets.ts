@@ -131,7 +131,6 @@ export function titleView(overrides: Partial<TitleView> = {}): TitleView {
             fgcAssociated: true
         },
         needsIssuer: false,
-        holderUserId: null,
         createdAt: '2026-10-09T12:00:00.000Z',
         updatedAt: '2026-10-09T12:00:00.000Z',
         valuation: previewResult(),
