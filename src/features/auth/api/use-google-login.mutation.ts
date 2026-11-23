@@ -1,6 +1,7 @@
 import { useMutation, type UseMutationResult } from '@tanstack/react-query';
 import { apiClient, unwrap } from '@/shared/lib/api/client';
-import type { LoginSession } from '../types';
+import type { GoogleLoginResponse, LoginSession } from '../types';
+import { requireAuthenticated } from '../lib/admin-sign-in';
 import { authKeys } from './auth-keys';
 import { completeSignIn, type CompletedSignIn } from './complete-sign-in';
 
@@ -8,7 +9,10 @@ export function useGoogleLogin(inviteToken?: string): UseMutationResult<Complete
     return useMutation({
         mutationKey: authKeys.login('google'),
         mutationFn: async (idToken: string): Promise<CompletedSignIn> => {
-            const session: LoginSession = unwrap<LoginSession>(await apiClient.POST('/auth/google', { body: { idToken, ...(inviteToken === undefined ? {} : { inviteToken }) } }));
+            const response: GoogleLoginResponse = unwrap<GoogleLoginResponse>(
+                await apiClient.POST('/auth/google', { body: { idToken, ...(inviteToken === undefined ? {} : { inviteToken }) } })
+            );
+            const session: LoginSession = requireAuthenticated(response);
             return completeSignIn(session);
         }
     });

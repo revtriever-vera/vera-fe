@@ -38,6 +38,7 @@ export function loginSession(overrides: Partial<LoginSession> = {}): LoginSessio
         user: { id: 'user-1', name: 'Maria Teste', email: 'maria@example.test', role: 'owner', companyId: 'company-1' },
         isNewAccount: true,
         joinedAccount: false,
+        offer: null,
         ...overrides
     };
 }

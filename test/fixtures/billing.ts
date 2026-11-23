@@ -24,6 +24,7 @@ export function billingMe(overrides: Partial<BillingMe> = {}): BillingMe {
         subscription: null,
         openInvoice: null,
         trial: null,
+        offer: null,
         features: { ai: 'available', whatsapp: 'available', calendar: 'available' },
         usage: null,
         ...overrides
