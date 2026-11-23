@@ -6,9 +6,11 @@ import enAuth from './en/auth.json';
 import ptBRAccount from './pt-BR/account.json';
 import ptBRMembers from './pt-BR/members.json';
 import ptBRIntegrations from './pt-BR/integrations.json';
+import ptBRWhatsapp from './pt-BR/whatsapp.json';
 import enAccount from './en/account.json';
 import enMembers from './en/members.json';
 import enIntegrations from './en/integrations.json';
+import enWhatsapp from './en/whatsapp.json';
 import ptBRPortfolio from './pt-BR/portfolio.json';
 import enPortfolio from './en/portfolio.json';
 import ptBRPortfolioOverview from './pt-BR/portfolioOverview.json';
@@ -70,6 +72,7 @@ const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'account', ptBR: ptBRAccount, en: enAccount },
     { name: 'members', ptBR: ptBRMembers, en: enMembers },
     { name: 'integrations', ptBR: ptBRIntegrations, en: enIntegrations },
+    { name: 'whatsapp', ptBR: ptBRWhatsapp, en: enWhatsapp },
     { name: 'portfolio', ptBR: ptBRPortfolio, en: enPortfolio },
     { name: 'portfolioOverview', ptBR: ptBRPortfolioOverview, en: enPortfolioOverview },
     { name: 'portfolioAssets', ptBR: ptBRPortfolioAssets, en: enPortfolioAssets },

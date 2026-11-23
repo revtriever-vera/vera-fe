@@ -14,6 +14,7 @@ export type PremiumGateStateName = 'premium_required' | 'paused' | 'disabled';
 export type BillingBannerKindName = 'past_due' | 'paused' | 'warning';
 export type InvoicePayOriginName = 'banner' | 'plan';
 export type IntegrationKindName = 'llm' | 'whatsapp' | 'google';
+export type WhatsAppLinkVia = 'button' | 'qr';
 export type CurrencyCode = 'BRL' | 'USD';
 export type SpendingImportFormatName = 'ofx' | 'csv_nubank_card' | 'csv_nubank_account' | 'csv_generic';
 export type SpendingFlexibilityName = 'fixed' | 'flexible';
@@ -97,6 +98,12 @@ export interface AnalyticsEventMap {
     premium_gate_clicked: { feature: PaidFeatureName };
     billing_banner_viewed: { kind: BillingBannerKindName };
     invoice_pay_clicked: { from: InvoicePayOriginName };
+    whatsapp_link_code_issued: undefined;
+    whatsapp_link_opened: { via: WhatsAppLinkVia };
+    whatsapp_linked: { consentGiven: boolean };
+    whatsapp_unlinked: undefined;
+    whatsapp_open_clicked: undefined;
+    reminder_deleted: undefined;
 }
 
 export type AnalyticsEventName = keyof AnalyticsEventMap;

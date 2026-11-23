@@ -1,0 +1,88 @@
+{
+  "loading": "Loading WhatsApp",
+  "locked": {
+    "title": "Vera on WhatsApp",
+    "description": "Ask about your portfolio and spending, book meetings and create reminders by message.",
+    "line": "Available on Premium."
+  },
+  "unavailable": {
+    "title": "Vera on WhatsApp",
+    "selfHosted": "This installation has no WhatsApp or language model keys.",
+    "integrations": "See integrations",
+    "hosted": "Vera on WhatsApp is unavailable right now."
+  },
+  "paused": "Monthly quota used up. Vera answers again on {{date}}.",
+  "pausedNoDate": "Monthly quota used up. Vera answers again when the month turns.",
+  "notice": {
+    "stale": "Link removed because it went unused. Link again whenever you like.",
+    "premiumEnded": "Premium ended and the number was disconnected."
+  },
+  "start": {
+    "title": "Link your WhatsApp",
+    "description": "Vera only answers the number that sends the code. Pix and payments are off limits: she only reads your data.",
+    "consent": "To answer, Vera sends aggregated totals to a language model through a Vercel service. Names of people and merchants, transaction descriptions, accounts and credentials are never sent. I agree, and this also turns on the text summaries. You can turn it off in Settings › Data and privacy.",
+    "seeSent": "See what is sent",
+    "generate": "Generate code"
+  },
+  "waiting": {
+    "title": "Only the message is missing",
+    "description": "Send the code from your WhatsApp. This screen updates as soon as the message arrives.",
+    "phoneTitle": "On your phone",
+    "open": "Open WhatsApp",
+    "qrTitle": "On your computer",
+    "qrHint": "Point your phone camera",
+    "qrLabel": "QR code to link WhatsApp",
+    "manual": "Or send VINCULAR {{code}} to {{number}}.",
+    "copyCode": "Copy the code",
+    "validUntil": "The code is valid until {{time}}.",
+    "expired": "The code expired.",
+    "another": "Generate another code",
+    "pendingNoLink": "You already generated a code, valid until {{time}}. To see the link again, generate another one."
+  },
+  "linked": {
+    "title": "Linked number",
+    "since": "since {{date}}",
+    "active": "active",
+    "suspended": "suspended",
+    "answersFrom": "Vera answers from {{number}}.",
+    "unlink": "Unlink",
+    "dialogTitle": "Unlink WhatsApp?",
+    "dialogText": "Vera stops answering on {{phone}}, reminders created there are canceled and the conversation history leaves here. You can link again whenever you like.",
+    "dialogConfirm": "Unlink",
+    "dialogCancel": "Cancel"
+  },
+  "examples": {
+    "title": "What you can send",
+    "open": "Open WhatsApp",
+    "items": {
+      "delivery": "How much did I spend on delivery?",
+      "portfolio": "How is my portfolio doing?",
+      "meeting": "Book a meeting with the accountant on Friday at 3pm",
+      "meetings": "What are my meetings?",
+      "reminder": "Remind me to invest every 5th"
+    },
+    "noPayments": "Vera does not make Pix transfers or payments."
+  },
+  "reminders": {
+    "title": "Reminders",
+    "description": "Created through WhatsApp; Vera notifies you at the set time.",
+    "loading": "Loading reminders",
+    "empty": "No reminders. Ask on WhatsApp: \"remind me to invest every 5th\".",
+    "monthly": "every month on day {{day}}, {{time}}",
+    "noDate": "no date",
+    "delete": "Delete reminder {{text}}",
+    "pausedNote": "While the quota is used up, reminders are not sent until the month turns."
+  },
+  "toasts": {
+    "linked": "WhatsApp linked",
+    "unlinked": "WhatsApp unlinked",
+    "reminderDeleted": "Reminder deleted"
+  },
+  "errors": {
+    "generic": "Could not reach WhatsApp right now. Try again.",
+    "alreadyLinked": "You already have a linked number.",
+    "consentRequired": "Tick the agreement box to generate the code.",
+    "providerDisabled": "Vera on WhatsApp is unavailable right now.",
+    "tooManyAttempts": "Too many codes in a row. Try again in an hour."
+  }
+}
