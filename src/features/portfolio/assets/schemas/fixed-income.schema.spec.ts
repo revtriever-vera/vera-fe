@@ -1,13 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import type { z, ZodIssue } from 'zod';
 import { i18n } from '@/shared/lib/i18n';
+import { titleView } from '../../../../../test/fixtures/assets';
 import { createFixedIncomeSchema, type FixedIncomeFormInput } from './fixed-income.schema';
 
 const TODAY: string = '2026-10-09';
 const schema: z.ZodType<FixedIncomeFormInput> = createFixedIncomeSchema(i18n.getFixedT('pt-BR', 'portfolioAssets'), TODAY);
 
+const requiredSchema: z.ZodType<FixedIncomeFormInput> = createFixedIncomeSchema(i18n.getFixedT('pt-BR', 'portfolioAssets'), TODAY, true);
+
+const ISSUER: FixedIncomeFormInput['issuer'] = titleView().issuer;
+
 const VALID: FixedIncomeFormInput = {
     kind: 'cdb',
+    issuer: null,
     name: 'CDB Banco XP',
     indexer: 'cdi_percent',
     rate: '110',
@@ -67,5 +73,12 @@ describe('createFixedIncomeSchema', () => {
         expect(issues({ ...VALID, name: 'x'.repeat(81) })[0]?.message).toBe('Use até 80 caracteres.');
         expect(issues({ ...VALID, name: 'a\u0007b' })[0]?.path).toBe('name');
         expect(issues({ ...VALID, classId: '' })[0]?.message).toBe('Escolha a classe do título.');
+    });
+
+    it('exige o emissor só no título novo', () => {
+        const result: z.SafeParseReturnType<FixedIncomeFormInput, FixedIncomeFormInput> = requiredSchema.safeParse(VALID);
+        expect(result.success ? [] : result.error.issues.map((issue: ZodIssue) => issue.path.join('.'))).toEqual(['issuer']);
+        expect(requiredSchema.safeParse({ ...VALID, issuer: ISSUER }).success).toBe(true);
+        expect(issues(VALID)).toEqual([]);
     });
 });

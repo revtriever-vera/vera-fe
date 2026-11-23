@@ -20,6 +20,7 @@ import { toPreviewBody } from '../lib/fixed-income-body';
 import { annualizedBps, roundYears, yearsBetween } from '../lib/fixed-income-summary';
 import type { FixedIncomeFormInput } from '../schemas/fixed-income.schema';
 import type { FixedIncomePreview, FixedIncomePreviewBody } from '../types';
+import { FgcPreview } from './fgc-preview';
 import { ValueToday } from './value-today';
 
 const PREVIEW_DEBOUNCE_MS: number = 400;
@@ -28,6 +29,7 @@ export interface FixedIncomePreviewPanelProps {
     readonly values: FixedIncomeFormInput;
     readonly termsValid: boolean;
     readonly classes: readonly AssetClassView[];
+    readonly excludeTitleId?: string;
 }
 
 function useDebouncedBody(values: FixedIncomeFormInput, termsValid: boolean): FixedIncomePreviewBody | null {
@@ -129,7 +131,7 @@ function Header({ values, classes }: { readonly values: FixedIncomeFormInput; re
     );
 }
 
-export function FixedIncomePreviewPanel({ values, termsValid, classes }: FixedIncomePreviewPanelProps): ReactElement {
+export function FixedIncomePreviewPanel({ values, termsValid, classes, excludeTitleId }: FixedIncomePreviewPanelProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const body: FixedIncomePreviewBody | null = useDebouncedBody(values, termsValid);
     const preview: UseQueryResult<FixedIncomePreview> = useFixedIncomePreview(body);
@@ -144,6 +146,7 @@ export function FixedIncomePreviewPanel({ values, termsValid, classes }: FixedIn
             {body !== null && preview.data !== undefined ? (
                 <Result result={preview.data} body={body} values={values} classes={classes} />
             ) : null}
+            <FgcPreview values={values} excludeTitleId={excludeTitleId} />
             <p className="flex items-start gap-2 rounded-control bg-info/10 p-3 text-xs text-content">
                 <Info className="mt-px size-4 shrink-0 text-info" aria-hidden="true" />
                 {t('fixedIncome.preview.note')}

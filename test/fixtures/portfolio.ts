@@ -87,6 +87,9 @@ export function holding(overrides: Partial<HoldingView> = {}): HoldingView {
         valueSource: 'brapi',
         priceDate: SAMPLE_PRICE_DATE,
         dollarExposure: false,
+        sector: null,
+        issuerGroupId: null,
+        issuerId: null,
         missingQuote: false,
         stale: false,
         estimated: false,
@@ -113,6 +116,8 @@ function fixedIncome(id: string, symbol: string, name: string, classId: string, 
         valueSource: 'curve_cdi',
         priceDate: null,
         estimated: true,
+        issuerId: 'banco-inter',
+        issuerGroupId: 'inter-co',
         ...overrides
     });
 }

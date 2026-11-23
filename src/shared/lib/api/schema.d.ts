@@ -628,6 +628,46 @@ export interface paths {
         patch: operations["FixedIncomeController_update"];
         trace?: never;
     };
+    "/issuers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Search the curated list of issuers
+         * @description Searches institutions and business groups by name, alias or group name, ignoring accents and case, and returns at most 20. Retired institutions only appear when the text matches their name exactly, so an old security can still be edited. Use `kind=bank` for CDB, LCI, LCA and LC, and `kind=company` for debenture, CRI and CRA. Limited to 120 calls per minute per company.
+         */
+        get: operations["IssuersController_search"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/portfolio/fgc/simulate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Simulate the FGC coverage of a new security
+         * @description Adds the value to the conglomerate of the issuer and tells whether the account stays covered by the FGC. Hand-written from the contract of vera#90 until the endpoint reaches the API milestone: regenerate with `npm run api:types`.
+         */
+        post: operations["FgcController_simulate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/fixed-income/preview": {
         parameters: {
             query?: never;
@@ -1348,6 +1388,126 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    IssuersController_search: {
+        parameters: {
+            query?: {
+                /** @description Fragment of the institution name, alias or group name, up to 60 characters; accents and case are ignored */
+                q?: string;
+                /** @description `bank` for CDB, LCI, LCA and LC issuers; `company` for debenture, CRI and CRA issuers; omitted searches every kind */
+                kind?: "bank" | "company";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Institutions ordered by relevance */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Institutions ordered by relevance, at most 20 */
+                        items: {
+                            /** @description Stable slug of the institution, e.g. banco-inter */
+                            id: string;
+                            /** @description Institution name */
+                            name: string;
+                            /** @description Slug of the prudential conglomerate or business group the institution belongs to */
+                            groupId: string;
+                            /** @description Name of the conglomerate or group, after following any incorporation */
+                            groupName: string;
+                            /**
+                             * @description `bank`, `company` or `sovereign`
+                             * @enum {string}
+                             */
+                            kind: "bank" | "company" | "sovereign";
+                            /** @description Whether the institution is associated to the FGC */
+                            fgcAssociated: boolean;
+                            /**
+                             * @description `retired` institutions only show up when the search matches the name exactly
+                             * @enum {string}
+                             */
+                            status: "active" | "retired";
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    FgcController_simulate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Slug of the issuer in the curated list (GET /issuers) */
+                    issuerId: string;
+                    /**
+                     * @description Kind of security: cdb, lci, lca, lc, debenture, cri or cra
+                     * @enum {string}
+                     */
+                    kind: "cdb" | "lci" | "lca" | "lc" | "debenture" | "cri" | "cra";
+                    /** @description Value of the new security in the smallest unit of the currency */
+                    valueMinor: number;
+                    /** @description Security being edited: its current value leaves the sum */
+                    excludeTitleId?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Verdict of the simulation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Where the security stands against the FGC
+                         * @enum {string}
+                         */
+                        verdict: "covered" | "over_limit" | "not_covered_kind" | "not_associated";
+                        /** @description Slug of the conglomerate of the issuer */
+                        groupId: string;
+                        /** @description Name of the conglomerate of the issuer */
+                        groupName: string;
+                        /** @description Total in the conglomerate after the new security, in minor units */
+                        totalAfterMinor: number;
+                        /** @description Amount above the limit per conglomerate, in minor units; 0 when covered */
+                        overMinor: number;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description fixed_income.unknown_issuer or fixed_income.issuer_kind_mismatch */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     HealthController_check: {
         parameters: {
             query?: never;
@@ -5071,6 +5231,8 @@ export interface operations {
                      * @description Class of the security; omitted uses the class suggested by the indexer
                      */
                     classId?: string;
+                    /** @description Issuer of the security; optional, but the app asks for it on new securities */
+                    issuerId?: string;
                 };
             };
         };
@@ -5117,6 +5279,26 @@ export interface operations {
                          * @description Asset class the security belongs to
                          */
                         classId: string;
+                        /** @description Issuer with its conglomerate; null for securities registered without one */
+                        issuer: {
+                            /** @description Slug of the issuer */
+                            id: string;
+                            /** @description Issuer name */
+                            name: string;
+                            /** @description Slug of the conglomerate or group the issuer belongs to today */
+                            groupId: string;
+                            /** @description Name of the conglomerate or group */
+                            groupName: string;
+                            /**
+                             * @description `bank`, `company` or `sovereign`
+                             * @enum {string}
+                             */
+                            kind: "bank" | "company" | "sovereign";
+                            /** @description Whether the issuer is associated to the FGC */
+                            fgcAssociated: boolean;
+                        } | null;
+                        /** @description True when the security has no issuer and the user should complete the registration */
+                        needsIssuer: boolean;
                         /** @description Creation instant, ISO 8601 */
                         createdAt: string;
                         /** @description Last update instant, ISO 8601 */
@@ -5313,6 +5495,26 @@ export interface operations {
                          * @description Asset class the security belongs to
                          */
                         classId: string;
+                        /** @description Issuer with its conglomerate; null for securities registered without one */
+                        issuer: {
+                            /** @description Slug of the issuer */
+                            id: string;
+                            /** @description Issuer name */
+                            name: string;
+                            /** @description Slug of the conglomerate or group the issuer belongs to today */
+                            groupId: string;
+                            /** @description Name of the conglomerate or group */
+                            groupName: string;
+                            /**
+                             * @description `bank`, `company` or `sovereign`
+                             * @enum {string}
+                             */
+                            kind: "bank" | "company" | "sovereign";
+                            /** @description Whether the issuer is associated to the FGC */
+                            fgcAssociated: boolean;
+                        } | null;
+                        /** @description True when the security has no issuer and the user should complete the registration */
+                        needsIssuer: boolean;
                         /** @description Creation instant, ISO 8601 */
                         createdAt: string;
                         /** @description Last update instant, ISO 8601 */
@@ -5514,6 +5716,8 @@ export interface operations {
                     appliedAt?: string;
                     /** @description Maturity date, YYYY-MM-DD, after the application date and at most 50 years ahead of it */
                     maturityDate?: string;
+                    /** @description New issuer; null removes the current one */
+                    issuerId?: string | null;
                 };
             };
         };
@@ -5560,6 +5764,26 @@ export interface operations {
                          * @description Asset class the security belongs to
                          */
                         classId: string;
+                        /** @description Issuer with its conglomerate; null for securities registered without one */
+                        issuer: {
+                            /** @description Slug of the issuer */
+                            id: string;
+                            /** @description Issuer name */
+                            name: string;
+                            /** @description Slug of the conglomerate or group the issuer belongs to today */
+                            groupId: string;
+                            /** @description Name of the conglomerate or group */
+                            groupName: string;
+                            /**
+                             * @description `bank`, `company` or `sovereign`
+                             * @enum {string}
+                             */
+                            kind: "bank" | "company" | "sovereign";
+                            /** @description Whether the issuer is associated to the FGC */
+                            fgcAssociated: boolean;
+                        } | null;
+                        /** @description True when the security has no issuer and the user should complete the registration */
+                        needsIssuer: boolean;
                         /** @description Creation instant, ISO 8601 */
                         createdAt: string;
                         /** @description Last update instant, ISO 8601 */
@@ -6703,6 +6927,12 @@ export interface operations {
                             priceDate: string | null;
                             /** @description True when the holding is quoted in USD or its asset has exposure to the dollar */
                             dollarExposure: boolean;
+                            /** @description Sector key from the curated profile of the asset; null for fixed income or an asset without profile */
+                            sector: string | null;
+                            /** @description Slug of the issuer group: the asset group from the curated profile, or the conglomerate of the title issuer; null when unknown */
+                            issuerGroupId: string | null;
+                            /** @description Slug of the issuer of a fixed income title; null for positions and titles without issuer */
+                            issuerId: string | null;
                             /** @description No quote yet for an asset with quantity: value is 0 and a fetch was requested */
                             missingQuote: boolean;
                             /** @description The quote is older than the freshness window of its market */

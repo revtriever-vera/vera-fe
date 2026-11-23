@@ -21,3 +21,7 @@ export function holdingFlags(holding: HoldingView): readonly HoldingFlag[] {
 export function hasUnreliableValue(holding: HoldingView): boolean {
     return holding.missingQuote || holding.missingRate;
 }
+
+export function needsIssuer(holding: HoldingView): boolean {
+    return holding.kind === 'fixed_income' && holding.issuerId === null;
+}

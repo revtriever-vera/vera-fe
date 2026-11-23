@@ -4,6 +4,7 @@ import { toPreviewBody, toTitleBody } from './fixed-income-body';
 
 const VALID: FixedIncomeFormInput = {
     kind: 'cdb',
+    issuer: null,
     name: '  CDB Banco XP  ',
     indexer: 'cdi_percent',
     rate: '110',

@@ -125,6 +125,17 @@
       "cri": "CRI",
       "cra": "CRA"
     },
+    "issuer": {
+      "label": "Emissor",
+      "placeholder": "Busque pelo nome do emissor",
+      "group": "{{issuer}} · conglomerado {{group}}",
+      "groupShort": "Conglomerado {{group}}",
+      "listLabel": "Emissores encontrados",
+      "loading": "Buscando…",
+      "failed": "Não foi possível buscar agora. Tente de novo.",
+      "empty": "Nenhum emissor com esse nome. Confira a grafia ou peça a inclusão no repositório.",
+      "listLink": "Ver a lista de emissores"
+    },
     "name": "Nome do título",
     "namePlaceholder": "Ex.: CDB Banco XP",
     "indexer": "Indexador",
@@ -156,7 +167,8 @@
       "maturityRequired": "Informe o vencimento.",
       "maturityBeforeApplied": "O vencimento precisa ser depois da aplicação.",
       "usdRequiresPrefixed": "Em dólar, só títulos prefixados.",
-      "classRequired": "Escolha a classe do título."
+      "classRequired": "Escolha a classe do título.",
+      "issuerRequired": "Escolha o emissor do título."
     },
     "preview": {
       "empty": "Preencha os dados do título para ver quanto ele vale hoje.",
@@ -178,6 +190,12 @@
       },
       "note": "O sistema recalcula esse valor todo dia com as séries do Banco Central. Você nunca precisa atualizar o saldo à mão.",
       "indexMissing": "Ainda não temos as séries do Banco Central para todo esse período. Mostramos o valor aplicado até a atualização."
+    },
+    "fgcPreview": {
+      "covered": "Coberto pelo FGC. Com este título, você terá {{total}} no conglomerado {{group}}, de um limite de {{limit}}.",
+      "over_limit": "Com este título, você terá {{total}} no conglomerado {{group}}: {{over}} acima do limite de {{limit}} do FGC.",
+      "not_covered_kind": "{{kind}} não tem cobertura do FGC: o risco é só da empresa emissora.",
+      "not_associated": "Este emissor não é associado ao FGC."
     }
   },
   "description": "Cadastro manual. Ações, fundos e cripto atualizam pela cotação; renda fixa é calculada pelo indexador. A classe vem sugerida e você pode trocar.",
@@ -297,5 +315,9 @@
       "bonds": "títulos"
     },
     "loadFailed": "Não foi possível carregar a carteira."
+  },
+  "issuer": {
+    "complete": "Complete o cadastro",
+    "completeLabel": "Complete o cadastro de {{name}}: informar o emissor"
   }
 }

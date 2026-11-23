@@ -14,7 +14,7 @@ interface CardProps extends Omit<HoldingsListProps, 'holdings' | 'classes'> {
     readonly classes: readonly AssetClassView[];
 }
 
-function HoldingCard({ holding, classes, baseCurrency, onEdit, onRemove }: CardProps): ReactElement {
+function HoldingCard({ holding, classes, baseCurrency, onEdit, onCompleteIssuer, onRemove }: CardProps): ReactElement {
     return (
         <li className="surface-card flex flex-col gap-3 p-4">
             <div className="flex items-start justify-between gap-2">
@@ -23,7 +23,11 @@ function HoldingCard({ holding, classes, baseCurrency, onEdit, onRemove }: CardP
             </div>
             <ClassSelectCell holding={holding} classes={classes} />
             <div className="flex items-center justify-between gap-2">
-                <QuantityOrTitle holding={holding} quantity={<QuantityCell key={holding.quantity} holding={holding} />} />
+                <QuantityOrTitle
+                    holding={holding}
+                    quantity={<QuantityCell key={holding.quantity} holding={holding} />}
+                    onCompleteIssuer={onCompleteIssuer}
+                />
                 <SourceCell holding={holding} />
             </div>
             <HoldingRowActions holding={holding} onEdit={onEdit} onRemove={onRemove} />
@@ -31,7 +35,7 @@ function HoldingCard({ holding, classes, baseCurrency, onEdit, onRemove }: CardP
     );
 }
 
-export function HoldingsCardList({ holdings, classes, baseCurrency, onEdit, onRemove }: HoldingsListProps): ReactElement {
+export function HoldingsCardList({ holdings, classes, baseCurrency, onEdit, onCompleteIssuer, onRemove }: HoldingsListProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     return (
         <ul aria-label={t('page.listLabel')} className="flex flex-col gap-3">
@@ -42,6 +46,7 @@ export function HoldingsCardList({ holdings, classes, baseCurrency, onEdit, onRe
                     classes={classes}
                     baseCurrency={baseCurrency}
                     onEdit={onEdit}
+                    onCompleteIssuer={onCompleteIssuer}
                     onRemove={onRemove}
                 />
             ))}

@@ -8,7 +8,8 @@ const DEFAULTED_KEYS: readonly string[] = [
     'VITE_FACEBOOK_APP_ID',
     'VITE_TERMS_URL',
     'VITE_PRIVACY_URL',
-    'VITE_LOGIN_PHOTO_URL'
+    'VITE_LOGIN_PHOTO_URL',
+    'VITE_REPO_URL'
 ];
 
 describe('env', () => {
@@ -30,6 +31,7 @@ describe('env', () => {
         expect(env.VITE_TERMS_URL).toBe('');
         expect(env.VITE_PRIVACY_URL).toBe('');
         expect(env.VITE_LOGIN_PHOTO_URL).toBe('');
+        expect(env.VITE_REPO_URL).toBe('');
     });
 
     it('reads the identity provider variables', async () => {

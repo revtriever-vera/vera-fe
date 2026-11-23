@@ -17,9 +17,12 @@ import {
     FIXED_INCOME_KINDS,
     type AssetCurrency,
     type FixedIncomeIndexer,
-    type FixedIncomeKind
+    type FixedIncomeKind,
+    type TitleIssuer
 } from '../types';
 import { ClassSelect } from './class-select';
+import { ErrorLine } from './error-line';
+import { IssuerField } from './issuer-field';
 import { LabeledSelect } from './labeled-select';
 
 export interface FixedIncomeFormProps {
@@ -29,19 +32,23 @@ export interface FixedIncomeFormProps {
     readonly formId: string;
     readonly alertMessage: string | null;
     readonly showClass?: boolean;
+    readonly issuerAutoFocus?: boolean;
     readonly onSubmit: () => void;
     readonly onIndexerChange: (indexer: FixedIncomeIndexer) => void;
+    readonly onKindChange: (kind: FixedIncomeKind) => void;
+    readonly onIssuerChange: (issuer: TitleIssuer | null) => void;
+    readonly onNameEdit: () => void;
 }
 
-function ErrorLine({ message }: { readonly message: string | undefined }): ReactElement | null {
-    return message === undefined ? null : (
-        <p role="alert" className="text-2xs text-critical">
-            {message}
-        </p>
-    );
+interface TitleFieldsProps {
+    readonly form: UseFormReturn<FixedIncomeFormInput>;
+    readonly issuerAutoFocus: boolean;
+    readonly onKindChange: (kind: FixedIncomeKind) => void;
+    readonly onIssuerChange: (issuer: TitleIssuer | null) => void;
+    readonly onNameEdit: () => void;
 }
 
-function KindAndName({ form }: { readonly form: UseFormReturn<FixedIncomeFormInput> }): ReactElement {
+function KindField({ form, onKindChange }: Pick<TitleFieldsProps, 'form' | 'onKindChange'>): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const choices: readonly SelectChoice[] = FIXED_INCOME_KINDS.map((kind: FixedIncomeKind): SelectChoice => ({
         value: kind,
@@ -49,26 +56,43 @@ function KindAndName({ form }: { readonly form: UseFormReturn<FixedIncomeFormInp
         warning: null
     }));
     return (
+        <Controller
+            control={form.control}
+            name="kind"
+            render={({ field }): ReactElement => (
+                <LabeledSelect
+                    label={t('fixedIncome.kind')}
+                    placeholder={t('fixedIncome.kind')}
+                    value={field.value}
+                    choices={choices}
+                    onChange={(value: string): void => {
+                        onKindChange(value as FixedIncomeKind);
+                    }}
+                />
+            )}
+        />
+    );
+}
+
+function IssuerAndName({ form, issuerAutoFocus, onIssuerChange, onNameEdit }: Omit<TitleFieldsProps, 'onKindChange'>): ReactElement {
+    const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
+    const kind: FixedIncomeKind = useWatch({ control: form.control, name: 'kind' });
+    const issuer: TitleIssuer | null = useWatch({ control: form.control, name: 'issuer' });
+    return (
         <>
-            <Controller
-                control={form.control}
-                name="kind"
-                render={({ field }): ReactElement => (
-                    <LabeledSelect
-                        label={t('fixedIncome.kind')}
-                        placeholder={t('fixedIncome.kind')}
-                        value={field.value}
-                        choices={choices}
-                        onChange={field.onChange}
-                    />
-                )}
+            <IssuerField
+                kind={kind}
+                value={issuer}
+                error={form.formState.errors.issuer?.message}
+                focusOnMount={issuerAutoFocus}
+                onChange={onIssuerChange}
             />
             <Field
                 label={t('fixedIncome.name')}
                 placeholder={t('fixedIncome.namePlaceholder')}
                 autoComplete="off"
                 error={form.formState.errors.name?.message}
-                {...form.register('name')}
+                {...form.register('name', { onChange: onNameEdit })}
             />
         </>
     );
@@ -238,6 +262,16 @@ function ClassField({
     );
 }
 
+function TesouroNotice(): ReactElement {
+    const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
+    return (
+        <p className="flex items-start gap-2 text-xs text-content-muted">
+            <Info className="mt-px size-4 shrink-0" aria-hidden="true" />
+            {t('fixedIncome.tesouroNotice')}
+        </p>
+    );
+}
+
 export function FixedIncomeForm({
     form,
     classes,
@@ -245,10 +279,13 @@ export function FixedIncomeForm({
     formId,
     alertMessage,
     showClass = true,
+    issuerAutoFocus = false,
     onSubmit,
-    onIndexerChange
+    onIndexerChange,
+    onKindChange,
+    onIssuerChange,
+    onNameEdit
 }: FixedIncomeFormProps): ReactElement {
-    const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     return (
         <form
             id={formId}
@@ -261,17 +298,17 @@ export function FixedIncomeForm({
         >
             {alertMessage === null ? null : <Alert title={alertMessage} />}
             <div className="grid grid-cols-1 gap-3 @sm:grid-cols-2">
-                <KindAndName form={form} />
+                <div className="flex flex-col gap-3 @sm:col-span-2">
+                    <KindField form={form} onKindChange={onKindChange} />
+                    <IssuerAndName form={form} issuerAutoFocus={issuerAutoFocus} onIssuerChange={onIssuerChange} onNameEdit={onNameEdit} />
+                </div>
                 <IndexerAndRate form={form} onIndexerChange={onIndexerChange} />
                 <AppliedAmount form={form} />
                 <AppliedAtField form={form} today={today} />
                 <MaturityField form={form} />
             </div>
             {showClass ? <ClassField form={form} classes={classes} /> : null}
-            <p className="flex items-start gap-2 text-xs text-content-muted">
-                <Info className="mt-px size-4 shrink-0" aria-hidden="true" />
-                {t('fixedIncome.tesouroNotice')}
-            </p>
+            <TesouroNotice />
         </form>
     );
 }

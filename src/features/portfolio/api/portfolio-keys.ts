@@ -3,6 +3,15 @@ export interface CatalogSearchParams {
     readonly q: string;
 }
 
+export interface IssuerSearchParams {
+    readonly kind: string;
+    readonly q: string;
+}
+
+export interface FgcSimulationInput {
+    readonly [field: string]: string | number | boolean | null;
+}
+
 export interface FixedIncomePreviewInput {
     readonly [field: string]: string | number | boolean | null;
 }
@@ -19,6 +28,8 @@ export const portfolioKeys: {
     quotes: (ids: readonly string[]) => readonly ['portfolio', 'quotes', readonly string[]];
     exchangeRate: (currency: string) => readonly ['portfolio', 'exchange-rate', string];
     fixedIncomePreview: (input: FixedIncomePreviewInput) => readonly ['portfolio', 'fixed-income-preview', FixedIncomePreviewInput];
+    issuerSearch: (params: IssuerSearchParams) => readonly ['portfolio', 'issuer-search', IssuerSearchParams];
+    fgcSimulation: (input: FgcSimulationInput) => readonly ['portfolio', 'fgc-simulation', FgcSimulationInput];
     position: (id: string) => readonly ['portfolio', 'position', string];
     fixedIncomeTitle: (id: string) => readonly ['portfolio', 'fixed-income-title', string];
     contributions: () => readonly ['portfolio', 'contribution'];
@@ -38,6 +49,10 @@ export const portfolioKeys: {
         [...portfolioKeys.all, 'exchange-rate', currency] as const,
     fixedIncomePreview: (input: FixedIncomePreviewInput): readonly ['portfolio', 'fixed-income-preview', FixedIncomePreviewInput] =>
         [...portfolioKeys.all, 'fixed-income-preview', input] as const,
+    issuerSearch: (params: IssuerSearchParams): readonly ['portfolio', 'issuer-search', IssuerSearchParams] =>
+        [...portfolioKeys.all, 'issuer-search', params] as const,
+    fgcSimulation: (input: FgcSimulationInput): readonly ['portfolio', 'fgc-simulation', FgcSimulationInput] =>
+        [...portfolioKeys.all, 'fgc-simulation', input] as const,
     position: (id: string): readonly ['portfolio', 'position', string] => [...portfolioKeys.all, 'position', id] as const,
     fixedIncomeTitle: (id: string): readonly ['portfolio', 'fixed-income-title', string] =>
         [...portfolioKeys.all, 'fixed-income-title', id] as const,

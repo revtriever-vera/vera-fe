@@ -8,7 +8,8 @@ import {
     FIXED_INCOME_KINDS,
     type AssetCurrency,
     type FixedIncomeIndexer,
-    type FixedIncomeKind
+    type FixedIncomeKind,
+    type TitleIssuer
 } from '../types';
 
 const NAME_MAX_LENGTH: number = 80;
@@ -16,6 +17,7 @@ const CONTROL_CHARACTERS: RegExp = /\p{Cc}/u;
 
 export interface FixedIncomeFormInput {
     kind: FixedIncomeKind;
+    issuer: TitleIssuer | null;
     name: string;
     indexer: FixedIncomeIndexer;
     rate: string;
@@ -69,10 +71,24 @@ function checkTerms(input: FixedIncomeFormInput, t: TFunction<'portfolioAssets'>
     }
 }
 
-export function createFixedIncomeSchema(t: TFunction<'portfolioAssets'>, today: string): z.ZodType<FixedIncomeFormInput> {
+const issuerSchema = z.object({
+    id: z.string().min(1),
+    name: z.string().min(1),
+    groupId: z.string().min(1),
+    groupName: z.string().min(1),
+    kind: z.enum(['bank', 'company', 'sovereign']),
+    fgcAssociated: z.boolean()
+});
+
+export function createFixedIncomeSchema(
+    t: TFunction<'portfolioAssets'>,
+    today: string,
+    issuerRequired: boolean = false
+): z.ZodType<FixedIncomeFormInput> {
     return z
         .object({
             kind: z.enum(FIXED_INCOME_KINDS),
+            issuer: issuerSchema.nullable(),
             name: z
                 .string()
                 .trim()
@@ -90,5 +106,6 @@ export function createFixedIncomeSchema(t: TFunction<'portfolioAssets'>, today: 
         .superRefine((input: FixedIncomeFormInput, ctx: z.RefinementCtx): void => {
             checkDates(input, today, t, ctx);
             checkTerms(input, t, ctx);
+            report(ctx, 'issuer', input.issuer === null && issuerRequired ? t('fixedIncome.errors.issuerRequired') : null);
         });
 }

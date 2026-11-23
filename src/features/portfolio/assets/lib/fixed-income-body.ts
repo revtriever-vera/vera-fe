@@ -20,5 +20,9 @@ export function toPreviewBody(input: FixedIncomeFormInput): FixedIncomePreviewBo
 
 export function toTitleBody(input: FixedIncomeFormInput): CreateTitleBody | null {
     const preview: FixedIncomePreviewBody | null = toPreviewBody(input);
-    return preview === null ? null : { ...preview, name: input.name.trim(), classId: input.classId };
+    if (preview === null) {
+        return null;
+    }
+    const base: CreateTitleBody = { ...preview, name: input.name.trim(), classId: input.classId };
+    return input.issuer === null ? base : { ...base, issuerId: input.issuer.id };
 }

@@ -32,6 +32,9 @@ export function FixedIncomeStep({ classes, initialClassId, onBack, onClose }: Fi
                     formId={FORM_ID}
                     alertMessage={state.alertMessage}
                     onIndexerChange={state.changeIndexer}
+                    onKindChange={state.changeKind}
+                    onIssuerChange={state.changeIssuer}
+                    onNameEdit={state.markNameTouched}
                     onSubmit={(): void => {
                         void state.submit();
                     }}
