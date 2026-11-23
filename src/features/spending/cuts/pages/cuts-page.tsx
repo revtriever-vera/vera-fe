@@ -10,6 +10,7 @@ import { Loading, Skeleton } from '@/shared/ui/skeleton';
 import { useSpendingSettings } from '../../api/use-spending-settings.query';
 import { SpendingEmptyState } from '../../components/spending-empty-state';
 import type { CutsResponse, SpendingSettings } from '../../types';
+import { RecurringCutsNote } from '../../recurring/components/recurring-cuts-note';
 import { useCuts } from '../api/use-cuts.query';
 import { CutsStatusCard } from '../components/cuts-status-card';
 import { CutsSuggestions } from '../components/cuts-suggestions';
@@ -58,6 +59,7 @@ function CutsBody({
             <CutsStatusCard cuts={cuts} />
             <CutsSuggestions cuts={cuts} />
             <UncategorizedNote cuts={cuts} />
+            <RecurringCutsNote />
             {renderSummary?.({ month: cuts.month, goalBps: cuts.goal.simulated ? cuts.goal.bps : undefined })}
         </div>
     );

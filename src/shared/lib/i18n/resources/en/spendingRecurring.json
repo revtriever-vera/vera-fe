@@ -205,5 +205,19 @@
     "valueModeHint": "Variable shows the average and range of the latest charges.",
     "submit": "Save",
     "cancel": "Cancel"
+  },
+  "touchpoints": {
+    "badge": "Recurring",
+    "mark": "Mark as recurring",
+    "summaryTitle": "Subscriptions and bills",
+    "summaryMonthly": "{{amount}} a month",
+    "summaryNoTotal": "Nothing confirmed yet",
+    "summaryReview_one": "{{count}} to review",
+    "summaryReview_other": "{{count}} to review",
+    "summaryLink": "See subscriptions and bills",
+    "cutsNote": "Subscriptions add up to {{amount}} a month.",
+    "cutsRaised_one": "{{count}} went up in price.",
+    "cutsRaised_other": "{{count}} went up in price.",
+    "cutsLink": "See subscriptions and bills"
   }
 }

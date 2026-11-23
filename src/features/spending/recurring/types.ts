@@ -74,3 +74,5 @@ export const SUBSCRIPTIONS_CATEGORY_KEY: string = 'subscriptions';
 export type NoticeBeforeList = ApiPaths['/spending/recurring/notice-before']['get']['responses']['200']['content']['application/json'];
 export type NoticeBeforeChoice =
     ApiPaths['/spending/recurring/{id}/notice-before']['put']['responses']['200']['content']['application/json'];
+
+export type MarkRecurringResult = ApiPaths['/spending/recurring']['post']['responses']['201']['content']['application/json'];

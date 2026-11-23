@@ -205,5 +205,19 @@
     "valueModeHint": "Variável mostra a média e a faixa das últimas cobranças.",
     "submit": "Salvar",
     "cancel": "Cancelar"
+  },
+  "touchpoints": {
+    "badge": "Recorrente",
+    "mark": "Marcar como recorrente",
+    "summaryTitle": "Assinaturas e contas",
+    "summaryMonthly": "{{amount}} por mês",
+    "summaryNoTotal": "Nada confirmado ainda",
+    "summaryReview_one": "{{count}} para revisar",
+    "summaryReview_other": "{{count}} para revisar",
+    "summaryLink": "Ver assinaturas e contas",
+    "cutsNote": "Assinaturas somam {{amount}} por mês.",
+    "cutsRaised_one": "{{count}} subiu de preço.",
+    "cutsRaised_other": "{{count}} subiram de preço.",
+    "cutsLink": "Ver assinaturas e contas"
   }
 }

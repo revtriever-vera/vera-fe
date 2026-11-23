@@ -363,6 +363,7 @@ export function transactionView(overrides: Partial<TransactionView> = {}): Trans
         source: 'pluggy',
         installment: null,
         isSample: false,
+        isRecurring: false,
         ...overrides
     };
 }

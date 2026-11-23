@@ -8,6 +8,8 @@ import { formatIsoDate } from '@/shared/lib/format/date';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { Badge } from '@/shared/ui/badge';
 import { useCategories } from '../../api/use-categories.query';
+import { MarkRecurringButton } from '../../recurring/components/mark-recurring-button';
+import { RecurringBadge } from '../../recurring/components/recurring-badge';
 import { CategorySourceBadge } from '../../components/category-source-badge';
 import { CategoryTile } from '../../components/category-tile';
 import { SignedAmount } from '../../components/signed-amount';
@@ -35,6 +37,8 @@ export function TransactionTitle({ transaction }: TransactionProps): ReactElemen
                 <Badge>{t('row.installment', { number: transaction.installment.number, total: transaction.installment.total })}</Badge>
             )}
             {transaction.isSample ? <Badge tone="accent">{t('row.sample')}</Badge> : null}
+            {transaction.isRecurring ? <RecurringBadge /> : null}
+            <MarkRecurringButton transaction={transaction} />
         </div>
     );
 }
