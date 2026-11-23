@@ -468,6 +468,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/billing/offer/redeem": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Redeem a signup link in the signed-in account
+         * @description For an account that already exists: it must be Free, never have paid for Premium nor had a trial, and not have redeemed another link. A no-card trial opens Premium right away; a card trial and the discount scale start when the owner subscribes, within 30 days. Trial offers need an email verified by the sign-in provider and that never redeemed a trial before. Limited per IP per day.
+         */
+        post: operations["BillingOfferController_redeem"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/integrations": {
         parameters: {
             query?: never;
@@ -1675,7 +1695,7 @@ export interface paths {
         put?: never;
         /**
          * Suggest where to put a new contribution
-         * @description Distributes the amount among the classes and, inside each class, among the holdings, to bring the portfolio closer to the target without selling anything. A class below its target receives the difference up to the target; when the amount does not cover everything the money is split in proportion to what is missing, and any surplus follows the targets. Amounts are integers in the minor unit of the base currency and add up exactly to the contribution on both layers. Matured fixed income titles receive nothing. Nothing is stored. The result approximates the target; it is not an individual investment recommendation.
+         * @description Distributes the amount among the classes and, inside each class, among the holdings, to bring the portfolio closer to the target without selling anything. A class below its target receives the difference up to the target; when the amount does not cover everything the money is split in proportion to what is missing, and any surplus follows the targets. Amounts are integers in the minor unit of the base currency and add up exactly to the contribution on both layers. Matured fixed income titles receive nothing. Nothing is stored. The result approximates the target; it is not an individual investment recommendation. With prioritizeGoals (default true), goals that are behind or overdue and have a linked holding receive first, nearest date first, up to what is missing for the plan (never below the monthly amount), and the rest follows the rules above over the portfolio already counting that money.
          */
         post: operations["ContributionController_suggest"];
         delete?: never;
@@ -2561,6 +2581,8 @@ export interface operations {
                     idToken: string;
                     /** @description Token of the invite link, to enter the account that invited */
                     inviteToken?: string;
+                    /** @description Token of a signup link (from /entrar?oferta=). A refusal does not fail the login: it comes back in `offer.reason` */
+                    offerToken?: string;
                     /**
                      * @description `app` (default) is the app of the accounts; `admin` is the platform admin, only for people of the platform company
                      * @enum {string}
@@ -2609,6 +2631,13 @@ export interface operations {
                         isNewAccount: boolean;
                         /** @description True when this login entered an account through an invite (no company was created) */
                         joinedAccount: boolean;
+                        /** @description Result of the `offerToken` sent with the login; null when no token was sent, the login joined an account by invite or the deployment is self-hosted */
+                        offer: {
+                            /** @description True when the signup link was redeemed by this login */
+                            redeemed: boolean;
+                            /** @description Error code of the refusal (for example signup_links.account_not_eligible); null when redeemed */
+                            reason: string | null;
+                        } | null;
                     };
                 };
             };
@@ -2796,6 +2825,8 @@ export interface operations {
                     accessToken: string;
                     /** @description Token of the invite link, to enter the account that invited */
                     inviteToken?: string;
+                    /** @description Token of a signup link (from /entrar?oferta=). A refusal does not fail the login: it comes back in `offer.reason` */
+                    offerToken?: string;
                 };
             };
         };
@@ -2839,6 +2870,13 @@ export interface operations {
                         isNewAccount: boolean;
                         /** @description True when this login entered an account through an invite (no company was created) */
                         joinedAccount: boolean;
+                        /** @description Result of the `offerToken` sent with the login; null when no token was sent, the login joined an account by invite or the deployment is self-hosted */
+                        offer: {
+                            /** @description True when the signup link was redeemed by this login */
+                            redeemed: boolean;
+                            /** @description Error code of the refusal (for example signup_links.account_not_eligible); null when redeemed */
+                            reason: string | null;
+                        } | null;
                     };
                 };
             };
@@ -5279,6 +5317,206 @@ export interface operations {
                 };
             };
             /** @description More than 30 lookups in a minute from this IP (core.too_many_attempts) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    BillingOfferController_redeem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Token of the signup link, as it appears in the URL */
+                    token: string;
+                };
+            };
+        };
+        responses: {
+            /** @description The redeemed offer */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        trial: {
+                            /**
+                             * @description `none`: no trial. `card`: trial with the card saved and the first charge at the end. `no_card`: Premium for N days without a card; the account goes back to Free if it does not subscribe
+                             * @enum {string}
+                             */
+                            kind: "none" | "card" | "no_card";
+                            /** @description Trial length in days (1 to 60); null when there is no trial */
+                            days: number | null;
+                        };
+                        /** @description Discount scale by paid cycle */
+                        rules: {
+                            /** @description Discount on the Premium price, from 1 to 90 percent */
+                            percent: number;
+                            /** @description First paid cycle the rule covers (the first paid cycle is 1; trial days do not count) */
+                            fromCycle: number;
+                            /** @description Last paid cycle the rule covers, inclusive */
+                            toCycle: number;
+                        }[];
+                        /**
+                         * Format: date-time
+                         * @description When the account redeemed the link
+                         */
+                        redeemedAt: string;
+                        /**
+                         * Format: date-time
+                         * @description Until when the offer can still start; after it, full price and no trial
+                         */
+                        expiresAt: string;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Only the owner can redeem (signup_links.not_owner) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No usable link with this token, or a self-hosted deployment (signup_links.not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The account cannot redeem (signup_links.account_not_eligible, meta.reason: platform_account, already_redeemed, already_paid or trial_used) or the email already redeemed a trial (signup_links.email_already_used) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description A no-card trial needs a verified email (signup_links.email_unverified) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Too many links redeemed from this IP today (signup_links.too_many_from_ip) */
             429: {
                 headers: {
                     [name: string]: unknown;
@@ -16007,6 +16245,8 @@ export interface operations {
                 "application/json": {
                     /** @description Contribution in minor units of the base currency of the portfolio, from 1 to 100,000,000,000 */
                     amountMinor: number;
+                    /** @description Start with the goals that are behind or overdue and have a linked holding; defaults to true. Only applies to portfolios in BRL */
+                    prioritizeGoals?: boolean;
                 };
             };
         };
@@ -16031,7 +16271,52 @@ export interface operations {
                         totalAfterMinor: number;
                         /** @description class_targets_not_100: the class targets do not add up to 100% */
                         warnings: "class_targets_not_100"[];
-                        /** @description Only classes that receive money, by amount descending; the amounts add up to amountMinor */
+                        /** @description Part of the contribution set apart for behind or overdue goals; 0 without them */
+                        goalsAmountMinor: number;
+                        /** @description Goals that come first, by nearest target date; the amounts add up to goalsAmountMinor */
+                        goals: {
+                            /**
+                             * Format: uuid
+                             * @description Goal id
+                             */
+                            goalId: string;
+                            /**
+                             * @description Kind of the goal
+                             * @enum {string}
+                             */
+                            kind: "emergency_reserve" | "travel" | "home_down_payment" | "other";
+                            /** @description Name of the goal */
+                            name: string;
+                            /** @description Target date of the goal, YYYY-MM-DD */
+                            targetDate: string;
+                            /** @description Amount set apart for the goal, in minor units of the base currency */
+                            amountMinor: number;
+                            /** @description The holding linked to the goal with the largest share, matured titles excluded */
+                            destination: {
+                                /**
+                                 * @description position: asset valued by quantity x quote; fixed_income: title
+                                 * @enum {string}
+                                 */
+                                kind: "position" | "fixed_income";
+                                /**
+                                 * Format: uuid
+                                 * @description Position id or fixed income title id, according to kind
+                                 */
+                                id: string;
+                                /** @description Ticker or title name */
+                                symbol: string;
+                                /** @description Asset or title name */
+                                name: string;
+                                /** @description Kind of holding used to group and label it */
+                                typeGroup: string;
+                                /**
+                                 * @description new_or_reinforce: fixed income, a new title or a reinforcement of this one; null otherwise
+                                 * @enum {string|null}
+                                 */
+                                hint: "new_or_reinforce" | null;
+                            };
+                        }[];
+                        /** @description Only classes that receive money, by amount descending; the amounts add up to amountMinor minus goalsAmountMinor. The value and share before already count what the goals receive */
                         classes: {
                             /**
                              * Format: uuid
@@ -20749,6 +21034,32 @@ export interface operations {
                             endsAt: string;
                             /** @description Whole days left, rounded up */
                             daysLeft: number;
+                        } | null;
+                        /** @description Signup-link offer redeemed by this account and still within its 30 days; null when there is none */
+                        offer: {
+                            /** @description The trial part of the redeemed offer */
+                            trial: {
+                                /**
+                                 * @description `none`: no trial; `card`: trial with the card saved; `no_card`: Premium for N days without a card
+                                 * @enum {string}
+                                 */
+                                kind: "none" | "card" | "no_card";
+                                /** @description Trial length in days; null when there is no trial */
+                                days: number | null;
+                            };
+                            /** @description Discount scale by paid cycle; the first rule that matches wins */
+                            rules: {
+                                /** @description Discount on the Premium price, in percent */
+                                percent: number;
+                                /** @description First paid cycle the rule covers */
+                                fromCycle: number;
+                                /** @description Last paid cycle the rule covers, inclusive */
+                                toCycle: number;
+                            }[];
+                            /** @description When the account redeemed the link (ISO 8601) */
+                            redeemedAt: string;
+                            /** @description Until when the offer can still start (ISO 8601); after it, full price and no trial */
+                            expiresAt: string;
                         } | null;
                         /** @description State of each paid feature */
                         features: {

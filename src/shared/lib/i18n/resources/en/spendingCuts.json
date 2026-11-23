@@ -51,5 +51,15 @@
     "description": "You changed the goal on the slider but did not save it. If you leave now, it goes back to the saved value.",
     "leave": "Leave without saving",
     "stay": "Keep editing"
+  },
+  "objectives": {
+    "title": "Your goals ask for {{amount}} a month",
+    "goalLine": "Your savings goal of {{rate}} of income gives {{amount}}.",
+    "noIncome": "Set this month's income to compare with the savings goal.",
+    "behind_one": "{{count}} goal is behind.",
+    "behind_other": "{{count}} goals are behind.",
+    "adopt": "Use {{amount}} as the savings goal",
+    "view": "View goals",
+    "saved": "Savings goal updated from your goals"
   }
 }

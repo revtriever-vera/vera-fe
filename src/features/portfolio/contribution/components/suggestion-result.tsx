@@ -5,6 +5,7 @@ import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import type { ContributionClass, ContributionSuggestion } from '../types';
 import { CalculationNote } from './calculation-note';
+import { ContributionGoalsBlock } from './contribution-goals-block';
 import { ContributionClassCard } from './contribution-class-card';
 import { ContributionWarnings } from './contribution-warnings';
 
@@ -22,6 +23,7 @@ export function SuggestionResult({ suggestion }: SuggestionResultProps): ReactEl
                 {t('announce', { amount: formatCurrency(suggestion.amountMinor, suggestion.baseCurrency, locale) })}
             </output>
             <ContributionWarnings warnings={suggestion.warnings} />
+            <ContributionGoalsBlock goals={suggestion.goals} totalMinor={suggestion.goalsAmountMinor} currency={suggestion.baseCurrency} />
             <ul aria-label={t('listLabel')} className="flex flex-col gap-3">
                 {suggestion.classes.map((item: ContributionClass): ReactElement => (
                     <ContributionClassCard

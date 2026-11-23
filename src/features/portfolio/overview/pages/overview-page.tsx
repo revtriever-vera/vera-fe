@@ -10,6 +10,7 @@ import { Button, buttonVariants } from '@/shared/ui/button';
 import { EmptyState } from '@/shared/ui/empty-state';
 import { FailureAlert } from '@/shared/ui/failure-alert';
 import { Loading, Skeleton } from '@/shared/ui/skeleton';
+import { GoalsOverviewCard } from '../../goals/components/goals-overview-card';
 import { useOverview } from '../../api/use-overview.query';
 import { BaseCurrencySwitch } from '../../components/base-currency-switch';
 import { DataSourcesNote } from '../../components/data-sources-note';
@@ -124,6 +125,7 @@ function OverviewContent({ overview, summarySlot }: { readonly overview: Overvie
                 <ActualVsTargetCard model={model} currency={overview.baseCurrency} />
             </div>
             {summarySlot}
+            <GoalsOverviewCard />
             <QualityNotice quality={overview.quality} />
             <DistributionCard model={model} overview={overview} />
         </div>

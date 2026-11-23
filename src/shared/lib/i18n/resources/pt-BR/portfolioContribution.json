@@ -51,5 +51,12 @@
     "rateLimited": "Muitas simulações em pouco tempo. Aguarde um instante e tente de novo.",
     "retry": "Tentar de novo"
   },
-  "settingsError": "Não foi possível carregar a moeda base."
+  "settingsError": "Não foi possível carregar a moeda base.",
+  "goals": {
+    "title": "Objetivos atrasados",
+    "listLabel": "Aportes para os objetivos atrasados",
+    "destination": "{{symbol}} · {{name}}",
+    "toggleLabel": "Começar pelos objetivos atrasados",
+    "toggleHint": "Eles recebem primeiro. O resto segue a carteira-alvo."
+  }
 }

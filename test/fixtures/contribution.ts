@@ -53,6 +53,8 @@ export function sampleSuggestion(overrides: Partial<ContributionSuggestion> = {}
         totalBeforeMinor: 177310040,
         totalAfterMinor: 178310040,
         warnings: [],
+        goalsAmountMinor: 0,
+        goals: [],
         classes: [
             contributionClass({
                 classId: 'class-rf-ipca',

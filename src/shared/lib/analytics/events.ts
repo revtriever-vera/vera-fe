@@ -65,6 +65,7 @@ export interface AnalyticsEventMap {
     portfolio_tolerance_changed: undefined;
     portfolio_asset_targets_saved: { assetCount: number };
     portfolio_contribution_calculated: { classesFunded: number; currency: CurrencyCode };
+    portfolio_contribution_goals_toggled: { on: boolean };
     portfolio_onboarding_assets_step: { count: number };
     assets_tab_viewed: { tab: AssetsTabName };
     holder_filter_changed: { kind: 'any' | 'all' | 'person' };
@@ -86,6 +87,7 @@ export interface AnalyticsEventMap {
     spending_category_created: undefined;
     spending_flexibility_changed: { flexibility: SpendingFlexibilityName };
     spending_goal_saved: undefined;
+    spending_goal_from_objectives: undefined;
     spending_income_mode_changed: { mode: 'transactions' | 'declared' };
     spending_cuts_viewed: { status: SpendingCutsStatusName };
     spending_contribution_shortcut: undefined;

@@ -51,5 +51,15 @@
     "description": "Você mudou a meta no controle, mas não salvou. Se sair agora, ela volta para o valor gravado.",
     "leave": "Sair sem salvar",
     "stay": "Continuar editando"
+  },
+  "objectives": {
+    "title": "Seus objetivos pedem {{amount}} por mês",
+    "goalLine": "Sua meta de {{rate}} da renda dá {{amount}}.",
+    "noIncome": "Informe a renda do mês para comparar com a meta de economia.",
+    "behind_one": "{{count}} objetivo atrasado.",
+    "behind_other": "{{count}} objetivos atrasados.",
+    "adopt": "Usar {{amount}} como meta",
+    "view": "Ver objetivos",
+    "saved": "Meta atualizada pelos objetivos"
   }
 }

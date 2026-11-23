@@ -131,5 +131,16 @@
     "saving": "Saving",
     "created": "Goal created.",
     "saved": "Goal saved."
+  },
+  "overviewCard": {
+    "title": "Goals",
+    "behind_one": "{{count}} behind · {{amount}} a month",
+    "behind_other": "{{count}} behind · {{amount}} a month",
+    "onTrack": "On track · {{amount}} a month",
+    "done": "All done"
+  },
+  "holdingBadge": {
+    "label": "Goals using this asset",
+    "item": "{{name}} {{percent}}"
   }
 }

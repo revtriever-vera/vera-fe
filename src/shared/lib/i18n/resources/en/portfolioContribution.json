@@ -51,5 +51,12 @@
     "rateLimited": "Too many simulations in a short time. Wait a moment and try again.",
     "retry": "Try again"
   },
-  "settingsError": "We could not load the base currency."
+  "settingsError": "We could not load the base currency.",
+  "goals": {
+    "title": "Goals that are behind",
+    "listLabel": "Contributions to goals that are behind",
+    "destination": "{{symbol}} · {{name}}",
+    "toggleLabel": "Start with the goals that are behind",
+    "toggleHint": "They get the money first. The rest follows the target portfolio."
+  }
 }

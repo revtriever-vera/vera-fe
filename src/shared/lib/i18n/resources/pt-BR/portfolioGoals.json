@@ -131,5 +131,16 @@
     "saving": "Salvando",
     "created": "Objetivo criado.",
     "saved": "Objetivo salvo."
+  },
+  "overviewCard": {
+    "title": "Objetivos",
+    "behind_one": "{{count}} atrasado · {{amount}} por mês",
+    "behind_other": "{{count}} atrasados · {{amount}} por mês",
+    "onTrack": "Em dia · {{amount}} por mês",
+    "done": "Todos concluídos"
+  },
+  "holdingBadge": {
+    "label": "Objetivos deste ativo",
+    "item": "{{name}} {{percent}}"
   }
 }

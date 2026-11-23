@@ -12,7 +12,8 @@ describe('portfolioKeys', () => {
 
     it('o detalhe de classe e o aporte carregam o parâmetro', () => {
         expect(portfolioKeys.classDetail('c-1')).toEqual(['portfolio', 'class-detail', 'c-1']);
-        expect(portfolioKeys.contribution(150000)).toEqual(['portfolio', 'contribution', 150000]);
+        expect(portfolioKeys.contribution(150000)).toEqual(['portfolio', 'contribution', 150000, true]);
+        expect(portfolioKeys.contribution(150000, false)).toEqual(['portfolio', 'contribution', 150000, false]);
     });
 
     it('a busca, as cotações, o câmbio e a prévia de renda fixa entram na chave', () => {
