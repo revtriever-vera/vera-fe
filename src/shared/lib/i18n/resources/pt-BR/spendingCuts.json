@@ -20,10 +20,10 @@
     "cutSuggested_one": "Dá pra chegar lá cortando {{total}} em {{count}} categoria flexível.",
     "cutSuggested_other": "Dá pra chegar lá cortando {{total}} em {{count}} categorias flexíveis.",
     "exceedsFlexible": "Mais do que todos os gastos flexíveis somados. Para essa meta, seria preciso rever algum gasto fixo ou a renda.",
-    "goalMet": "Você guardou mais do que a meta. Esse valor pode ir direto para o aporte inteligente.",
+    "goalMet": "Você guardou mais do que a meta. Esse valor pode ir direto para Onde aportar.",
     "noIncome": "Sem renda registrada neste mês, não dá para calcular a meta.",
     "defineIncome": "Definir a renda",
-    "contribution": "Ir para o aporte inteligente"
+    "contribution": "Ir para Onde aportar"
   },
   "table": {
     "title": "Sugestão de limites para {{month}}",

@@ -48,6 +48,7 @@
     }
   },
   "credentials": {
+    "ownerOnly": "Only the account owner registers and replaces the Meu Pluggy credentials.",
     "title": "Your credentials",
     "formIntro": "The Client ID and Client Secret come from step 3; the Item IDs, from step 5.",
     "rotateIntro": "Paste the Client ID and Client Secret of the new application. Connected banks stay as they are.",

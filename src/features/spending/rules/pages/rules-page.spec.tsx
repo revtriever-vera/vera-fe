@@ -387,7 +387,7 @@ describe('RulesPage: alteração pendente', () => {
 
         await user.click(screen.getByRole('button', { name: 'Nova categoria' }));
         await user.type(await screen.findByLabelText('Nome'), 'Algo');
-        await user.click(within(screen.getByRole('navigation', { name: 'Seções dos gastos' })).getByRole('link', { name: 'Conexões' }));
+        await user.click(within(screen.getByRole('navigation', { name: 'Seções dos gastos' })).getByRole('link', { name: 'Transações' }));
 
         expect(await screen.findByText('Sair sem salvar?')).toBeInTheDocument();
         expect(router.state.location.pathname).toBe(PATH);

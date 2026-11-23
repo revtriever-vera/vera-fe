@@ -5,6 +5,7 @@ import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { BrandLogo } from '@/shared/ui/brand-logo';
 import { SidebarContent, type SidebarContentProps } from './sidebar';
 import { useNavBadgeCount } from './use-nav-badge-count';
+import { UserMenu } from './user-menu';
 
 const FOCUSABLE: string = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
@@ -103,19 +104,22 @@ export function MobileTopBar(props: SidebarContentProps): ReactElement {
     return (
         <header className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-surface px-4 py-2 pt-[max(0.5rem,env(safe-area-inset-top))] min-[861px]:hidden">
             <BrandLogo />
-            <button
-                ref={triggerRef}
-                type="button"
-                aria-label={pending > 0 ? t('openMenuPending', { count: pending }) : t('openMenu')}
-                aria-expanded={open}
-                onClick={(): void => {
-                    setOpen(true);
-                }}
-                className="relative grid size-11 place-items-center rounded-control text-content hover:bg-surface-muted"
-            >
-                <Menu className="size-5" aria-hidden="true" />
-                {pending > 0 ? <span aria-hidden="true" className="absolute top-2 right-2 size-2.5 rounded-full bg-caution" /> : null}
-            </button>
+            <div className="flex items-center gap-1">
+                <UserMenu />
+                <button
+                    ref={triggerRef}
+                    type="button"
+                    aria-label={pending > 0 ? t('openMenuPending', { count: pending }) : t('openMenu')}
+                    aria-expanded={open}
+                    onClick={(): void => {
+                        setOpen(true);
+                    }}
+                    className="relative grid size-11 place-items-center rounded-control text-content hover:bg-surface-muted"
+                >
+                    <Menu className="size-5" aria-hidden="true" />
+                    {pending > 0 ? <span aria-hidden="true" className="absolute top-2 right-2 size-2.5 rounded-full bg-caution" /> : null}
+                </button>
+            </div>
             {open ? <Drawer {...props} onClose={close} /> : null}
         </header>
     );

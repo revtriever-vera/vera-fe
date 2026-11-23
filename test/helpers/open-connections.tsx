@@ -19,7 +19,7 @@ export interface OpenedConnections {
 export async function openConnectionsPage(options: ConnectionsApiOptions = {}, fakeTimers: boolean = false): Promise<OpenedConnections> {
     const api: ConnectionsApi = installConnectionsApi(options);
     const user: UserEvent = userEvent.setup(fakeTimers ? { advanceTimers: vi.advanceTimersByTime.bind(vi) } : {});
-    renderRouterAt('/spending/connections', { signedIn: true });
+    renderRouterAt('/settings/banks', { signedIn: true });
     await screen.findByRole('region', { name: 'Suas credenciais' });
     return { user, api };
 }

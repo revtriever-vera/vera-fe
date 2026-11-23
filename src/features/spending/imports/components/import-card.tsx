@@ -1,30 +1,42 @@
-import type { ReactElement } from 'react';
-import { Upload } from 'lucide-react';
-import { useNavigate, type UseNavigateResult } from '@tanstack/react-router';
+import { useState, type ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
-import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
+import { FileDrop } from '@/shared/ui/file-drop';
+import { IMPORT_ACCEPT, MAX_FILE_BYTES, importRejectionMessage } from '../lib/import-file-rules';
 import { ImportHistory } from './import-history';
+import { ImportStatementModal } from './import-statement-modal';
 
 export function ImportCard(): ReactElement {
     const { t }: UseTranslationResponse<'spendingImports', undefined> = useTranslation('spendingImports');
-    const navigate: UseNavigateResult<string> = useNavigate();
-    const open = (): void => {
-        void navigate({ to: '.', search: (previous: Record<string, unknown>): Record<string, unknown> => ({ ...previous, import: true }) });
-    };
+    const [picked, setPicked] = useState<File | null>(null);
     return (
         <Card className="flex flex-col gap-4">
-            <div className="flex flex-wrap items-start justify-between gap-3">
-                <div className="flex flex-col gap-1">
-                    <h2 className="text-base font-semibold text-content">{t('card.title')}</h2>
-                    <p className="text-sm text-content-muted">{t('card.description')}</p>
-                </div>
-                <Button onClick={open}>
-                    <Upload className="size-4" aria-hidden="true" />
-                    {t('card.button')}
-                </Button>
+            <div className="flex flex-col gap-1">
+                <h2 className="text-base font-semibold text-content">{t('card.title')}</h2>
+                <p className="text-sm text-content-muted">{t('card.description')}</p>
             </div>
+            <FileDrop
+                label={t('file.label')}
+                title={t('file.dropTitle')}
+                hint={t('file.hint')}
+                accept={IMPORT_ACCEPT}
+                maxSizeBytes={MAX_FILE_BYTES}
+                fileName={null}
+                onPicked={setPicked}
+                onClear={(): void => {
+                    setPicked(null);
+                }}
+                rejectionMessage={importRejectionMessage(t)}
+            />
             <ImportHistory />
+            {picked === null ? null : (
+                <ImportStatementModal
+                    initialFile={picked}
+                    onClose={(): void => {
+                        setPicked(null);
+                    }}
+                />
+            )}
         </Card>
     );
 }

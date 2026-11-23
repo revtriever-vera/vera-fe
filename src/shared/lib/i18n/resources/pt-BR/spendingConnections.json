@@ -48,6 +48,7 @@
     }
   },
   "credentials": {
+    "ownerOnly": "Só o dono da conta cadastra e troca as credenciais do Meu Pluggy.",
     "title": "Suas credenciais",
     "formIntro": "O Client ID e o Client Secret saem do passo 3; os Item IDs, do passo 5.",
     "rotateIntro": "Cole o Client ID e o Client Secret da aplicação nova. Os bancos conectados continuam como estão.",

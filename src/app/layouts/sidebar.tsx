@@ -5,14 +5,12 @@ import { cn } from '@/shared/lib/cn';
 import { BrandLogo } from '@/shared/ui/brand-logo';
 import { activeNavId, type NavGroup, type NavItem, type NavLabelKey } from './app-nav';
 import { useNavBadgeCount } from './use-nav-badge-count';
-import { UserBox } from './user-box';
 
-const GROUP_ORDER: readonly NavGroup[] = ['portfolio', 'spending', 'settings'];
+const GROUP_ORDER: readonly NavGroup[] = ['portfolio', 'spending'];
 
 const GROUP_LABEL: Readonly<Record<NavGroup, NavLabelKey>> = {
     portfolio: 'navGroupPortfolio',
-    spending: 'navGroupSpending',
-    settings: 'navGroupSettings'
+    spending: 'navGroupSpending'
 };
 
 interface SectionProps {
@@ -112,7 +110,6 @@ export function SidebarContent({ items, topSlot }: SidebarContentProps): ReactEl
                     );
                 })}
             </nav>
-            <UserBox />
         </div>
     );
 }

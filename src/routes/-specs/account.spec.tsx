@@ -17,13 +17,13 @@ function failWith(method: 'get' | 'patch' | 'delete', path: string, type: string
     server.use(http[method](path, (): Response => HttpResponse.json(problem(type, status), { status })));
 }
 
-async function openAccount(identity: Parameters<typeof sessionIdentity>[0] = {}): Promise<AnyRouter> {
+async function openAccount(identity: Parameters<typeof sessionIdentity>[0] = {}, tab: string = 'privacy'): Promise<AnyRouter> {
     server.use(
         http.get('*/auth/me', (): Response => HttpResponse.json(sessionIdentity(identity))),
         ...signedInHandlers()
     );
-    const router: AnyRouter = renderRouterAt('/account');
-    await screen.findByRole('heading', { name: 'Minha conta', level: 1 });
+    const router: AnyRouter = renderRouterAt(`/settings/${tab}`);
+    await screen.findByRole('heading', { name: 'Configurações', level: 1 });
     return router;
 }
 
@@ -39,7 +39,7 @@ afterEach((): void => {
 
 describe('account profile', () => {
     it('shows name, email and provider with no edit action', async () => {
-        await openAccount();
+        await openAccount({}, 'preferences');
 
         const profile: HTMLElement = screen.getByRole('region', { name: 'Perfil' });
         expect(within(profile).getByText('Maria Teste')).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe('account profile', () => {
     });
 
     it('shows Facebook for a Facebook login', async () => {
-        await openAccount({ loginProvider: 'facebook' });
+        await openAccount({ loginProvider: 'facebook' }, 'preferences');
 
         expect(screen.getByText('Você entra com o Facebook')).toBeInTheDocument();
     });
@@ -64,7 +64,7 @@ describe('account language', () => {
 
     it('lists the languages in their own names', async () => {
         const user: UserEvent = userEvent.setup();
-        await openAccount();
+        await openAccount({}, 'preferences');
 
         await user.click(screen.getByRole('combobox', { name: 'Idioma da interface' }));
 
@@ -81,11 +81,11 @@ describe('account language', () => {
             })
         );
         const user: UserEvent = userEvent.setup();
-        await openAccount();
+        await openAccount({}, 'preferences');
 
         await chooseEnglish(user);
 
-        expect(await screen.findByRole('heading', { name: 'My account', level: 1 })).toBeInTheDocument();
+        expect(await screen.findByRole('heading', { name: 'Settings', level: 1 })).toBeInTheDocument();
         await waitFor((): void => {
             expect(bodies).toEqual([{ locale: 'en' }]);
         });
@@ -97,7 +97,7 @@ describe('account language', () => {
     it('reverts the selector and shows an error when saving fails', async () => {
         failWith('patch', '*/auth/me/preferences', 'validation_failed', 422);
         const user: UserEvent = userEvent.setup();
-        await openAccount();
+        await openAccount({}, 'preferences');
 
         await chooseEnglish(user);
 
@@ -269,7 +269,7 @@ describe('account deletion', () => {
         expect(await within(dialog).findByText(message)).toBeInTheDocument();
         expect(screen.getByRole('dialog')).toBeInTheDocument();
         expect(tokenStore.get()).not.toBeNull();
-        expect(router.state.location.pathname).toBe('/account');
+        expect(router.state.location.pathname).toBe('/settings/privacy');
     });
 
     it('on 204 ends the session without calling logout, goes to the login and shows the notice once', async () => {

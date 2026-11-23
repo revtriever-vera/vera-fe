@@ -8,6 +8,13 @@ import { installOverviewApi, type OverviewApi } from '../../../../../test/helper
 import { server } from '../../../../../test/msw/server';
 import { renderRouterAt } from '../../../../../test/router';
 
+function shortcutLink(name: string): HTMLElement {
+    const link: HTMLElement | undefined = screen
+        .getAllByRole('link', { name })
+        .find((node: HTMLElement): boolean => node.closest('nav') === null);
+    return link as HTMLElement;
+}
+
 async function openOverview(): Promise<UserEvent> {
     renderRouterAt('/portfolio', { signedIn: true });
     await screen.findByText('R$ 1.773.100,40');
@@ -36,7 +43,7 @@ describe('visão geral: conteúdo', () => {
         await openOverview();
 
         expect(screen.getByText('Maior desvio: Cripto, 6,7 pp acima da meta.')).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: 'Onde aportar' })).toHaveAttribute('href', '/portfolio/contribution');
+        expect(shortcutLink('Onde aportar')).toHaveAttribute('href', '/portfolio/contribution');
     });
 
     it('sem desvio fora da faixa não mostra o destaque', async () => {
@@ -226,7 +233,7 @@ describe('visão geral: estados', () => {
         installOverviewApi({ overview: emptyOverview() });
         renderRouterAt('/portfolio', { signedIn: true });
 
-        expect(await screen.findByRole('heading', { name: 'Sua carteira ainda está vazia' })).toBeInTheDocument();
+        expect(await screen.findByRole('heading', { name: 'Nenhum ativo cadastrado' })).toBeInTheDocument();
         expect(screen.getByRole('link', { name: 'Cadastrar meu primeiro ativo' })).toHaveAttribute('href', '/portfolio/get-started');
         expect(screen.getByRole('radiogroup', { name: 'Moeda base' })).toBeInTheDocument();
         expect(screen.queryByRole('table')).not.toBeInTheDocument();
@@ -261,6 +268,6 @@ describe('visão geral: estados', () => {
         expect(await screen.findByText('R$1,773,100.40')).toBeInTheDocument();
         expect(screen.getByText('Total net worth')).toBeInTheDocument();
         expect(screen.getByText('Largest deviation: Crypto, 6.7 pp above target.')).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: 'Where to invest' })).toBeInTheDocument();
+        expect(shortcutLink('Where to invest')).toBeInTheDocument();
     });
 });

@@ -1,5 +1,4 @@
 {
-  "title": "My account",
   "profileTitle": "Profile",
   "profileName": "Name",
   "profileEmail": "Email",
@@ -29,7 +28,7 @@
   "deleteItemPortfolio": "your portfolio, your assets and your targets",
   "deleteItemSpending": "your spending and your connections",
   "deleteItemRest": "everything else Vera keeps about the account",
-  "deleteIrreversible": "This cannot be undone. Backups expire on their own, according to the backup retention period.",
+  "deleteIrreversible": "This cannot be undone. Backups expire according to the backup retention period.",
   "deleteExportInvite": "Want to keep a copy first? Download your data now.",
   "deleteConfirmLabel": "Type your email to confirm",
   "deleteConfirmHint": "Your email is {{email}}",
