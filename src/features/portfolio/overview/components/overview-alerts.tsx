@@ -13,7 +13,8 @@ import { useFgc } from '../../fixed-income/api/use-fgc.query';
 import { useMaturities } from '../../fixed-income/api/use-maturities.query';
 import { ReallocateButton } from '../../fixed-income/components/reallocate-button';
 import { useWhenLabel } from '../../fixed-income/lib/use-when-label';
-import type { FgcGroup, MaturityItem } from '../../fixed-income/types';
+import { overLimitGroups, type OverLimitGroup } from '../../fixed-income/lib/over-limit-groups';
+import type { FgcCoverage, MaturityItem } from '../../fixed-income/types';
 
 interface AlertLineProps {
     readonly icon: ReactNode;
@@ -66,14 +67,19 @@ function MaturityAlert({ item }: { readonly item: MaturityItem }): ReactElement 
     );
 }
 
-function FgcAlert({ group }: { readonly group: FgcGroup }): ReactElement {
+function FgcAlert({ item }: { readonly item: OverLimitGroup }): ReactElement {
     const locale: SupportedLocale = useLocale();
     const { t }: UseTranslationResponse<'portfolioFixedIncome', undefined> = useTranslation('portfolioFixedIncome');
+    const amount: string = formatCurrency(item.group.overMinor, 'BRL', locale);
     return (
         <AlertLine
             caution
             icon={<ShieldAlert className="size-4 shrink-0 text-caution" aria-hidden="true" />}
-            text={t('alerts.fgc', { amount: formatCurrency(group.overMinor, 'BRL', locale), group: group.groupName })}
+            text={
+                item.holderName === null
+                    ? t('alerts.fgc', { amount, group: item.group.groupName })
+                    : t('alerts.fgcHolder', { amount, group: item.group.groupName, holder: item.holderName })
+            }
             action={
                 <Link
                     to="/portfolio/assets"
@@ -93,15 +99,16 @@ function FgcAlert({ group }: { readonly group: FgcGroup }): ReactElement {
 export function OverviewAlerts(): ReactElement | null {
     const { t }: UseTranslationResponse<'portfolioFixedIncome', undefined> = useTranslation('portfolioFixedIncome');
     const maturities: MaturityItem | undefined = useMaturities().data?.items.find((item: MaturityItem): boolean => item.soon);
-    const overLimit: readonly FgcGroup[] = useFgc().data?.groups.filter((group: FgcGroup): boolean => group.overMinor > 0) ?? [];
+    const coverage: FgcCoverage | undefined = useFgc().data;
+    const overLimit: readonly OverLimitGroup[] = coverage === undefined ? [] : overLimitGroups(coverage);
     if (maturities === undefined && overLimit.length === 0) {
         return null;
     }
     return (
         <ul aria-label={t('alerts.label')} className="flex flex-col gap-2">
             {maturities === undefined ? null : <MaturityAlert item={maturities} />}
-            {overLimit.map((group: FgcGroup): ReactElement => (
-                <FgcAlert key={group.groupId} group={group} />
+            {overLimit.map((item: OverLimitGroup): ReactElement => (
+                <FgcAlert key={item.key} item={item} />
             ))}
         </ul>
     );

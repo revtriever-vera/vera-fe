@@ -90,6 +90,7 @@
     "label": "Portfolio notices",
     "maturity": "{{name}} matures {{when}}, on {{date}}, with about {{amount}} to reallocate.",
     "fgc": "{{amount}} at {{group}} above the R$ 250,000 FGC limit.",
+    "fgcHolder": "{{amount}} of {{holder}} at {{group}} above the R$ 250,000 FGC limit.",
     "reallocate": "Reallocate",
     "reallocateLabel": "Reallocate the value of {{name}}",
     "viewCoverage": "View coverage"

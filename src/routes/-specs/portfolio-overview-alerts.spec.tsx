@@ -3,8 +3,9 @@ import { http, HttpResponse } from 'msw';
 import { screen } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import type { AnyRouter } from '@tanstack/react-router';
+import type { FgcGroup } from '@/features/portfolio/fixed-income/types';
 import { track } from '@/shared/lib/analytics';
-import { fgcCoverage, maturities, maturityItem } from '../../../test/fixtures/fixed-income';
+import { fgcCoverage, fgcGroup, maturities, maturityItem } from '../../../test/fixtures/fixed-income';
 import { installOverviewApi } from '../../../test/helpers/overview-api';
 import { server } from '../../../test/msw/server';
 import { renderRouterAt } from '../../../test/router';
@@ -63,6 +64,25 @@ describe('/portfolio: avisos de vencimento e FGC', () => {
         expect(router.state.location.search).toEqual({ tab: 'fixed-income' });
         expect(await screen.findByRole('tab', { name: 'Renda fixa', selected: true })).toBeInTheDocument();
         expect(track).toHaveBeenCalledWith('overview_alert_clicked', { kind: 'fgc' });
+    });
+
+    it('com mais de um titular avisa pelos blocos de cada pessoa', async () => {
+        installOverviewApi();
+        const over: FgcGroup = fgcGroup();
+        server.use(
+            http.get('*/portfolio/fgc', () =>
+                HttpResponse.json(
+                    fgcCoverage({
+                        peopleCount: 2,
+                        groups: [],
+                        byHolder: [{ holder: { userId: 'u-ana', name: 'Ana' }, coveredMinor: 1, capShareBps: 1, groups: [over], outside: [] }]
+                    })
+                )
+            )
+        );
+        await openOverview();
+
+        expect(await screen.findByText('R$ 50.000,00 de Ana em Conglomerado Alfa acima do limite de R$ 250 mil do FGC.')).toBeInTheDocument();
     });
 
     it('mostra os dois avisos juntos', async () => {

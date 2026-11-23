@@ -90,6 +90,7 @@
     "label": "Avisos da carteira",
     "maturity": "{{name}} vence {{when}}, em {{date}}, com cerca de {{amount}} para realocar.",
     "fgc": "{{amount}} em {{group}} acima do limite de R$ 250 mil do FGC.",
+    "fgcHolder": "{{amount}} de {{holder}} em {{group}} acima do limite de R$ 250 mil do FGC.",
     "reallocate": "Realocar",
     "reallocateLabel": "Realocar o valor de {{name}}",
     "viewCoverage": "Ver cobertura"
