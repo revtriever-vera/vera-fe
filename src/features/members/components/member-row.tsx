@@ -1,9 +1,10 @@
+import type { TFunction } from 'i18next';
 import type { ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { Avatar } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
-import { inviteDaysLeft } from '../lib/invite-days';
+import { inviteDaysLeft, inviteExpired } from '../lib/invite-days';
 import type { PersonRow } from '../lib/person-rows';
 import { ROLE_HINT_KEYS, ROLE_LABEL_KEYS } from '../lib/role-labels';
 import type { MemberRole } from '../types';
@@ -19,10 +20,16 @@ export interface MemberRowProps {
     readonly onRemove: () => void;
 }
 
+function inviteDetail(t: TFunction<'members'>, person: PersonRow): string {
+    if (person.expiresAt === null) {
+        return t(ROLE_HINT_KEYS[person.role]);
+    }
+    return inviteExpired(person.expiresAt) ? t('inviteExpired') : t('inviteValidity', { count: inviteDaysLeft(person.expiresAt) });
+}
+
 function RowDetail({ person }: { readonly person: PersonRow }): ReactElement {
     const { t }: UseTranslationResponse<'members', undefined> = useTranslation('members');
-    const detail: string =
-        person.expiresAt === null ? t(ROLE_HINT_KEYS[person.role]) : t('inviteValidity', { count: inviteDaysLeft(person.expiresAt) });
+    const detail: string = inviteDetail(t, person);
 
     return (
         <p className="truncate text-xs text-content-muted">

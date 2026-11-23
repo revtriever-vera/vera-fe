@@ -9,6 +9,7 @@
   "invitePending": "convite enviado",
   "inviteValidity_one": "o link vale {{count}} dia",
   "inviteValidity_other": "o link vale {{count}} dias",
+  "inviteExpired": "o link expirou, reenvie o convite",
   "roleOwner": "Dono",
   "roleEditor": "Editor",
   "roleViewer": "Leitura",

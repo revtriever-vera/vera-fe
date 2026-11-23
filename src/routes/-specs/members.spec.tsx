@@ -45,6 +45,15 @@ describe('people list', () => {
         expect(within(list).getByText('o link vale 3 dias')).toBeInTheDocument();
     });
 
+    it('shows an expired invite as expired, still with resend', async () => {
+        const expired: string = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+        await openPeople('owner', membersList({ invites: [pendingInvite({ expiresAt: expired })] }));
+
+        expect(screen.getByText('o link expirou, reenvie o convite')).toBeInTheDocument();
+        expect(screen.queryByText(/o link vale/)).not.toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Reenviar' })).toBeInTheDocument();
+    });
+
     it('locks the role of the only owner', async () => {
         await openPeople('owner', membersList({ members: [member()], invites: [] }));
 

@@ -9,6 +9,7 @@
   "invitePending": "invite sent",
   "inviteValidity_one": "the link is valid for {{count}} day",
   "inviteValidity_other": "the link is valid for {{count}} days",
+  "inviteExpired": "the link expired, resend the invite",
   "roleOwner": "Owner",
   "roleEditor": "Editor",
   "roleViewer": "Viewer",

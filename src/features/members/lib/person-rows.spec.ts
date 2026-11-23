@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ana, member, membersList, pendingInvite } from '../../../../test/fixtures/members';
-import { inviteDaysLeft } from './invite-days';
+import { inviteDaysLeft, inviteExpired } from './invite-days';
 import { isOnlyOwner, toPersonRows, type PersonRow } from './person-rows';
 
 function rowsOf(list: Parameters<typeof toPersonRows>[0]): readonly PersonRow[] {
@@ -50,5 +50,15 @@ describe('inviteDaysLeft', () => {
 
         expect(inviteDaysLeft('2026-11-27T11:00:00.000Z', now)).toBe(7);
         expect(inviteDaysLeft('2026-11-19T12:00:00.000Z', now)).toBe(1);
+    });
+});
+
+describe('inviteExpired', () => {
+    it('is true once the expiry has passed', (): void => {
+        const now: number = Date.parse('2026-11-20T12:00:00.000Z');
+
+        expect(inviteExpired('2026-11-19T12:00:00.000Z', now)).toBe(true);
+        expect(inviteExpired('2026-11-20T12:00:00.000Z', now)).toBe(true);
+        expect(inviteExpired('2026-11-20T12:00:01.000Z', now)).toBe(false);
     });
 });
