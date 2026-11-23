@@ -71,6 +71,7 @@ export function emptyFgc(): FgcCoverage {
     return {
         currency: 'BRL',
         scope: 'account',
+        byHolder: [],
         peopleCount: 1,
         limitPerGroupMinor: 25000000,
         capMinor: 100000000,

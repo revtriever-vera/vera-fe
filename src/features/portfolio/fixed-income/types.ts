@@ -2,6 +2,7 @@ import type { paths } from '@/shared/lib/api/schema';
 
 export type FgcCoverage = paths['/portfolio/fgc']['get']['responses']['200']['content']['application/json'];
 export type FgcGroup = FgcCoverage['groups'][number];
+export type FgcHolderBlock = FgcCoverage['byHolder'][number];
 export type FgcOutside = FgcCoverage['outside'][number];
 export type FgcOutsideReason = FgcOutside['reason'];
 export type MaturitiesResponse = paths['/portfolio/maturities']['get']['responses']['200']['content']['application/json'];

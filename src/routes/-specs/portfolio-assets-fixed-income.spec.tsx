@@ -3,6 +3,7 @@ import { http, HttpResponse } from 'msw';
 import { screen, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import type { AnyRouter } from '@tanstack/react-router';
+import type { FgcHolderBlock } from '@/features/portfolio/fixed-income/types';
 import { track } from '@/shared/lib/analytics';
 import { i18n } from '@/shared/lib/i18n';
 import { emptyFgc, fgcCoverage, fgcGroup, maturities, maturityItem, realRateItem, realRates } from '../../../test/fixtures/fixed-income';
@@ -180,6 +181,26 @@ describe('/portfolio/assets: renda fixa, FGC', () => {
         renderRouterAt(PATH, { signedIn: true });
 
         expect(await screen.findByText(/O limite do FGC vale por CPF/)).toBeInTheDocument();
+    });
+
+    it('com blocos por titular mostra um bloco para cada pessoa e a conta toda', async () => {
+        const block = (name: string | null, overMinor: number): FgcHolderBlock => ({
+            holder: name === null ? null : { userId: `id-${name}`, name },
+            coveredMinor: 100,
+            capShareBps: 100,
+            groups: [fgcGroup({ groupId: `g-${name}`, groupName: `Grupo de ${name ?? 'todos'}`, overMinor })],
+            outside: []
+        });
+        server.use(
+            http.get('*/portfolio/fgc', () =>
+                HttpResponse.json(fgcCoverage({ peopleCount: 2, groups: [], byHolder: [block('Ana', 0), block(null, 10)] }))
+            )
+        );
+        renderRouterAt(PATH, { signedIn: true });
+
+        const ana: HTMLElement = await screen.findByRole('region', { name: 'Ana' });
+        expect(within(ana).getByText('Grupo de Ana')).toBeInTheDocument();
+        expect(within(screen.getByRole('region', { name: 'Conta toda' })).getByText('Grupo de todos')).toBeInTheDocument();
     });
 
     it('explica os títulos fora do FGC e pede o emissor de quem não tem', async () => {

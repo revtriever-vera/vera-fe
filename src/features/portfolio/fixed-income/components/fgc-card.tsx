@@ -4,7 +4,7 @@ import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { Money } from '@/shared/ui/money';
 import type { TableColumn } from '@/shared/ui/table';
 import { useFgc } from '../api/use-fgc.query';
-import type { FgcCoverage, FgcGroup } from '../types';
+import type { FgcCoverage, FgcGroup, FgcHolderBlock, FgcOutside } from '../types';
 import { GroupNameCell, OverLimitCell } from './fgc-group-cells';
 import { FgcMeter } from './fgc-meter';
 import { FgcOutsideNotes } from './fgc-outside-notes';
@@ -56,16 +56,60 @@ function FgcGroups({ groups }: { readonly groups: readonly FgcGroup[] }): ReactE
     );
 }
 
+interface FgcBlockProps {
+    readonly coverage: FgcCoverage;
+    readonly coveredMinor: number;
+    readonly capShareBps: number;
+    readonly groups: readonly FgcGroup[];
+    readonly outside: readonly FgcOutside[];
+}
+
+function FgcBlock({ coverage, coveredMinor, capShareBps, groups, outside }: FgcBlockProps): ReactElement {
+    return (
+        <div className="flex flex-col gap-4">
+            <FgcMeter coveredMinor={coveredMinor} capMinor={coverage.capMinor} capShareBps={capShareBps} currency={coverage.currency} />
+            <FgcGroups groups={groups} />
+            <FgcOutsideNotes outside={outside} />
+        </div>
+    );
+}
+
+function HolderBlock({ coverage, block }: { readonly coverage: FgcCoverage; readonly block: FgcHolderBlock }): ReactElement {
+    const { t }: UseTranslationResponse<'portfolioFixedIncome', undefined> = useTranslation('portfolioFixedIncome');
+    return (
+        <section aria-label={block.holder?.name ?? t('fgc.wholeAccount')} className="flex flex-col gap-3">
+            <h4 className="text-sm font-semibold">{block.holder?.name ?? t('fgc.wholeAccount')}</h4>
+            <FgcBlock
+                coverage={coverage}
+                coveredMinor={block.coveredMinor}
+                capShareBps={block.capShareBps}
+                groups={block.groups}
+                outside={block.outside}
+            />
+        </section>
+    );
+}
+
 function FgcContent({ coverage }: { readonly coverage: FgcCoverage }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioFixedIncome', undefined> = useTranslation('portfolioFixedIncome');
     return (
         <div className="flex flex-col gap-4">
-            <FgcMeter coverage={coverage} />
-            <FgcGroups groups={coverage.groups} />
+            {coverage.byHolder.length === 0 ? (
+                <FgcBlock
+                    coverage={coverage}
+                    coveredMinor={coverage.coveredMinor}
+                    capShareBps={coverage.capShareBps}
+                    groups={coverage.groups}
+                    outside={coverage.outside}
+                />
+            ) : (
+                coverage.byHolder.map((block: FgcHolderBlock): ReactElement => (
+                    <HolderBlock key={block.holder?.userId ?? 'account'} coverage={coverage} block={block} />
+                ))
+            )}
             {coverage.peopleCount >= PEOPLE_FOR_PER_CPF_NOTE ? (
                 <p className="rounded-control bg-info/10 px-3 py-2 text-sm text-content">{t('fgc.perCpf')}</p>
             ) : null}
-            <FgcOutsideNotes outside={coverage.outside} />
         </div>
     );
 }

@@ -74,6 +74,7 @@
     "groupDetail": "{{issuers}} · {{titles}}",
     "within": "dentro",
     "perCpf": "O limite do FGC vale por CPF. Filtre por titular, no alto da tela, para ver a cobertura de cada pessoa.",
+    "wholeAccount": "Conta toda",
     "outside": "Fora do FGC: {{names}}.",
     "reasons": {
       "tesouro": "Tesouro Direto tem garantia do Tesouro Nacional.",
