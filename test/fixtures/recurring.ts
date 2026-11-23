@@ -1,4 +1,4 @@
-import type { RecurringOverview, RecurringSeriesView } from '@/features/spending/recurring/types';
+import type { CalendarEntry, RecurringAlert, RecurringOverview, RecurringSeriesView } from '@/features/spending/recurring/types';
 
 export const SERIES_ID_NETFLIX: string = '00000000-0000-4000-8000-0000000000d1';
 export const SERIES_ID_LIGHT: string = '00000000-0000-4000-8000-0000000000d2';
@@ -96,6 +96,36 @@ export function recurringOverview(overrides: Partial<RecurringOverview> = {}): R
         stopped: [],
         dismissed: [],
         alerts: [],
+        ...overrides
+    };
+}
+
+export function calendarEntry(overrides: Partial<CalendarEntry> = {}): CalendarEntry {
+    return {
+        date: '2026-11-25',
+        state: 'upcoming',
+        seriesId: SERIES_ID_NETFLIX,
+        name: 'Netflix',
+        amountMinor: 5590,
+        isEstimate: false,
+        isSuggestion: false,
+        accountId: ACCOUNT_ID_CARD,
+        accountName: 'Cartão Nubank',
+        institutionName: 'Nubank',
+        accountKind: 'credit_card',
+        ...overrides
+    };
+}
+
+export function recurringAlert(overrides: Partial<RecurringAlert> = {}): RecurringAlert {
+    return {
+        id: '00000000-0000-4000-8000-0000000000a1',
+        kind: 'price_increase',
+        seriesId: SERIES_ID_LIGHT,
+        seriesName: 'Enel',
+        occurredOn: '2026-10-08',
+        canMarkSeen: true,
+        data: { fromAmountMinor: 4490, toAmountMinor: 5590, percent: 24.5, chargeDate: '2026-10-08' },
         ...overrides
     };
 }

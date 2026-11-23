@@ -126,7 +126,11 @@ function recurringHandlers(): RequestHandler[] {
         http.post('*/spending/recurring/:id/dismiss', () => HttpResponse.json(recurringSeries({ status: 'dismissed' }))),
         http.post('*/spending/recurring/:id/snooze', () => HttpResponse.json(recurringSeries())),
         http.post('*/spending/recurring/:id/stop', () => HttpResponse.json(recurringSeries({ status: 'stopped' }))),
-        http.post('*/spending/recurring/:id/restore', () => HttpResponse.json(recurringSeries()))
+        http.post('*/spending/recurring/:id/restore', () => HttpResponse.json(recurringSeries())),
+        http.get('*/spending/recurring/calendar', () => HttpResponse.json([])),
+        http.patch('*/spending/recurring/:id', () => HttpResponse.json(recurringSeries({ status: 'confirmed' }))),
+        http.delete('*/spending/recurring/:id/charges/:transactionId', () => new HttpResponse(null, { status: 204 })),
+        http.post('*/spending/recurring/alerts/:id/seen', ({ params }) => HttpResponse.json({ id: String(params['id']), seen: true }))
     ];
 }
 

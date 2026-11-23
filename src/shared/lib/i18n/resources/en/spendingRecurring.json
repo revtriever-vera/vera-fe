@@ -64,7 +64,9 @@
     "stopLabel": "{{name}}: I cancelled it",
     "stopTitle": "Mark {{name}} as cancelled?",
     "stopDescription": "Vera stops forecasting this charge and warns you if it comes back. Vera does not cancel anything: cancel in the service's app or website.",
-    "stopConfirm": "Mark as cancelled"
+    "stopConfirm": "Mark as cancelled",
+    "details": "Details",
+    "detailsLabel": "Details of {{name}}"
   },
   "inactive": {
     "title": "Stopped and dismissed ({{count}})",
@@ -100,7 +102,10 @@
     "dismissed": "{{name}} left the suggestions. It stays in Stopped and dismissed, with Undo.",
     "snoozed": "{{name}} is hidden for 30 days",
     "stopped": "{{name}} marked as cancelled",
-    "restored": "{{name}} is back"
+    "restored": "{{name}} is back",
+    "seen": "Alert marked as seen",
+    "updated": "{{name}} updated",
+    "chargeRemoved": "Charge taken out of {{name}}"
   },
   "empty": {
     "noTransactionsTitle": "No transactions imported",
@@ -118,6 +123,83 @@
     "notFound": "This subscription or bill no longer exists. Refresh the screen.",
     "invalidState": "This subscription or bill already changed status. Refresh the screen.",
     "categoryKindMismatch": "Choose an expense category.",
-    "validationFailed": "Check the fields and try again."
+    "validationFailed": "Check the fields and try again.",
+    "chargeNotFound": "That charge is no longer part of the series. Refresh the screen."
+  },
+  "alerts": {
+    "title": "Worth a look ({{count}})",
+    "listLabel": "Subscription and bill alerts",
+    "view": "See charges",
+    "viewLabel": "{{name}}: see charges",
+    "seen": "Seen",
+    "seenLabel": "{{name}}: seen",
+    "stop": "I canceled it",
+    "stopLabel": "{{name}}: I canceled it",
+    "dismiss": "Not recurring",
+    "dismissLabel": "{{name}}: not recurring",
+    "note": "Vera does not cancel subscriptions. Cancel in the service's app or your bank's.",
+    "text": {
+      "priceIncrease": "{{name}} went from {{from}} to {{to}} in {{month}} (+{{percent}}%)",
+      "duplicateCharge": "{{name}} charged twice in {{month}}: {{firstAmount}} on {{firstDate}} and {{secondAmount}} on {{secondDate}}",
+      "duplicateAccount": "{{name}} looks like the same subscription on two accounts: {{account}} and {{other}}",
+      "trialConverted": "The {{name}} trial became a charge: {{amount}} on {{date}}",
+      "returned_one": "{{name}} charged {{amount}} again on {{date}}, {{count}} day after the last charge",
+      "returned_other": "{{name}} charged {{amount}} again on {{date}}, {{count}} days after the last charge",
+      "stillUsing_one": "{{name}} charged {{count}} time ({{amount}}) and was never reviewed. Do you still use it?",
+      "stillUsing_other": "{{name}} charged {{count}} times ({{amount}}) and was never reviewed. Do you still use it?",
+      "renewal_one": "{{name}} renews in {{count}} day: {{amount}}",
+      "renewal_other": "{{name}} renews in {{count}} days: {{amount}}"
+    }
+  },
+  "calendar": {
+    "title": "Next 60 days",
+    "description": "Expected debits of confirmed series and suggestions.",
+    "loading": "Loading the debit calendar",
+    "loadError": "Could not load the debit calendar",
+    "viewLabel": "Calendar view",
+    "list": "List",
+    "month": "Month",
+    "weekTitle": "Week of {{from}} to {{to}}",
+    "tableLabel": "Expected debits from {{from}} to {{to}}",
+    "date": "Date",
+    "name": "Charge",
+    "account": "Account",
+    "amount": "Amount",
+    "suggestion": "Suggestion",
+    "onCard": "on the {{name}} card",
+    "missed": "Did not charge on {{date}}",
+    "empty": "No debits expected in the next 60 days.",
+    "monthTable": "Expected debits in {{month}}",
+    "openLabel": "See {{name}}, {{date}}"
+  },
+  "detail": {
+    "close": "Close",
+    "edit": "Edit",
+    "account": "Account",
+    "nextDate": "Next charge",
+    "noNextDate": "No expected date",
+    "status": {
+      "confirmed": "Confirmed",
+      "suggested": "Suggestion",
+      "stopped": "Stopped",
+      "dismissed": "Dismissed"
+    },
+    "charges": "Latest charges",
+    "noCharges": "No charges in this series.",
+    "removeCharge": "Not from this subscription",
+    "removeChargeLabel": "{{date}}, {{amount}}: not from this subscription",
+    "removeTitle": "Take this charge out of {{name}}?",
+    "removeDescription": "The charge leaves the series and does not come back. The transaction stays in your statement.",
+    "removeConfirm": "Take out of series"
+  },
+  "edit": {
+    "title": "Edit {{name}}",
+    "description": "Change what Vera shows for this series. The charges do not change.",
+    "valueMode": "Amount",
+    "fixed": "Fixed",
+    "variable": "Variable",
+    "valueModeHint": "Variable shows the average and range of the latest charges.",
+    "submit": "Save",
+    "cancel": "Cancel"
   }
 }

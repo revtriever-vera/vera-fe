@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { Button } from '@/shared/ui/button';
@@ -7,12 +7,15 @@ import { Loading, Skeleton } from '@/shared/ui/skeleton';
 import { useTransactions } from '../../transactions/api/use-transactions.query';
 import type { TransactionsResponse } from '../../types';
 import { useRecurring } from '../api/use-recurring.query';
+import { AlertsStrip } from '../components/alerts-strip';
+import { CalendarSection } from '../components/calendar-section';
 import { ConfirmedSection } from '../components/confirmed-section';
 import { InactiveSection } from '../components/inactive-section';
 import { RecurringNoSeries, RecurringNoTransactions } from '../components/recurring-empty';
 import { RecurringKpis } from '../components/recurring-kpis';
 import { ReviewSection } from '../components/review-section';
-import type { RecurringOverview } from '../types';
+import { SeriesDetailDialog } from '../components/series-detail-dialog';
+import type { RecurringOverview, RecurringSeriesView } from '../types';
 
 function RecurringLoading(): ReactElement {
     const { t }: UseTranslationResponse<'spendingRecurring', undefined> = useTranslation('spendingRecurring');
@@ -41,13 +44,30 @@ function RecurringFailure({ error, onRetry }: { readonly error: Error; readonly 
     );
 }
 
+function allSeries(overview: RecurringOverview): readonly RecurringSeriesView[] {
+    return [...overview.review, ...overview.confirmed, ...overview.stopped, ...overview.dismissed];
+}
+
 function RecurringContent({ overview }: { readonly overview: RecurringOverview }): ReactElement {
+    const [openId, setOpenId] = useState<string | null>(null);
+    const everything: readonly RecurringSeriesView[] = allSeries(overview);
+    const open: RecurringSeriesView | undefined = everything.find((item: RecurringSeriesView): boolean => item.id === openId);
     return (
         <div className="flex flex-col gap-6">
             <RecurringKpis totals={overview.totals} />
+            <AlertsStrip alerts={overview.alerts} series={everything} onOpenSeries={setOpenId} />
             <ReviewSection series={overview.review} />
-            <ConfirmedSection series={overview.confirmed} />
+            <CalendarSection onOpenSeries={setOpenId} />
+            <ConfirmedSection series={overview.confirmed} onOpenSeries={setOpenId} />
             <InactiveSection stopped={overview.stopped} dismissed={overview.dismissed} />
+            {open === undefined ? null : (
+                <SeriesDetailDialog
+                    series={open}
+                    onClose={(): void => {
+                        setOpenId(null);
+                    }}
+                />
+            )}
         </div>
     );
 }

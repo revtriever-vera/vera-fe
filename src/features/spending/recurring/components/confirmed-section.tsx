@@ -15,10 +15,48 @@ const MIN_WIDTH: string = 'min-w-[44rem]';
 
 interface ConfirmedColumnsInput {
     readonly canEdit: boolean;
+    readonly onOpen: (series: RecurringSeriesView) => void;
     readonly onStop: (series: RecurringSeriesView) => void;
 }
 
-function useConfirmedColumns({ canEdit, onStop }: ConfirmedColumnsInput): readonly TableColumn<RecurringSeriesView>[] {
+interface RowActionsProps {
+    readonly row: RecurringSeriesView;
+    readonly canEdit: boolean;
+    readonly onOpen: (series: RecurringSeriesView) => void;
+    readonly onStop: (series: RecurringSeriesView) => void;
+}
+
+function RowActions({ row, canEdit, onOpen, onStop }: RowActionsProps): ReactElement {
+    const { t }: UseTranslationResponse<'spendingRecurring', undefined> = useTranslation('spendingRecurring');
+    return (
+        <div className="flex justify-end gap-1">
+            <Button
+                size="sm"
+                variant="ghost"
+                aria-label={t('confirmed.detailsLabel', { name: row.name })}
+                onClick={(): void => {
+                    onOpen(row);
+                }}
+            >
+                {t('confirmed.details')}
+            </Button>
+            {canEdit ? (
+                <Button
+                    size="sm"
+                    variant="ghost"
+                    aria-label={t('confirmed.stopLabel', { name: row.name })}
+                    onClick={(): void => {
+                        onStop(row);
+                    }}
+                >
+                    {t('confirmed.stop')}
+                </Button>
+            ) : null}
+        </div>
+    );
+}
+
+function useConfirmedColumns({ canEdit, onOpen, onStop }: ConfirmedColumnsInput): readonly TableColumn<RecurringSeriesView>[] {
     const { t }: UseTranslationResponse<'spendingRecurring', undefined> = useTranslation('spendingRecurring');
     const locale: SupportedLocale = useLocale();
     const columns: TableColumn<RecurringSeriesView>[] = [
@@ -34,27 +72,13 @@ function useConfirmedColumns({ canEdit, onStop }: ConfirmedColumnsInput): readon
             render: (row): string => formatCurrency(row.monthlyEquivalentMinor, RECURRING_CURRENCY, locale)
         }
     ];
-    if (!canEdit) {
-        return columns;
-    }
     return [
         ...columns,
         {
             key: 'actions',
             header: t('confirmed.actions'),
             align: 'right',
-            render: (row): ReactElement => (
-                <Button
-                    size="sm"
-                    variant="ghost"
-                    aria-label={t('confirmed.stopLabel', { name: row.name })}
-                    onClick={(): void => {
-                        onStop(row);
-                    }}
-                >
-                    {t('confirmed.stop')}
-                </Button>
-            )
+            render: (row): ReactElement => <RowActions row={row} canEdit={canEdit} onOpen={onOpen} onStop={onStop} />
         }
     ];
 }
@@ -78,12 +102,23 @@ function StopDialog({ series, onConfirm, onClose }: StopDialogProps): ReactEleme
     );
 }
 
-export function ConfirmedSection({ series }: { readonly series: readonly RecurringSeriesView[] }): ReactElement | null {
+export interface ConfirmedSectionProps {
+    readonly series: readonly RecurringSeriesView[];
+    readonly onOpenSeries: (seriesId: string) => void;
+}
+
+export function ConfirmedSection({ series, onOpenSeries }: ConfirmedSectionProps): ReactElement | null {
     const { t }: UseTranslationResponse<'spendingRecurring', undefined> = useTranslation('spendingRecurring');
     const { canEdit } = useRole();
     const stop: SeriesAction = useStopAction();
     const [stopping, setStopping] = useState<RecurringSeriesView | null>(null);
-    const columns: readonly TableColumn<RecurringSeriesView>[] = useConfirmedColumns({ canEdit, onStop: setStopping });
+    const columns: readonly TableColumn<RecurringSeriesView>[] = useConfirmedColumns({
+        canEdit,
+        onOpen: (item: RecurringSeriesView): void => {
+            onOpenSeries(item.id);
+        },
+        onStop: setStopping
+    });
     if (series.length === 0) {
         return null;
     }

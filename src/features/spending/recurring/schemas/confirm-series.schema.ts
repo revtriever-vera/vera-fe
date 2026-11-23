@@ -12,7 +12,7 @@ export function hasExpectedDay(cadence: RecurringCadence): boolean {
     return cadence !== RECURRING_CADENCE.weekly && cadence !== RECURRING_CADENCE.biweekly;
 }
 
-function validDay(value: string): boolean {
+export function validDay(value: string): boolean {
     const day: number = Number.parseInt(value, RADIX);
     return DAY_PATTERN.test(value.trim()) && day >= MIN_DAY && day <= MAX_DAY;
 }
