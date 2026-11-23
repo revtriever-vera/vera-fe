@@ -5,6 +5,8 @@ import type { AnyRouter } from '@tanstack/react-router';
 import { http, HttpResponse } from 'msw';
 import * as analytics from '@/shared/lib/analytics';
 import { tokenStore } from '@/shared/lib/api/token-store';
+import type { BillingMe } from '@/features/billing/types';
+import { billingMe, freeBilling, selfHostedBilling } from '../../../test/fixtures/billing';
 import { signedInHandlers } from '../../../test/msw/handlers/auth.handlers';
 import { server } from '../../../test/msw/server';
 import { renderRouterAt } from '../../../test/router';
@@ -168,12 +170,28 @@ describe('menu do avatar', () => {
         vi.spyOn(analytics, 'track');
     });
 
-    async function openMenu(user: UserEvent): Promise<HTMLElement> {
+    async function openMenu(user: UserEvent, me: BillingMe = freeBilling()): Promise<HTMLElement> {
+        server.use(http.get('*/billing/me', () => HttpResponse.json(me)));
         renderRouterAt('/portfolio', { signedIn: true });
         const [trigger] = await screen.findAllByRole('button', { name: 'Abrir menu da conta' });
         await user.click(trigger as HTMLElement);
         return screen.findByRole('menu', { name: 'Abrir menu da conta' });
     }
+
+    it('mostra o selo Premium para quem assina', async () => {
+        const menu: HTMLElement = await openMenu(userEvent.setup(), billingMe());
+
+        expect(await within(menu).findByText('Premium')).toBeInTheDocument();
+        expect(within(menu).queryByText('Free')).not.toBeInTheDocument();
+    });
+
+    it('não mostra selo de plano na auto-hospedada', async () => {
+        const menu: HTMLElement = await openMenu(userEvent.setup(), selfHostedBilling());
+
+        await within(menu).findByRole('menuitem', { name: 'Configurações' });
+        expect(within(menu).queryByText('Free')).not.toBeInTheDocument();
+        expect(within(menu).queryByText('Premium')).not.toBeInTheDocument();
+    });
 
     it('abre com nome, provedor, Plano e uso, Configurações e Sair, e põe o foco no primeiro item', async () => {
         const user: UserEvent = userEvent.setup();
@@ -182,7 +200,7 @@ describe('menu do avatar', () => {
 
         expect(within(menu).getByText(/via Google/)).toBeInTheDocument();
         expect(within(menu).getByRole('menuitem', { name: /Plano e uso/ })).toBeInTheDocument();
-        expect(within(menu).getByText('Free')).toBeInTheDocument();
+        expect(await within(menu).findByText('Free')).toBeInTheDocument();
         expect(within(menu).getByRole('menuitem', { name: 'Configurações' })).toBeInTheDocument();
         await waitFor(() => {
             expect(within(menu).getByRole('menuitem', { name: /Plano e uso/ })).toHaveFocus();

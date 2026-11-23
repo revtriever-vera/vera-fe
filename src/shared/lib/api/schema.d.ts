@@ -1620,6 +1620,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/billing/invoices/{id}/payment-link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Payment page of an invoice
+         * @description Asked on click and never stored: only an open (issued or overdue) invoice of the signed-in company.
+         */
+        get: operations["BillingInvoicesController_paymentLink"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -14169,6 +14189,32 @@ export interface operations {
                         meta?: {
                             [key: string]: unknown;
                         };
+                    };
+                };
+            };
+        };
+    };
+    BillingInvoicesController_paymentLink: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Payment page of the invoice */
+                        url: string;
+                        /** @description Kind of page the url opens */
+                        kind: string;
                     };
                 };
             };

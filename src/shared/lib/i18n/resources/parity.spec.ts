@@ -59,6 +59,8 @@ interface NamespaceFixture {
 }
 import ptBRSettings from './pt-BR/settings.json';
 import enSettings from './en/settings.json';
+import ptBRBilling from './pt-BR/billing.json';
+import enBilling from './en/billing.json';
 
 const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'common', ptBR: ptBRCommon, en: enCommon },
@@ -79,7 +81,8 @@ const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'spendingConnections', ptBR: ptBRSpendingConnections, en: enSpendingConnections },
     { name: 'spendingImports', ptBR: ptBRSpendingImports, en: enSpendingImports },
     { name: 'spendingRules', ptBR: ptBRSpendingRules, en: enSpendingRules },
-    { name: 'settings', ptBR: ptBRSettings, en: enSettings }
+    { name: 'settings', ptBR: ptBRSettings, en: enSettings },
+    { name: 'billing', ptBR: ptBRBilling, en: enBilling }
 ];
 
 describe('paridade de chaves entre os namespaces de tradução', () => {

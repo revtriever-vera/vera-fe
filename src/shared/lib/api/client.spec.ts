@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { apiClient, unwrap, unwrapEmpty } from './client';
+import { http, HttpResponse } from 'msw';
+import { server } from '../../../../test/msw/server';
+import { apiClient, setProblemListener, unwrap, unwrapEmpty } from './client';
 import { ApiError } from './api-error';
 
 describe('apiClient', () => {
@@ -31,5 +33,39 @@ describe('unwrapEmpty', () => {
         expect(() => {
             unwrapEmpty({ error: { detail: 'failed' }, response: { ok: false, status: 500 } as Response });
         }).toThrow(ApiError);
+    });
+});
+
+describe('problem listener', () => {
+    function problemHandler(status: number, type: string): ReturnType<typeof http.get> {
+        return http.get('*/health', () => HttpResponse.json({ type, title: type, status, detail: 'x', requestId: null }, { status }));
+    }
+
+    it('reports the type of a 402 and of a 429', async () => {
+        const seen: string[] = [];
+        const stop: () => void = setProblemListener((type: string): void => {
+            seen.push(type);
+        });
+        server.use(problemHandler(402, 'billing.premium_required'));
+        await apiClient.GET('/health');
+        server.use(problemHandler(429, 'usage.cap_reached'));
+        await apiClient.GET('/health');
+        stop();
+
+        expect(seen).toEqual(['billing.premium_required', 'usage.cap_reached']);
+    });
+
+    it('ignores other statuses and bodies that are not json', async () => {
+        const seen: string[] = [];
+        const stop: () => void = setProblemListener((type: string): void => {
+            seen.push(type);
+        });
+        server.use(problemHandler(400, 'validation_failed'));
+        await apiClient.GET('/health');
+        server.use(http.get('*/health', () => new HttpResponse('nope', { status: 429 })));
+        await apiClient.GET('/health');
+        stop();
+
+        expect(seen).toEqual([]);
     });
 });
