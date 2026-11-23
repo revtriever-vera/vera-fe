@@ -3,6 +3,8 @@ import ptBRCommon from './pt-BR/common.json';
 import enCommon from './en/common.json';
 import ptBRAuth from './pt-BR/auth.json';
 import enAuth from './en/auth.json';
+import ptBRNotices from './pt-BR/notices.json';
+import enNotices from './en/notices.json';
 import ptBRAccount from './pt-BR/account.json';
 import ptBRMembers from './pt-BR/members.json';
 import ptBRIntegrations from './pt-BR/integrations.json';
@@ -80,6 +82,7 @@ const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'common', ptBR: ptBRCommon, en: enCommon },
     { name: 'auth', ptBR: ptBRAuth, en: enAuth },
     { name: 'account', ptBR: ptBRAccount, en: enAccount },
+    { name: 'notices', ptBR: ptBRNotices, en: enNotices },
     { name: 'members', ptBR: ptBRMembers, en: enMembers },
     { name: 'integrations', ptBR: ptBRIntegrations, en: enIntegrations },
     { name: 'whatsapp', ptBR: ptBRWhatsapp, en: enWhatsapp },

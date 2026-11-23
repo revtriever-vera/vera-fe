@@ -190,7 +190,11 @@
     "removeChargeLabel": "{{date}}, {{amount}}: não é desta assinatura",
     "removeTitle": "Tirar essa cobrança de {{name}}?",
     "removeDescription": "A cobrança sai da série e não volta. A transação continua no extrato.",
-    "removeConfirm": "Tirar da série"
+    "removeConfirm": "Tirar da série",
+    "noticeBefore": "Avisar por e-mail na véspera",
+    "noticeBeforeHint": "Um e-mail às 9h do dia anterior a cada cobrança desta série, com o nome e o valor. Vale só para você.",
+    "noticeBeforeOn": "Você vai receber o aviso na véspera.",
+    "noticeBeforeOff": "Você não vai mais receber o aviso na véspera."
   },
   "edit": {
     "title": "Editar {{name}}",
@@ -201,5 +205,19 @@
     "valueModeHint": "Variável mostra a média e a faixa das últimas cobranças.",
     "submit": "Salvar",
     "cancel": "Cancelar"
+  },
+  "touchpoints": {
+    "badge": "Recorrente",
+    "mark": "Marcar como recorrente",
+    "summaryTitle": "Assinaturas e contas",
+    "summaryMonthly": "{{amount}} por mês",
+    "summaryNoTotal": "Nada confirmado ainda",
+    "summaryReview_one": "{{count}} para revisar",
+    "summaryReview_other": "{{count}} para revisar",
+    "summaryLink": "Ver assinaturas e contas",
+    "cutsNote": "Assinaturas somam {{amount}} por mês.",
+    "cutsRaised_one": "{{count}} subiu de preço.",
+    "cutsRaised_other": "{{count}} subiram de preço.",
+    "cutsLink": "Ver assinaturas e contas"
   }
 }

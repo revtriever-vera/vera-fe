@@ -39,7 +39,7 @@ describe('authenticated routes guard', () => {
         expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
     });
 
-    it('keeps every route except the logins, the invite and the dev gallery behind a guard', () => {
+    it('keeps every route except the logins, the invite, the unsubscribe page and the dev gallery behind a guard', () => {
         const ids: string[] = Object.keys(createRouter({ routeTree }).routesById).filter((id: string): boolean => id !== '__root__');
 
         const exposed: string[] = ids.filter(
@@ -47,6 +47,7 @@ describe('authenticated routes guard', () => {
                 id !== '/login' &&
                 id !== '/admin/login' &&
                 !id.startsWith('/convite') &&
+                !id.startsWith('/avisos/sair') &&
                 !id.startsWith('/_dev') &&
                 id !== '/_auth' &&
                 !id.startsWith('/_auth/') &&

@@ -1,5 +1,6 @@
 import type ptBRCommon from './shared/lib/i18n/resources/pt-BR/common.json';
 import type ptBRAuth from './shared/lib/i18n/resources/pt-BR/auth.json';
+import type ptBRNotices from './shared/lib/i18n/resources/pt-BR/notices.json';
 import type ptBRAccount from './shared/lib/i18n/resources/pt-BR/account.json';
 import type ptBRMembers from './shared/lib/i18n/resources/pt-BR/members.json';
 import type ptBRIntegrations from './shared/lib/i18n/resources/pt-BR/integrations.json';
@@ -34,6 +35,7 @@ declare module 'i18next' {
             common: typeof ptBRCommon;
             auth: typeof ptBRAuth;
             account: typeof ptBRAccount;
+            notices: typeof ptBRNotices;
             members: typeof ptBRMembers;
             integrations: typeof ptBRIntegrations;
             whatsapp: typeof ptBRWhatsapp;

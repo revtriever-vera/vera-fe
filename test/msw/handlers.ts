@@ -7,6 +7,7 @@ import { billingHandlers } from './handlers/billing.handlers';
 import { goalsHandlers } from './handlers/goals.handlers';
 import { integrationsHandlers } from './handlers/integrations.handlers';
 import { membersHandlers } from './handlers/members.handlers';
+import { noticesHandlers } from './handlers/notices.handlers';
 import { onboardingHandlers } from './handlers/onboarding.handlers';
 import { portfolioHandlers } from './handlers/portfolio.handlers';
 import { spendingHandlers } from './handlers/spending.handlers';
@@ -19,6 +20,7 @@ export const handlers: RequestHandler[] = [
     ...adminHandlers,
     ...accountHandlers,
     ...membersHandlers,
+    ...noticesHandlers(),
     ...billingHandlers,
     ...summariesHandlers,
     ...integrationsHandlers,
