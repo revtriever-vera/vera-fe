@@ -1,0 +1,102 @@
+{
+  "tabs": {
+    "label": "My assets sections",
+    "list": "Assets",
+    "fixedIncome": "Fixed income",
+    "concentration": "Issuers and sectors"
+  },
+  "common": {
+    "loadError": "Could not load this right now.",
+    "retry": "Try again",
+    "brlOnly": "amounts in R$",
+    "none": "—"
+  },
+  "when": {
+    "today": "today",
+    "days_one": "in {{count}} day",
+    "days_other": "in {{count}} days",
+    "months_one": "in {{count}} month",
+    "months_other": "in {{count}} months",
+    "years": "in {{years}} years"
+  },
+  "maturities": {
+    "title": "Upcoming maturities",
+    "description": "Estimated gross value on the date, before income tax. When a security matures, the money goes back to your account: use \"Reallocate\" to see where to invest it.",
+    "loading": "Loading the maturities",
+    "empty": "No security with a maturity date registered.",
+    "listLabel": "Upcoming maturities",
+    "columns": {
+      "title": "Security",
+      "maturity": "Matures",
+      "value": "Value on the date"
+    },
+    "tesouro": "Tesouro Direto",
+    "issuerLine": "{{issuer}} · {{name}}",
+    "reallocate": "Reallocate",
+    "reallocateLabel": "Reallocate the value of {{name}}",
+    "estimatedCdi": "Estimated with the CDI of {{date}}",
+    "estimatedIpca": "Estimated with the 12-month IPCA",
+    "estimatedOther": "Estimated value: it depends on a market assumption."
+  },
+  "realRate": {
+    "title": "Real rate",
+    "description": "Each security's rate minus the 12-month IPCA ({{ipca}}), before income tax. LCI and LCA are exempt from income tax.",
+    "descriptionNoIpca": "Each security's rate minus the 12-month IPCA, before income tax. LCI and LCA are exempt from income tax.",
+    "loading": "Loading the real rate",
+    "empty": "No fixed income security registered with a rate.",
+    "listLabel": "Real rate by security",
+    "columns": {
+      "title": "Security",
+      "contracted": "Contracted",
+      "nominal": "Yearly rate",
+      "real": "Real rate",
+      "gain": "Above inflation"
+    },
+    "subtitle": "{{kind}} · applied on {{date}}",
+    "contracted": {
+      "cdi_percent": "{{rate}} of the CDI",
+      "prefixed": "Fixed {{rate}}",
+      "ipca_plus": "IPCA + {{rate}}"
+    },
+    "low": "below 3% a year",
+    "ok": "3% a year or more",
+    "purchasingPower": "purchasing power {{change}}",
+    "note": "\"Above inflation\" compares today's value with what was applied, corrected by the IPCA since the application date."
+  },
+  "fgc": {
+    "title": "FGC coverage",
+    "description": "The FGC guarantees up to R$ 250,000 per CPF at each conglomerate, capped at R$ 1 million every 4 years. CDB, LCI, LCA and LC are included.",
+    "loading": "Loading the FGC coverage",
+    "meterLabel": "Covered by the FGC",
+    "meterValue": "{{covered}} of {{cap}}",
+    "listLabel": "Coverage by conglomerate",
+    "empty": "No security covered by the FGC.",
+    "columns": {
+      "group": "Conglomerate",
+      "total": "In covered securities",
+      "covered": "Covered",
+      "over": "Above the limit"
+    },
+    "groupDetail": "{{issuers}} · {{titles}}",
+    "within": "within",
+    "perCpf": "The FGC limit applies per CPF. Filter by holder at the top of the screen to see each person's coverage.",
+    "outside": "Outside the FGC: {{names}}.",
+    "reasons": {
+      "tesouro": "Tesouro Direto is guaranteed by the National Treasury.",
+      "not_covered_kind": "Debentures, CRI and CRA depend only on the company.",
+      "not_associated": "The issuer is not a member of the FGC.",
+      "foreign": "Foreign issuers are not covered by the FGC.",
+      "not_calculated": "You chose \"Other issuer\": coverage is not calculated."
+    },
+    "missingIssuer": "No issuer: {{names}}. Complete the registration to see the coverage.",
+    "completeIssuer": "Complete the registration of {{name}}"
+  },
+  "alerts": {
+    "label": "Portfolio notices",
+    "maturity": "{{name}} matures {{when}}, on {{date}}, with about {{amount}} to reallocate.",
+    "fgc": "{{amount}} at {{group}} above the R$ 250,000 FGC limit.",
+    "reallocate": "Reallocate",
+    "reallocateLabel": "Reallocate the value of {{name}}",
+    "viewCoverage": "View coverage"
+  }
+}

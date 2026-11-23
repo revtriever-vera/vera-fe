@@ -1,10 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
+import { ASSETS_TABS } from '@/features/portfolio/assets/lib/assets-tab';
 import { AssetsPage } from '@/features/portfolio/assets/pages/assets-page';
 
 const assetsSearchSchema = z.object({
     add: z.boolean().optional().catch(undefined),
-    classId: z.string().optional().catch(undefined)
+    classId: z.string().optional().catch(undefined),
+    tab: z.enum(ASSETS_TABS).optional().catch(undefined)
 });
 
 export const Route = createFileRoute('/_auth/_app/portfolio/assets')({

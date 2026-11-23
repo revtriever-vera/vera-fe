@@ -12,6 +12,8 @@ import ptBRPortfolioOverview from './resources/pt-BR/portfolioOverview.json';
 import enPortfolioOverview from './resources/en/portfolioOverview.json';
 import ptBRPortfolioAssets from './resources/pt-BR/portfolioAssets.json';
 import enPortfolioAssets from './resources/en/portfolioAssets.json';
+import ptBRPortfolioFixedIncome from './resources/pt-BR/portfolioFixedIncome.json';
+import enPortfolioFixedIncome from './resources/en/portfolioFixedIncome.json';
 import ptBRPortfolioTargets from './resources/pt-BR/portfolioTargets.json';
 import enPortfolioTargets from './resources/en/portfolioTargets.json';
 import ptBRPortfolioContribution from './resources/pt-BR/portfolioContribution.json';
@@ -46,6 +48,7 @@ type LocaleResources = {
     readonly portfolio: typeof ptBRPortfolio;
     readonly portfolioOverview: typeof ptBRPortfolioOverview;
     readonly portfolioAssets: typeof ptBRPortfolioAssets;
+    readonly portfolioFixedIncome: typeof ptBRPortfolioFixedIncome;
     readonly portfolioTargets: typeof ptBRPortfolioTargets;
     readonly portfolioContribution: typeof ptBRPortfolioContribution;
     readonly onboarding: typeof ptBROnboarding;
@@ -67,6 +70,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolio: ptBRPortfolio,
         portfolioOverview: ptBRPortfolioOverview,
         portfolioAssets: ptBRPortfolioAssets,
+        portfolioFixedIncome: ptBRPortfolioFixedIncome,
         portfolioTargets: ptBRPortfolioTargets,
         portfolioContribution: ptBRPortfolioContribution,
         onboarding: ptBROnboarding,
@@ -86,6 +90,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolio: enPortfolio,
         portfolioOverview: enPortfolioOverview,
         portfolioAssets: enPortfolioAssets,
+        portfolioFixedIncome: enPortfolioFixedIncome,
         portfolioTargets: enPortfolioTargets,
         portfolioContribution: enPortfolioContribution,
         onboarding: enOnboarding,
@@ -116,6 +121,7 @@ void i18next.use(initReactI18next).init({
         'portfolio',
         'portfolioOverview',
         'portfolioAssets',
+        'portfolioFixedIncome',
         'portfolioTargets',
         'portfolioContribution',
         'onboarding',

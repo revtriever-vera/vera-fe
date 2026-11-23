@@ -1,6 +1,7 @@
 import type { ReactElement } from 'react';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { cn } from '@/shared/lib/cn';
+import { SegmentedTablist } from './segmented-tablist';
 
 export interface SegmentedOption<T extends string> {
     readonly value: T;
@@ -15,12 +16,14 @@ export interface SegmentedControlProps<T extends string> {
     readonly disabled?: boolean;
     readonly busy?: boolean;
     readonly className?: string;
+    readonly mode?: 'group' | 'tablist';
+    readonly idPrefix?: string;
 }
 
 const ITEM: string =
     'min-w-12 rounded-control px-3 py-1 text-sm font-semibold text-content-muted transition hover:text-content disabled:cursor-not-allowed disabled:opacity-60 data-[state=on]:bg-surface data-[state=on]:text-content data-[state=on]:shadow-card';
 
-export function SegmentedControl<T extends string>({
+function SegmentedGroup<T extends string>({
     label,
     options,
     value,
@@ -28,7 +31,7 @@ export function SegmentedControl<T extends string>({
     disabled = false,
     busy = false,
     className
-}: SegmentedControlProps<T>): ReactElement {
+}: Omit<SegmentedControlProps<T>, 'mode' | 'idPrefix'>): ReactElement {
     const select = (next: string): void => {
         const match: SegmentedOption<T> | undefined = options.find((option: SegmentedOption<T>): boolean => option.value === next);
         if (match !== undefined && match.value !== value) {
@@ -52,4 +55,8 @@ export function SegmentedControl<T extends string>({
             ))}
         </ToggleGroup.Root>
     );
+}
+
+export function SegmentedControl<T extends string>({ mode = 'group', idPrefix, ...props }: SegmentedControlProps<T>): ReactElement {
+    return mode === 'tablist' ? <SegmentedTablist {...props} idPrefix={idPrefix} /> : <SegmentedGroup {...props} />;
 }

@@ -1,8 +1,9 @@
 import { Plus } from 'lucide-react';
-import type { ReactElement } from 'react';
+import { useEffect, type ReactElement } from 'react';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { Link, useNavigate, useSearch, type UseNavigateResult } from '@tanstack/react-router';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
+import { track } from '@/shared/lib/analytics';
 import { Button, buttonVariants } from '@/shared/ui/button';
 import { EmptyState } from '@/shared/ui/empty-state';
 import { FailureAlert } from '@/shared/ui/failure-alert';
@@ -15,6 +16,9 @@ import type { ClassesResponse, HoldingsResponse } from '../../types';
 import { AddAssetModal } from '../components/add-asset-modal';
 import { ExportMenu } from '../components/export-menu';
 import { HoldingsSection } from '../components/holdings-section';
+import { AssetsTabPanel, AssetsTabs } from '../components/assets-tabs';
+import { FixedIncomeTab } from '../../fixed-income/components/fixed-income-tab';
+import { resolveAssetsTab, type AssetsTab } from '../lib/assets-tab';
 
 function AssetsLoading(): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
@@ -109,22 +113,60 @@ function AssetsHeader({ empty, onAdd }: { readonly empty: boolean; readonly onAd
     );
 }
 
+interface AssetsSearch {
+    readonly add?: boolean;
+    readonly classId?: string;
+    readonly tab?: AssetsTab;
+}
+
+interface TabContentProps {
+    readonly tab: AssetsTab;
+    readonly holdings: UseQueryResult<HoldingsResponse>;
+    readonly classes: UseQueryResult<ClassesResponse>;
+    readonly onAdd: () => void;
+}
+
+function TabContent({ tab, holdings, classes, onAdd }: TabContentProps): ReactElement {
+    if (tab === 'fixed-income') {
+        return <FixedIncomeTab />;
+    }
+    return (
+        <>
+            <AssetsBody holdings={holdings} classes={classes} onAdd={onAdd} />
+            <DataSourcesNote />
+        </>
+    );
+}
+
 export function AssetsPage(): ReactElement {
-    const search: { add?: boolean; classId?: string } = useSearch({ from: '/_auth/_app/portfolio/assets' });
+    const search: AssetsSearch = useSearch({ from: '/_auth/_app/portfolio/assets' });
     const navigate: UseNavigateResult<string> = useNavigate();
+    const tab: AssetsTab = resolveAssetsTab(search.tab);
     const holdings: UseQueryResult<HoldingsResponse> = useHoldings();
     const classes: UseQueryResult<ClassesResponse> = useClasses();
+    useEffect((): void => {
+        track('assets_tab_viewed', { tab });
+    }, [tab]);
     const setOpen = (open: boolean): void => {
-        void navigate({ to: '/portfolio/assets', search: open ? { add: true, classId: search.classId } : {}, replace: true });
+        void navigate({
+            to: '/portfolio/assets',
+            search: { ...(open ? { add: true, classId: search.classId } : {}), ...(tab === 'list' ? {} : { tab }) },
+            replace: true
+        });
     };
     const openModal = (): void => {
         setOpen(true);
     };
+    const changeTab = (next: AssetsTab): void => {
+        void navigate({ to: '/portfolio/assets', search: next === 'list' ? {} : { tab: next } });
+    };
     return (
         <section className="flex flex-col gap-4">
             <AssetsHeader empty={holdings.data?.data.length === 0} onAdd={openModal} />
-            <AssetsBody holdings={holdings} classes={classes} onAdd={openModal} />
-            <DataSourcesNote />
+            <AssetsTabs tab={tab} onChange={changeTab} />
+            <AssetsTabPanel tab={tab}>
+                <TabContent tab={tab} holdings={holdings} classes={classes} onAdd={openModal} />
+            </AssetsTabPanel>
             <AddAssetModal open={search.add === true} onOpenChange={setOpen} initialClassId={search.classId} />
         </section>
     );

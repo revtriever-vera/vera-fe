@@ -317,6 +317,17 @@ export function SelectionSection(): ReactElement {
                 onChange={setCurrency}
             />
             <SegmentedControl
+                mode="tablist"
+                idPrefix="gallery"
+                label="Seções em abas"
+                options={[
+                    { value: 'BRL', label: 'Ativos' },
+                    { value: 'USD', label: 'Renda fixa' }
+                ]}
+                value={currency}
+                onChange={setCurrency}
+            />
+            <SegmentedControl
                 label="Moeda base desabilitada"
                 options={[
                     { value: 'BRL', label: 'R$' },

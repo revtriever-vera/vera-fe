@@ -1060,6 +1060,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/portfolio/concentration": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Concentration of the net worth by issuer group and by sector
+         * @description Share of each issuer group in the net worth (top 10 and the rest), adding the fixed income securities and the assets of the same group, following incorporations. Positions without a single issuer fall in fixed buckets (missing_issuer, funds, crypto, unmapped). Also the share of each sector in the equity holdings (Brazilian stocks, US stocks, FII and REITs). Zeroed positions and matured securities are left out. Shares are exact: they sum to 10000 basis points.
+         */
+        get: operations["ConcentrationController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/portfolio/contributions/suggest": {
         parameters: {
             query?: never;
@@ -9080,6 +9100,104 @@ export interface operations {
                         };
                     };
                     "text/csv": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    ConcentrationController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Concentration by issuer group and by sector */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Reference date of the portfolio, YYYY-MM-DD */
+                        asOf: string;
+                        /**
+                         * @description Base currency of every valueMinor
+                         * @enum {string}
+                         */
+                        baseCurrency: "BRL" | "USD";
+                        /** @description Net worth counted in the concentration (open positions and fixed income not yet matured), in base currency minor units */
+                        totalMinor: number;
+                        /** @description Value of the holdings of the equity classes (Brazilian stocks, US stocks, FII, REITs), in base currency minor units */
+                        equityTotalMinor: number;
+                        /** @description Top 10 issuer groups and buckets by value, largest first */
+                        byIssuer: {
+                            /** @description Issuer group id (kind group) or a fixed bucket key (kind bucket): missing_issuer, funds, crypto, unmapped. The front translates the bucket keys */
+                            key: string;
+                            /**
+                             * @description group: issuer group from the curated list; bucket: fixed bucket without a single issuer
+                             * @enum {string}
+                             */
+                            kind: "group" | "bucket";
+                            /** @description Group name when kind is group; null for a bucket */
+                            name: string | null;
+                            /** @description Sum of the holdings of the row, in base currency minor units */
+                            valueMinor: number;
+                            /** @description Share of the total net worth in basis points; the rows plus byIssuerOthers sum to 10000 */
+                            shareBps: number;
+                            /** @description Names of up to 4 assets in the row, largest first. Untrusted text */
+                            assets: string[];
+                            /** @description Number of assets in the row beyond the ones listed in assets */
+                            moreCount: number;
+                        }[];
+                        /** @description Everything beyond the top 10; null when there are 10 rows or fewer */
+                        byIssuerOthers: {
+                            /** @description Sum of the groups beyond the top 10, in base currency minor units */
+                            valueMinor: number;
+                            /** @description Share of the total net worth in basis points */
+                            shareBps: number;
+                            /** @description Number of groups and buckets beyond the top 10 */
+                            groups: number;
+                        } | null;
+                        /** @description Sectors of the equity holdings, largest first */
+                        bySector: {
+                            /** @description Sector key from the closed sector list, or unmapped_sector when the asset has no sector in the catalog */
+                            key: string;
+                            /** @description Sum of the equity holdings of the sector, in base currency minor units */
+                            valueMinor: number;
+                            /** @description Share of the equity total in basis points; the rows sum to 10000 */
+                            shareBps: number;
+                            /** @description Names of up to 4 assets in the row, largest first. Untrusted text */
+                            assets: string[];
+                            /** @description Number of assets in the row beyond the ones listed in assets */
+                            moreCount: number;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
                         /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
