@@ -1,5 +1,5 @@
 import { useRole } from '@/app/providers/use-role';
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import { Link } from '@tanstack/react-router';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { Plus, Wallet } from 'lucide-react';
@@ -115,7 +115,7 @@ function DistributionCard({ model, overview }: { readonly model: OverviewViewMod
     );
 }
 
-function OverviewContent({ overview }: { readonly overview: Overview }): ReactElement {
+function OverviewContent({ overview, summarySlot }: { readonly overview: Overview; readonly summarySlot: ReactNode }): ReactElement {
     const model: OverviewViewModel = buildOverviewViewModel(overview);
     return (
         <div className="flex flex-col gap-4">
@@ -123,17 +123,22 @@ function OverviewContent({ overview }: { readonly overview: Overview }): ReactEl
                 <TotalCard overview={overview} callout={model.callout} />
                 <ActualVsTargetCard model={model} currency={overview.baseCurrency} />
             </div>
+            {summarySlot}
             <QualityNotice quality={overview.quality} />
             <DistributionCard model={model} overview={overview} />
         </div>
     );
 }
 
-function OverviewBody(): ReactElement {
+function OverviewBody({ summarySlot }: { readonly summarySlot: ReactNode }): ReactElement {
     const holder: HolderParam = useHolderParam();
     const overview: UseQueryResult<Overview> = useOverview(holder);
     if (overview.data !== undefined) {
-        return overview.data.empty ? <OverviewEmpty holder={holder} /> : <OverviewContent overview={overview.data} />;
+        return overview.data.empty ? (
+            <OverviewEmpty holder={holder} />
+        ) : (
+            <OverviewContent overview={overview.data} summarySlot={summarySlot} />
+        );
     }
     if (overview.error !== null) {
         return (
@@ -148,12 +153,16 @@ function OverviewBody(): ReactElement {
     return <OverviewLoading />;
 }
 
-export function OverviewPage(): ReactElement {
+export interface OverviewPageProps {
+    readonly summarySlot?: ReactNode;
+}
+
+export function OverviewPage({ summarySlot = null }: OverviewPageProps): ReactElement {
     return (
         <section className="flex flex-col gap-4">
             <OverviewHeader />
             <OverviewAlerts />
-            <OverviewBody />
+            <OverviewBody summarySlot={summarySlot} />
             <DataSourcesNote />
         </section>
     );

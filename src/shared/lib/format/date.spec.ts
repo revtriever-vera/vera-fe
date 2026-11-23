@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDate, formatIsoDate } from './date';
+import { formatClock, formatDate, formatDayMonthNumeric, formatIsoDate, formatMonthName, isSameLocalDay } from './date';
 
 const SAME_INSTANT: Date = new Date('2026-01-15T14:30:00Z');
 
@@ -23,5 +23,35 @@ describe('formatIsoDate', () => {
         expect(formatIsoDate('2028-03-10', 'pt-BR')).toBe('10/03/2028');
         expect(formatIsoDate('2028-03-10', 'en')).toBe('03/10/2028');
         expect(formatIsoDate('2028-03-10T23:59:59Z', 'pt-BR')).toBe('10/03/2028');
+    });
+});
+
+describe('formatMonthName', () => {
+    it('escreve só o nome do mês, no idioma pedido', () => {
+        expect(formatMonthName('2026-09', 'pt-BR')).toBe('setembro');
+        expect(formatMonthName('2026-09', 'en')).toBe('September');
+    });
+
+    it('devolve o texto de entrada quando não é um mês', () => {
+        expect(formatMonthName('hoje', 'pt-BR')).toBe('hoje');
+    });
+});
+
+describe('formatClock e formatDayMonthNumeric', () => {
+    const moment: Date = new Date(2026, 9, 8, 8, 12);
+
+    it('hora e minuto com dois dígitos', () => {
+        expect(formatClock(moment, 'pt-BR')).toBe('08:12');
+    });
+
+    it('dia e mês numéricos', () => {
+        expect(formatDayMonthNumeric(moment, 'pt-BR')).toBe('08/10');
+    });
+});
+
+describe('isSameLocalDay', () => {
+    it('compara o dia, ignorando a hora', () => {
+        expect(isSameLocalDay(new Date(2026, 9, 8, 1), new Date(2026, 9, 8, 23))).toBe(true);
+        expect(isSameLocalDay(new Date(2026, 9, 8, 23), new Date(2026, 9, 9, 1))).toBe(false);
     });
 });

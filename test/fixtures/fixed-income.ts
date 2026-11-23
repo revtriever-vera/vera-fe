@@ -1,7 +1,18 @@
-import type { FgcCoverage, FgcGroup, MaturitiesResponse, MaturityItem, RealRateItem, RealRatesResponse } from '@/features/portfolio/fixed-income/types';
+import type {
+    FgcCoverage,
+    FgcGroup,
+    MaturitiesResponse,
+    MaturityItem,
+    RealRateItem,
+    RealRatesResponse
+} from '@/features/portfolio/fixed-income/types';
 
 export function emptyMaturities(): MaturitiesResponse {
-    return { asOf: '2026-10-09', reference: { cdiAnnualBps: 1465, ipca12mBps: 450, cdiDate: '2026-10-08', ipcaMonth: '2026-09' }, items: [] };
+    return {
+        asOf: '2026-10-09',
+        reference: { cdiAnnualBps: 1465, ipca12mBps: 450, cdiDate: '2026-10-08', ipcaMonth: '2026-09' },
+        items: []
+    };
 }
 
 export function maturityItem(overrides: Partial<MaturityItem> = {}): MaturityItem {
@@ -62,7 +73,9 @@ export function fgcGroup(overrides: Partial<FgcGroup> = {}): FgcGroup {
         totalMinor: 30000000,
         coveredMinor: 25000000,
         overMinor: 5000000,
-        titles: [{ id: 'title-cdb', name: 'CDB Banco Alfa', issuerName: 'Banco Alfa', kind: 'cdb', valueMinor: 30000000, estimated: false }],
+        titles: [
+            { id: 'title-cdb', name: 'CDB Banco Alfa', issuerName: 'Banco Alfa', kind: 'cdb', valueMinor: 30000000, estimated: false }
+        ],
         ...overrides
     };
 }

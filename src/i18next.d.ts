@@ -20,6 +20,7 @@ import type ptBRSpendingImports from './shared/lib/i18n/resources/pt-BR/spending
 import type ptBRSpendingRules from './shared/lib/i18n/resources/pt-BR/spendingRules.json';
 import type ptBRSettings from './shared/lib/i18n/resources/pt-BR/settings.json';
 import type ptBRBilling from './shared/lib/i18n/resources/pt-BR/billing.json';
+import type ptBRSummaries from './shared/lib/i18n/resources/pt-BR/summaries.json';
 
 declare module 'i18next' {
     interface CustomTypeOptions {
@@ -48,6 +49,7 @@ declare module 'i18next' {
             spendingRules: typeof ptBRSpendingRules;
             settings: typeof ptBRSettings;
             billing: typeof ptBRBilling;
+            summaries: typeof ptBRSummaries;
         };
     }
 }

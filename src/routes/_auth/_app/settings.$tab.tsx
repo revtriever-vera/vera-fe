@@ -11,6 +11,7 @@ import { useTrackSettingsViewed } from '@/features/settings/lib/use-track-settin
 import { SETTINGS_TAB, type SettingsTabId } from '@/features/settings/types';
 import { WhatsAppTab } from '@/features/whatsapp/components/whatsapp-tab';
 import { ConnectionsPage } from '@/features/spending/connections/pages/connections-page';
+import { SummariesPrivacyCard } from '@/features/summaries/components/summaries-privacy-card';
 import { layoutSearchSchema } from '@/features/spending/schemas/spending-search.schema';
 
 const TAB_CONTENT: Readonly<Record<SettingsTabId, () => ReactElement>> = {
@@ -21,7 +22,7 @@ const TAB_CONTENT: Readonly<Record<SettingsTabId, () => ReactElement>> = {
     calendar: (): ReactElement => <SettingsPlaceholder title="tabs.calendar" tab={SETTINGS_TAB.calendar} />,
     banks: (): ReactElement => <ConnectionsPage />,
     preferences: (): ReactElement => <PreferencesTab />,
-    privacy: (): ReactElement => <PrivacyTab />
+    privacy: (): ReactElement => <PrivacyTab summariesSlot={<SummariesPrivacyCard />} />
 };
 
 function SettingsTabRoute(): ReactElement | null {

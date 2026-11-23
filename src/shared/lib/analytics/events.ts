@@ -20,6 +20,9 @@ export type SpendingImportFormatName = 'ofx' | 'csv_nubank_card' | 'csv_nubank_a
 export type SpendingFlexibilityName = 'fixed' | 'flexible';
 export type SpendingRuleMatchName = 'description' | 'contains';
 export type SettingsTabName = 'plan' | 'integrations' | 'people' | 'whatsapp' | 'calendar' | 'banks' | 'preferences' | 'privacy';
+export type SummaryKindName = 'month' | 'cuts' | 'portfolio';
+export type SummaryCardStateName = 'locked' | 'consent' | 'text';
+export type SummaryConsentSourceName = 'summary_card' | 'privacy_settings';
 export type SpendingCutsStatusName = 'no_data' | 'no_income' | 'goal_met' | 'cut_suggested' | 'exceeds_flexible';
 
 export interface AnalyticsEventMap {
@@ -98,6 +101,11 @@ export interface AnalyticsEventMap {
     premium_gate_clicked: { feature: PaidFeatureName };
     billing_banner_viewed: { kind: BillingBannerKindName };
     invoice_pay_clicked: { from: InvoicePayOriginName };
+    summary_viewed: { kind: SummaryKindName; state: SummaryCardStateName };
+    summary_consent_granted: { source: SummaryConsentSourceName };
+    summary_consent_revoked: undefined;
+    summary_regenerated: { kind: SummaryKindName };
+    summary_payload_viewed: { kind: SummaryKindName };
     whatsapp_link_code_issued: undefined;
     whatsapp_link_opened: { via: WhatsAppLinkVia };
     whatsapp_linked: { consentGiven: boolean };
