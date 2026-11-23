@@ -1,3 +1,4 @@
+import { civilDayZone } from '@/shared/lib/format/date';
 import type { SupportedLocale } from '@/shared/lib/locale';
 
 const DAY_KEY: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -17,7 +18,7 @@ export function syncStamp(iso: string, now: Date, locale: SupportedLocale): Sync
 }
 
 export function shortDate(iso: string, locale: SupportedLocale): string {
-    return new Intl.DateTimeFormat(locale, { day: '2-digit', month: '2-digit' }).format(new Date(iso));
+    return new Intl.DateTimeFormat(locale, { day: '2-digit', month: '2-digit', timeZone: civilDayZone(iso) }).format(new Date(iso));
 }
 
 export function verifiedStamp(iso: string, locale: SupportedLocale): string {

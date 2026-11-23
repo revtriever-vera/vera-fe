@@ -1,8 +1,8 @@
 import type { ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { Card } from '@/shared/ui/card';
-import { humanizeKey } from '../lib/account-data-view';
-import { DataValue } from './data-value';
+import { fieldLabel, type LabelMap } from '../lib/account-data-view';
+import { DataValue, useFieldLabels } from './data-value';
 
 export interface AccountSectionsProps {
     readonly title: string;
@@ -11,6 +11,7 @@ export interface AccountSectionsProps {
 
 export function AccountSections({ title, sections }: AccountSectionsProps): ReactElement {
     const { t }: UseTranslationResponse<'admin', undefined> = useTranslation('admin');
+    const fieldLabels: LabelMap = useFieldLabels();
     const entries: [string, unknown][] = Object.entries(sections);
     return (
         <section className="flex flex-col gap-3" aria-label={title}>
@@ -18,7 +19,7 @@ export function AccountSections({ title, sections }: AccountSectionsProps): Reac
             {entries.length === 0 ? <p className="text-sm text-content-muted">{t('valueEmpty')}</p> : null}
             {entries.map(([area, value]: [string, unknown]): ReactElement => (
                 <Card key={area} className="flex flex-col gap-2 p-4">
-                    <h3 className="text-sm font-semibold">{humanizeKey(area)}</h3>
+                    <h3 className="text-sm font-semibold">{fieldLabel(area, fieldLabels)}</h3>
                     <DataValue value={value} />
                 </Card>
             ))}

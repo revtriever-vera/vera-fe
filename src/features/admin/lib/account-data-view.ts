@@ -9,6 +9,28 @@ export interface ScalarLabels {
     readonly yes: string;
     readonly no: string;
     readonly empty: string;
+    readonly values: LabelMap;
+}
+
+export type LabelMap = Readonly<Record<string, string>>;
+
+const ENUM_KEYS: ReadonlySet<string> = new Set<string>([
+    'status',
+    'paymentMethod',
+    'method',
+    'kind',
+    'planSource',
+    'source',
+    'feature',
+    'incomeMode'
+]);
+
+export function fieldLabel(key: string, labels: LabelMap): string {
+    return labels[key] ?? humanizeKey(key);
+}
+
+export function enumValueText(value: string, labels: LabelMap): string {
+    return labels[value] ?? value;
 }
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
@@ -64,26 +86,36 @@ const ISO_DAY: RegExp = /^\d{4}-\d{2}-\d{2}$/;
  * Writes one value of the account detail by what its key says: money in minor units (`...Minor`, `...Cents`) and in
  * micros (`costMicros`), basis points (`...Bps`), instants and days. Anything else falls back to `scalarText`.
  */
+function numberText(key: string, value: number, locale: SupportedLocale, currency: unknown): string | null {
+    const code: string = typeof currency === 'string' ? currency : DEFAULT_CURRENCY;
+    if (key.endsWith('Minor') || key.endsWith('Cents')) {
+        return formatCurrency(value, code, locale);
+    }
+    if (key === 'costMicros') {
+        return formatCurrency(value / MICROS_PER_CENT, DEFAULT_CURRENCY, locale);
+    }
+    if (key.endsWith('Bps')) {
+        return new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(value / BPS_PER_UNIT);
+    }
+    return null;
+}
+
+function stringText(key: string, value: string, labels: ScalarLabels, locale: SupportedLocale): string | null {
+    if (ISO_INSTANT.test(value)) {
+        return formatDate(new Date(value), locale, 'UTC');
+    }
+    if (ISO_DAY.test(value)) {
+        return formatIsoDate(value, locale);
+    }
+    return ENUM_KEYS.has(key) ? enumValueText(value, labels.values) : null;
+}
+
 export function fieldText(key: string, value: unknown, labels: ScalarLabels, locale: SupportedLocale, currency?: unknown): string {
     if (typeof value === 'number') {
-        const code: string = typeof currency === 'string' ? currency : DEFAULT_CURRENCY;
-        if (key.endsWith('Minor') || key.endsWith('Cents')) {
-            return formatCurrency(value, code, locale);
-        }
-        if (key === 'costMicros') {
-            return formatCurrency(value / MICROS_PER_CENT, DEFAULT_CURRENCY, locale);
-        }
-        if (key.endsWith('Bps')) {
-            return new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 2 }).format(value / BPS_PER_UNIT);
-        }
+        return numberText(key, value, locale, currency) ?? scalarText(value, labels);
     }
     if (typeof value === 'string') {
-        if (ISO_INSTANT.test(value)) {
-            return formatDate(new Date(value), locale, 'UTC');
-        }
-        if (ISO_DAY.test(value)) {
-            return formatIsoDate(value, locale);
-        }
+        return stringText(key, value, labels, locale) ?? scalarText(value, labels);
     }
     return scalarText(value, labels);
 }

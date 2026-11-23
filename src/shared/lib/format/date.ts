@@ -1,5 +1,11 @@
 import type { SupportedLocale } from '@/shared/lib/locale';
 
+const MIDNIGHT_UTC: RegExp = /^\d{4}-\d{2}-\d{2}(T00:00:00(\.0+)?Z)?$/;
+
+export function civilDayZone(iso: string): string | undefined {
+    return MIDNIGHT_UTC.test(iso) ? 'UTC' : undefined;
+}
+
 export function formatDate(date: Date, locale: SupportedLocale, timeZone: string): string {
     return new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'short', timeStyle: 'short' }).format(date);
 }
