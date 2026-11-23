@@ -195,6 +195,7 @@
       "covered": "Coberto pelo FGC. Com este título, você terá {{total}} no conglomerado {{group}}, de um limite de {{limit}}.",
       "over_limit": "Com este título, você terá {{total}} no conglomerado {{group}}: {{over}} acima do limite de {{limit}} do FGC.",
       "not_covered_kind": "{{kind}} não tem cobertura do FGC: o risco é só da empresa emissora.",
+      "not_calculated": "Este emissor não tem cobertura calculada.",
       "not_associated": "Este emissor não é associado ao FGC."
     }
   },

@@ -16,6 +16,15 @@ vi.mock('@/shared/config/env', async (importOriginal: () => Promise<{ env: Recor
     return { env: new Proxy(actual.env, { get: (target, key: string): string => mocks.env[key] ?? target[key] ?? '' }) };
 });
 
+const OUTRO: IssuerItem = issuerItem({
+    id: 'outro',
+    name: 'Outro emissor (sem cobertura calculada)',
+    groupId: 'outro',
+    groupName: 'Outro',
+    kind: 'other',
+    fgcAssociated: false
+});
+
 const BANKS: IssuerItem[] = [
     issuerItem(),
     issuerItem({ id: 'banco-inter', name: 'Banco Inter', groupId: 'inter-co', groupName: 'Inter&Co' })
@@ -227,6 +236,22 @@ describe('AddAssetModal: prévia do FGC', () => {
         await fillTerms(user);
 
         expect(await screen.findByText('Este emissor não é associado ao FGC.')).toBeInTheDocument();
+    });
+
+    it('outro emissor: sem linha de conglomerado e a prévia diz que a cobertura não é calculada', async () => {
+        mockAssetsApi({ issuers: [...BANKS, OUTRO], fgc: fgcSimulation({ verdict: 'not_calculated' }) });
+        const { user }: AddAssetSetup = await openFixedIncome();
+        await user.click(await screen.findByRole('combobox', { name: 'Emissor' }));
+        await screen.findByRole('option', { name: /Banco Inter/ });
+        const options: HTMLElement[] = await screen.findAllByRole('option');
+        expect(options[options.length - 1]).toHaveTextContent('Outro emissor (sem cobertura calculada)');
+        expect(options[options.length - 1]).not.toHaveTextContent('conglomerado');
+        await user.click(options[options.length - 1] as HTMLElement);
+        await fillTerms(user);
+
+        expect(screen.queryByText(/conglomerado Outro/)).toBeNull();
+        expect(await screen.findByText('Este emissor não tem cobertura calculada.')).toBeInTheDocument();
+        expect(track).toHaveBeenCalledWith('fgc_preview_shown', { verdict: 'not_calculated' });
     });
 
     it('erro na simulação esconde a prévia e não bloqueia o cadastro', async () => {

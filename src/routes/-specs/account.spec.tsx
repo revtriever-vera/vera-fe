@@ -309,7 +309,7 @@ describe('account deletion', () => {
     });
 
     it('shows the owner-only notice instead of the button for a member', async () => {
-        await openAccount({ role: 'member' });
+        await openAccount({ role: 'editor' });
 
         expect(screen.getByText('Só quem criou a conta pode excluí-la.')).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Excluir minha conta' })).not.toBeInTheDocument();

@@ -182,7 +182,7 @@ export function IssuerField({ kind, value, error, focusOnMount = false, onChange
                     activeId: showList ? activeOptionId(listId, results.items, list.active) : undefined
                 }}
             />
-            {value === null ? null : <SupportLine issuer={value} />}
+            {value === null || value.kind === 'other' ? null : <SupportLine issuer={value} />}
             {showList ? <IssuerOptions listId={listId} active={list.active} {...results} onPick={pick} /> : null}
             <ErrorLine message={error} />
         </div>

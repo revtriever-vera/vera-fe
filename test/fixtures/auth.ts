@@ -37,6 +37,7 @@ export function loginSession(overrides: Partial<LoginSession> = {}): LoginSessio
         accessToken: 'access-token-1',
         user: { id: 'user-1', name: 'Maria Teste', email: 'maria@example.test', role: 'owner', companyId: 'company-1' },
         isNewAccount: true,
+        joinedAccount: false,
         ...overrides
     };
 }
