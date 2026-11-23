@@ -11,3 +11,6 @@ export type SignupLinkStatus = SignupLink['status'];
 export type TrialKind = SignupLink['trial']['kind'];
 export type DiscountRule = SignupLink['rules'][number];
 export type CreateSignupLinkInput = NonNullable<SignupLinksPath['post']['requestBody']>['content']['application/json'];
+export type UpdateSignupLinkInput = NonNullable<
+    paths['/platform/signup-links/{id}']['patch']['requestBody']
+>['content']['application/json'];

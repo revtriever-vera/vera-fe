@@ -2,7 +2,7 @@ import type { TFunction } from 'i18next';
 import { z } from 'zod';
 import type { TrialKind } from '../types';
 import { noCardLastIso, todayIso } from '../lib/signup-link-dates';
-import { MAX_PERCENT, MAX_RULES, MAX_TRIAL_DAYS, TRIAL_KIND } from '../lib/signup-link-offer';
+import { MAX_OFFER_VALIDITY_DAYS, MAX_PERCENT, MAX_RULES, MAX_TRIAL_DAYS, TRIAL_KIND } from '../lib/signup-link-offer';
 
 const MAX_LABEL: number = 80;
 const MAX_USES: number = 1_000_000;
@@ -12,6 +12,7 @@ export interface SignupLinkFormValues {
     readonly days: string;
     readonly maxUses: string;
     readonly expiresAt: string | null;
+    readonly offerValidityDays: string;
     readonly rules: { percent: string; fromCycle: string; toCycle: string }[];
 }
 
@@ -56,24 +57,33 @@ function checkUses(values: SignupLinkFormValues, t: TFunction<'admin'>, ctx: z.R
     }
 }
 
-function expiryIssue(values: SignupLinkFormValues, noCard: boolean): ExpiryIssue | null {
+function expiryIssue(values: SignupLinkFormValues, noCard: boolean, unchangedExpiry: string | null): ExpiryIssue | null {
     if (values.expiresAt === null) {
         return noCard ? 'formExpiryRequired' : null;
     }
-    if (values.expiresAt < todayIso()) {
+    if (values.expiresAt < todayIso() && values.expiresAt !== unchangedExpiry) {
         return 'formExpiryPast';
     }
     return noCard && values.expiresAt > noCardLastIso() ? 'formExpiryTooFar' : null;
 }
 
-function checkExpiry(values: SignupLinkFormValues, t: TFunction<'admin'>, ctx: z.RefinementCtx): void {
-    const issue: ExpiryIssue | null = expiryIssue(values, values.trialKind === TRIAL_KIND.noCard);
+function checkExpiry(values: SignupLinkFormValues, unchangedExpiry: string | null, t: TFunction<'admin'>, ctx: z.RefinementCtx): void {
+    const issue: ExpiryIssue | null = expiryIssue(values, values.trialKind === TRIAL_KIND.noCard, unchangedExpiry);
     if (issue !== null) {
         ctx.addIssue({ code: 'custom', path: ['expiresAt'], message: t(issue) });
     }
 }
 
-export function createSignupLinkSchema(t: TFunction<'admin'>): z.ZodType<SignupLinkFormValues, z.ZodTypeDef, SignupLinkFormValues> {
+function checkOfferValidity(values: SignupLinkFormValues, t: TFunction<'admin'>, ctx: z.RefinementCtx): void {
+    if (!inRange(values.offerValidityDays, 1, MAX_OFFER_VALIDITY_DAYS)) {
+        ctx.addIssue({ code: 'custom', path: ['offerValidityDays'], message: t('formOfferValidityInvalid') });
+    }
+}
+
+export function createSignupLinkSchema(
+    t: TFunction<'admin'>,
+    unchangedExpiry: string | null = null
+): z.ZodType<SignupLinkFormValues, z.ZodTypeDef, SignupLinkFormValues> {
     return z
         .object({
             label: z.string().trim().min(1, t('formLabelRequired')).max(MAX_LABEL, t('formLabelTooLong')),
@@ -81,12 +91,14 @@ export function createSignupLinkSchema(t: TFunction<'admin'>): z.ZodType<SignupL
             days: z.string(),
             maxUses: z.string(),
             expiresAt: z.string().nullable(),
+            offerValidityDays: z.string(),
             rules: z.array(ruleSchema).max(MAX_RULES, t('formTooManyRules'))
         })
         .superRefine((values: SignupLinkFormValues, ctx: z.RefinementCtx): void => {
             checkTrial(values, t, ctx);
             checkUses(values, t, ctx);
-            checkExpiry(values, t, ctx);
+            checkExpiry(values, unchangedExpiry, t, ctx);
+            checkOfferValidity(values, t, ctx);
             checkRules(values.rules, t, ctx);
         });
 }
