@@ -7,6 +7,7 @@ import { membersHandlers } from './handlers/members.handlers';
 import { onboardingHandlers } from './handlers/onboarding.handlers';
 import { portfolioHandlers } from './handlers/portfolio.handlers';
 import { spendingHandlers } from './handlers/spending.handlers';
+import { summariesHandlers } from './handlers/summaries.handlers';
 
 export const handlers: RequestHandler[] = [
     http.get('*/health', () => HttpResponse.json({ status: 'ok' })),
@@ -14,6 +15,7 @@ export const handlers: RequestHandler[] = [
     ...accountHandlers,
     ...membersHandlers,
     ...billingHandlers,
+    ...summariesHandlers,
     ...integrationsHandlers,
     ...onboardingHandlers(),
     ...portfolioHandlers(),

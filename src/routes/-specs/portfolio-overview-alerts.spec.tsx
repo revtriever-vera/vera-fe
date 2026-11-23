@@ -17,7 +17,9 @@ async function openOverview(): Promise<AnyRouter> {
 }
 
 function fail(path: string): void {
-    server.use(http.get(path, () => HttpResponse.json({ type: 'x', title: 'x', status: 400, detail: 'x', requestId: null }, { status: 400 })));
+    server.use(
+        http.get(path, () => HttpResponse.json({ type: 'x', title: 'x', status: 400, detail: 'x', requestId: null }, { status: 400 }))
+    );
 }
 
 describe('/portfolio: avisos de vencimento e FGC', () => {
@@ -30,11 +32,17 @@ describe('/portfolio: avisos de vencimento e FGC', () => {
 
     it('mostra o primeiro vencimento próximo e Realocar leva ao Onde aportar', async () => {
         installOverviewApi();
-        server.use(http.get('*/portfolio/maturities', () => HttpResponse.json(maturities([maturityItem(), maturityItem({ id: 'b', name: 'Outro' })]))));
+        server.use(
+            http.get('*/portfolio/maturities', () =>
+                HttpResponse.json(maturities([maturityItem(), maturityItem({ id: 'b', name: 'Outro' })]))
+            )
+        );
         const user: UserEvent = userEvent.setup();
         const router: AnyRouter = await openOverview();
 
-        expect(await screen.findByText('CDB Banco Alfa vence em 42 dias, em 20/11/2026, com cerca de R$ 12.300,00 para realocar.')).toBeInTheDocument();
+        expect(
+            await screen.findByText('CDB Banco Alfa vence em 42 dias, em 20/11/2026, com cerca de R$ 12.300,00 para realocar.')
+        ).toBeInTheDocument();
         expect(screen.queryByText(/Outro vence/)).not.toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: 'Realocar o valor de CDB Banco Alfa' }));
 
@@ -45,7 +53,9 @@ describe('/portfolio: avisos de vencimento e FGC', () => {
 
     it('ignora vencimento que não é próximo', async () => {
         installOverviewApi();
-        server.use(http.get('*/portfolio/maturities', () => HttpResponse.json(maturities([maturityItem({ soon: false, daysToMaturity: 200 })]))));
+        server.use(
+            http.get('*/portfolio/maturities', () => HttpResponse.json(maturities([maturityItem({ soon: false, daysToMaturity: 200 })])))
+        );
         await openOverview();
 
         expect(screen.queryByRole('list', { name: 'Avisos da carteira' })).not.toBeInTheDocument();
@@ -75,14 +85,18 @@ describe('/portfolio: avisos de vencimento e FGC', () => {
                     fgcCoverage({
                         peopleCount: 2,
                         groups: [],
-                        byHolder: [{ holder: { userId: 'u-ana', name: 'Ana' }, coveredMinor: 1, capShareBps: 1, groups: [over], outside: [] }]
+                        byHolder: [
+                            { holder: { userId: 'u-ana', name: 'Ana' }, coveredMinor: 1, capShareBps: 1, groups: [over], outside: [] }
+                        ]
                     })
                 )
             )
         );
         await openOverview();
 
-        expect(await screen.findByText('R$ 50.000,00 de Ana em Conglomerado Alfa acima do limite de R$ 250 mil do FGC.')).toBeInTheDocument();
+        expect(
+            await screen.findByText('R$ 50.000,00 de Ana em Conglomerado Alfa acima do limite de R$ 250 mil do FGC.')
+        ).toBeInTheDocument();
     });
 
     it('mostra os dois avisos juntos', async () => {

@@ -4,6 +4,94 @@
  */
 
 export interface paths {
+    "/ai/consent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Whether the account allowed sending aggregated figures to a language model
+         * @description The permission belongs to the account, not to the person. `needsConsent` is true when it was never given, was turned off, or was given on an older notice version: the summary card must then show the request. `canChange` is false for members who only read (they get 403 on PUT and DELETE).
+         */
+        get: operations["AiConsentController_get"];
+        /**
+         * Allow the account to send aggregated figures to a language model
+         * @description Records that the account accepted the current notice. Only totals and shares are sent, never names, descriptions or ids. The notice states that the model provider may use inputs and outputs to train its models (no zero retention). Owner and editor only; the plan must include the feature.
+         */
+        put: operations["AiConsentController_accept"];
+        post?: never;
+        /**
+         * Turn the permission off and delete the stored summaries
+         * @description Records the revocation and, in the same transaction, deletes what the registered purge ports return (the stored summaries). The log of model calls stays (cost record, no content). Idempotent. Owner and editor only.
+         */
+        delete: operations["AiConsentController_revoke"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/ai/payload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What would be sent to the language model for a summary
+         * @description Builds the context with the same builder the summary uses and returns it serialized the same way: figures only, formatted in the effective locale, with stable keys (`chave`) in place of names. It does not require the permission, because it is what the person reads before allowing. 204 when there is no data for that kind (the summary card does not appear).
+         */
+        get: operations["AiPayloadController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/ai/summaries/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The written summary of the month, of the savings cuts or of the portfolio
+         * @description Returns the stored text when the figures did not change (`cached`). When they changed, writes a new one, at most once per hour automatically: inside the hour it returns the stored text with `stale: true`. A savings goal already met gets a fixed text (`source: fixed`) with no model call and no permission. Needs the permission of the account for the model text. 204 when there is no data (the card does not appear).
+         */
+        get: operations["SummariesController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/ai/summaries/{kind}/regenerate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Write the summary again
+         * @description Writes a new text even when the figures did not change, at most 5 times per hour per account and kind. Needs the permission of the account and an editor or owner role.
+         */
+        post: operations["SummariesController_regenerate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -1792,6 +1880,1169 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    AiConsentController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Permission state */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description The plan and the installation allow the AI features */
+                        available: boolean;
+                        /** @description The account allowed sending aggregated figures with the current notice */
+                        granted: boolean;
+                        /** @description The permission request must be shown: not granted, revoked or accepted on an older notice */
+                        needsConsent: boolean;
+                        /** @description Current notice version */
+                        noticeVersion: number;
+                        /** @description Notice version the account accepted, null when never accepted */
+                        acceptedNoticeVersion: number | null;
+                        /**
+                         * Format: date-time
+                         * @description When the permission was given, null when never given
+                         */
+                        grantedAt: string | null;
+                        /**
+                         * @description Where the permission was given, null when never given
+                         * @enum {string|null}
+                         */
+                        source: "summary_card" | "privacy_settings" | "whatsapp_link" | null;
+                        /** @description The signed-in member may turn the permission on and off (owner and editor) */
+                        canChange: boolean;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AiConsentController_accept: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Version of the notice the person read and accepted; must be the current one */
+                    noticeVersion: number;
+                    /**
+                     * @description Where the person accepted: the summary card or the privacy settings
+                     * @enum {string}
+                     */
+                    source: "summary_card" | "privacy_settings";
+                };
+            };
+        };
+        responses: {
+            /** @description Permission state after the change */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description The plan and the installation allow the AI features */
+                        available: boolean;
+                        /** @description The account allowed sending aggregated figures with the current notice */
+                        granted: boolean;
+                        /** @description The permission request must be shown: not granted, revoked or accepted on an older notice */
+                        needsConsent: boolean;
+                        /** @description Current notice version */
+                        noticeVersion: number;
+                        /** @description Notice version the account accepted, null when never accepted */
+                        acceptedNoticeVersion: number | null;
+                        /**
+                         * Format: date-time
+                         * @description When the permission was given, null when never given
+                         */
+                        grantedAt: string | null;
+                        /**
+                         * @description Where the permission was given, null when never given
+                         * @enum {string|null}
+                         */
+                        source: "summary_card" | "privacy_settings" | "whatsapp_link" | null;
+                        /** @description The signed-in member may turn the permission on and off (owner and editor) */
+                        canChange: boolean;
+                    };
+                };
+            };
+            /** @description Invalid body (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The plan does not include the feature (billing.premium_required) */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Only owner and editor may change it (identity.forbidden) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The accepted notice is not the current one (ai.notice_outdated) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The installation has no model credentials (billing.feature_disabled) */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AiConsentController_revoke: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Turned off */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Only owner and editor may change it (identity.forbidden) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AiPayloadController_get: {
+        parameters: {
+            query: {
+                /** @description Which summary the payload is for */
+                kind: "month" | "cuts" | "portfolio";
+                /** @description Month, YYYY-MM, for month and cuts; defaults to the last closed month */
+                month?: string;
+                /** @description Simulated savings goal in basis points, for cuts */
+                goalBps?: number;
+                /** @description Planned contribution in minor units, for portfolio */
+                contributionMinor?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The exact object sent to the model */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Which summary the payload is for
+                         * @enum {string}
+                         */
+                        kind: "month" | "cuts" | "portfolio";
+                        /** @description Current notice version */
+                        noticeVersion: number;
+                        /** @description Exactly the object sent to the language model, figures only */
+                        payload: {
+                            /** @description Month, YYYY-MM */
+                            mes: string;
+                            /** @description The month is not over */
+                            parcial: boolean;
+                            /** @description Income, formatted */
+                            renda: string;
+                            /** @description Expenses, formatted */
+                            gastos: string;
+                            /** @description Amount saved, formatted */
+                            guardado: string;
+                            /** @description Savings rate, formatted */
+                            taxa_poupanca: string | null;
+                            /** @description Savings goal, formatted */
+                            meta_economia_pct: string;
+                            /** @description Missing to reach the goal, formatted */
+                            falta_para_meta: string;
+                            fixos: {
+                                /** @description Fixed spending, formatted */
+                                total: string;
+                                /** @description Share of income */
+                                pct_renda: string | null;
+                            };
+                            flexiveis: {
+                                /** @description Flexible spending, formatted */
+                                total: string;
+                            };
+                            sem_categoria: {
+                                /** @description Uncategorized spending, formatted */
+                                total: string;
+                                /** @description Uncategorized count */
+                                transacoes: number;
+                            };
+                            /** @description Spending by category */
+                            gastos_por_categoria: {
+                                /** @description Stable key of the category: the system key or custom_<n> */
+                                chave: string;
+                                /** @description Default label of a system category in the effective locale */
+                                rotulo_padrao?: string;
+                                /**
+                                 * @description Fixed or flexible
+                                 * @enum {string}
+                                 */
+                                tipo: "fixo" | "flexivel";
+                                /** @description Spent this month, formatted */
+                                total: string;
+                                /** @description Average of the last three months, formatted */
+                                media_3m: string | null;
+                                /** @description Change against the average, formatted with sign */
+                                variacao_pct: string | null;
+                                /** @description The category has no history */
+                                nova: boolean;
+                            }[];
+                        } | {
+                            /** @description Savings goal, formatted */
+                            meta_economia_pct: string;
+                            /** @description Missing per month, formatted */
+                            falta_por_mes: string;
+                            /**
+                             * @description Whether cutting can reach the goal
+                             * @enum {string}
+                             */
+                            status: "meta_batida" | "possivel" | "so_cortar_nao_resolve";
+                            /** @description Flexible categories with the suggested cut */
+                            categorias_flexiveis: {
+                                /** @description Stable key of the category */
+                                chave: string;
+                                /** @description Default label of a system category */
+                                rotulo_padrao?: string;
+                                /** @description Spent, formatted */
+                                atual: string;
+                                /** @description Three-month average, formatted */
+                                media_3m: string | null;
+                                /** @description Suggested cut, formatted */
+                                cortar: string;
+                                /** @description Suggested limit, formatted */
+                                limite_sugerido: string;
+                            }[];
+                        } | {
+                            /** @description Base currency */
+                            moeda_base: string;
+                            /** @description Total, formatted */
+                            total: string;
+                            /** @description Dollar exposure, formatted */
+                            exposicao_dolar_pct: string;
+                            /** @description Tolerance in percentage points */
+                            tolerancia_pp: string;
+                            /** @description Allocation by class */
+                            carteira_pct: {
+                                /** @description Stable key of the class */
+                                chave: string;
+                                /** @description Default label of a system class */
+                                rotulo_padrao?: string;
+                                /** @description Current share, formatted */
+                                atual: string;
+                                /** @description Target share, formatted */
+                                meta: string;
+                                /**
+                                 * @description Against the tolerance band
+                                 * @enum {string}
+                                 */
+                                situacao: "abaixo" | "dentro" | "acima";
+                            }[];
+                            aporte_planejado?: {
+                                /** @description Planned contribution, formatted */
+                                total: string;
+                                por_classe: {
+                                    /** @description Class key */
+                                    chave: string;
+                                    /** @description Amount, formatted */
+                                    valor: string;
+                                }[];
+                            };
+                        };
+                    };
+                };
+            };
+            /** @description No data for that kind */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid query (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The plan does not include the feature (billing.premium_required) */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Malformed, earlier than 2000-01 or future month (summary.invalid_month) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The monthly cap of paid usage is reached (usage.cap_reached) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The installation has no model credentials (billing.feature_disabled) */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    SummariesController_get: {
+        parameters: {
+            query?: {
+                /** @description Month, YYYY-MM, for month and cuts; defaults to the last closed month */
+                month?: string;
+                /** @description Simulated savings goal in basis points, for cuts */
+                goalBps?: unknown;
+                /** @description Planned contribution in minor units, for portfolio */
+                contributionMinor?: unknown;
+            };
+            header?: never;
+            path: {
+                /** @description Which summary */
+                kind: "month" | "cuts" | "portfolio";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The summary */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Which summary this is
+                         * @enum {string}
+                         */
+                        kind: "month" | "cuts" | "portfolio";
+                        /** @description Month (YYYY-MM) for month and cuts, day (YYYY-MM-DD) for portfolio */
+                        period: string;
+                        /** @description The text, names already in place of the markers; the main figure of a paragraph is wrapped in ** **, nothing else is markup */
+                        paragraphs: string[];
+                        /** @description When the text was written, ISO 8601 */
+                        generatedAt: string;
+                        /** @description The stored text was served, with no model call */
+                        cached: boolean;
+                        /** @description The figures changed after the stored text was written and the hourly limit did not allow a new one */
+                        stale: boolean;
+                        /**
+                         * @description Written by the model or a fixed text with no model call
+                         * @enum {string}
+                         */
+                        source: "model" | "fixed";
+                        /** @description Usage of the cap, so the card can show the band without another call */
+                        usage: {
+                            /**
+                             * @description State of the monthly paid usage cap
+                             * @enum {string}
+                             */
+                            state: "ok" | "warning" | "paused";
+                            /** @description Share of the cap used, in basis points */
+                            usedBps: number;
+                            /** @description When the usage resets, ISO 8601 */
+                            resetsAt: string;
+                        };
+                    };
+                };
+            };
+            /** @description No data for that kind */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid query, params or body (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The plan does not include the feature (billing.premium_required) */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The account did not allow sending figures to a language model (ai.consent_required) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Malformed, earlier than 2000-01 or future month (summary.invalid_month) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The monthly cap of paid usage is reached (usage.cap_reached) or the hourly limit of rewrites passed (rate_limit.exceeded) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The model answered twice with a text that failed the checks (ai.invalid_response); nothing was stored */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The installation has no model credentials or the provider did not answer (billing.feature_disabled, ai.provider_unavailable) */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    SummariesController_regenerate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Which summary */
+                kind: "month" | "cuts" | "portfolio";
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Month, YYYY-MM, for month and cuts; defaults to the last closed month */
+                    month?: string;
+                    /** @description Simulated savings goal in basis points, for cuts */
+                    goalBps?: number;
+                    /** @description Planned contribution in minor units, for portfolio */
+                    contributionMinor?: number;
+                };
+            };
+        };
+        responses: {
+            /** @description The new summary */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description Which summary this is
+                         * @enum {string}
+                         */
+                        kind: "month" | "cuts" | "portfolio";
+                        /** @description Month (YYYY-MM) for month and cuts, day (YYYY-MM-DD) for portfolio */
+                        period: string;
+                        /** @description The text, names already in place of the markers; the main figure of a paragraph is wrapped in ** **, nothing else is markup */
+                        paragraphs: string[];
+                        /** @description When the text was written, ISO 8601 */
+                        generatedAt: string;
+                        /** @description The stored text was served, with no model call */
+                        cached: boolean;
+                        /** @description The figures changed after the stored text was written and the hourly limit did not allow a new one */
+                        stale: boolean;
+                        /**
+                         * @description Written by the model or a fixed text with no model call
+                         * @enum {string}
+                         */
+                        source: "model" | "fixed";
+                        /** @description Usage of the cap, so the card can show the band without another call */
+                        usage: {
+                            /**
+                             * @description State of the monthly paid usage cap
+                             * @enum {string}
+                             */
+                            state: "ok" | "warning" | "paused";
+                            /** @description Share of the cap used, in basis points */
+                            usedBps: number;
+                            /** @description When the usage resets, ISO 8601 */
+                            resetsAt: string;
+                        };
+                    };
+                };
+            };
+            /** @description No data for that kind */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid query, params or body (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The plan does not include the feature (billing.premium_required) */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The account did not allow sending figures to a language model (ai.consent_required) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Malformed, earlier than 2000-01 or future month (summary.invalid_month) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The monthly cap of paid usage is reached (usage.cap_reached) or the hourly limit of rewrites passed (rate_limit.exceeded) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The model answered twice with a text that failed the checks (ai.invalid_response); nothing was stored */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The installation has no model credentials or the provider did not answer (billing.feature_disabled, ai.provider_unavailable) */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
     HealthController_check: {
         parameters: {
             query?: never;
