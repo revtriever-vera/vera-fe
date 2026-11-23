@@ -6,7 +6,15 @@ import type { ApiPaths } from './api-paths';
 
 const REFRESH_PATH: string = '/auth/refresh';
 
-const OWN_CREDENTIAL_PATHS: readonly string[] = [REFRESH_PATH, '/auth/logout', '/auth/google', '/auth/facebook'];
+const OWN_CREDENTIAL_PATHS: readonly string[] = [
+    REFRESH_PATH,
+    '/auth/logout',
+    '/auth/google',
+    '/auth/facebook',
+    '/auth/totp/enroll',
+    '/auth/totp/activate',
+    '/auth/totp/verify'
+];
 
 function carriesOwnCredential(url: string): boolean {
     return OWN_CREDENTIAL_PATHS.some((path: string): boolean => url.endsWith(path));
@@ -48,6 +56,35 @@ export async function refreshSession(): Promise<boolean> {
     return pendingRefresh;
 }
 
+export type ProblemListener = (type: string) => void;
+
+const PROBLEM_STATUSES: ReadonlySet<number> = new Set<number>([402, 429]);
+
+let problemListener: ProblemListener | null = null;
+
+export function setProblemListener(next: ProblemListener): () => void {
+    problemListener = next;
+    return (): void => {
+        if (problemListener === next) {
+            problemListener = null;
+        }
+    };
+}
+
+async function reportProblem(response: Response): Promise<void> {
+    if (problemListener === null || !PROBLEM_STATUSES.has(response.status)) {
+        return;
+    }
+    const body: unknown = await response
+        .clone()
+        .json()
+        .catch((): null => null);
+    const type: unknown = typeof body === 'object' && body !== null ? (body as { type?: unknown }).type : null;
+    if (typeof type === 'string') {
+        problemListener(type);
+    }
+}
+
 const retriable: WeakMap<Request, Request> = new WeakMap();
 
 const authMiddleware: Middleware = {
@@ -60,6 +97,7 @@ const authMiddleware: Middleware = {
         return request;
     },
     async onResponse({ request, response }: { request: Request; response: Response }): Promise<Response> {
+        await reportProblem(response);
         if (response.status !== 401 || carriesOwnCredential(request.url)) {
             return response;
         }

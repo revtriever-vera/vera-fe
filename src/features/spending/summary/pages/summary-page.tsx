@@ -1,4 +1,4 @@
-import { useState, type ReactElement } from 'react';
+import { useState, type ReactElement, type ReactNode } from 'react';
 import { useNavigate, useSearch, type UseNavigateResult } from '@tanstack/react-router';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
@@ -8,6 +8,7 @@ import { Loading, Skeleton } from '@/shared/ui/skeleton';
 import { IncomeModeDialog } from '../../components/income-mode-dialog';
 import { SpendingEmptyState } from '../../components/spending-empty-state';
 import type { MonthlySummary } from '../../types';
+import { RecurringSummaryCard } from '../../recurring/components/recurring-summary-card';
 import { useSummary } from '../api/use-summary.query';
 import { SpendingBars } from '../components/spending-bars';
 import { SummaryHeader } from '../components/summary-header';
@@ -50,9 +51,10 @@ interface SummaryContentProps {
     readonly summary: MonthlySummary;
     readonly onMonthChange: (month: string) => void;
     readonly onChangeIncome: () => void;
+    readonly renderSummary?: (month: string) => ReactNode;
 }
 
-function SummaryContent({ summary, onMonthChange, onChangeIncome }: SummaryContentProps): ReactElement {
+function SummaryContent({ summary, onMonthChange, onChangeIncome, renderSummary }: SummaryContentProps): ReactElement {
     if (!summary.hasData) {
         return <SpendingEmptyState />;
     }
@@ -60,13 +62,19 @@ function SummaryContent({ summary, onMonthChange, onChangeIncome }: SummaryConte
         <div className="flex flex-col gap-4">
             <SummaryHeader summary={summary} onMonthChange={onMonthChange} />
             <SummaryKpis summary={summary} onChangeIncome={onChangeIncome} />
+            {renderSummary?.(summary.month)}
+            <RecurringSummaryCard />
             <SpendingBars summary={summary} />
             <SummaryNotes summary={summary} onChangeIncome={onChangeIncome} />
         </div>
     );
 }
 
-export function SummaryPage(): ReactElement {
+export interface SummaryPageProps {
+    readonly renderSummary?: (month: string) => ReactNode;
+}
+
+export function SummaryPage({ renderSummary }: SummaryPageProps): ReactElement {
     const search: { month?: string } = useSearch({ from: '/_auth/_app/spending/' });
     const navigate: UseNavigateResult<string> = useNavigate();
     const summary: UseQueryResult<MonthlySummary> = useSummary(search.month);
@@ -80,7 +88,12 @@ export function SummaryPage(): ReactElement {
     return (
         <section className="flex flex-col gap-4">
             {summary.data === undefined ? null : (
-                <SummaryContent summary={summary.data} onMonthChange={goToMonth} onChangeIncome={openIncome} />
+                <SummaryContent
+                    summary={summary.data}
+                    onMonthChange={goToMonth}
+                    onChangeIncome={openIncome}
+                    renderSummary={renderSummary}
+                />
             )}
             {summary.data === undefined && summary.error === null ? <SummaryLoading /> : null}
             {summary.data === undefined && summary.error !== null ? (

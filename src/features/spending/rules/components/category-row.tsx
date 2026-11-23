@@ -1,3 +1,4 @@
+import { useRole } from '@/app/providers/use-role';
 import type { UseMutationResult } from '@tanstack/react-query';
 import type { ApiError } from '@/shared/lib/api/api-error';
 import type { UpdateCategoryInput } from '../api/use-update-category.mutation';
@@ -102,9 +103,13 @@ function RowActions({
     readonly name: string;
     readonly onRename: () => void;
     readonly onDelete: (category: CategoryView) => void;
-}): ReactElement {
+}): ReactElement | null {
     const { t }: UseTranslationResponse<'spendingRules', undefined> = useTranslation('spendingRules');
     const changeIcon: (icon: IconKey) => void = useIconChange(category);
+    const { canEdit } = useRole();
+    if (!canEdit) {
+        return null;
+    }
     return (
         <div className="flex items-center gap-1">
             <button type="button" aria-label={t('categories.rename', { name })} className={ICON_BUTTON} onClick={onRename}>

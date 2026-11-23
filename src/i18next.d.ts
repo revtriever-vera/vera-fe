@@ -1,11 +1,19 @@
 import type ptBRCommon from './shared/lib/i18n/resources/pt-BR/common.json';
 import type ptBRAuth from './shared/lib/i18n/resources/pt-BR/auth.json';
+import type ptBRNotices from './shared/lib/i18n/resources/pt-BR/notices.json';
 import type ptBRAccount from './shared/lib/i18n/resources/pt-BR/account.json';
+import type ptBRMembers from './shared/lib/i18n/resources/pt-BR/members.json';
+import type ptBRIntegrations from './shared/lib/i18n/resources/pt-BR/integrations.json';
+import type ptBRWhatsapp from './shared/lib/i18n/resources/pt-BR/whatsapp.json';
+import type ptBRCalendar from './shared/lib/i18n/resources/pt-BR/calendar.json';
 import type ptBRPortfolio from './shared/lib/i18n/resources/pt-BR/portfolio.json';
 import type ptBRPortfolioOverview from './shared/lib/i18n/resources/pt-BR/portfolioOverview.json';
 import type ptBRPortfolioAssets from './shared/lib/i18n/resources/pt-BR/portfolioAssets.json';
+import type ptBRPortfolioFixedIncome from './shared/lib/i18n/resources/pt-BR/portfolioFixedIncome.json';
 import type ptBRPortfolioTargets from './shared/lib/i18n/resources/pt-BR/portfolioTargets.json';
 import type ptBRPortfolioContribution from './shared/lib/i18n/resources/pt-BR/portfolioContribution.json';
+import type ptBRPortfolioGoals from './shared/lib/i18n/resources/pt-BR/portfolioGoals.json';
+import type ptBRSpendingRecurring from './shared/lib/i18n/resources/pt-BR/spendingRecurring.json';
 import type ptBROnboarding from './shared/lib/i18n/resources/pt-BR/onboarding.json';
 import type ptBRSpending from './shared/lib/i18n/resources/pt-BR/spending.json';
 import type ptBRSpendingSummary from './shared/lib/i18n/resources/pt-BR/spendingSummary.json';
@@ -14,6 +22,10 @@ import type ptBRSpendingCuts from './shared/lib/i18n/resources/pt-BR/spendingCut
 import type ptBRSpendingConnections from './shared/lib/i18n/resources/pt-BR/spendingConnections.json';
 import type ptBRSpendingImports from './shared/lib/i18n/resources/pt-BR/spendingImports.json';
 import type ptBRSpendingRules from './shared/lib/i18n/resources/pt-BR/spendingRules.json';
+import type ptBRSettings from './shared/lib/i18n/resources/pt-BR/settings.json';
+import type ptBRBilling from './shared/lib/i18n/resources/pt-BR/billing.json';
+import type ptBRSummaries from './shared/lib/i18n/resources/pt-BR/summaries.json';
+import type ptBRAdmin from './shared/lib/i18n/resources/pt-BR/admin.json';
 
 declare module 'i18next' {
     interface CustomTypeOptions {
@@ -23,11 +35,19 @@ declare module 'i18next' {
             common: typeof ptBRCommon;
             auth: typeof ptBRAuth;
             account: typeof ptBRAccount;
+            notices: typeof ptBRNotices;
+            members: typeof ptBRMembers;
+            integrations: typeof ptBRIntegrations;
+            whatsapp: typeof ptBRWhatsapp;
+            calendar: typeof ptBRCalendar;
             portfolio: typeof ptBRPortfolio;
             portfolioOverview: typeof ptBRPortfolioOverview;
             portfolioAssets: typeof ptBRPortfolioAssets;
+            portfolioFixedIncome: typeof ptBRPortfolioFixedIncome;
             portfolioTargets: typeof ptBRPortfolioTargets;
             portfolioContribution: typeof ptBRPortfolioContribution;
+            portfolioGoals: typeof ptBRPortfolioGoals;
+            spendingRecurring: typeof ptBRSpendingRecurring;
             onboarding: typeof ptBROnboarding;
             spending: typeof ptBRSpending;
             spendingSummary: typeof ptBRSpendingSummary;
@@ -36,6 +56,10 @@ declare module 'i18next' {
             spendingConnections: typeof ptBRSpendingConnections;
             spendingImports: typeof ptBRSpendingImports;
             spendingRules: typeof ptBRSpendingRules;
+            settings: typeof ptBRSettings;
+            billing: typeof ptBRBilling;
+            summaries: typeof ptBRSummaries;
+            admin: typeof ptBRAdmin;
         };
     }
 }

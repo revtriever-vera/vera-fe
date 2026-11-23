@@ -282,10 +282,8 @@ describe('CutsPage: status', () => {
 
         expect(await screen.findByText('Meta atingida')).toBeInTheDocument();
         expect(screen.getByText('R$ 560', { selector: 'span.numeric.text-3xl' })).toBeInTheDocument();
-        expect(
-            screen.getByText('Você guardou mais do que a meta. Esse valor pode ir direto para o aporte inteligente.')
-        ).toBeInTheDocument();
-        const link: HTMLElement = screen.getByRole('link', { name: 'Ir para o aporte inteligente' });
+        expect(screen.getByText('Você guardou mais do que a meta. Esse valor pode ir direto para Onde aportar.')).toBeInTheDocument();
+        const link: HTMLElement = screen.getByRole('link', { name: 'Ir para Onde aportar' });
         expect(link).toHaveAttribute('href', '/portfolio/contribution?amount=560');
         await user.click(link);
         expect(track).toHaveBeenCalledWith('spending_contribution_shortcut');

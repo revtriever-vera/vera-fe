@@ -1,0 +1,80 @@
+{
+  "card": {
+    "titleMonth": "Resumo de {{month}}",
+    "titleCuts": "Como chegar à meta de economia",
+    "titlePortfolio": "Resumo da carteira",
+    "descriptionMonth": "O que mudou no mês e por quê.",
+    "descriptionCuts": "A conta da sugestão acima, em texto.",
+    "descriptionPortfolio": "O que está fora da meta e para onde vai o próximo aporte.",
+    "loading": "Escrevendo o resumo",
+    "loadingConsent": "Verificando a permissão"
+  },
+  "locked": {
+    "text": "No Premium, a Vera escreve aqui um resumo destes números em 3 ou 4 frases."
+  },
+  "consent": {
+    "notice": "Para escrever este resumo, a Vera envia totais agregados a um modelo de linguagem, por um serviço da Vercel. Nomes de pessoas e de estabelecimentos, descrições das transações, contas e credenciais nunca são enviados. O provedor do modelo usa o que recebe e o que escreve para treinar os modelos dele, sem retenção zero.",
+    "noticeSelfHosted": "Para escrever este resumo, a Vera envia totais agregados ao modelo de linguagem que você cadastrou em Integrações. Nomes de pessoas e de estabelecimentos, descrições das transações, contas e credenciais nunca são enviados.",
+    "seeSent": "Ver o que é enviado",
+    "allow": "Permitir e mostrar",
+    "hint": "Dá para desligar em Configurações › Dados e privacidade.",
+    "askEditor": "Peça a um Dono ou Editor para permitir.",
+    "granted": "Resumos em texto ligados"
+  },
+  "meta": {
+    "month": "Escrito {{when}} a partir dos totais do mês.",
+    "cuts": "Escrito {{when}} a partir dos totais do mês e da meta.",
+    "portfolio": "Escrito {{when}} a partir dos totais da carteira.",
+    "stale": "Escrito {{when}}. Os números mudaram depois disso.",
+    "today": "hoje às {{time}}",
+    "otherDay": "em {{date}} às {{time}}",
+    "seeSent": "O que é enviado"
+  },
+  "regenerate": {
+    "action": "Escrever de novo",
+    "done": "Resumo escrito de novo"
+  },
+  "payload": {
+    "title": "O que é enviado",
+    "description": "Montado agora com os seus dados. Vai para um modelo de linguagem, por um serviço da Vercel. Só números agregados, sem nomes. Desligue em Configurações › Dados e privacidade.",
+    "descriptionSelfHosted": "Montado agora com os seus dados. Vai para o modelo de linguagem que você cadastrou em Integrações. Só números agregados, sem nomes. Desligue em Configurações › Dados e privacidade.",
+    "close": "Entendi",
+    "loading": "Montando o que é enviado",
+    "failed": "Não deu para montar o que é enviado agora.",
+    "tabsLabel": "Resumo",
+    "tabMonth": "Mês",
+    "tabCuts": "Cortes",
+    "tabPortfolio": "Carteira",
+    "empty": "Ainda não há dados para enviar."
+  },
+  "privacy": {
+    "title": "Resumos em texto",
+    "description": "Os textos do mês, dos cortes e da carteira são escritos por um modelo de linguagem, a partir de totais agregados enviados por um serviço da Vercel. Nomes de pessoas e de estabelecimentos, descrições das transações, contas e credenciais nunca são enviados. O provedor do modelo usa o que recebe e o que escreve para treinar os modelos dele, sem retenção zero. Desligado, nada mais é enviado.",
+    "descriptionSelfHosted": "Os textos do mês, dos cortes e da carteira são escritos pelo modelo de linguagem que você cadastrou em Integrações, a partir de totais agregados. Nomes de pessoas e de estabelecimentos, descrições das transações, contas e credenciais nunca são enviados. Desligado, nada mais é enviado.",
+    "switchLabel": "Permitir o envio de totais agregados",
+    "switchHint": "Desligado, nada é enviado e os resumos somem das telas.",
+    "seeSent": "Ver o que é enviado",
+    "locked": "Disponível no Premium.",
+    "registerModel": "Cadastrar o modelo de linguagem",
+    "askEditor": "Peça a um Dono ou Editor para mudar.",
+    "loadFailed": "Não deu para ver a permissão agora.",
+    "retry": "Tentar de novo",
+    "granted": "Resumos em texto ligados",
+    "revoked": "Resumos desligados. Nada mais é enviado",
+    "confirmTitle": "Desligar os resumos?",
+    "confirmDescription": "Nada mais é enviado e os textos guardados são apagados.",
+    "confirmAction": "Desligar"
+  },
+  "errors": {
+    "consentRequired": "Permita o envio dos totais para ver este resumo.",
+    "premiumRequired": "Os resumos fazem parte do Premium.",
+    "capReached": "Resumos pausados até {{date}}. A cota do mês acabou; o resto da Vera segue normal.",
+    "capReachedNoDate": "Resumos pausados até a virada do mês. A cota do mês acabou; o resto da Vera segue normal.",
+    "unavailable": "Não deu para escrever o resumo agora. Os números da tela continuam certos.",
+    "noticeOutdated": "O aviso mudou. Leia o pedido de novo e permita outra vez.",
+    "repeated": "Este resumo já foi escrito várias vezes hoje com os mesmos números. Ele muda quando os números mudarem.",
+    "tooMany": "Você pediu muitos resumos nesta hora. Tente de novo mais tarde.",
+    "notConfigured": "Este servidor ainda não tem o modelo de linguagem cadastrado.",
+    "generic": "Não deu para mostrar o resumo agora. Tente de novo em instantes."
+  }
+}

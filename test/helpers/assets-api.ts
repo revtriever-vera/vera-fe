@@ -4,12 +4,15 @@ import type {
     CatalogAsset,
     CreatePositionBody,
     CreateTitleBody,
+    FgcSimulation,
+    FgcSimulationBody,
     FixedIncomePreview,
     FixedIncomePreviewBody,
+    IssuerItem,
     PositionView,
     Quote
 } from '@/features/portfolio/assets/types';
-import { exchangeRate, positionView, previewResult, titleView } from '../fixtures/assets';
+import { exchangeRate, fgcSimulation, issuerItem, positionView, previewResult, titleView } from '../fixtures/assets';
 import { server } from '../msw/server';
 
 export interface AssetsApiOptions {
@@ -18,6 +21,8 @@ export interface AssetsApiOptions {
     readonly pending?: readonly string[];
     readonly holdings?: HoldingsResponse;
     readonly preview?: FixedIncomePreview;
+    readonly issuers?: readonly IssuerItem[];
+    readonly fgc?: FgcSimulation;
 }
 
 export interface AssetsApi {
@@ -27,6 +32,8 @@ export interface AssetsApi {
     readonly patchBodies: { id: string; body: unknown }[];
     readonly previewBodies: FixedIncomePreviewBody[];
     readonly titleBodies: CreateTitleBody[];
+    readonly issuerSearches: string[];
+    readonly fgcBodies: FgcSimulationBody[];
 }
 
 export function mockAssetsApi({
@@ -34,9 +41,23 @@ export function mockAssetsApi({
     quotes = [],
     pending = [],
     holdings,
-    preview = previewResult()
+    preview = previewResult(),
+    issuers = [
+        issuerItem(),
+        issuerItem({ id: 'petrobras', name: 'Petrobras', groupId: 'petrobras', groupName: 'Petrobras', kind: 'company' })
+    ],
+    fgc = fgcSimulation()
 }: AssetsApiOptions = {}): AssetsApi {
-    const api: AssetsApi = { searches: [], quoteRequests: [], positionBodies: [], patchBodies: [], previewBodies: [], titleBodies: [] };
+    const api: AssetsApi = {
+        searches: [],
+        quoteRequests: [],
+        positionBodies: [],
+        patchBodies: [],
+        previewBodies: [],
+        titleBodies: [],
+        issuerSearches: [],
+        fgcBodies: []
+    };
     server.use(
         http.get('*/catalog/assets', ({ request }) => {
             const url: URL = new URL(request.url);
@@ -57,6 +78,21 @@ export function mockAssetsApi({
             });
         }),
         http.get('*/market-data/exchange-rates/:currency', () => HttpResponse.json(exchangeRate())),
+        http.get('*/issuers', ({ request }) => {
+            const url: URL = new URL(request.url);
+            const kind: string = url.searchParams.get('kind') ?? '';
+            const q: string = (url.searchParams.get('q') ?? '').toLowerCase();
+            api.issuerSearches.push(`${kind}|${q}`);
+            const items: IssuerItem[] = issuers.filter(
+                (item: IssuerItem): boolean =>
+                    (item.kind === kind || item.kind === 'other') && `${item.name} ${item.groupName}`.toLowerCase().includes(q)
+            );
+            return HttpResponse.json({ items });
+        }),
+        http.post('*/portfolio/fgc/simulate', async ({ request }) => {
+            api.fgcBodies.push((await request.json()) as FgcSimulationBody);
+            return HttpResponse.json(fgc);
+        }),
         http.post('*/fixed-income/preview', async ({ request }) => {
             api.previewBodies.push((await request.json()) as FixedIncomePreviewBody);
             return HttpResponse.json(preview);

@@ -1,3 +1,4 @@
+import type { AssetsTabName } from '@/shared/lib/analytics/events';
 import type { paths } from '@/shared/lib/api/schema';
 
 type CatalogOperation = paths['/catalog/assets']['get'];
@@ -34,3 +35,18 @@ export type TitleValuation = TitleDetail['valuation'];
 export type ExportFormat = paths['/portfolio/export']['get']['parameters']['query']['format'];
 
 export const EXPORT_FORMATS = ['xlsx', 'csv'] as const satisfies readonly ExportFormat[];
+
+export type IssuerSearchResponse = paths['/issuers']['get']['responses']['200']['content']['application/json'];
+export type IssuerItem = IssuerSearchResponse['items'][number];
+export type IssuerKind = NonNullable<NonNullable<paths['/issuers']['get']['parameters']['query']>['kind']>;
+export type TitleIssuer = Omit<NonNullable<TitleDetail['issuer']>, 'kind'> & { readonly kind: IssuerItem['kind'] };
+
+export type FgcSimulationBody = paths['/portfolio/fgc/simulate']['post']['requestBody']['content']['application/json'];
+export type FgcSimulation = paths['/portfolio/fgc/simulate']['post']['responses']['200']['content']['application/json'];
+export type FgcVerdict = FgcSimulation['verdict'];
+
+export const FGC_LIMIT_MINOR: number = 25000000;
+
+export const ASSETS_TABS = ['list', 'fixed-income', 'concentration'] as const satisfies readonly AssetsTabName[];
+
+export type AssetsTab = (typeof ASSETS_TABS)[number];

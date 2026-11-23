@@ -14,7 +14,7 @@ export function useExportData(): UseMutationResult<void, Error, void> {
     return useMutation({
         mutationKey: accountKeys.export(),
         mutationFn: async (): Promise<void> => {
-            const result: ExportResult = await apiClient.GET('/account/export', { parseAs: 'blob' });
+            const result: ExportResult = await apiClient.GET('/account/export/spreadsheets', { parseAs: 'blob' });
             const blob: Blob = unwrap<Blob>(result);
             downloadBlob(blob, exportFilename(result.response.headers.get('content-disposition')));
         }

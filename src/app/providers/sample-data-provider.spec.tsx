@@ -18,6 +18,10 @@ const tracked: Mock = vi.hoisted((): Mock => vi.fn());
 
 vi.mock('@/shared/lib/analytics', () => ({ track: tracked }));
 
+vi.mock('./use-role', () => ({
+    useRole: (): { role: string; canEdit: boolean; isOwner: boolean } => ({ role: 'owner', canEdit: true, isOwner: true })
+}));
+
 vi.mock('@tanstack/react-router', async (importOriginal) => ({
     ...(await importOriginal<typeof import('@tanstack/react-router')>()),
     useRouterState: ({ select }: { select: (state: { matches: { routeId: string }[] }) => string }): string =>

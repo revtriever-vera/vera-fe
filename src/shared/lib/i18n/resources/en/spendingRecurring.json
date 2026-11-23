@@ -1,0 +1,223 @@
+{
+  "title": "Subscriptions and bills",
+  "subtitle": "What repeats in your statement, and what it costs per month and per year.",
+  "loading": "Loading subscriptions and bills",
+  "loadError": "Could not load subscriptions and bills",
+  "retry": "Try again",
+  "kpis": {
+    "monthly": "Per month",
+    "monthlySupport": "Adds up only what you confirmed.",
+    "yearly": "Per year",
+    "subscriptions": "Subscriptions",
+    "bills": "Bills",
+    "suggestions_one": "+{{amount}} per month in {{count}} suggestion to review",
+    "suggestions_other": "+{{amount}} per month in {{count}} suggestions to review"
+  },
+  "cadence": {
+    "weekly": "Weekly",
+    "biweekly": "Every two weeks",
+    "monthly": "Monthly",
+    "bimonthly": "Every two months",
+    "quarterly": "Quarterly",
+    "semiannual": "Every six months",
+    "annual": "Yearly"
+  },
+  "kind": {
+    "subscription": "Subscription",
+    "bill": "Bill",
+    "other": "Other"
+  },
+  "day": {
+    "value": "Day {{day}}",
+    "none": "No fixed day"
+  },
+  "value": {
+    "estimate": "≈ {{amount}}",
+    "range": "{{min}} to {{max}}"
+  },
+  "review": {
+    "title": "To review ({{count}})",
+    "description": "Confirm what is recurring. Suggestions are not part of the totals.",
+    "listLabel": "Suggestions to review",
+    "confirm": "Confirm",
+    "confirmLabel": "Confirm {{name}}",
+    "dismiss": "Not recurring",
+    "dismissLabel": "{{name}}: not recurring",
+    "snooze": "Not now",
+    "snoozeLabel": "{{name}}: not now",
+    "lastCharges": "Latest charges",
+    "known": "Known subscription",
+    "dayChange": "Moved from day {{from}} to day {{to}}",
+    "noCharges": "No charges to show"
+  },
+  "confirmed": {
+    "title": "Confirmed",
+    "tableLabel": "Confirmed subscriptions and bills",
+    "name": "Name",
+    "cadence": "Cadence",
+    "day": "Day",
+    "value": "Amount",
+    "account": "Account",
+    "monthly": "Monthly equivalent",
+    "actions": "Actions",
+    "stop": "I cancelled it",
+    "stopLabel": "{{name}}: I cancelled it",
+    "stopTitle": "Mark {{name}} as cancelled?",
+    "stopDescription": "Vera stops forecasting this charge and warns you if it comes back. Vera does not cancel anything: cancel in the service's app or website.",
+    "stopConfirm": "Mark as cancelled",
+    "details": "Details",
+    "detailsLabel": "Details of {{name}}"
+  },
+  "inactive": {
+    "title": "Stopped and dismissed ({{count}})",
+    "stopped": "Stopped",
+    "dismissed": "Dismissed",
+    "stoppedByUser": "You marked it as cancelled",
+    "stoppedAuto": "No charge in time",
+    "restore": "Undo",
+    "restoreLabel": "Undo: {{name}}"
+  },
+  "confirm": {
+    "title": "Confirm {{name}}",
+    "description": "Adjust the name, cadence and day. Once confirmed, the charge counts in the totals.",
+    "name": "Name",
+    "cadence": "Cadence",
+    "day": "Day of the month",
+    "dayHint": "From 1 to 31. From day 29 to 31, the last day of shorter months applies.",
+    "kind": "Type",
+    "category": "Category",
+    "categoryNone": "No category",
+    "categoryHint": "If you already chose the category of these charges, Vera does not change it.",
+    "always": "Always for {{name}}",
+    "submit": "Confirm",
+    "cancel": "Cancel",
+    "errors": {
+      "nameRequired": "Enter the name",
+      "nameTooLong": "Use up to 80 characters",
+      "dayInvalid": "Enter a day from 1 to 31"
+    }
+  },
+  "toast": {
+    "confirmed": "Confirmed: {{name}}",
+    "dismissed": "{{name}} left the suggestions. It stays in Stopped and dismissed, with Undo.",
+    "snoozed": "{{name}} is hidden for 30 days",
+    "stopped": "{{name}} marked as cancelled",
+    "restored": "{{name}} is back",
+    "seen": "Alert marked as seen",
+    "updated": "{{name}} updated",
+    "chargeRemoved": "Charge taken out of {{name}}"
+  },
+  "empty": {
+    "noTransactionsTitle": "No transactions imported",
+    "noTransactionsDescription": "With 3 months of statements, Vera finds what repeats.",
+    "viewerDescription": "Ask someone who edits the account to connect the banks or import a statement.",
+    "connect": "Connect banks",
+    "import": "Import statement",
+    "noSeriesTitle": "Nothing repeated in the last 13 months",
+    "noSeriesDescription": "When a charge repeats, it shows up here for you to confirm.",
+    "markTransaction": "Mark a transaction as recurring"
+  },
+  "errors": {
+    "generic": "Could not finish. Try again.",
+    "forbidden": "Only people who edit the account can change subscriptions and bills.",
+    "notFound": "This subscription or bill no longer exists. Refresh the screen.",
+    "invalidState": "This subscription or bill already changed status. Refresh the screen.",
+    "categoryKindMismatch": "Choose an expense category.",
+    "validationFailed": "Check the fields and try again.",
+    "chargeNotFound": "That charge is no longer part of the series. Refresh the screen."
+  },
+  "alerts": {
+    "title": "Worth a look ({{count}})",
+    "listLabel": "Subscription and bill alerts",
+    "view": "See charges",
+    "viewLabel": "{{name}}: see charges",
+    "seen": "Seen",
+    "seenLabel": "{{name}}: seen",
+    "stop": "I canceled it",
+    "stopLabel": "{{name}}: I canceled it",
+    "dismiss": "Not recurring",
+    "dismissLabel": "{{name}}: not recurring",
+    "note": "Vera does not cancel subscriptions. Cancel in the service's app or your bank's.",
+    "text": {
+      "priceIncrease": "{{name}} went from {{from}} to {{to}} in {{month}} (+{{percent}}%)",
+      "duplicateCharge": "{{name}} charged twice in {{month}}: {{firstAmount}} on {{firstDate}} and {{secondAmount}} on {{secondDate}}",
+      "duplicateAccount": "{{name}} looks like the same subscription on two accounts: {{account}} and {{other}}",
+      "trialConverted": "The {{name}} trial became a charge: {{amount}} on {{date}}",
+      "returned_one": "{{name}} charged {{amount}} again on {{date}}, {{count}} day after the last charge",
+      "returned_other": "{{name}} charged {{amount}} again on {{date}}, {{count}} days after the last charge",
+      "stillUsing_one": "{{name}} charged {{count}} time ({{amount}}) and was never reviewed. Do you still use it?",
+      "stillUsing_other": "{{name}} charged {{count}} times ({{amount}}) and was never reviewed. Do you still use it?",
+      "renewal_one": "{{name}} renews in {{count}} day: {{amount}}",
+      "renewal_other": "{{name}} renews in {{count}} days: {{amount}}"
+    }
+  },
+  "calendar": {
+    "title": "Next 60 days",
+    "description": "Expected debits of confirmed series and suggestions.",
+    "loading": "Loading the debit calendar",
+    "loadError": "Could not load the debit calendar",
+    "viewLabel": "Calendar view",
+    "list": "List",
+    "month": "Month",
+    "weekTitle": "Week of {{from}} to {{to}}",
+    "tableLabel": "Expected debits from {{from}} to {{to}}",
+    "date": "Date",
+    "name": "Charge",
+    "account": "Account",
+    "amount": "Amount",
+    "suggestion": "Suggestion",
+    "onCard": "on the {{name}} card",
+    "missed": "Did not charge on {{date}}",
+    "empty": "No debits expected in the next 60 days.",
+    "monthTable": "Expected debits in {{month}}",
+    "openLabel": "See {{name}}, {{date}}"
+  },
+  "detail": {
+    "close": "Close",
+    "edit": "Edit",
+    "account": "Account",
+    "nextDate": "Next charge",
+    "noNextDate": "No expected date",
+    "status": {
+      "confirmed": "Confirmed",
+      "suggested": "Suggestion",
+      "stopped": "Stopped",
+      "dismissed": "Dismissed"
+    },
+    "charges": "Latest charges",
+    "noCharges": "No charges in this series.",
+    "removeCharge": "Not from this subscription",
+    "removeChargeLabel": "{{date}}, {{amount}}: not from this subscription",
+    "removeTitle": "Take this charge out of {{name}}?",
+    "removeDescription": "The charge leaves the series and does not come back. The transaction stays in your statement.",
+    "removeConfirm": "Take out of series",
+    "noticeBefore": "E-mail me the day before",
+    "noticeBeforeHint": "An e-mail at 9 a.m. the day before each charge of this series, with the name and the amount. It applies only to you.",
+    "noticeBeforeOn": "You will get the notice the day before.",
+    "noticeBeforeOff": "You will no longer get the notice the day before."
+  },
+  "edit": {
+    "title": "Edit {{name}}",
+    "description": "Change what Vera shows for this series. The charges do not change.",
+    "valueMode": "Amount",
+    "fixed": "Fixed",
+    "variable": "Variable",
+    "valueModeHint": "Variable shows the average and range of the latest charges.",
+    "submit": "Save",
+    "cancel": "Cancel"
+  },
+  "touchpoints": {
+    "badge": "Recurring",
+    "mark": "Mark as recurring",
+    "summaryTitle": "Subscriptions and bills",
+    "summaryMonthly": "{{amount}} a month",
+    "summaryNoTotal": "Nothing confirmed yet",
+    "summaryReview_one": "{{count}} to review",
+    "summaryReview_other": "{{count}} to review",
+    "summaryLink": "See subscriptions and bills",
+    "cutsNote": "Subscriptions add up to {{amount}} a month.",
+    "cutsRaised_one": "{{count}} went up in price.",
+    "cutsRaised_other": "{{count}} went up in price.",
+    "cutsLink": "See subscriptions and bills"
+  }
+}

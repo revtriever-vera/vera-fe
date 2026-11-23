@@ -7,6 +7,7 @@ import { Loading, Skeleton } from '@/shared/ui/skeleton';
 import { useAccounts } from '../../api/use-accounts.query';
 import type { AccountView, AccountsResponse } from '../../types';
 import type { ImportFlow } from '../lib/use-import-flow';
+import { IMPORT_ACCEPT, MAX_FILE_BYTES, importRejectionMessage } from '../lib/import-file-rules';
 import { loadSavedMapping } from '../lib/saved-mapping';
 import { EMPTY_MAPPING_VALUES, toMappingFormValues, type CsvMapping, type MappingFormValues } from '../schemas/mapping.schema';
 import { AccountTarget } from './account-target';
@@ -15,16 +16,6 @@ import { PreviewSampleTable } from './preview-sample-table';
 import { PreviewSummary } from './preview-summary';
 
 export const IMPORT_FORM_ID: string = 'import-target-form';
-export const MAX_FILE_BYTES: number = 5 * 1024 * 1024;
-
-const ACCEPT: Readonly<Record<string, readonly string[]>> = {
-    'application/x-ofx': ['.ofx'],
-    'text/csv': ['.csv'],
-    'text/plain': ['.txt']
-};
-
-const TOO_LARGE_CODE: string = 'file-too-large';
-
 function initialMapping(fileName: string): MappingFormValues {
     const saved: CsvMapping | null = loadSavedMapping(fileName);
     return saved === null ? EMPTY_MAPPING_VALUES : toMappingFormValues(saved);
@@ -69,19 +60,18 @@ function AccountsGate({ flow }: { readonly flow: ImportFlow }): ReactElement {
 
 export function FileStep({ flow }: { readonly flow: ImportFlow }): ReactElement {
     const { t }: UseTranslationResponse<'spendingImports', undefined> = useTranslation('spendingImports');
-    const rejectionMessage = (codes: readonly string[]): string =>
-        codes.includes(TOO_LARGE_CODE) ? t('file.tooLarge') : t('file.invalidType');
     return (
         <div className="flex flex-col gap-4">
             <FileDrop
                 label={t('file.label')}
+                title={t('file.dropTitle')}
                 hint={t('file.hint')}
-                accept={ACCEPT}
+                accept={IMPORT_ACCEPT}
                 maxSizeBytes={MAX_FILE_BYTES}
                 fileName={flow.file?.name ?? null}
                 onPicked={flow.pickFile}
                 onClear={flow.clearFile}
-                rejectionMessage={rejectionMessage}
+                rejectionMessage={importRejectionMessage(t)}
             />
             {flow.errorMessage === null ? null : <Alert title={flow.errorMessage} />}
             {flow.previewing && flow.preview === null ? (

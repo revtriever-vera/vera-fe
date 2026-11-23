@@ -20,10 +20,10 @@
     "cutSuggested_one": "You can get there by cutting {{total}} in {{count}} flexible category.",
     "cutSuggested_other": "You can get there by cutting {{total}} in {{count}} flexible categories.",
     "exceedsFlexible": "More than all flexible spending combined. To reach this goal you would need to review a fixed expense or your income.",
-    "goalMet": "You saved more than your goal. That amount can go straight to the smart contribution.",
+    "goalMet": "You saved more than your goal. That amount can go straight to Where to invest.",
     "noIncome": "No income recorded this month, so the goal cannot be calculated.",
     "defineIncome": "Set your income",
-    "contribution": "Go to the smart contribution"
+    "contribution": "Go to Where to invest"
   },
   "table": {
     "title": "Suggested limits for {{month}}",
@@ -51,5 +51,18 @@
     "description": "You changed the goal on the slider but did not save it. If you leave now, it goes back to the saved value.",
     "leave": "Leave without saving",
     "stay": "Keep editing"
+  },
+  "objectives": {
+    "title": "Your goals ask for {{amount}} a month",
+    "goalLine": "Your savings goal of {{rate}} of income gives {{amount}}.",
+    "noIncome": "Set this month's income to compare with the savings goal.",
+    "behind_one": "{{count}} goal is behind.",
+    "behind_other": "{{count}} goals are behind.",
+    "adopt": "Use {{amount}} as the savings goal",
+    "adoptCapped": "Use {{amount}} as the savings goal ({{rate}} maximum)",
+    "savedCapped": "Goal capped at {{rate}} of income: your goals ask for more",
+    "exceedsIncome": "Your goals ask for more than your income: the savings goal can only reach {{rate}} of it.",
+    "view": "View goals",
+    "saved": "Savings goal updated from your goals"
   }
 }

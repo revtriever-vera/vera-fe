@@ -3,13 +3,15 @@ import { useEffect, useId, useRef, type ReactElement, type ReactNode, type RefOb
 import { cn } from '@/shared/lib/cn';
 import { type UiText, useUiText } from './ui-text';
 
+type ModalSize = 'default' | 'mid' | 'wide';
+
 interface ModalProps {
     readonly title: string;
     readonly description?: string;
     readonly onClose: () => void;
     readonly children: ReactNode;
     readonly footer: ReactNode;
-    readonly size?: 'default' | 'wide';
+    readonly size?: ModalSize;
     readonly leading?: ReactNode;
     readonly fullOnMobile?: boolean;
 }
@@ -51,7 +53,7 @@ function useInitialFocus(dialog: RefObject<HTMLDivElement | null>): void {
     }, [dialog]);
 }
 
-const WIDTH: Readonly<Record<'default' | 'wide', string>> = { default: 'max-w-lg', wide: 'max-w-4xl' };
+const WIDTH: Readonly<Record<ModalSize, string>> = { default: 'max-w-lg', mid: 'max-w-3xl', wide: 'max-w-4xl' };
 
 function ModalHeader({
     titleId,
@@ -106,7 +108,7 @@ function useKeyboard(onClose: () => void, dialog: RefObject<HTMLDivElement | nul
     }, [onClose, dialog]);
 }
 
-function panelClass(size: 'default' | 'wide', fullOnMobile: boolean): string {
+function panelClass(size: ModalSize, fullOnMobile: boolean): string {
     return cn(
         'relative flex w-full flex-col overflow-hidden border border-border bg-surface shadow-popover outline-none',
         WIDTH[size],

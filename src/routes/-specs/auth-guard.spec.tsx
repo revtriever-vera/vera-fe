@@ -29,7 +29,7 @@ describe('authenticated routes guard', () => {
 
         expect(await screen.findByRole('navigation', { name: 'Navegação principal' })).toBeInTheDocument();
         expect(router.state.location.pathname).toBe('/');
-        expect(screen.getByRole('button', { name: 'Sair' })).toBeInTheDocument();
+        expect(screen.getAllByRole('button', { name: 'Abrir menu da conta' }).length).toBeGreaterThan(0);
     });
 
     it('shows neither the login nor the protected content while restoring', () => {
@@ -39,11 +39,21 @@ describe('authenticated routes guard', () => {
         expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
     });
 
-    it('keeps every route except the login and the dev gallery behind the guard', () => {
+    it('keeps every route except the logins, the offer, the invite, the unsubscribe page and the dev gallery behind a guard', () => {
         const ids: string[] = Object.keys(createRouter({ routeTree }).routesById).filter((id: string): boolean => id !== '__root__');
 
         const exposed: string[] = ids.filter(
-            (id: string): boolean => id !== '/login' && !id.startsWith('/_dev') && id !== '/_auth' && !id.startsWith('/_auth/')
+            (id: string): boolean =>
+                id !== '/login' &&
+                id !== '/entrar' &&
+                id !== '/admin/login' &&
+                !id.startsWith('/convite') &&
+                !id.startsWith('/avisos/sair') &&
+                !id.startsWith('/_dev') &&
+                id !== '/_auth' &&
+                !id.startsWith('/_auth/') &&
+                id !== '/_platform' &&
+                !id.startsWith('/_platform/')
         );
 
         expect(exposed).toEqual([]);

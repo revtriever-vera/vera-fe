@@ -3,17 +3,33 @@ import ptBRCommon from './pt-BR/common.json';
 import enCommon from './en/common.json';
 import ptBRAuth from './pt-BR/auth.json';
 import enAuth from './en/auth.json';
+import ptBRNotices from './pt-BR/notices.json';
+import enNotices from './en/notices.json';
 import ptBRAccount from './pt-BR/account.json';
+import ptBRMembers from './pt-BR/members.json';
+import ptBRIntegrations from './pt-BR/integrations.json';
+import ptBRWhatsapp from './pt-BR/whatsapp.json';
+import ptBRCalendar from './pt-BR/calendar.json';
 import enAccount from './en/account.json';
+import enMembers from './en/members.json';
+import enIntegrations from './en/integrations.json';
+import enWhatsapp from './en/whatsapp.json';
+import enCalendar from './en/calendar.json';
 import ptBRPortfolio from './pt-BR/portfolio.json';
 import enPortfolio from './en/portfolio.json';
 import ptBRPortfolioOverview from './pt-BR/portfolioOverview.json';
 import enPortfolioOverview from './en/portfolioOverview.json';
 import ptBRPortfolioAssets from './pt-BR/portfolioAssets.json';
 import enPortfolioAssets from './en/portfolioAssets.json';
+import ptBRPortfolioFixedIncome from './pt-BR/portfolioFixedIncome.json';
+import enPortfolioFixedIncome from './en/portfolioFixedIncome.json';
 import ptBRPortfolioTargets from './pt-BR/portfolioTargets.json';
 import enPortfolioTargets from './en/portfolioTargets.json';
 import ptBRPortfolioContribution from './pt-BR/portfolioContribution.json';
+import ptBRPortfolioGoals from './pt-BR/portfolioGoals.json';
+import enPortfolioGoals from './en/portfolioGoals.json';
+import ptBRSpendingRecurring from './pt-BR/spendingRecurring.json';
+import enSpendingRecurring from './en/spendingRecurring.json';
 import enPortfolioContribution from './en/portfolioContribution.json';
 import ptBROnboarding from './pt-BR/onboarding.json';
 import enOnboarding from './en/onboarding.json';
@@ -53,16 +69,32 @@ interface NamespaceFixture {
     readonly ptBR: TranslationNode;
     readonly en: TranslationNode;
 }
+import ptBRSettings from './pt-BR/settings.json';
+import enSettings from './en/settings.json';
+import ptBRBilling from './pt-BR/billing.json';
+import enBilling from './en/billing.json';
+import ptBRSummaries from './pt-BR/summaries.json';
+import enSummaries from './en/summaries.json';
+import ptBRAdmin from './pt-BR/admin.json';
+import enAdmin from './en/admin.json';
 
 const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'common', ptBR: ptBRCommon, en: enCommon },
     { name: 'auth', ptBR: ptBRAuth, en: enAuth },
     { name: 'account', ptBR: ptBRAccount, en: enAccount },
+    { name: 'notices', ptBR: ptBRNotices, en: enNotices },
+    { name: 'members', ptBR: ptBRMembers, en: enMembers },
+    { name: 'integrations', ptBR: ptBRIntegrations, en: enIntegrations },
+    { name: 'whatsapp', ptBR: ptBRWhatsapp, en: enWhatsapp },
+    { name: 'calendar', ptBR: ptBRCalendar, en: enCalendar },
     { name: 'portfolio', ptBR: ptBRPortfolio, en: enPortfolio },
     { name: 'portfolioOverview', ptBR: ptBRPortfolioOverview, en: enPortfolioOverview },
     { name: 'portfolioAssets', ptBR: ptBRPortfolioAssets, en: enPortfolioAssets },
+    { name: 'portfolioFixedIncome', ptBR: ptBRPortfolioFixedIncome, en: enPortfolioFixedIncome },
     { name: 'portfolioTargets', ptBR: ptBRPortfolioTargets, en: enPortfolioTargets },
     { name: 'portfolioContribution', ptBR: ptBRPortfolioContribution, en: enPortfolioContribution },
+    { name: 'portfolioGoals', ptBR: ptBRPortfolioGoals, en: enPortfolioGoals },
+    { name: 'spendingRecurring', ptBR: ptBRSpendingRecurring, en: enSpendingRecurring },
     { name: 'onboarding', ptBR: ptBROnboarding, en: enOnboarding },
     { name: 'spending', ptBR: ptBRSpending, en: enSpending },
     { name: 'spendingSummary', ptBR: ptBRSpendingSummary, en: enSpendingSummary },
@@ -70,7 +102,11 @@ const NAMESPACES: readonly NamespaceFixture[] = [
     { name: 'spendingCuts', ptBR: ptBRSpendingCuts, en: enSpendingCuts },
     { name: 'spendingConnections', ptBR: ptBRSpendingConnections, en: enSpendingConnections },
     { name: 'spendingImports', ptBR: ptBRSpendingImports, en: enSpendingImports },
-    { name: 'spendingRules', ptBR: ptBRSpendingRules, en: enSpendingRules }
+    { name: 'spendingRules', ptBR: ptBRSpendingRules, en: enSpendingRules },
+    { name: 'settings', ptBR: ptBRSettings, en: enSettings },
+    { name: 'billing', ptBR: ptBRBilling, en: enBilling },
+    { name: 'summaries', ptBR: ptBRSummaries, en: enSummaries },
+    { name: 'admin', ptBR: ptBRAdmin, en: enAdmin }
 ];
 
 describe('paridade de chaves entre os namespaces de tradução', () => {

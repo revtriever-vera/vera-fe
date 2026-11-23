@@ -11,7 +11,7 @@ const EMPTY: AreaSummary = { items: 0, amountCents: null, currency: null };
 describe('landingDestination', () => {
     it('usa os destinos reais de gastos e de patrimônio', () => {
         expect(DESTINATIONS.spending).toBe('/spending');
-        expect(DESTINATIONS.connections).toBe('/spending/connections');
+        expect(DESTINATIONS.connections).toBe('/settings/banks');
     });
 
     it('vai à Visão geral quando há ativos', () => {

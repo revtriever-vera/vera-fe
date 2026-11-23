@@ -1,3 +1,4 @@
+import { RoleGate } from '@/app/providers/role-gate';
 import { useState, type ReactElement } from 'react';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
@@ -82,10 +83,12 @@ function CategoriesHeader({ onNew }: { readonly onNew: () => void }): ReactEleme
                 </h2>
                 <p className="max-w-prose text-sm text-content-muted">{t('categories.description')}</p>
             </div>
-            <Button onClick={onNew}>
-                <Plus className="size-4" aria-hidden="true" />
-                {t('categories.new')}
-            </Button>
+            <RoleGate min="editor">
+                <Button onClick={onNew}>
+                    <Plus className="size-4" aria-hidden="true" />
+                    {t('categories.new')}
+                </Button>
+            </RoleGate>
         </header>
     );
 }

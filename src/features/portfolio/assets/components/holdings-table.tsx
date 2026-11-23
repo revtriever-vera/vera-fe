@@ -1,9 +1,12 @@
 import type { ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
+import { useRole } from '@/app/providers/use-role';
 import { Table, type TableColumn } from '@/shared/ui/table';
+import { usePeople, type PeopleState } from '../../lib/people-context';
 import type { AssetClassView, HoldingView } from '../../types';
 import { AssetCell, QuantityOrTitle } from './asset-cell';
 import { ClassSelectCell } from './class-select-cell';
+import { HolderCell } from './holder-cell';
 import { HoldingRowActions } from './holding-row-actions';
 import type { HoldingsListProps } from './holdings-list.types';
 import { QuantityCell } from './quantity-cell';
@@ -12,7 +15,20 @@ import { ValueCell } from './value-cell';
 
 type Translate = UseTranslationResponse<'portfolioAssets', undefined>['t'];
 
-function identityColumns(t: Translate, classes: readonly AssetClassView[]): readonly TableColumn<HoldingView>[] {
+function holderColumn(label: string): TableColumn<HoldingView> {
+    return {
+        key: 'holder',
+        header: label,
+        render: (holding: HoldingView): ReactElement | null => <HolderCell holding={holding} />
+    };
+}
+
+function identityColumns(
+    t: Translate,
+    classes: readonly AssetClassView[],
+    onCompleteIssuer: HoldingsListProps['onCompleteIssuer'],
+    holder: readonly TableColumn<HoldingView>[]
+): readonly TableColumn<HoldingView>[] {
     const classOf = (holding: HoldingView): AssetClassView | undefined =>
         classes.find((item: AssetClassView): boolean => item.id === holding.classId);
     return [
@@ -26,11 +42,16 @@ function identityColumns(t: Translate, classes: readonly AssetClassView[]): read
             header: t('columns.class'),
             render: (holding: HoldingView): ReactElement => <ClassSelectCell holding={holding} classes={classes} />
         },
+        ...holder,
         {
             key: 'quantity',
             header: t('columns.quantity'),
             render: (holding: HoldingView): ReactElement => (
-                <QuantityOrTitle holding={holding} quantity={<QuantityCell key={holding.quantity} holding={holding} />} />
+                <QuantityOrTitle
+                    holding={holding}
+                    quantity={<QuantityCell key={holding.quantity} holding={holding} />}
+                    onCompleteIssuer={onCompleteIssuer}
+                />
             )
         }
     ];
@@ -59,14 +80,23 @@ function valueColumns(
     ];
 }
 
+function withoutActions(columns: readonly TableColumn<HoldingView>[]): readonly TableColumn<HoldingView>[] {
+    return columns.filter((column: TableColumn<HoldingView>): boolean => column.key !== 'actions');
+}
+
 const MIN_WIDTH: string = 'min-w-[60rem]';
 
-export function HoldingsTable({ holdings, classes, baseCurrency, onEdit, onRemove }: HoldingsListProps): ReactElement {
+export function HoldingsTable({ holdings, classes, baseCurrency, onEdit, onCompleteIssuer, onRemove }: HoldingsListProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
-    const columns: readonly TableColumn<HoldingView>[] = [
-        ...identityColumns(t, classes),
+    const { canEdit } = useRole();
+    const { multi }: PeopleState = usePeople();
+    const { t: tp }: UseTranslationResponse<'portfolio', undefined> = useTranslation('portfolio');
+    const holder: readonly TableColumn<HoldingView>[] = multi ? [holderColumn(tp('holder.column'))] : [];
+    const allColumns: readonly TableColumn<HoldingView>[] = [
+        ...identityColumns(t, classes, onCompleteIssuer, holder),
         ...valueColumns(t, { baseCurrency, onEdit, onRemove })
     ];
+    const columns: readonly TableColumn<HoldingView>[] = canEdit ? allColumns : withoutActions(allColumns);
     return (
         <Table
             label={t('page.tableLabel')}

@@ -1,3 +1,5 @@
+import { CategoryReadOnly } from '../../components/category-read-only';
+import { useRole } from '@/app/providers/use-role';
 import { useState, type ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import type { UseQueryResult } from '@tanstack/react-query';
@@ -6,6 +8,8 @@ import { formatIsoDate } from '@/shared/lib/format/date';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { Badge } from '@/shared/ui/badge';
 import { useCategories } from '../../api/use-categories.query';
+import { MarkRecurringButton } from '../../recurring/components/mark-recurring-button';
+import { RecurringBadge } from '../../recurring/components/recurring-badge';
 import { CategorySourceBadge } from '../../components/category-source-badge';
 import { CategoryTile } from '../../components/category-tile';
 import { SignedAmount } from '../../components/signed-amount';
@@ -33,6 +37,8 @@ export function TransactionTitle({ transaction }: TransactionProps): ReactElemen
                 <Badge>{t('row.installment', { number: transaction.installment.number, total: transaction.installment.total })}</Badge>
             )}
             {transaction.isSample ? <Badge tone="accent">{t('row.sample')}</Badge> : null}
+            {transaction.isRecurring ? <RecurringBadge /> : null}
+            <MarkRecurringButton transaction={transaction} />
         </div>
     );
 }
@@ -76,6 +82,10 @@ function CategorizedCell({ transaction }: TransactionProps): ReactElement {
 }
 
 export function TransactionCategory({ transaction }: TransactionProps): ReactElement {
+    const { canEdit } = useRole();
+    if (!canEdit) {
+        return <CategoryReadOnly categoryId={transaction.categoryId} />;
+    }
     if (transaction.categoryId === null) {
         return <InlineCategorize transaction={transaction} />;
     }

@@ -8,7 +8,7 @@ export function SampleDataButton(): ReactElement | null {
     const t: UiText = useUiText();
     const sample: SampleDataControls = useSampleData();
 
-    if (!sample.available || sample.active) {
+    if (!sample.canManage || !sample.available || sample.active) {
         return null;
     }
     return (

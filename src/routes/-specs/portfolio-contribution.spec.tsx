@@ -25,6 +25,16 @@ function cards(): HTMLElement[] {
 }
 
 describe('aporte: sugestão', () => {
+    it('guarda o último valor digitado na sessão, para o resumo da carteira', async () => {
+        window.sessionStorage.clear();
+        openScreen();
+
+        await screen.findByText('Renda fixa IPCA+');
+        await waitFor(() => {
+            expect(window.sessionStorage.getItem('vera.contribution-amount.company-1')).toBe('1000000');
+        });
+    });
+
     it('mostra os quatro cartões na ordem da API, com antes → depois', async () => {
         openScreen();
 

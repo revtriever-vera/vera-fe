@@ -2,6 +2,8 @@ import { vi, type Mock } from 'vitest';
 import { screen, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { AddAssetModal, type AddAssetModalProps } from '@/features/portfolio/assets/components/add-asset-modal';
+import { PeopleProvider } from '@/features/portfolio/components/people-provider';
+import type { PortfolioPerson } from '@/features/portfolio/lib/holder-filter';
 import { renderWithProviders } from '../render';
 
 export interface AddAssetSetup {
@@ -9,9 +11,13 @@ export interface AddAssetSetup {
     readonly onOpenChange: Mock;
 }
 
-export function renderAddAsset(props: Partial<AddAssetModalProps> = {}): AddAssetSetup {
+export function renderAddAsset(props: Partial<AddAssetModalProps> = {}, people: readonly PortfolioPerson[] = []): AddAssetSetup {
     const onOpenChange: Mock = vi.fn();
-    renderWithProviders(<AddAssetModal open onOpenChange={onOpenChange} {...props} />);
+    renderWithProviders(
+        <PeopleProvider people={people}>
+            <AddAssetModal open onOpenChange={onOpenChange} {...props} />
+        </PeopleProvider>
+    );
     return { user: userEvent.setup(), onOpenChange };
 }
 

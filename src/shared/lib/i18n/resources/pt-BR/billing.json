@@ -1,0 +1,263 @@
+{
+  "lock": {
+    "cta": "Ver o Premium",
+    "askOwner": "Peça ao Dono da conta",
+    "defaultText": "Disponível no Premium.",
+    "paused": "Cota do mês esgotada. Volta em {{date}}.",
+    "pausedNoDate": "Cota do mês esgotada. Volta na virada do mês.",
+    "loading": "Verificando o seu plano"
+  },
+  "meter": {
+    "title": "Cota de {{month}}",
+    "label": "Cota de uso do mês",
+    "used": "{{percent}}% usada",
+    "renews": "Renova em {{date}}",
+    "remaining": "Sobram {{percent}}%",
+    "nearLimit": "Perto do limite",
+    "paused": "Pausado até a renovação",
+    "byFeature": "Explicações {{ai}}% · WhatsApp {{whatsapp}}%",
+    "note": "Cada explicação gerada e cada mensagem no WhatsApp usam um pouco; a cota cobre o uso normal de um mês."
+  },
+  "banner": {
+    "warningTitle": "{{percent}}% da cota de {{month}} usada",
+    "warning": "Em 100%, explicações e WhatsApp pausam até {{date}}, sem cobrança extra.",
+    "pausedTitle": "Pausado até {{date}}",
+    "paused": "A cota do mês acabou. Explicações e WhatsApp voltam na virada do mês, sem cobrança extra; o resto da Vera segue normal.",
+    "pastDueTitle": "Não conseguimos cobrar o Premium.",
+    "pastDueUntil": "Ele continua até {{date}}.",
+    "pastDueNoDate": "Ele continua por enquanto.",
+    "pay": "Pagar",
+    "payOpening": "Abrindo o pagamento",
+    "tellOwner": "Avise o Dono da conta.",
+    "dismiss": "Dispensar o aviso",
+    "trialEndingTitle": "Seu teste acaba em {{date}}.",
+    "trialEnding": "Assine para não perder os resumos e o WhatsApp."
+  },
+  "toast": {
+    "warning": "Você já usou {{percent}}% da cota do mês",
+    "paused": "Cota esgotada: explicações e WhatsApp pausados até {{date}}",
+    "payFailed": "Não foi possível abrir a página de pagamento. Tente de novo."
+  },
+  "errors": {
+    "generic": "Não foi possível consultar o seu plano. Tente de novo.",
+    "premiumRequired": "Esta função é do plano Premium.",
+    "featureDisabled": "Esta função não está ligada nesta instalação.",
+    "capReached": "A cota do mês acabou. Volta em {{date}}.",
+    "capReachedNoDate": "A cota do mês acabou. Volta na virada do mês.",
+    "alreadySubscribed": "Esta conta já é Premium.",
+    "notAvailable": "Planos não existem nesta instalação.",
+    "notResumable": "Esta assinatura não pode mais ser reativada. Assine de novo.",
+    "engineRejected": "A Revtriever recusou a operação. Tente de novo ou use outra forma de pagamento.",
+    "providerUnavailable": "A página de pagamento está fora do ar. Tente de novo em alguns minutos.",
+    "invoiceNotFound": "Essa fatura não está mais em aberto.",
+    "tooManyAttempts": "Muitas tentativas. Tente de novo em uma hora.",
+    "action": "Não foi possível concluir. Tente de novo."
+  },
+  "plan": {
+    "free": "Free",
+    "premium": "Premium"
+  },
+  "planTab": {
+    "loading": "Carregando o plano",
+    "loadFailed": "Não foi possível carregar o seu plano. Tente de novo.",
+    "ownerOnly": "Só o Dono da conta muda o plano.",
+    "free": {
+      "title": "Seu plano",
+      "description": "Free: carteira e gastos completos, sem custo e sem prazo.",
+      "chip": "Free",
+      "openInvoice": "Há uma cobrança em aberto.",
+      "openInvoicePay": "Pagar"
+    },
+    "cards": {
+      "freeText": "Tudo que existe hoje na Vera.",
+      "current": "Plano atual",
+      "premiumText": "Tudo do Free, mais resumos em texto e a Vera no WhatsApp com reuniões e lembretes.",
+      "subscribe": "Assinar o Premium",
+      "hint": "Pix ou cartão · cancele quando quiser, sem multa",
+      "perMonth": "/mês",
+      "freeLabel": "Free",
+      "premiumLabel": "Premium"
+    },
+    "compare": {
+      "title": "O que muda",
+      "label": "Free e Premium lado a lado",
+      "feature": "Recurso",
+      "included": "Incluído",
+      "notIncluded": "Não incluído",
+      "rows": {
+        "wallet": "Carteira, carteira-alvo e onde aportar",
+        "spending": "Gastos pelo Open Finance, categorias e regras",
+        "cuts": "Onde cortar",
+        "export": "Exportar carteira e transações",
+        "summaries": "Resumos em texto do mês, dos cortes e da carteira",
+        "whatsapp": "Vera no WhatsApp: perguntas sobre carteira e gastos",
+        "calendar": "Reuniões no Google Agenda e lembretes pelo WhatsApp"
+      },
+      "note": "O Premium inclui uma cota mensal de uso para os resumos e o WhatsApp. Se acabar, essas duas funções pausam até o mês virar; não existe cobrança extra."
+    },
+    "subscription": {
+      "title": "Assinatura",
+      "description": "{{price}}/mês · assinante desde {{date}}",
+      "descriptionNoDate": "{{price}}/mês",
+      "chipActive": "Premium ativo",
+      "chipCanceled": "cancelada",
+      "chipPastDue": "atrasada",
+      "people": {
+        "title": "Pessoas",
+        "text": "Vale para as {{count}} pessoas da conta.",
+        "action": "Ver pessoas"
+      },
+      "next": {
+        "title": "Próxima cobrança",
+        "line": "{{date}} · {{price}}",
+        "lineNoDate": "{{price}}",
+        "pixNote": "a cobrança Pix chega por e-mail",
+        "none": "Nenhuma. O Premium vale até {{date}}; depois a conta volta ao Free sem perder nada.",
+        "noneNoDate": "Nenhuma. Depois do período pago, a conta volta ao Free sem perder nada.",
+        "trialing": "{{date}}, no fim do teste · {{price}}",
+        "discount": "{{percent}}% de desconto até {{date}}"
+      },
+      "method": {
+        "title": "Forma de pagamento",
+        "pix": "Pix, uma cobrança por mês",
+        "card": "Cartão {{brand}} final {{last4}}, renovação automática",
+        "cardNoDetails": "Cartão, renovação automática",
+        "useCard": "Usar cartão",
+        "changeCard": "Trocar cartão",
+        "pay": "Pagar",
+        "openInvoice": "Há uma cobrança em aberto."
+      },
+      "trial": {
+        "title": "Teste sem cartão",
+        "text": "Faltam {{days}} dias. O teste termina em {{date}}.",
+        "cardTitle": "Teste com cartão",
+        "cardText": "Nada é cobrado até {{date}}. Nesse dia cobramos no cartão salvo."
+      },
+      "pastDue": "Não conseguimos cobrar. Seu Premium continua até {{date}}.",
+      "pastDueNoDate": "Não conseguimos cobrar. Seu Premium continua por enquanto.",
+      "cancel": "Cancelar assinatura",
+      "resume": "Reativar assinatura",
+      "resuming": "Reativando",
+      "chipTrialing": "Em teste"
+    },
+    "history": {
+      "title": "Histórico",
+      "label": "Histórico de cobranças",
+      "loading": "Carregando o histórico",
+      "empty": "Nenhuma cobrança ainda.",
+      "failed": "Não foi possível carregar o histórico. Tente de novo.",
+      "date": "Data",
+      "amount": "Valor",
+      "method": "Forma",
+      "status": "Situação",
+      "view": "Ver fatura",
+      "opening": "Abrindo",
+      "methods": {
+        "card": "Cartão",
+        "pix": "Pix"
+      },
+      "statuses": {
+        "issued": "Aberta",
+        "overdue": "Atrasada",
+        "paid": "Paga"
+      }
+    },
+    "usage": {
+      "title": "Uso do mês",
+      "description": "Só os resumos em texto e o WhatsApp usam a cota."
+    },
+    "offer": {
+      "title": "Sua oferta",
+      "expires": "Para usar, assine até {{date}}. Depois disso, preço cheio e sem teste."
+    },
+    "trialStrip": {
+      "title": "Premium grátis até {{date}}",
+      "detail": "Se você não assinar, a conta volta ao Free nessa data.",
+      "endingTitle": "Seu teste acaba em {{date}}.",
+      "endingDetail": "Assine para não perder os resumos e o WhatsApp."
+    }
+  },
+  "checkout": {
+    "title": "Assinar o Premium",
+    "method": "Forma de pagamento",
+    "pix": {
+      "generating": "Gerando a cobrança…",
+      "pay": "Pagar com Pix",
+      "instruction": "Na página de pagamento, escolha Pix e leia o QR Code no app do seu banco.",
+      "slow": "A cobrança está demorando. Feche esta janela e abra de novo em instantes.",
+      "reopen": "Abrir a página de pagamento de novo"
+    },
+    "card": "Cartão de crédito",
+    "pixHint": "Uma cobrança por mês, paga na página da Revtriever.",
+    "cardHint": "Renovação automática todo mês.",
+    "processed": "Pagamento processado pela Revtriever.",
+    "cardPrivacy": "A Vera não vê nem guarda os dados do cartão.",
+    "pixPrivacy": "A Vera só recebe a confirmação.",
+    "summary": {
+      "label": "Vera Premium",
+      "perMonth": "por mês",
+      "quota": "Cota mensal de uso inclusa",
+      "cancelNote": "Cancele quando quiser, sem multa: o Premium vale até o fim do período pago e a conta volta ao Free sem perder nada.",
+      "deferred": "Nada é cobrado hoje. Em {{date}} cobramos {{price}}."
+    },
+    "subscribeCard": "Assinar por {{price}}/mês",
+    "subscribePix": "Assinar com Pix",
+    "subscribing": "Preparando",
+    "cancel": "Cancelar",
+    "redirect": {
+      "title": "Ir para o pagamento?",
+      "text": "Você vai para a página segura de pagamento. A Vera não vê nem guarda os dados do cartão.",
+      "confirm": "Ir para o pagamento",
+      "cancel": "Voltar"
+    },
+    "wait": {
+      "text": "Confirmando o pagamento…",
+      "slow": "Ainda não recebemos a confirmação. Se você já pagou, ela chega em alguns minutos e o Premium abre assim que chegar.",
+      "close": "Fechar"
+    },
+    "done": {
+      "title": "Premium ativo",
+      "descriptionPix": "Pagamento confirmado via Pix.",
+      "descriptionCard": "Pagamento confirmado no cartão.",
+      "intro": "Por onde começar. Cada função pede a sua permissão antes de ligar.",
+      "summary": "Ver o resumo do mês",
+      "summaryText": "Um texto curto no Resumo do mês.",
+      "summaryAction": "Abrir",
+      "whatsapp": "Vincular o WhatsApp",
+      "whatsappText": "Com um código de verificação.",
+      "whatsappAction": "Vincular",
+      "later": "Fazer depois"
+    },
+    "cardCanceled": "Cartão não salvo. Nada foi cobrado.",
+    "cardUpdated": "Cartão atualizado.",
+    "cardOnly": "Com o teste, o pagamento é só no cartão.",
+    "saveCard": "Salvar o cartão"
+  },
+  "cancelDialog": {
+    "title": "Cancelar o Premium?",
+    "intro": "Não haverá nova cobrança. O Premium continua ativo até {{date}}. Depois disso:",
+    "introNoDate": "Não haverá nova cobrança. O Premium continua ativo até o fim do período pago. Depois disso:",
+    "item1": "Os resumos em texto e a Vera no WhatsApp param; o número e o Google Agenda são desconectados.",
+    "item2": "Carteira, metas, gastos e regras ficam como estão, no Free.",
+    "item3": "Dá para assinar de novo quando quiser.",
+    "withdrawal": "Você está dentro dos 7 dias: o Premium termina agora e o valor volta para você em até {{days}} dias úteis.",
+    "confirm": "Cancelar assinatura",
+    "keep": "Manter o Premium"
+  },
+  "toasts": {
+    "canceled": "Assinatura cancelada. O Premium vale até {{date}}.",
+    "canceledNoDate": "Assinatura cancelada. O Premium vale até o fim do período pago.",
+    "canceledNow": "Assinatura cancelada. O Premium terminou e o valor volta para você.",
+    "resumed": "Assinatura reativada. A próxima cobrança é em {{date}}.",
+    "resumedNoDate": "Assinatura reativada."
+  },
+  "offer": {
+    "trialCard_one": "{{count}} dia grátis. Você salva o cartão agora e a primeira cobrança vem só no fim do teste.",
+    "trialCard_other": "{{count}} dias grátis. Você salva o cartão agora e a primeira cobrança vem só no fim do teste.",
+    "trialNoCard_one": "{{count}} dia de Premium grátis, sem cartão. Se você não assinar, a conta volta ao Free.",
+    "trialNoCard_other": "{{count}} dias de Premium grátis, sem cartão. Se você não assinar, a conta volta ao Free.",
+    "rule": "{{percent}}% de desconto nos ciclos {{from}} a {{to}}",
+    "ruleSingle": "{{percent}}% de desconto no ciclo {{cycle}}",
+    "afterRules": "Depois, preço cheio."
+  }
+}

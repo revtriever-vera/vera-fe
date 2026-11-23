@@ -6,3 +6,8 @@ export function formatCurrency(cents: number, currency: string, locale: Supporte
     const amount: number = cents / 10 ** exponent;
     return formatter.format(amount);
 }
+
+export function formatCurrencyCompact(cents: number, currency: string, locale: SupportedLocale): string {
+    const exponent: number = new Intl.NumberFormat(locale, { style: 'currency', currency }).resolvedOptions().maximumFractionDigits ?? 2;
+    return new Intl.NumberFormat(locale, { style: 'currency', currency, notation: 'compact' }).format(cents / 10 ** exponent);
+}

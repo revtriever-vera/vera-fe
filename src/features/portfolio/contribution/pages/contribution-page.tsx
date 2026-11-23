@@ -2,6 +2,8 @@ import { useEffect, useState, type ReactElement } from 'react';
 import { useNavigate, useSearch, type UseNavigateResult } from '@tanstack/react-router';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
+import { useSession } from '@/app/providers/session-provider';
+import { writeContributionMinor } from '@/shared/lib/contribution-amount-store';
 import { useLocale } from '@/shared/lib/i18n';
 import { track } from '@/shared/lib/analytics';
 import type { SupportedLocale } from '@/shared/lib/locale';
@@ -13,6 +15,7 @@ import { BaseCurrencySwitch } from '../../components/base-currency-switch';
 import type { BaseCurrency, PortfolioSettings } from '../../types';
 import { useContributionSuggestion } from '../api/use-contribution-suggestion.query';
 import { AmountInput } from '../components/amount-input';
+import { GoalsPriorityToggle } from '../components/goals-priority-toggle';
 import { SuggestionPanel } from '../components/suggestion-panel';
 import { majorToMinor, minorToMajor } from '../lib/amount-minor';
 import { DEFAULT_AMOUNT } from '../lib/quick-amounts';
@@ -46,17 +49,36 @@ function useTrackCalculated(suggestion: ContributionSuggestion | undefined, curr
     }, [suggestion, currency]);
 }
 
+function useRememberAmount(amountMinor: number | null): void {
+    const { user } = useSession();
+    const companyId: string | undefined = user?.companyId;
+    useEffect((): void => {
+        if (companyId !== undefined && amountMinor !== null && amountMinor > 0) {
+            writeContributionMinor(companyId, amountMinor);
+        }
+    }, [companyId, amountMinor]);
+}
+
 function ContributionBody({ currency }: { readonly currency: BaseCurrency }): ReactElement {
     const locale: SupportedLocale = useLocale();
     const search: { amount?: number } = useSearch({ from: '/_auth/_app/portfolio/contribution' });
     const [draft, setDraft] = useState<number | null>((): number | null => initialMinor(search.amount, currency, locale));
     const amountMinor: number | null = useDebouncedValue(draft, DEBOUNCE_MS);
-    const query: UseQueryResult<ContributionSuggestion> = useContributionSuggestion(amountMinor);
+    const [prioritize, setPrioritize] = useState<boolean>(true);
+    const query: UseQueryResult<ContributionSuggestion> = useContributionSuggestion(amountMinor, prioritize);
     useAmountInUrl(amountMinor, currency);
+    useRememberAmount(amountMinor);
     useTrackCalculated(query.data, currency);
     return (
         <div className="flex flex-col gap-4">
             <AmountInput value={draft} currency={currency} onChange={setDraft} />
+            <GoalsPriorityToggle
+                checked={prioritize}
+                onChange={(next: boolean): void => {
+                    track('portfolio_contribution_goals_toggled', { on: next });
+                    setPrioritize(next);
+                }}
+            />
             <SuggestionPanel amountMinor={amountMinor} query={query} />
         </div>
     );

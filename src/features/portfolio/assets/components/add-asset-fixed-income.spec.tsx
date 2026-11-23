@@ -8,8 +8,13 @@ import { chooseType, renderAddAsset, submitAdd, type AddAssetSetup } from '../..
 import { mockAssetsApi, problem, type AssetsApi } from '../../../../../test/helpers/assets-api';
 import { server } from '../../../../../test/msw/server';
 
+async function pickIssuer(user: UserEvent, text: string, name: string): Promise<void> {
+    await user.type(await screen.findByRole('combobox', { name: 'Emissor' }), text);
+    await user.click(await screen.findByRole('option', { name: new RegExp(name) }));
+}
+
 async function fillCdb(user: UserEvent): Promise<void> {
-    await user.type(await screen.findByRole('textbox', { name: 'Nome do título' }), 'CDB Banco XP');
+    await pickIssuer(user, 'xp', 'Banco XP');
     const rate: HTMLElement = screen.getByRole('textbox', { name: 'Percentual do CDI' });
     await user.clear(rate);
     await user.type(rate, '110');
@@ -67,7 +72,9 @@ describe('AddAssetModal: renda fixa', () => {
 
         await submitAdd(user);
         await waitFor(() => {
-            expect(api.titleBodies).toEqual([{ ...api.previewBodies[0], name: 'CDB Banco XP', classId: 'class-rf-pos' }]);
+            expect(api.titleBodies).toEqual([
+                { ...api.previewBodies[0], name: 'CDB Banco XP', classId: 'class-rf-pos', issuerId: 'banco-xp' }
+            ]);
         });
         expect(await screen.findByText('CDB Banco XP adicionado em Renda fixa pós')).toBeInTheDocument();
         expect(onOpenChange).toHaveBeenCalledWith(false);

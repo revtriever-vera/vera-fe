@@ -363,6 +363,7 @@ export function transactionView(overrides: Partial<TransactionView> = {}): Trans
         source: 'pluggy',
         installment: null,
         isSample: false,
+        isRecurring: false,
         ...overrides
     };
 }
@@ -544,6 +545,7 @@ function cutsBase(overrides: Partial<CutsResponse>): CutsResponse {
         uncategorizedMinor: CANONICAL_UNCATEGORIZED_MINOR,
         averageMonths: 3,
         suggestions: [],
+        objectives: { monthlyNeededMinor: 0, behindCount: 0, asGoalBps: null },
         ...overrides
     };
 }

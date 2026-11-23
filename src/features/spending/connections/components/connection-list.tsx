@@ -1,3 +1,4 @@
+import { useRole } from '@/app/providers/use-role';
 import { useId, useState, type ReactElement } from 'react';
 import { RefreshCw } from 'lucide-react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
@@ -30,6 +31,7 @@ function ListHeader({
     readonly titleId: string;
 }): ReactElement {
     const { t }: UseTranslationResponse<'spendingConnections', undefined> = useTranslation('spendingConnections');
+    const { canEdit } = useRole();
     return (
         <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-col gap-1">
@@ -38,7 +40,7 @@ function ListHeader({
                 </h2>
                 <p className="text-sm text-content-muted">{t('banks.intro')}</p>
             </div>
-            {hasConnections ? (
+            {hasConnections && canEdit ? (
                 <Button variant="secondary" size="sm" loading={sync.allPending} disabled={allSyncing} onClick={sync.syncAll}>
                     <RefreshCw className="size-3.5" aria-hidden="true" />
                     {t('banks.syncAll')}

@@ -1,4 +1,4 @@
-export const FALLBACK_EXPORT_FILENAME: string = 'vera-export.json';
+export const FALLBACK_EXPORT_FILENAME: string = 'vera-meus-dados.zip';
 
 const QUOTED_FILENAME: RegExp = /filename="([^"]+)"/i;
 const BARE_FILENAME: RegExp = /filename=([^;]+)/i;

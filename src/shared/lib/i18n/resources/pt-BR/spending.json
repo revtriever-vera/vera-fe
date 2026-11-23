@@ -5,8 +5,8 @@
     "tabs": {
       "summary": "Resumo do mês",
       "transactions": "Transações",
+      "recurring": "Assinaturas e contas",
       "cuts": "Onde cortar",
-      "connections": "Conexões",
       "rules": "Regras"
     }
   },
@@ -56,7 +56,7 @@
       "none": "sem categoria"
     },
     "tips": {
-      "user": "Você escolheu esta categoria à mão. Ela não muda mais sozinha.",
+      "user": "Você escolheu esta categoria à mão. A Vera não muda mais essa categoria.",
       "rule": "Esta categoria veio de uma regra criada por você.",
       "dictionary": "Esta categoria veio do dicionário de estabelecimentos da Vera.",
       "provider": "Esta categoria veio da própria Pluggy, que lê o banco.",
@@ -96,9 +96,10 @@
   },
   "emptyState": {
     "title": "Nenhum gasto por aqui ainda",
-    "description": "Conecte seus bancos pelo Meu Pluggy ou importe um extrato do banco. A partir daí, os gastos chegam sozinhos e já categorizados.",
+    "description": "Conecte seus bancos pelo Meu Pluggy ou importe um extrato do banco. A partir daí, os gastos chegam já categorizados.",
     "connect": "Conectar bancos",
-    "import": "Importar extrato"
+    "import": "Importar extrato",
+    "viewerDescription": "Peça a quem edita a conta para conectar os bancos ou importar um extrato."
   },
   "flexibility": {
     "toggleLabel": "Natureza de {{name}}: {{state}}",

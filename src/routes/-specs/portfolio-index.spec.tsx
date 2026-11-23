@@ -17,16 +17,18 @@ describe('/portfolio: visão geral', () => {
         installOverviewApi();
         await openOverview();
 
-        expect(screen.getByRole('heading', { name: 'Patrimônio', level: 1 })).toBeInTheDocument();
-        const tabs: HTMLElement = screen.getByRole('navigation', { name: 'Seções do patrimônio' });
+        expect(screen.getByRole('heading', { name: 'Carteira', level: 1 })).toBeInTheDocument();
+        const tabs: HTMLElement = screen.getByRole('navigation', { name: 'Seções da carteira' });
         expect(within(tabs).getByRole('link', { name: 'Visão geral' })).toHaveAttribute('aria-current', 'page');
     });
 
-    it('Onde aportar leva ao aporte inteligente', async () => {
+    it('Onde aportar leva à tela Onde aportar', async () => {
         installOverviewApi();
         const { router, user } = await openOverview();
 
-        await user.click(screen.getByRole('link', { name: 'Onde aportar' }));
+        await user.click(
+            within(screen.getByRole('navigation', { name: 'Seções da carteira' })).getByRole('link', { name: 'Onde aportar' })
+        );
 
         expect(router.state.location.pathname).toBe('/portfolio/contribution');
     });

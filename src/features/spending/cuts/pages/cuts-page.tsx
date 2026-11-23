@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactElement } from 'react';
+import { useEffect, useRef, type ReactElement, type ReactNode } from 'react';
 import { useSearch } from '@tanstack/react-router';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
@@ -10,10 +10,12 @@ import { Loading, Skeleton } from '@/shared/ui/skeleton';
 import { useSpendingSettings } from '../../api/use-spending-settings.query';
 import { SpendingEmptyState } from '../../components/spending-empty-state';
 import type { CutsResponse, SpendingSettings } from '../../types';
+import { RecurringCutsNote } from '../../recurring/components/recurring-cuts-note';
 import { useCuts } from '../api/use-cuts.query';
 import { CutsStatusCard } from '../components/cuts-status-card';
 import { CutsSuggestions } from '../components/cuts-suggestions';
 import { GoalCard } from '../components/goal-card';
+import { ObjectivesCard } from '../components/objectives-card';
 import { UncategorizedNote } from '../components/uncategorized-note';
 import { UnsavedDialog } from '../components/unsaved-dialog';
 import { useGoalDraft, type GoalDraftControls } from '../lib/goal-draft';
@@ -31,24 +33,34 @@ function useTrackViewed(cuts: CutsResponse | undefined, placeholder: boolean): v
     }, [cuts, placeholder]);
 }
 
+export interface CutsSummaryContext {
+    readonly month: string;
+    readonly goalBps: number | undefined;
+}
+
 function CutsBody({
     cuts,
     draft,
-    busy
+    busy,
+    renderSummary
 }: {
     readonly cuts: CutsResponse;
     readonly draft: GoalDraftControls;
     readonly busy: boolean;
+    readonly renderSummary?: (context: CutsSummaryContext) => ReactNode;
 }): ReactElement {
     if (cuts.status === 'no_data') {
         return <SpendingEmptyState />;
     }
     return (
         <div aria-busy={busy} className="flex flex-col gap-4">
+            <ObjectivesCard cuts={cuts} draft={draft} />
             {cuts.status === 'no_income' ? null : <GoalCard cuts={cuts} draft={draft} />}
             <CutsStatusCard cuts={cuts} />
             <CutsSuggestions cuts={cuts} />
             <UncategorizedNote cuts={cuts} />
+            <RecurringCutsNote />
+            {renderSummary?.({ month: cuts.month, goalBps: cuts.goal.simulated ? cuts.goal.bps : undefined })}
         </div>
     );
 }
@@ -64,7 +76,11 @@ function CutsLoading(): ReactElement {
     );
 }
 
-export function CutsPage(): ReactElement {
+export interface CutsPageProps {
+    readonly renderSummary?: (context: CutsSummaryContext) => ReactNode;
+}
+
+export function CutsPage({ renderSummary }: CutsPageProps): ReactElement {
     const { t }: UseTranslationResponse<'spendingCuts', undefined> = useTranslation('spendingCuts');
     const search: { month?: string } = useSearch({ from: '/_auth/_app/spending/cuts' });
     const settings: UseQueryResult<SpendingSettings> = useSpendingSettings();
@@ -81,7 +97,7 @@ export function CutsPage(): ReactElement {
             {cuts.data === undefined || settings.data === undefined ? (
                 loading
             ) : (
-                <CutsBody cuts={cuts.data} draft={draft} busy={cuts.isPlaceholderData} />
+                <CutsBody cuts={cuts.data} draft={draft} busy={cuts.isPlaceholderData} renderSummary={renderSummary} />
             )}
             <UnsavedDialog guard={guard} />
         </section>

@@ -7,6 +7,8 @@ import { useToast, type ToastApi } from '@/app/providers/toast-provider';
 import { track } from '@/shared/lib/analytics';
 import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
+import { HOLDER_ALL, trackHolder } from '../../lib/holder-filter';
+import { usePeople, type PeopleState } from '../../lib/people-context';
 import { useClassLabel, type ClassLabel } from '../../lib/use-class-label';
 import type { AssetClassView } from '../../types';
 import type { UseMutationResult } from '@tanstack/react-query';
@@ -18,6 +20,7 @@ import { toTitleBody } from './fixed-income-body';
 import { defaultRateText, indexerClassKey, localTodayIso } from './fixed-income-defaults';
 import { defaultClassId } from './position-defaults';
 import { termsAreValid } from './terms-valid';
+import { useIssuerHandlers, type IssuerHandlers } from './use-issuer-handlers';
 import { useFailureReporter } from './use-failure-reporter';
 
 export interface FixedIncomeFormParams {
@@ -26,7 +29,7 @@ export interface FixedIncomeFormParams {
     readonly onSaved: () => void;
 }
 
-export interface FixedIncomeFormState {
+export interface FixedIncomeFormState extends IssuerHandlers {
     readonly form: UseFormReturn<FixedIncomeFormInput>;
     readonly values: FixedIncomeFormInput;
     readonly today: string;
@@ -45,6 +48,7 @@ export function fixedIncomeDefaults(
 ): FixedIncomeFormInput {
     return {
         kind: 'cdb',
+        issuer: null,
         name: '',
         indexer: 'cdi_percent',
         rate: defaultRateText('cdi_percent', locale),
@@ -52,7 +56,8 @@ export function fixedIncomeDefaults(
         currency: 'BRL',
         appliedAt: null,
         maturityDate: null,
-        classId: defaultClassId(classes, indexerClassKey('cdi_percent'), initialClassId)
+        classId: defaultClassId(classes, indexerClassKey('cdi_percent'), initialClassId),
+        holder: HOLDER_ALL
     };
 }
 
@@ -85,10 +90,11 @@ function useTitleSubmit({ form, classes, onSaved, setAlertMessage }: SubmitParam
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const toast: ToastApi = useToast();
     const classLabel: ClassLabel = useClassLabel();
+    const { multi }: PeopleState = usePeople();
     const create: UseMutationResult<TitleView, ApiError, CreateTitleBody> = useCreateFixedIncomeTitle();
     const report: (error: Error) => void = useFailureReporter({ onAlert: setAlertMessage }, t('toasts.addFailed'));
     const submit: () => Promise<void> = form.handleSubmit(async (input: FixedIncomeFormInput): Promise<void> => {
-        const body: CreateTitleBody | null = toTitleBody(input);
+        const body: CreateTitleBody | null = toTitleBody(input, multi);
         if (body === null) {
             return;
         }
@@ -96,6 +102,7 @@ function useTitleSubmit({ form, classes, onSaved, setAlertMessage }: SubmitParam
         try {
             await create.mutateAsync(body);
             track('portfolio_asset_added', { type: 'fixed_income', source: 'fixed_income' });
+            trackHolder(input.holder, multi, 'add');
             const chosen: AssetClassView | undefined = classes.find((item: AssetClassView): boolean => item.id === input.classId);
             const className: string = chosen === undefined ? '' : classLabel(chosen.systemKey, chosen.name);
             toast.show({ tone: 'positive', title: t('toasts.added', { name: input.name.trim(), className }) });
@@ -113,7 +120,7 @@ export function useFixedIncomeForm({ classes, initialClassId, onSaved }: FixedIn
     const [alertMessage, setAlertMessage] = useState<string | null>(null);
     const today: string = useMemo((): string => localTodayIso(), []);
     const schema: z.ZodType<FixedIncomeFormInput> = useMemo(
-        (): z.ZodType<FixedIncomeFormInput> => createFixedIncomeSchema(t, today),
+        (): z.ZodType<FixedIncomeFormInput> => createFixedIncomeSchema(t, today, true),
         [t, today]
     );
     const form: UseFormReturn<FixedIncomeFormInput> = useForm<FixedIncomeFormInput>({
@@ -123,6 +130,7 @@ export function useFixedIncomeForm({ classes, initialClassId, onSaved }: FixedIn
     });
     const values: FixedIncomeFormInput = useWatch({ control: form.control }) as FixedIncomeFormInput;
     const changeIndexer: (indexer: FixedIncomeIndexer) => void = useIndexerChange(form, classes, initialClassId);
+    const issuerHandlers: IssuerHandlers = useIssuerHandlers(form, 'create');
     const { submit, busy } = useTitleSubmit({ form, classes, onSaved, setAlertMessage });
     return {
         form,
@@ -133,6 +141,7 @@ export function useFixedIncomeForm({ classes, initialClassId, onSaved }: FixedIn
         busy,
         alertMessage,
         submit,
-        changeIndexer
+        changeIndexer,
+        ...issuerHandlers
     };
 }

@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import { useEffect, useRef, type ReactElement, type RefObject } from 'react';
 import { Link } from '@tanstack/react-router';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { Button, buttonVariants } from '@/shared/ui/button';
@@ -45,9 +45,21 @@ function ResultFooter({ created, onAnother }: { readonly created: ImportCreated;
     );
 }
 
-export function ImportStatementModal({ onClose }: { readonly onClose: () => void }): ReactElement {
+export interface ImportStatementModalProps {
+    readonly onClose: () => void;
+    readonly initialFile?: File;
+}
+
+export function ImportStatementModal({ onClose, initialFile }: ImportStatementModalProps): ReactElement {
     const { t }: UseTranslationResponse<'spendingImports', undefined> = useTranslation('spendingImports');
     const flow: ImportFlow = useImportFlow();
+    const started: RefObject<boolean> = useRef<boolean>(false);
+    useEffect((): void => {
+        if (initialFile !== undefined && !started.current) {
+            started.current = true;
+            flow.pickFile(initialFile);
+        }
+    }, [initialFile, flow]);
     return (
         <Modal
             title={t('modal.title')}

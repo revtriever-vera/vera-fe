@@ -1,3 +1,6 @@
+import { RoleGate } from '@/app/providers/role-gate';
+import { useRole } from '@/app/providers/use-role';
+import { ReadOnlyClassAssets } from '../components/read-only-class-assets';
 import { useState, type ReactElement } from 'react';
 import { Link, useParams } from '@tanstack/react-router';
 import type { UseQueryResult } from '@tanstack/react-query';
@@ -14,6 +17,9 @@ import { useClassDetail } from '../api/use-class-detail.query';
 import { ClassHeader } from '../components/class-header';
 import { ClassTargetsEditor } from '../components/class-targets-editor';
 import { ZeroQuantityNote } from '../components/zero-quantity-note';
+import { HolderFilter } from '../../components/holder-filter';
+import type { HolderParam } from '../../lib/holder-filter';
+import { useHolderParam } from '../../lib/use-holder-param';
 import type { ClassDetail } from '../types';
 
 const CLASS_NOT_FOUND: string = 'allocation.class_not_found';
@@ -57,6 +63,10 @@ function NotFound(): ReactElement {
 
 function EmptyClass({ onAdd }: { readonly onAdd: () => void }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioTargets', undefined> = useTranslation('portfolioTargets');
+    const { canEdit } = useRole();
+    if (!canEdit) {
+        return <EmptyState title={t('classDetail.emptyTitle')} description={t('classDetail.zeroNote')} />;
+    }
     return (
         <EmptyState
             title={t('classDetail.emptyTitle')}
@@ -66,20 +76,25 @@ function EmptyClass({ onAdd }: { readonly onAdd: () => void }): ReactElement {
     );
 }
 
+function ClassEditor({ detail, canEdit }: { readonly detail: ClassDetail; readonly canEdit: boolean }): ReactElement {
+    return canEdit ? <ClassTargetsEditor detail={detail} /> : <ReadOnlyClassAssets detail={detail} />;
+}
+
 function DetailContent({ detail }: { readonly detail: ClassDetail }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioTargets', undefined> = useTranslation('portfolioTargets');
     const [adding, setAdding] = useState<boolean>(false);
     const open = (): void => {
         setAdding(true);
     };
+    const { canEdit } = useRole();
     const empty: boolean = detail.assets.length === 0;
     const unbalanced: boolean = detail.targetsSumBps !== 0 && detail.targetsSumBps !== 10000;
     return (
         <section className="flex flex-col gap-4">
             <ClassHeader detail={detail} />
             {unbalanced ? <Alert tone="caution" title={t('classDetail.sumWarning')} /> : null}
-            {empty ? <EmptyClass onAdd={open} /> : <ClassTargetsEditor detail={detail} />}
-            {empty ? null : (
+            {empty ? <EmptyClass onAdd={open} /> : <ClassEditor detail={detail} canEdit={canEdit} />}
+            {empty || !canEdit ? null : (
                 <div className="flex flex-col gap-3">
                     <ZeroQuantityNote />
                     <div>
@@ -90,14 +105,15 @@ function DetailContent({ detail }: { readonly detail: ClassDetail }): ReactEleme
                     </div>
                 </div>
             )}
-            <AddAssetModal open={adding} onOpenChange={setAdding} initialClassId={detail.class.classId} />
+            <RoleGate min="editor">
+                <AddAssetModal open={adding} onOpenChange={setAdding} initialClassId={detail.class.classId} />
+            </RoleGate>
         </section>
     );
 }
 
-export function ClassDetailPage(): ReactElement {
-    const { classId }: { classId: string } = useParams({ from: '/_auth/_app/portfolio/classes/$classId' });
-    const query: UseQueryResult<ClassDetail> = useClassDetail(classId);
+function ClassDetailBody({ classId, holder }: { readonly classId: string; readonly holder: HolderParam }): ReactElement {
+    const query: UseQueryResult<ClassDetail> = useClassDetail(classId, holder);
     if (query.error instanceof ApiError && query.error.problem.type === CLASS_NOT_FOUND) {
         return <NotFound />;
     }
@@ -112,4 +128,17 @@ export function ClassDetailPage(): ReactElement {
         );
     }
     return query.data === undefined ? <DetailLoading /> : <DetailContent detail={query.data} />;
+}
+
+export function ClassDetailPage(): ReactElement {
+    const { classId }: { classId: string } = useParams({ from: '/_auth/_app/portfolio/classes/$classId' });
+    const holder: HolderParam = useHolderParam();
+    return (
+        <div className="flex flex-col gap-4">
+            <div className="max-w-full empty:hidden">
+                <HolderFilter />
+            </div>
+            <ClassDetailBody classId={classId} holder={holder} />
+        </div>
+    );
 }

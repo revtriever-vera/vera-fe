@@ -1,11 +1,12 @@
 {
   "layout": {
-    "title": "Patrimônio",
-    "tabsLabel": "Seções do patrimônio",
+    "title": "Carteira",
+    "tabsLabel": "Seções da carteira",
     "tabs": {
       "overview": "Visão geral",
       "targets": "Carteira-alvo",
-      "contribution": "Aporte inteligente",
+      "contribution": "Onde aportar",
+      "goals": "Objetivos",
       "assets": "Meus ativos"
     }
   },
@@ -124,5 +125,68 @@
     "targetsIncomplete": "Informe a meta de todos os ativos da classe.",
     "contributionTargetsNotSet": "Defina a carteira-alvo antes de simular um aporte.",
     "exchangeRateUnavailable": "O câmbio do dia não está disponível agora."
+  },
+  "concentration": {
+    "loading": "Carregando a concentração da carteira",
+    "loadError": "Não foi possível carregar a concentração.",
+    "retry": "Tentar de novo",
+    "more_one": "e mais {{count}}",
+    "more_other": "e mais {{count}}",
+    "others_one": "Outros {{count}} grupo",
+    "others_other": "Outros {{count}} grupos",
+    "groups": {
+      "tesouro-nacional": "Tesouro Nacional",
+      "tesouro-eua": "Tesouro dos EUA",
+      "outro": "Sem grupo"
+    },
+    "buckets": {
+      "funds": "Fundos e ETFs, vários emissores",
+      "crypto": "Cripto, sem emissor",
+      "missing_issuer": "Sem emissor cadastrado",
+      "unmapped": "Sem emissor no catálogo"
+    },
+    "issuer": {
+      "title": "Por emissor",
+      "description": "Quanto do patrimônio depende de cada empresa ou banco. Renda fixa e ações do mesmo grupo somam juntas.",
+      "note": "ETFs, fundos imobiliários e cripto não têm um emissor único e aparecem agrupados."
+    },
+    "sector": {
+      "title": "Por setor",
+      "description": "Ações, FIIs e REITs, em percentual da renda variável ({{total}}).",
+      "note": "O setor vem do catálogo de ativos. ETFs de índice somam vários setores.",
+      "empty": "Nenhuma ação, FII ou REIT cadastrado."
+    }
+  },
+  "sectors": {
+    "financeiro": "Financeiro",
+    "energia_eletrica": "Energia elétrica",
+    "petroleo_gas": "Petróleo e gás",
+    "mineracao_siderurgia": "Mineração e siderurgia",
+    "papel_celulose": "Papel e celulose",
+    "bens_industriais": "Bens industriais",
+    "tecnologia": "Tecnologia",
+    "consumo": "Consumo",
+    "saude": "Saúde",
+    "varejo": "Varejo",
+    "imobiliario_logistica": "Imobiliário: logística",
+    "imobiliario_shoppings": "Imobiliário: shoppings",
+    "imobiliario_recebiveis": "Imobiliário: recebíveis",
+    "imobiliario_lajes": "Imobiliário: lajes corporativas",
+    "imobiliario_hibrido": "Imobiliário: híbrido",
+    "etf_indice": "ETFs de índice",
+    "cripto": "Cripto",
+    "unmapped_sector": "Sem setor no catálogo"
+  },
+  "holder": {
+    "label": "Filtrar por titular",
+    "any": "Todos",
+    "all": "Conta toda",
+    "field": "Titular",
+    "column": "Titular",
+    "cell": "Titular de {{symbol}}",
+    "changed": "{{symbol}}: titular {{holder}}",
+    "changeFailed": "Não foi possível mudar o titular",
+    "emptyTitle": "Nenhum ativo de {{holder}}",
+    "emptyDescription": "Troque o filtro de titular ou marque o titular de cada ativo em Meus ativos."
   }
 }

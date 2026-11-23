@@ -1,11 +1,12 @@
 {
   "layout": {
-    "title": "Net worth",
-    "tabsLabel": "Net worth sections",
+    "title": "Portfolio",
+    "tabsLabel": "Portfolio sections",
     "tabs": {
       "overview": "Overview",
       "targets": "Target portfolio",
-      "contribution": "Smart contribution",
+      "contribution": "Where to invest",
+      "goals": "Goals",
       "assets": "My assets"
     }
   },
@@ -124,5 +125,68 @@
     "targetsIncomplete": "Enter a target for every asset in the class.",
     "contributionTargetsNotSet": "Set your target portfolio before simulating a contribution.",
     "exchangeRateUnavailable": "Today's exchange rate is not available right now."
+  },
+  "concentration": {
+    "loading": "Loading portfolio concentration",
+    "loadError": "Could not load the concentration.",
+    "retry": "Try again",
+    "more_one": "and {{count}} more",
+    "more_other": "and {{count}} more",
+    "others_one": "Other {{count}} group",
+    "others_other": "Other {{count}} groups",
+    "groups": {
+      "tesouro-nacional": "National Treasury",
+      "tesouro-eua": "US Treasury",
+      "outro": "No group"
+    },
+    "buckets": {
+      "funds": "Funds and ETFs, several issuers",
+      "crypto": "Crypto, no issuer",
+      "missing_issuer": "No issuer registered",
+      "unmapped": "No issuer in the catalog"
+    },
+    "issuer": {
+      "title": "By issuer",
+      "description": "How much of your net worth depends on each company or bank. Fixed income and stocks of the same group add up.",
+      "note": "ETFs, real estate funds and crypto have no single issuer and appear grouped."
+    },
+    "sector": {
+      "title": "By sector",
+      "description": "Stocks, FIIs and REITs, as a share of equities ({{total}}).",
+      "note": "The sector comes from the asset catalog. Index ETFs add up several sectors.",
+      "empty": "No stock, FII or REIT registered."
+    }
+  },
+  "sectors": {
+    "financeiro": "Financials",
+    "energia_eletrica": "Electric utilities",
+    "petroleo_gas": "Oil and gas",
+    "mineracao_siderurgia": "Mining and steel",
+    "papel_celulose": "Paper and pulp",
+    "bens_industriais": "Industrial goods",
+    "tecnologia": "Technology",
+    "consumo": "Consumer",
+    "saude": "Health care",
+    "varejo": "Retail",
+    "imobiliario_logistica": "Real estate: logistics",
+    "imobiliario_shoppings": "Real estate: malls",
+    "imobiliario_recebiveis": "Real estate: receivables",
+    "imobiliario_lajes": "Real estate: office",
+    "imobiliario_hibrido": "Real estate: hybrid",
+    "etf_indice": "Index ETFs",
+    "cripto": "Crypto",
+    "unmapped_sector": "No sector in the catalog"
+  },
+  "holder": {
+    "label": "Filter by holder",
+    "any": "Everyone",
+    "all": "Whole account",
+    "field": "Holder",
+    "column": "Holder",
+    "cell": "Holder of {{symbol}}",
+    "changed": "{{symbol}}: holder {{holder}}",
+    "changeFailed": "Could not change the holder",
+    "emptyTitle": "No assets of {{holder}}",
+    "emptyDescription": "Change the holder filter or set the holder of each asset in My assets."
   }
 }

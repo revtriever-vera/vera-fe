@@ -8,6 +8,8 @@ import { ClassName } from '../../components/class-name';
 import { ClassTile } from '../../components/class-tile';
 import { StatusChip } from '../../components/status-chip';
 import { formatShareBps, formatTargetBps } from '../../lib/format-bps';
+import type { HolderParam } from '../../lib/holder-filter';
+import { useHolderParam } from '../../lib/use-holder-param';
 import type { ClassRow } from '../lib/overview-view-model';
 
 export interface ClassCardListProps {
@@ -17,6 +19,7 @@ export interface ClassCardListProps {
 export function ClassCardList({ rows }: ClassCardListProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioOverview', undefined> = useTranslation('portfolioOverview');
     const locale: SupportedLocale = useLocale();
+    const holder: HolderParam = useHolderParam();
     return (
         <ul aria-label={t('table.listLabel')} className="flex flex-col gap-2">
             {rows.map((row: ClassRow): ReactElement => (
@@ -24,6 +27,7 @@ export function ClassCardList({ rows }: ClassCardListProps): ReactElement {
                     <Link
                         to="/portfolio/classes/$classId"
                         params={{ classId: row.classId }}
+                        search={{ holder }}
                         className={cn('surface-card flex items-center gap-3 p-3', row.dimmed && 'opacity-60')}
                     >
                         <ClassTile systemKey={row.systemKey} colorKey={row.colorKey} />

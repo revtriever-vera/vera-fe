@@ -5,10 +5,10 @@ import { resolveConnectionsLink } from './connections-link';
 describe('resolveConnectionsLink', () => {
     it('trata a raiz como destino ausente e repassa os demais', () => {
         expect(resolveConnectionsLink('/')).toBeNull();
-        expect(resolveConnectionsLink('/spending/connections')).toBe('/spending/connections');
+        expect(resolveConnectionsLink('/settings/banks')).toBe('/settings/banks');
     });
 
-    it('o destino real do onboarding é a tela de Conexões', () => {
-        expect(resolveConnectionsLink(ONBOARDING_DESTINATIONS.connections)).toBe('/spending/connections');
+    it('o destino real do onboarding é a aba Bancos', () => {
+        expect(resolveConnectionsLink(ONBOARDING_DESTINATIONS.connections)).toBe('/settings/banks');
     });
 });

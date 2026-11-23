@@ -1,5 +1,6 @@
 import { useState, type ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
+import { RoleGate } from '@/app/providers/role-gate';
 import { useSession } from '@/app/providers/session-provider';
 import { cn } from '@/shared/lib/cn';
 import { Alert } from '@/shared/ui/alert';
@@ -7,6 +8,7 @@ import { Button } from '@/shared/ui/button';
 import { FailureAlert } from '@/shared/ui/failure-alert';
 import { Loading, Skeleton } from '@/shared/ui/skeleton';
 import { ImportCard } from '../../imports/components/import-card';
+import { ImportStatementHost } from '../../imports/components/import-statement-host';
 import type { ConnectionsResponse } from '../../types';
 import { useConnections, type ConnectionsState } from '../api/use-connections.query';
 import { ConnectionList } from '../components/connection-list';
@@ -42,9 +44,25 @@ interface ContentProps {
     readonly data: ConnectionsResponse;
     readonly state: ConnectionsState;
     readonly companyId: string;
+    readonly isOwner: boolean;
 }
 
-function ConnectionsContent({ data, state, companyId }: ContentProps): ReactElement {
+interface OwnerCredentialsProps {
+    readonly isOwner: boolean;
+    readonly credentials: ConnectionsResponse['credentials'];
+    readonly editing: EditMode | null;
+    readonly onEditingChange: (mode: EditMode | null) => void;
+}
+
+function OwnerCredentials({ isOwner, credentials, editing, onEditingChange }: OwnerCredentialsProps): ReactElement {
+    const { t }: UseTranslationResponse<'spendingConnections', undefined> = useTranslation('spendingConnections');
+    if (!isOwner) {
+        return <Alert tone="caution" title={t('credentials.ownerOnly')} />;
+    }
+    return <CredentialsCard credentials={credentials} editing={editing} onEditingChange={onEditingChange} />;
+}
+
+function ConnectionsContent({ data, state, companyId, isOwner }: ContentProps): ReactElement {
     const { t }: UseTranslationResponse<'spendingConnections', undefined> = useTranslation('spendingConnections');
     const configured: boolean = data.credentials.configured;
     const [expanded, setExpanded] = useState<boolean>(!(configured && data.connections.length > 0));
@@ -65,7 +83,7 @@ function ConnectionsContent({ data, state, companyId }: ContentProps): ReactElem
                     <PluggyTutorial companyId={companyId} expanded={expanded} focusStep={focusStep} onExpandedChange={setExpanded} />
                 </div>
                 <div className={cn('flex min-w-0 flex-col gap-4 lg:order-2', configured ? 'order-1' : 'order-2')}>
-                    <CredentialsCard credentials={data.credentials} editing={editing} onEditingChange={setEditing} />
+                    <OwnerCredentials isOwner={isOwner} credentials={data.credentials} editing={editing} onEditingChange={setEditing} />
                     <ConnectionList
                         connections={data.connections}
                         now={new Date(state.query.dataUpdatedAt)}
@@ -76,7 +94,9 @@ function ConnectionsContent({ data, state, companyId }: ContentProps): ReactElem
                             setEditing('rotate');
                         }}
                     />
-                    <ImportCard />
+                    <RoleGate min="editor">
+                        <ImportCard />
+                    </RoleGate>
                 </div>
             </div>
         </div>
@@ -100,5 +120,10 @@ export function ConnectionsPage(): ReactElement {
             />
         );
     }
-    return <ConnectionsContent data={data} state={state} companyId={user?.companyId ?? ''} />;
+    return (
+        <>
+            <ConnectionsContent data={data} state={state} companyId={user?.companyId ?? ''} isOwner={user?.role === 'owner'} />
+            <ImportStatementHost />
+        </>
+    );
 }

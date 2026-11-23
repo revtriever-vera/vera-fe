@@ -21,6 +21,7 @@ import { usePreviewValue, type PreviewValue } from '../lib/use-preview-value';
 import type { PositionFormInput } from '../schemas/position.schema';
 import type { CatalogAsset } from '../types';
 import { ClassSelect } from './class-select';
+import { HolderField } from './holder-field';
 import { ValueToday } from './value-today';
 
 export interface PositionPreviewProps {
@@ -193,6 +194,11 @@ function PositionFields({
                 />
             </div>
             <PositionClassField asset={asset} form={form} classes={classes} />
+            <Controller
+                control={form.control}
+                name="holder"
+                render={({ field }): ReactElement => <HolderField value={field.value} onChange={field.onChange} />}
+            />
         </>
     );
 }

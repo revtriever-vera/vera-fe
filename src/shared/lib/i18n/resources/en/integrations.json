@@ -1,0 +1,85 @@
+{
+  "title": "Integrations",
+  "description": "This installation has no plans or quota: each person registers their own keys and pays each service directly. Whatever has no key does not show up in the app.",
+  "loading": "Loading integrations",
+  "ownerOnly": "Only the Owner of the account registers, replaces and removes keys.",
+  "configured": "configured",
+  "notConfigured": "no key",
+  "register": "Register",
+  "replace": "Replace",
+  "remove": "Remove",
+  "registerAria": "Register the {{name}} key",
+  "replaceAria": "Replace the {{name}} key",
+  "removeAria": "Remove the {{name}} key",
+  "needsModel": "Also needs the language model",
+  "copyUrl": "Copy the URL",
+  "modalNote": "{{note}} Keys are encrypted on your server.",
+  "currentHint": "The current key ends in {{tail}}. Type it again to replace it.",
+  "cancel": "Cancel",
+  "saveAndTest": "Save and test",
+  "testing": "Testing…",
+  "fields": {
+    "baseUrl": "API URL",
+    "apiKey": "Key",
+    "model": "Model",
+    "accessToken": "Access token",
+    "phoneNumberId": "Number ID",
+    "verifyToken": "Webhook verify token",
+    "appSecret": "App secret",
+    "clientId": "Client ID",
+    "clientSecret": "Client Secret"
+  },
+  "kinds": {
+    "llm": {
+      "title": "Language model",
+      "description": "Writes the summaries and the WhatsApp replies. Any provider compatible with the OpenAI API, including a local model.",
+      "note": "Any provider compatible with the OpenAI API, including a local model.",
+      "removeWarning": "Text summaries disappear from the screens."
+    },
+    "whatsapp": {
+      "title": "WhatsApp",
+      "description": "WhatsApp Business Cloud API, from Meta.",
+      "note": "Create an app in Meta for Developers and point the webhook to the URL below.",
+      "urlLabel": "Webhook URL",
+      "removeWarning": "WhatsApp stops answering and reminders are canceled."
+    },
+    "google": {
+      "title": "Google Calendar",
+      "description": "Google Cloud OAuth client.",
+      "note": "In Google Cloud, create an OAuth client with the redirect URL below.",
+      "urlLabel": "Redirect URL",
+      "removeWarning": "The calendar is disconnected."
+    }
+  },
+  "removeDialog": {
+    "title": "Remove the {{name}} key?",
+    "confirm": "Remove the key"
+  },
+  "toasts": {
+    "saved": "{{name}}: connected",
+    "removed": "Key removed: the feature disappears from the app"
+  },
+  "validation": {
+    "required": "Fill in this field.",
+    "secret": "Use 8 to 512 characters, with no spaces.",
+    "tooLong": "Use at most 256 characters.",
+    "baseUrl": "Use an address that starts with https:// (or http:// on a local network).",
+    "model": "That model name is not valid.",
+    "phoneNumberId": "Use digits only, 5 to 20 of them.",
+    "clientId": "The Client ID ends in .apps.googleusercontent.com."
+  },
+  "errors": {
+    "unauthorized": "The key was refused.",
+    "invalidModel": "Model not found at this provider.",
+    "notFound": "We could not find that resource at the provider. Check the API URL.",
+    "phoneNotFound": "The number ID was not found at Meta.",
+    "unreachable": "Could not reach the API URL.",
+    "unreachableWhatsApp": "Could not reach the Meta API.",
+    "phoneInUse": "That number is already linked to another account.",
+    "notAvailable": "Keys can only be registered on a self-hosted installation.",
+    "forbidden": "Only the Owner of the account can change keys.",
+    "validation": "Check the fields and try again.",
+    "tooManyAttempts": "Too many attempts. Wait a few minutes and try again.",
+    "generic": "Could not finish right now. Try again in a moment."
+  }
+}

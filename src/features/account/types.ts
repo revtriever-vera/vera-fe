@@ -3,3 +3,6 @@ import type { SupportedLocale } from '@/shared/lib/locale';
 
 export type AccountIdentity = paths['/auth/me/preferences']['patch']['responses']['200']['content']['application/json'];
 export type PreferredLocale = SupportedLocale;
+
+export type SupportAccessList = paths['/account/support-access']['get']['responses']['200']['content']['application/json'];
+export type SupportAccessItem = SupportAccessList['items'][number];

@@ -7,11 +7,13 @@ describe('portfolioKeys', () => {
         expect(portfolioKeys.classes()).toEqual(['portfolio', 'classes']);
         expect(portfolioKeys.holdings()).toEqual(['portfolio', 'holdings']);
         expect(portfolioKeys.overview()).toEqual(['portfolio', 'overview']);
+        expect(portfolioKeys.concentration()).toEqual(['portfolio', 'concentration']);
     });
 
     it('o detalhe de classe e o aporte carregam o parâmetro', () => {
         expect(portfolioKeys.classDetail('c-1')).toEqual(['portfolio', 'class-detail', 'c-1']);
-        expect(portfolioKeys.contribution(150000)).toEqual(['portfolio', 'contribution', 150000]);
+        expect(portfolioKeys.contribution(150000)).toEqual(['portfolio', 'contribution', 150000, true]);
+        expect(portfolioKeys.contribution(150000, false)).toEqual(['portfolio', 'contribution', 150000, false]);
     });
 
     it('a busca, as cotações, o câmbio e a prévia de renda fixa entram na chave', () => {
@@ -32,5 +34,13 @@ describe('portfolioKeys', () => {
     it('as chaves de detalhe e de aporte ficam sob o prefixo geral da família', () => {
         expect(portfolioKeys.classDetail('c-1').slice(0, 2)).toEqual(portfolioKeys.classDetails());
         expect(portfolioKeys.contribution(1).slice(0, 2)).toEqual(portfolioKeys.contributions());
+    });
+
+    it('o titular entra na chave de leitura, sob o prefixo geral', () => {
+        expect(portfolioKeys.holdingsOf(undefined)).toEqual(['portfolio', 'holdings', 'any']);
+        expect(portfolioKeys.overviewOf('all')).toEqual(['portfolio', 'overview', 'all']);
+        expect(portfolioKeys.classDetailOf('c-1', 'u-1')).toEqual(['portfolio', 'class-detail', 'c-1', 'u-1']);
+        expect(portfolioKeys.holdingsOf('u-1').slice(0, 2)).toEqual(portfolioKeys.holdings());
+        expect(portfolioKeys.classDetailOf('c-1', 'u-1').slice(0, 3)).toEqual(portfolioKeys.classDetail('c-1'));
     });
 });

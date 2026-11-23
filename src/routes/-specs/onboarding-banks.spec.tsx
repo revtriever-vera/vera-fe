@@ -16,26 +16,26 @@ function serveBanks(summary: OnboardingSummary): void {
 }
 
 describe('etapa Bancos na rota', () => {
-    it('Ir para Conexões abre a tela de Conexões', async () => {
+    it('Ir para Bancos abre Bancos em Configurações', async () => {
         serveBanks(onboardingSummary());
         const router: AnyRouter = renderRouterAt('/onboarding/banks', { signedIn: true });
 
-        await userEvent.click(await screen.findByRole('link', { name: /Ir para Conexões/ }));
+        await userEvent.click(await screen.findByRole('link', { name: /Ir para Bancos/ }));
 
         await waitFor(() => {
-            expect(router.state.location.pathname).toBe('/spending/connections');
+            expect(router.state.location.pathname).toBe('/settings/banks');
         });
         expect(router.state.location.search).toEqual({});
     });
 
-    it('o link de importação abre Conexões com o modal de importação', async () => {
+    it('o link de importação abre Bancos com o modal de importação', async () => {
         serveBanks(onboardingSummary());
         const router: AnyRouter = renderRouterAt('/onboarding/banks', { signedIn: true });
 
         await userEvent.click(await screen.findByRole('link', { name: /Importe um extrato do seu banco/ }));
 
         await waitFor(() => {
-            expect(router.state.location.pathname).toBe('/spending/connections');
+            expect(router.state.location.pathname).toBe('/settings/banks');
         });
         expect(router.state.location.search).toEqual({ import: true });
         expect(await screen.findByRole('dialog')).toBeInTheDocument();

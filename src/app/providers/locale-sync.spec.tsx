@@ -21,7 +21,7 @@ describe('LocaleSync', () => {
 
         renderRouterAt('/');
 
-        expect(await screen.findByRole('button', { name: 'Sign out' })).toBeInTheDocument();
+        expect((await screen.findAllByRole('button', { name: 'Open account menu' })).length).toBeGreaterThan(0);
         expect(i18n.language).toBe('en');
     });
 
@@ -34,7 +34,9 @@ describe('LocaleSync', () => {
         const user: UserEvent = userEvent.setup();
         renderRouterAt('/');
 
-        await user.click(await screen.findByRole('button', { name: 'Sign out' }));
+        const [trigger] = await screen.findAllByRole('button', { name: 'Open account menu' });
+        await user.click(trigger as HTMLElement);
+        await user.click(await screen.findByRole('menuitem', { name: 'Sign out' }));
 
         await waitFor(() => {
             expect(i18n.language).toBe('pt-BR');

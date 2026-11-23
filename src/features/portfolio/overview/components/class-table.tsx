@@ -4,13 +4,16 @@ import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { Money } from '@/shared/ui/money';
-import { Table, type TableColumn } from '@/shared/ui/table';
+import { ResponsiveRows } from '@/shared/ui/responsive-rows';
+import type { TableColumn } from '@/shared/ui/table';
 import { RichBalloon } from '@/shared/ui/tooltip';
 import { ClassName } from '../../components/class-name';
 import { ClassTile } from '../../components/class-tile';
 import { StatusChip } from '../../components/status-chip';
 import { formatShareBps, formatTargetBps } from '../../lib/format-bps';
 import { isSystemClassKey } from '../../lib/class-icons';
+import type { HolderParam } from '../../lib/holder-filter';
+import { useHolderParam } from '../../lib/use-holder-param';
 import type { ClassRow } from '../lib/overview-view-model';
 import { ClassSegmentTooltip } from './class-segment-tooltip';
 import { Gauge } from './gauge';
@@ -88,8 +91,9 @@ export function ClassTable({ rows, currency }: ClassTableProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioOverview', undefined> = useTranslation('portfolioOverview');
     const navigate: UseNavigateResult<string> = useNavigate();
     const columns: readonly TableColumn<ClassRow>[] = useColumns(currency);
+    const holder: HolderParam = useHolderParam();
     return (
-        <Table
+        <ResponsiveRows
             label={t('table.label')}
             columns={columns}
             rows={rows}
@@ -97,7 +101,7 @@ export function ClassTable({ rows, currency }: ClassTableProps): ReactElement {
             minWidthClass={MIN_WIDTH}
             rowClassName={(row: ClassRow): string | undefined => (row.dimmed ? DIMMED : undefined)}
             onRowActivate={(row: ClassRow): void => {
-                void navigate({ to: '/portfolio/classes/$classId', params: { classId: row.classId } });
+                void navigate({ to: '/portfolio/classes/$classId', params: { classId: row.classId }, search: { holder } });
             }}
         />
     );

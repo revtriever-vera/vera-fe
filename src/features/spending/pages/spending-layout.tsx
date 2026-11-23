@@ -9,8 +9,8 @@ export function SpendingLayout(): ReactElement {
     const tabs: readonly TabItem[] = [
         { to: '/spending', label: t('layout.tabs.summary'), exact: true },
         { to: '/spending/transactions', label: t('layout.tabs.transactions') },
+        { to: '/spending/recurring', label: t('layout.tabs.recurring') },
         { to: '/spending/cuts', label: t('layout.tabs.cuts') },
-        { to: '/spending/connections', label: t('layout.tabs.connections') },
         { to: '/spending/rules', label: t('layout.tabs.rules') }
     ];
     return (

@@ -27,6 +27,7 @@ import { SearchInput } from '@/shared/ui/search-input';
 import { SegmentedControl } from '@/shared/ui/segmented-control';
 import { SelectMenu, type SelectChoice } from '@/shared/ui/select-menu';
 import { SkeletonForm, SkeletonPanel } from '@/shared/ui/skeleton-form';
+import { Switch } from '@/shared/ui/switch';
 import { SkeletonTable } from '@/shared/ui/skeleton-table';
 import { StatusDot } from '@/shared/ui/status-dot';
 import { Stepper } from '@/shared/ui/stepper';
@@ -83,6 +84,7 @@ export function ActionsSection(): ReactElement {
             <Badge tone="caution">Pendente</Badge>
             <Badge tone="critical">Falhou</Badge>
             <Badge>Rascunho</Badge>
+            <SwitchDemo />
         </Section>
     );
 }
@@ -221,6 +223,7 @@ function SampleDataDemo(): ReactElement {
     const [active, setActive] = useState<boolean>(false);
     const controls: SampleDataControls = {
         available: true,
+        canManage: true,
         active,
         isLoading: false,
         load: (): Promise<void> => {
@@ -300,6 +303,16 @@ export function StructureSection(): ReactElement {
                 <SkeletonPanel label="Carregando painel" />
             </div>
         </Section>
+    );
+}
+
+function SwitchDemo(): ReactElement {
+    const [enabled, setEnabled] = useState<boolean>(true);
+    return (
+        <div className="flex items-center gap-3">
+            <Switch label="Permitir o envio" checked={enabled} onCheckedChange={setEnabled} />
+            <Switch label="Permitir o envio desabilitado" checked={false} onCheckedChange={setEnabled} disabled />
+        </div>
     );
 }
 

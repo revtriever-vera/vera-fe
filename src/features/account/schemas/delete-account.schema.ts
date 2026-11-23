@@ -1,17 +1,17 @@
 import type { TFunction } from 'i18next';
 import { z, type ZodEffects, type ZodObject, type ZodString } from 'zod';
-import { emailsMatch } from '../lib/emails-match';
+import { confirmWordMatches } from '../lib/confirm-word';
 
 export function createDeleteAccountSchema(
     t: TFunction<'account'>,
-    expectedEmail: string
-): ZodObject<{ confirmEmail: ZodEffects<ZodString, string, string> }> {
+    word: string
+): ZodObject<{ confirmation: ZodEffects<ZodString, string, string> }> {
     return z.object({
-        confirmEmail: z
+        confirmation: z
             .string()
             .trim()
-            .min(1, t('deleteConfirmRequired'))
-            .refine((value: string): boolean => emailsMatch(value, expectedEmail), t('deleteConfirmMismatch'))
+            .min(1, t('deleteConfirmRequired', { word }))
+            .refine((value: string): boolean => confirmWordMatches(value, word), t('deleteConfirmMismatch', { word }))
     });
 }
 

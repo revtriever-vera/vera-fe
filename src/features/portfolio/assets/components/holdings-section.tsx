@@ -10,32 +10,63 @@ import { RemoveHoldingDialog } from './remove-holding-dialog';
 
 const NARROW_QUERY: string = '(max-width: 639px)';
 
+interface EditTarget {
+    readonly holding: HoldingView;
+    readonly focusIssuer: boolean;
+}
+
 export interface HoldingsSectionProps {
     readonly holdings: readonly HoldingView[];
     readonly classes: readonly AssetClassView[];
     readonly baseCurrency: BaseCurrency;
 }
 
+interface EditSlotProps {
+    readonly editing: EditTarget | null;
+    readonly classes: readonly AssetClassView[];
+    readonly onClose: () => void;
+}
+
+function EditSlot({ editing, classes, onClose }: EditSlotProps): ReactElement | null {
+    return editing === null ? null : (
+        <EditFixedIncomeModal
+            titleId={editing.holding.id}
+            name={editing.holding.symbol}
+            focusIssuer={editing.focusIssuer}
+            classes={classes}
+            onClose={onClose}
+        />
+    );
+}
+
 export function HoldingsSection({ holdings, classes, baseCurrency }: HoldingsSectionProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const narrow: boolean = useMediaQuery(NARROW_QUERY);
-    const [editing, setEditing] = useState<HoldingView | null>(null);
+    const [editing, setEditing] = useState<EditTarget | null>(null);
     const [removing, setRemoving] = useState<HoldingView | null>(null);
     const List: (props: HoldingsListProps) => ReactElement = narrow ? HoldingsCardList : HoldingsTable;
     return (
         <div className="flex flex-col gap-3">
-            <List holdings={holdings} classes={classes} baseCurrency={baseCurrency} onEdit={setEditing} onRemove={setRemoving} />
+            <List
+                holdings={holdings}
+                classes={classes}
+                baseCurrency={baseCurrency}
+                onEdit={(holding: HoldingView): void => {
+                    setEditing({ holding, focusIssuer: false });
+                }}
+                onCompleteIssuer={(holding: HoldingView): void => {
+                    setEditing({ holding, focusIssuer: true });
+                }}
+                onRemove={setRemoving}
+            />
             <p className="text-xs text-content-muted">{t('page.reclassifyNote')}</p>
-            {editing === null ? null : (
-                <EditFixedIncomeModal
-                    titleId={editing.id}
-                    name={editing.symbol}
-                    classes={classes}
-                    onClose={(): void => {
-                        setEditing(null);
-                    }}
-                />
-            )}
+            <EditSlot
+                editing={editing}
+                classes={classes}
+                onClose={(): void => {
+                    setEditing(null);
+                }}
+            />
             {removing === null ? null : (
                 <RemoveHoldingDialog
                     holding={removing}

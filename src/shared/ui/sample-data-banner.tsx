@@ -37,15 +37,17 @@ export function SampleDataBanner(): ReactElement | null {
                 <FlaskConical className="size-4 shrink-0 text-caution" aria-hidden="true" />
                 {t.sampleBannerText}
             </span>
-            <Button
-                variant="secondary"
-                size="sm"
-                onClick={(): void => {
-                    setConfirming(true);
-                }}
-            >
-                {t.sampleClear}
-            </Button>
+            {sample.canManage ? (
+                <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={(): void => {
+                        setConfirming(true);
+                    }}
+                >
+                    {t.sampleClear}
+                </Button>
+            ) : null}
             {confirming && (
                 <ClearConfirm
                     onClose={(): void => {

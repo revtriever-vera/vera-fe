@@ -2,6 +2,7 @@ import type { ReactElement, ReactNode } from 'react';
 import type { NavItem } from './app-nav';
 import { MobileTopBar } from './mobile-top-bar';
 import { Sidebar } from './sidebar';
+import { UserMenu } from './user-menu';
 
 export interface AppShellProps {
     readonly items: readonly NavItem[];
@@ -14,7 +15,12 @@ export function AppShell({ items, topSlot, children }: AppShellProps): ReactElem
         <div className="min-h-dvh bg-canvas min-[861px]:grid min-[861px]:grid-cols-[248px_minmax(0,1fr)]">
             <Sidebar items={items} topSlot={topSlot} />
             <MobileTopBar items={items} topSlot={topSlot} />
-            <div className="min-w-0 min-[861px]:h-dvh min-[861px]:overflow-y-auto">{children}</div>
+            <div className="min-w-0 min-[861px]:h-dvh min-[861px]:overflow-y-auto">
+                <div className="hidden justify-end px-page-x pt-3 min-[861px]:flex">
+                    <UserMenu />
+                </div>
+                {children}
+            </div>
         </div>
     );
 }

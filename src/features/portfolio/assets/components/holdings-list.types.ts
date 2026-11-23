@@ -5,5 +5,6 @@ export interface HoldingsListProps {
     readonly classes: readonly AssetClassView[];
     readonly baseCurrency: BaseCurrency;
     readonly onEdit: (holding: HoldingView) => void;
+    readonly onCompleteIssuer: (holding: HoldingView) => void;
     readonly onRemove: (holding: HoldingView) => void;
 }

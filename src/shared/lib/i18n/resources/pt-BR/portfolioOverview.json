@@ -65,8 +65,10 @@
     "action": "Ver meus ativos"
   },
   "empty": {
-    "title": "Sua carteira ainda está vazia",
+    "title": "Nenhum ativo cadastrado",
     "description": "Cadastre seus ativos para ver como o patrimônio está distribuído em relação à sua meta.",
-    "action": "Cadastrar meu primeiro ativo"
+    "action": "Cadastrar meu primeiro ativo",
+    "viewerTitle": "Nenhum ativo cadastrado",
+    "viewerDescription": "Peça a quem edita a conta para cadastrar."
   }
 }

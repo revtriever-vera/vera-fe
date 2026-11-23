@@ -12,24 +12,26 @@ cp .env.example .env
 npm run dev
 ```
 
-| Comando             | O que faz                                                                                       |
-| ------------------- | ----------------------------------------------------------------------------------------------- |
-| `npm run dev`       | Servidor de desenvolvimento do Vite                                                             |
-| `npm run build`     | `tsc -b` e build de produção em `dist/`                                                         |
-| `npm run lint`      | ESLint (inclui as fronteiras de camada)                                                         |
-| `npm run typecheck` | TypeScript sem emitir                                                                           |
-| `npm test`          | Vitest; `npm run test:cov` aplica o mínimo de 85% de cobertura                                  |
-| `npm run api:types` | Gera `src/shared/lib/api/schema.d.ts` a partir do `/docs-json` do `vera-api` local (porta 3333) |
+| Comando                                              | O que faz                                                                                                                                                                                             |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run dev`                                        | Servidor de desenvolvimento do Vite                                                                                                                                                                   |
+| `npm run build`                                      | `tsc -b` e build de produção em `dist/`                                                                                                                                                               |
+| `npm run dev:admin` / `build:admin` / `build:tenant` | Alvo `admin` (só o admin da plataforma) ou `tenant` (sem o admin), pelo `VITE_APP_TARGET`                                                                                                             |
+| `npm run lint`                                       | ESLint (inclui as fronteiras de camada)                                                                                                                                                               |
+| `npm run typecheck`                                  | TypeScript sem emitir                                                                                                                                                                                 |
+| `npm test`                                           | Vitest; `npm run test:cov` aplica o mínimo de 85% de cobertura                                                                                                                                        |
+| `npm run api:types`                                  | Gera `src/shared/lib/api/schema.d.ts` a partir do `openapi.json` gerado por `npm run openapi:dump` no `vera-api` (padrão `../vera-api/openapi.json`; outro caminho: `npm run api:types -- <arquivo>`) |
 
 ## Variáveis de ambiente
 
 Lidas em `src/shared/config/env.ts` e embutidas no build (não há configuração de runtime).
 
-| Variável            | Padrão                     |
-| ------------------- | -------------------------- |
-| `VITE_API_URL`      | `http://localhost:3333`    |
-| `VITE_POSTHOG_KEY`  | vazio (PostHog desligado)  |
-| `VITE_POSTHOG_HOST` | `https://us.i.posthog.com` |
+| Variável            | Padrão                                                                    |
+| ------------------- | ------------------------------------------------------------------------- |
+| `VITE_API_URL`      | `http://localhost:3333`                                                   |
+| `VITE_APP_TARGET`   | `unified` (`tenant` sem admin, `admin` só o admin; `npm run build:admin`) |
+| `VITE_POSTHOG_KEY`  | vazio (PostHog desligado)                                                 |
+| `VITE_POSTHOG_HOST` | `https://us.i.posthog.com`                                                |
 
 ## Estrutura
 

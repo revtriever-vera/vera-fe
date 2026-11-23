@@ -1,4 +1,5 @@
-import type { ReactElement } from 'react';
+import { useRole } from '@/app/providers/use-role';
+import type { ReactElement, ReactNode } from 'react';
 import { Link } from '@tanstack/react-router';
 import type { UseQueryResult } from '@tanstack/react-query';
 import { Plus, Wallet } from 'lucide-react';
@@ -9,13 +10,19 @@ import { Button, buttonVariants } from '@/shared/ui/button';
 import { EmptyState } from '@/shared/ui/empty-state';
 import { FailureAlert } from '@/shared/ui/failure-alert';
 import { Loading, Skeleton } from '@/shared/ui/skeleton';
+import { GoalsOverviewCard } from '../../goals/components/goals-overview-card';
 import { useOverview } from '../../api/use-overview.query';
 import { BaseCurrencySwitch } from '../../components/base-currency-switch';
 import { DataSourcesNote } from '../../components/data-sources-note';
+import { HolderEmpty } from '../../components/holder-empty';
+import { HolderFilter } from '../../components/holder-filter';
+import type { HolderParam } from '../../lib/holder-filter';
+import { useHolderParam } from '../../lib/use-holder-param';
 import type { Overview } from '../../types';
 import { ActualVsTargetCard } from '../components/actual-vs-target-card';
 import { ClassCardList } from '../components/class-card-list';
 import { ClassTable } from '../components/class-table';
+import { OverviewAlerts } from '../components/overview-alerts';
 import { QualityNotice } from '../components/quality-notice';
 import { TotalCard } from '../components/total-card';
 import { buildOverviewViewModel, type OverviewViewModel } from '../lib/overview-view-model';
@@ -30,7 +37,10 @@ function OverviewHeader(): ReactElement {
                 <h2 className="text-xl font-extrabold">{t('title')}</h2>
                 <p className="text-sm text-content-muted">{t('subtitle')}</p>
             </div>
-            <BaseCurrencySwitch />
+            <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2">
+                <HolderFilter />
+                <BaseCurrencySwitch />
+            </div>
         </div>
     );
 }
@@ -60,8 +70,17 @@ function OverviewFailure({ error, onRetry }: { readonly error: Error; readonly o
     );
 }
 
-function OverviewEmpty(): ReactElement {
+function OverviewEmpty({ holder }: { readonly holder: HolderParam }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioOverview', undefined> = useTranslation('portfolioOverview');
+    const { canEdit } = useRole();
+    if (holder !== undefined) {
+        return <HolderEmpty holder={holder} />;
+    }
+    if (!canEdit) {
+        return (
+            <EmptyState icon={<Wallet className="size-6" />} title={t('empty.viewerTitle')} description={t('empty.viewerDescription')} />
+        );
+    }
     return (
         <EmptyState
             icon={<Wallet className="size-6" />}
@@ -97,7 +116,7 @@ function DistributionCard({ model, overview }: { readonly model: OverviewViewMod
     );
 }
 
-function OverviewContent({ overview }: { readonly overview: Overview }): ReactElement {
+function OverviewContent({ overview, summarySlot }: { readonly overview: Overview; readonly summarySlot: ReactNode }): ReactElement {
     const model: OverviewViewModel = buildOverviewViewModel(overview);
     return (
         <div className="flex flex-col gap-4">
@@ -105,16 +124,23 @@ function OverviewContent({ overview }: { readonly overview: Overview }): ReactEl
                 <TotalCard overview={overview} callout={model.callout} />
                 <ActualVsTargetCard model={model} currency={overview.baseCurrency} />
             </div>
+            {summarySlot}
+            <GoalsOverviewCard />
             <QualityNotice quality={overview.quality} />
             <DistributionCard model={model} overview={overview} />
         </div>
     );
 }
 
-function OverviewBody(): ReactElement {
-    const overview: UseQueryResult<Overview> = useOverview();
+function OverviewBody({ summarySlot }: { readonly summarySlot: ReactNode }): ReactElement {
+    const holder: HolderParam = useHolderParam();
+    const overview: UseQueryResult<Overview> = useOverview(holder);
     if (overview.data !== undefined) {
-        return overview.data.empty ? <OverviewEmpty /> : <OverviewContent overview={overview.data} />;
+        return overview.data.empty ? (
+            <OverviewEmpty holder={holder} />
+        ) : (
+            <OverviewContent overview={overview.data} summarySlot={summarySlot} />
+        );
     }
     if (overview.error !== null) {
         return (
@@ -129,11 +155,16 @@ function OverviewBody(): ReactElement {
     return <OverviewLoading />;
 }
 
-export function OverviewPage(): ReactElement {
+export interface OverviewPageProps {
+    readonly summarySlot?: ReactNode;
+}
+
+export function OverviewPage({ summarySlot = null }: OverviewPageProps): ReactElement {
     return (
         <section className="flex flex-col gap-4">
             <OverviewHeader />
-            <OverviewBody />
+            <OverviewAlerts />
+            <OverviewBody summarySlot={summarySlot} />
             <DataSourcesNote />
         </section>
     );

@@ -6,6 +6,7 @@ import { termsAreValid } from './terms-valid';
 
 const VALID: FixedIncomeFormInput = {
     kind: 'cdb',
+    issuer: null,
     name: '',
     indexer: 'cdi_percent',
     rate: '105',
@@ -13,7 +14,8 @@ const VALID: FixedIncomeFormInput = {
     currency: 'BRL',
     appliedAt: '2025-03-10',
     maturityDate: '2028-03-10',
-    classId: ''
+    classId: '',
+    holder: 'all'
 };
 
 describe('termsAreValid', () => {
