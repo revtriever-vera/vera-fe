@@ -6,6 +6,7 @@ import type { SupportedLocale } from '@/shared/lib/locale';
 import { Card } from '@/shared/ui/card';
 import { ResponsiveRows } from '@/shared/ui/responsive-rows';
 import type { TableColumn } from '@/shared/ui/table';
+import { enumValueText, type LabelMap } from '../lib/account-data-view';
 import type { AccountPerson, AccountSummary } from '../types';
 import { AccountSections } from './account-sections';
 
@@ -23,11 +24,14 @@ function AccountFacts({ summary }: { readonly summary: AccountSummary }): ReactE
     const locale: SupportedLocale = useLocale();
     const { account }: AccountSummary = summary;
     const plan: string = t(account.plan === 'premium' ? 'planPremium' : 'planFree');
+    const values: LabelMap = t('valueLabels', { returnObjects: true });
+    const planText: string =
+        account.planSource === null ? plan : t('summaryPlanWithSource', { plan, source: enumValueText(account.planSource, values) });
     return (
         <Card className="p-4">
             <dl className="grid gap-3 sm:grid-cols-3">
                 <Fact label={t('accountColumnName')} value={account.name} />
-                <Fact label={t('accountColumnPlan')} value={account.planSource === null ? plan : `${plan} (${account.planSource})`} />
+                <Fact label={t('accountColumnPlan')} value={planText} />
                 <Fact label={t('accountColumnCreated')} value={formatDate(new Date(account.createdAt), locale, 'UTC')} />
                 <Fact label={t('summaryLocale')} value={summary.locale} />
                 <Fact label={t('summaryTimezone')} value={summary.timezone} />

@@ -4,6 +4,7 @@ import type { UseQueryResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useSession } from '@/app/providers/session-provider';
 import { track } from '@/shared/lib/analytics';
+import { civilDayZone } from '@/shared/lib/format/date';
 import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { Alert } from '@/shared/ui/alert';
@@ -27,9 +28,12 @@ function expiryText(t: UseTranslationResponse<'auth', undefined>['t'], offer: Of
     if (offer.expiresAt === null) {
         return null;
     }
-    const date: string = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(
-        new Date(offer.expiresAt)
-    );
+    const date: string = new Intl.DateTimeFormat(locale, {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        timeZone: civilDayZone(offer.expiresAt)
+    }).format(new Date(offer.expiresAt));
     return t('offerExpires', { date });
 }
 
