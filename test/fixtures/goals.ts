@@ -1,4 +1,4 @@
-import type { GoalHoldingView, GoalView, GoalsList } from '@/features/portfolio/goals/types';
+import type { EmergencySuggestion, GoalHoldingView, GoalView, GoalsList } from '@/features/portfolio/goals/types';
 
 export const GOAL_ID_RESERVE: string = '00000000-0000-4000-8000-0000000000a1';
 export const GOAL_ID_TRAVEL: string = '00000000-0000-4000-8000-0000000000b2';
@@ -35,6 +35,7 @@ export function goal(overrides: Partial<GoalView> = {}): GoalView {
         planMonthlyMinor: 120000,
         monthDeltaMinor: 38000,
         removedHoldings: 0,
+        reserve: null,
         holdings: [goalHolding()],
         createdAt: '2026-10-01T12:00:00.000Z',
         updatedAt: '2026-11-01T12:00:00.000Z',
@@ -79,4 +80,18 @@ export function goalsList(items: readonly GoalView[] = [goal(), behindTravel()])
 
 export function emptyGoals(): GoalsList {
     return goalsList([]);
+}
+
+export function emergencySuggestion(overrides: Partial<EmergencySuggestion> = {}): EmergencySuggestion {
+    return {
+        months: 6,
+        averageMinor: 520000,
+        averageMonths: ['2026-08', '2026-09', '2026-10'],
+        suggestedMinor: 3120000,
+        ...overrides
+    };
+}
+
+export function noSpendingSuggestion(months: number = 6): EmergencySuggestion {
+    return { months, averageMinor: null, averageMonths: [], suggestedMinor: null };
 }

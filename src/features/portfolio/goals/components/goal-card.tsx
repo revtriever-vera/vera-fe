@@ -9,6 +9,7 @@ import { personName } from '../../lib/holder-filter';
 import { usePeople, type PeopleState } from '../../lib/people-context';
 import { progressPercent } from '../lib/goal-progress';
 import { GOAL_BASE_CURRENCY, GOAL_KIND, type GoalKind, type GoalView } from '../types';
+import { EditGoalLink } from './edit-goal-link';
 import { GoalLinks, GoalMonthDelta } from './goal-card-details';
 import { GoalProgressBar } from './goal-progress-bar';
 import { GoalStatusBadge } from './goal-status-badge';
@@ -42,7 +43,10 @@ export function GoalCard({ goal }: { readonly goal: GoalView }): ReactElement {
                     <IconTile icon={ICONS[goal.kind]} tone="neutral" size="sm" />
                     <h3 className="min-w-0 truncate text-base font-semibold">{goal.name}</h3>
                 </div>
-                <GoalStatusBadge status={goal.status} />
+                <div className="flex shrink-0 items-center gap-2">
+                    <GoalStatusBadge status={goal.status} />
+                    <EditGoalLink goalId={goal.id} name={goal.name} />
+                </div>
             </div>
             <GoalProgressBar
                 label={t('card.progress', { name: goal.name })}

@@ -11,6 +11,7 @@ import { useHolderParam } from '../../lib/use-holder-param';
 import { useGoals } from '../api/use-goals.query';
 import { CreateGoalLink } from '../components/create-goal-link';
 import { GoalCard } from '../components/goal-card';
+import { GoalModalHost } from '../components/goal-modal-host';
 import { GoalsEmpty } from '../components/goals-empty';
 import { GoalsKpis } from '../components/goals-kpis';
 import { GOAL_KIND, type GoalsList, type GoalView } from '../types';
@@ -96,6 +97,7 @@ export function GoalsPage(): ReactElement {
         <section className="flex flex-col gap-4">
             <GoalsHeader />
             <GoalsBody />
+            <GoalModalHost />
         </section>
     );
 }

@@ -6,7 +6,8 @@ import { holderSearchSchema } from '@/features/portfolio/schemas/holder.schema';
 
 const goalsSearchSchema = z.object({
     holder: holderSearchSchema,
-    create: z.enum(GOAL_CREATE_KINDS).optional().catch(undefined)
+    create: z.enum(GOAL_CREATE_KINDS).optional().catch(undefined),
+    edit: z.string().uuid().optional().catch(undefined)
 });
 
 export const Route = createFileRoute('/_auth/_app/portfolio/goals')({

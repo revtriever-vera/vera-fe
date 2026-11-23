@@ -8,3 +8,10 @@ export function formatGoalMonth(iso: string, locale: SupportedLocale): string {
         new Date(Date.UTC(year ?? 1970, (month ?? 1) - 1, 1))
     );
 }
+
+export function formatMonthName(yearMonth: string, locale: SupportedLocale): string {
+    const [year, month]: number[] = yearMonth.split('-').map(Number);
+    return new Intl.DateTimeFormat(locale, { month: 'long', timeZone: 'UTC' }).format(
+        new Date(Date.UTC(year ?? 1970, (month ?? 1) - 1, 1))
+    );
+}

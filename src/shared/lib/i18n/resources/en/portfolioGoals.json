@@ -46,6 +46,90 @@
     "removed_one": "{{count}} linked asset was removed",
     "removed_other": "{{count}} linked assets were removed",
     "holder": "Holder: {{holder}}",
-    "holderAll": "Whole account"
+    "holderAll": "Whole account",
+    "edit": "Edit {{name}}",
+    "editLabel": "Edit"
+  },
+  "errors": {
+    "generic": "Could not save the goal. Try again.",
+    "validationFailed": "Check the fields and try again.",
+    "holdingNotFound": "A linked asset is no longer in the portfolio. Review the list of assets.",
+    "holdingOverallocated": "The shares add up to more than 100% on one of the assets. Lower the share in this goal.",
+    "emergencyReserveExists": "This holder already has an emergency reserve. Edit the existing one.",
+    "targetDateInPast": "Choose a date after today.",
+    "limitReached": "The account reached the limit of 20 goals. Remove one to create another.",
+    "goalNotFound": "This goal no longer exists.",
+    "reserveMonthsNotAllowed": "Months of spending only apply to the emergency reserve."
+  },
+  "form": {
+    "createTitle": "New goal",
+    "editTitle": "Edit {{name}}",
+    "description": "Say how much and by when. The calculation does not include future yield.",
+    "loadFailed": "Could not open the goal",
+    "model": "Template",
+    "models": {
+      "emergency_reserve": {
+        "label": "Emergency reserve",
+        "name": "Emergency reserve"
+      },
+      "travel": {
+        "label": "Trip",
+        "name": "Trip"
+      },
+      "home_down_payment": {
+        "label": "Home down payment",
+        "name": "Home down payment"
+      },
+      "other": {
+        "label": "Other",
+        "name": ""
+      }
+    },
+    "name": "Name",
+    "namePlaceholder": "E.g. New car",
+    "target": "Goal amount",
+    "date": "Date",
+    "manual": "Outside the portfolio",
+    "manualHint": "Money you keep that is not registered, such as savings or a checking account.",
+    "reserve": {
+      "monthsLabel": "Months of spending covered",
+      "monthsOption": "{{months}} months",
+      "monthsHint": "3 months: steady income and reserves from other sources. 12 months: self-employed or variable income.",
+      "suggestionRange": "Suggestion: {{suggested}}. That is {{months}} months of your average spending from {{from}} to {{to}} ({{average}}).",
+      "suggestionOne": "Suggestion: {{suggested}}. That is {{months}} months of your average spending in {{from}} ({{average}}).",
+      "use": "Use {{suggested}}",
+      "spendLabel": "How much do you spend per month?",
+      "spendHint": "No spending imported yet. Vera multiplies this amount by the months you chose.",
+      "connect": "Connect banks",
+      "loadError": "Could not calculate the suggestion. Enter the goal amount.",
+      "changed": "Your average spending changed to {{average}}. Suggested reserve: {{suggested}}.",
+      "update": "Update the amount"
+    },
+    "holdings": {
+      "title": "Where the money is",
+      "hint": "Enter the share of each asset that counts for this goal. Leave blank what does not count.",
+      "reserveHint": "For the reserve, prefer daily-liquidity assets, such as Tesouro Selic. Leave blank what does not count.",
+      "rowLabel": "{{name}} (share in %)",
+      "sharePlaceholder": "E.g. 40%",
+      "free": "Free: {{free}} of this asset",
+      "empty": "No assets registered.",
+      "addAssets": "Add assets",
+      "loadError": "Could not load the assets."
+    },
+    "errors": {
+      "nameRequired": "Name the goal",
+      "nameTooLong": "Use up to {{max}} characters",
+      "targetRequired": "Enter the goal amount",
+      "dateRequired": "Choose the date",
+      "datePast": "Choose a date after today",
+      "shareInvalid": "Enter a share between 0.01% and 100%",
+      "shareOverFree": "The share is more than what is free on this asset"
+    },
+    "cancel": "Cancel",
+    "create": "Create goal",
+    "save": "Save",
+    "saving": "Saving",
+    "created": "Goal created.",
+    "saved": "Goal saved."
   }
 }
