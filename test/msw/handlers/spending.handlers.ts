@@ -1,5 +1,6 @@
 import { http, HttpResponse, type RequestHandler } from 'msw';
 import type { CategoryView, SpendingSettings, UpdateSpendingSettings } from '@/features/spending/types';
+import { emptyRecurring, recurringSeries } from '../../fixtures/recurring';
 import {
     CURRENT_MONTH,
     accountView,
@@ -116,6 +117,19 @@ function importHandlers(): RequestHandler[] {
     ];
 }
 
+function recurringHandlers(): RequestHandler[] {
+    return [
+        http.get('*/spending/recurring', () => HttpResponse.json(emptyRecurring())),
+        http.post('*/spending/recurring/:id/confirm', () =>
+            HttpResponse.json({ series: recurringSeries({ status: 'confirmed' }), categoryRule: null })
+        ),
+        http.post('*/spending/recurring/:id/dismiss', () => HttpResponse.json(recurringSeries({ status: 'dismissed' }))),
+        http.post('*/spending/recurring/:id/snooze', () => HttpResponse.json(recurringSeries())),
+        http.post('*/spending/recurring/:id/stop', () => HttpResponse.json(recurringSeries({ status: 'stopped' }))),
+        http.post('*/spending/recurring/:id/restore', () => HttpResponse.json(recurringSeries()))
+    ];
+}
+
 export function spendingHandlers(): RequestHandler[] {
     return [
         ...categoryHandlers(),
@@ -123,6 +137,7 @@ export function spendingHandlers(): RequestHandler[] {
         ...transactionHandlers(),
         ...summaryHandlers(),
         ...connectionHandlers(),
-        ...importHandlers()
+        ...importHandlers(),
+        ...recurringHandlers()
     ];
 }

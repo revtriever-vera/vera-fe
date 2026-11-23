@@ -5,6 +5,7 @@
     "tabs": {
       "summary": "Resumo do mês",
       "transactions": "Transações",
+      "recurring": "Assinaturas e contas",
       "cuts": "Onde cortar",
       "rules": "Regras"
     }

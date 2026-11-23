@@ -30,19 +30,26 @@ describe('APP_NAV_ITEMS', () => {
 describe('grupo Gastos', () => {
     const spending: readonly NavItem[] = APP_NAV_ITEMS.filter((item: NavItem): boolean => item.group === 'spending');
 
-    it('tem os três itens, na ordem do menu, sem Conexões', () => {
-        expect(spending.map((item: NavItem): string => item.to)).toEqual(['/spending', '/spending/transactions', '/spending/cuts']);
+    it('tem os quatro itens, na ordem do menu, sem Conexões', () => {
+        expect(spending.map((item: NavItem): string => item.to)).toEqual([
+            '/spending',
+            '/spending/transactions',
+            '/spending/recurring',
+            '/spending/cuts'
+        ]);
     });
 
-    it('só Transações carrega o contador de sem categoria', () => {
+    it('Transações e Assinaturas e contas carregam contador', () => {
         expect(spending.filter((item: NavItem): boolean => item.badge !== undefined).map((item: NavItem): string => item.id)).toEqual([
-            'spending-transactions'
+            'spending-transactions',
+            'spending-recurring'
         ]);
     });
 
     it('marca o item mais específico em cada rota de gastos e nenhum em Regras', () => {
         expect(activeNavId('/spending', APP_NAV_ITEMS)).toBe('spending-summary');
         expect(activeNavId('/spending/transactions', APP_NAV_ITEMS)).toBe('spending-transactions');
+        expect(activeNavId('/spending/recurring', APP_NAV_ITEMS)).toBe('spending-recurring');
         expect(activeNavId('/spending/connections', APP_NAV_ITEMS)).toBeNull();
         expect(activeNavId('/spending/rules', APP_NAV_ITEMS)).toBeNull();
     });
@@ -65,8 +72,8 @@ describe('grupo Carteira', () => {
         expect(activeNavId('/portfolio/goals', APP_NAV_ITEMS)).toBe('portfolio-goals');
     });
 
-    it('o menu tem só os dois grupos e oito itens', () => {
+    it('o menu tem só os dois grupos e nove itens', () => {
         expect(new Set(APP_NAV_ITEMS.map((item: NavItem) => item.group))).toEqual(new Set(['portfolio', 'spending']));
-        expect(APP_NAV_ITEMS).toHaveLength(8);
+        expect(APP_NAV_ITEMS).toHaveLength(9);
     });
 });
