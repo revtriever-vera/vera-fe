@@ -1,5 +1,4 @@
 {
-  "title": "Minha conta",
   "profileTitle": "Perfil",
   "profileName": "Nome",
   "profileEmail": "E-mail",
@@ -29,7 +28,7 @@
   "deleteItemPortfolio": "sua carteira, seus ativos e suas metas",
   "deleteItemSpending": "seus gastos e suas conexões",
   "deleteItemRest": "tudo o mais que a Vera guarda da conta",
-  "deleteIrreversible": "Não há como desfazer. Cópias de segurança expiram sozinhas, conforme o prazo de retenção de backup.",
+  "deleteIrreversible": "Não há como desfazer. Cópias de segurança expiram conforme o prazo de retenção de backup.",
   "deleteExportInvite": "Quer guardar uma cópia antes? Baixe seus dados agora.",
   "deleteConfirmLabel": "Digite o seu e-mail para confirmar",
   "deleteConfirmHint": "Seu e-mail é {{email}}",

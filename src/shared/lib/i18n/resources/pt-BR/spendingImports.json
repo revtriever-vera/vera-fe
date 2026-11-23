@@ -4,9 +4,8 @@
     "description": "Envie o arquivo do seu banco, confira a prévia e importe."
   },
   "card": {
-    "title": "Importar arquivo",
-    "description": "Funciona com qualquer banco: OFX ou CSV do seu banco (inclusive da fatura do cartão).",
-    "button": "Importar arquivo"
+    "title": "Importar extrato",
+    "description": "Funciona com qualquer banco: exporte o extrato ou a fatura em OFX ou CSV."
   },
   "formats": {
     "ofx": "OFX",
@@ -16,9 +15,10 @@
   },
   "file": {
     "label": "Arquivo do extrato",
-    "hint": "OFX ou CSV do seu banco, até 5 MB",
+    "dropTitle": "Arraste o extrato aqui",
+    "hint": "OFX ou CSV, até 5 MB",
     "tooLarge": "O arquivo passa de 5 MB",
-    "invalidType": "Use um arquivo .ofx, .csv ou .txt",
+    "invalidType": "Use um arquivo OFX ou CSV",
     "reading": "Lendo o arquivo"
   },
   "preview": {

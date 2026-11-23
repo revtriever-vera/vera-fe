@@ -37,7 +37,7 @@ const BADGE_ITEMS: readonly NavItem[] = [
 const ITEMS: readonly NavItem[] = [
     { id: 'overview', to: '/portfolio', labelKey: 'navPortfolioOverview', icon: PieChart, group: 'portfolio' },
     { id: 'assets', to: '/portfolio/assets', labelKey: 'navPortfolioAssets', icon: Wallet, group: 'portfolio' },
-    { id: 'extra', to: '/extra', labelKey: 'navGroupSettings', icon: Wallet }
+    { id: 'extra', to: '/extra', labelKey: 'navSpendingCuts', icon: Wallet }
 ];
 
 function renderShell(items: readonly NavItem[], path: string, withSlot: boolean = false): AnyRouter {
@@ -76,10 +76,10 @@ describe('AppShell', () => {
 
         const nav: HTMLElement = await screen.findByRole('navigation', { name: 'Navegação principal' });
 
-        expect(within(nav).getByRole('heading', { name: 'Patrimônio' })).toBeInTheDocument();
+        expect(within(nav).getByRole('heading', { name: 'Carteira' })).toBeInTheDocument();
         expect(within(nav).getByRole('link', { name: 'Meus ativos' })).toHaveAttribute('aria-current', 'page');
         expect(within(nav).getByRole('link', { name: 'Visão geral' })).not.toHaveAttribute('aria-current');
-        expect(within(nav).getByRole('link', { name: 'Configurações' })).toBeInTheDocument();
+        expect(within(nav).getByRole('link', { name: 'Onde cortar' })).toBeInTheDocument();
     });
 
     it('keeps the parent item of a nested page as the only active one', async () => {
@@ -97,13 +97,13 @@ describe('AppShell', () => {
         expect(await screen.findByText('Continuar configuração')).toBeInTheDocument();
     });
 
-    it('renders only the brand and the user box without items', async () => {
+    it('renders only the brand and the account menu without items', async () => {
         renderShell([], '/portfolio');
 
         const nav: HTMLElement = await screen.findByRole('navigation', { name: 'Navegação principal' });
 
         expect(within(nav).queryAllByRole('link')).toHaveLength(0);
-        expect(await screen.findByRole('group', { name: 'Conta' })).toBeInTheDocument();
+        expect((await screen.findAllByRole('button', { name: 'Abrir menu da conta' })).length).toBeGreaterThan(0);
         expect(screen.getAllByText('vera').length).toBeGreaterThan(0);
     });
 

@@ -1,11 +1,11 @@
 {
   "layout": {
-    "title": "Patrimônio",
-    "tabsLabel": "Seções do patrimônio",
+    "title": "Carteira",
+    "tabsLabel": "Seções da carteira",
     "tabs": {
       "overview": "Visão geral",
       "targets": "Carteira-alvo",
-      "contribution": "Aporte inteligente",
+      "contribution": "Onde aportar",
       "assets": "Meus ativos"
     }
   },

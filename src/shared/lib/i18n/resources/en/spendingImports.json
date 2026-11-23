@@ -4,9 +4,8 @@
     "description": "Upload the file from your bank, check the preview and import."
   },
   "card": {
-    "title": "Import a file",
-    "description": "Works with any bank: OFX or CSV from your bank (including credit card statements).",
-    "button": "Import a file"
+    "title": "Import a statement",
+    "description": "Works with any bank: export the statement or the card bill as OFX or CSV."
   },
   "formats": {
     "ofx": "OFX",
@@ -16,9 +15,10 @@
   },
   "file": {
     "label": "Statement file",
-    "hint": "OFX or CSV from your bank, up to 5 MB",
+    "dropTitle": "Drag the statement here",
+    "hint": "OFX or CSV, up to 5 MB",
     "tooLarge": "The file is over 5 MB",
-    "invalidType": "Use a .ofx, .csv or .txt file",
+    "invalidType": "Use an OFX or CSV file",
     "reading": "Reading the file"
   },
   "preview": {

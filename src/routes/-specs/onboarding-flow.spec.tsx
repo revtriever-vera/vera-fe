@@ -30,12 +30,14 @@ describe('boas-vindas', () => {
         serveState(onboardingState());
         renderRouterAt('/onboarding', { signedIn: true });
 
-        expect(await screen.findByText('Boas-vindas à Vera')).toBeInTheDocument();
+        expect(await screen.findByText('Configuração inicial')).toBeInTheDocument();
         expect(screen.getByText('1. Cadastrar seus ativos')).toBeInTheDocument();
         expect(screen.getByText('2. Conectar seus bancos')).toBeInTheDocument();
         expect(screen.getByText('~5 min')).toBeInTheDocument();
         expect(screen.getByText('~15 min')).toBeInTheDocument();
-        expect(screen.getByText('de verdade')).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', { level: 1, name: 'Some seus investimentos e acompanhe os gastos do mês.' })
+        ).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Só explorar com dados de exemplo' })).not.toBeInTheDocument();
         expect(screen.queryByRole('list', { name: 'Progresso da configuração' })).not.toBeInTheDocument();
         expect(screen.getByRole('heading', { level: 1 })).toHaveFocus();
@@ -193,8 +195,8 @@ describe('progresso', () => {
             within(list)
                 .getAllByRole('listitem')
                 .map((item: HTMLElement): string | null => item.textContent)
-        ).toEqual(['Boas-vindas', '2Patrimônio', '3Gastos', '4Pronto']);
-        expect(within(list).getByText('Patrimônio').previousSibling).toHaveAttribute('aria-current', 'step');
+        ).toEqual(['Boas-vindas', '2Carteira', '3Gastos', '4Pronto']);
+        expect(within(list).getByText('Carteira').previousSibling).toHaveAttribute('aria-current', 'step');
         const compact: HTMLElement = screen.getByRole('progressbar', { name: 'Progresso da configuração' });
         expect(compact).toHaveAttribute('aria-valuenow', '1');
         expect(within(compact).getByText('Etapa 1 de 2')).toBeInTheDocument();

@@ -1,0 +1,17 @@
+{
+  "title": "Settings",
+  "description": "Plan, integrations and your data.",
+  "descriptionSelfHosted": "Self-hosted installation.",
+  "navLabel": "Settings sections",
+  "placeholder": "This section is coming soon.",
+  "tabs": {
+    "plan": "Plan and usage",
+    "integrations": "Integrations",
+    "people": "People",
+    "whatsapp": "WhatsApp",
+    "calendar": "Google Calendar",
+    "banks": "Banks",
+    "preferences": "Preferences",
+    "privacy": "Data and privacy"
+  }
+}

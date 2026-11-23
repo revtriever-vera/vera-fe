@@ -29,7 +29,7 @@ describe('authenticated routes guard', () => {
 
         expect(await screen.findByRole('navigation', { name: 'Navegação principal' })).toBeInTheDocument();
         expect(router.state.location.pathname).toBe('/');
-        expect(screen.getByRole('button', { name: 'Sair' })).toBeInTheDocument();
+        expect(screen.getAllByRole('button', { name: 'Abrir menu da conta' }).length).toBeGreaterThan(0);
     });
 
     it('shows neither the login nor the protected content while restoring', () => {

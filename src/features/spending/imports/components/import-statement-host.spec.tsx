@@ -17,7 +17,7 @@ describe('ImportStatementHost', () => {
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
 
-    it.each(['/spending', '/spending/transactions', '/spending/connections'])('?import=true abre o modal em %s', async (path: string) => {
+    it.each(['/spending', '/spending/transactions'])('?import=true abre o modal em %s', async (path: string) => {
         await openedAt(`${path}?import=true`);
 
         expect(await screen.findByRole('dialog', { name: 'Importar extrato' })).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe('ImportStatementHost', () => {
 
     it('Esc também fecha', async () => {
         const user: UserEvent = userEvent.setup();
-        const router: AnyRouter = await openedAt('/spending/connections?import=true');
+        const router: AnyRouter = await openedAt('/spending/transactions?import=true');
         await screen.findByRole('dialog');
 
         await user.keyboard('{Escape}');
@@ -45,21 +45,5 @@ describe('ImportStatementHost', () => {
         await waitFor(() => {
             expect(router.state.location.search).toEqual({});
         });
-    });
-
-    it('o botão do cartão abre o modal e o foco volta a ele ao fechar', async () => {
-        const user: UserEvent = userEvent.setup();
-        const router: AnyRouter = await openedAt('/spending/connections');
-        const button: HTMLElement = await screen.findByRole('button', { name: 'Importar arquivo' });
-
-        await user.click(button);
-        expect(await screen.findByRole('dialog', { name: 'Importar extrato' })).toBeInTheDocument();
-        expect(router.state.location.search).toEqual({ import: true });
-        await user.click(screen.getByRole('button', { name: 'Cancelar' }));
-
-        await waitFor(() => {
-            expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-        });
-        expect(button).toHaveFocus();
     });
 });
