@@ -230,6 +230,20 @@ describe('aba Plano: Premium', () => {
         expect(screen.queryByText('Ver pessoas')).not.toBeInTheDocument();
     });
 
+    it('com desconto vigente: mostra o valor da próxima cobrança vindo da API e até quando vale', async () => {
+        mockBilling(
+            premiumMe({
+                subscription: billingSubscription({
+                    nextChargeAmountMinor: 1118,
+                    discount: { percent: 25, cycle: 4, endsAt: '2027-03-09T12:00:00.000Z' }
+                })
+            })
+        );
+        await openPlan();
+
+        expect(await screen.findByText(/9 de dezembro de 2026 · R\$\s11,18 · 25% de desconto até 9 de março de 2027/)).toBeInTheDocument();
+    });
+
     it('Pix: a próxima cobrança chega por e-mail e não há "Usar Pix"', async () => {
         mockBilling(premiumMe({ subscription: billingSubscription({ method: 'pix', card: null }) }));
         await openPlan();

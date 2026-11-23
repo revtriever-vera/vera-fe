@@ -22646,6 +22646,17 @@ export interface operations {
                             withdrawalEndsAt: string | null;
                             /** @description True when a canceled subscription can be resumed */
                             canResume: boolean;
+                            /** @description Discount that applies to the next charge; null when the next charge is at full price or there is none */
+                            discount: {
+                                /** @description Discount on the Premium price, in percent */
+                                percent: number;
+                                /** @description Cycle of the discount scale the next charge falls in (starts at 1) */
+                                cycle: number;
+                                /** @description When the discount stops applying (ISO 8601): the end of the last discounted cycle */
+                                endsAt: string;
+                            } | null;
+                            /** @description Amount of the next charge in cents of BRL, discount included (same rule as the price endpoint); null when there is no next charge */
+                            nextChargeAmountMinor: number | null;
                         } | null;
                         /** @description Invoice waiting for payment; null when there is none */
                         openInvoice: {
@@ -23048,6 +23059,17 @@ export interface operations {
                             withdrawalEndsAt: string | null;
                             /** @description True when a canceled subscription can be resumed */
                             canResume: boolean;
+                            /** @description Discount that applies to the next charge; null when the next charge is at full price or there is none */
+                            discount: {
+                                /** @description Discount on the Premium price, in percent */
+                                percent: number;
+                                /** @description Cycle of the discount scale the next charge falls in (starts at 1) */
+                                cycle: number;
+                                /** @description When the discount stops applying (ISO 8601): the end of the last discounted cycle */
+                                endsAt: string;
+                            } | null;
+                            /** @description Amount of the next charge in cents of BRL, discount included (same rule as the price endpoint); null when there is no next charge */
+                            nextChargeAmountMinor: number | null;
                         } | null;
                         /** @description Invoice waiting for payment; null when there is none */
                         openInvoice: {
@@ -23243,6 +23265,17 @@ export interface operations {
                             withdrawalEndsAt: string | null;
                             /** @description True when a canceled subscription can be resumed */
                             canResume: boolean;
+                            /** @description Discount that applies to the next charge; null when the next charge is at full price or there is none */
+                            discount: {
+                                /** @description Discount on the Premium price, in percent */
+                                percent: number;
+                                /** @description Cycle of the discount scale the next charge falls in (starts at 1) */
+                                cycle: number;
+                                /** @description When the discount stops applying (ISO 8601): the end of the last discounted cycle */
+                                endsAt: string;
+                            } | null;
+                            /** @description Amount of the next charge in cents of BRL, discount included (same rule as the price endpoint); null when there is no next charge */
+                            nextChargeAmountMinor: number | null;
                         } | null;
                         /** @description Invoice waiting for payment; null when there is none */
                         openInvoice: {
@@ -23507,6 +23540,17 @@ export interface operations {
                             withdrawalEndsAt: string | null;
                             /** @description True when a canceled subscription can be resumed */
                             canResume: boolean;
+                            /** @description Discount that applies to the next charge; null when the next charge is at full price or there is none */
+                            discount: {
+                                /** @description Discount on the Premium price, in percent */
+                                percent: number;
+                                /** @description Cycle of the discount scale the next charge falls in (starts at 1) */
+                                cycle: number;
+                                /** @description When the discount stops applying (ISO 8601): the end of the last discounted cycle */
+                                endsAt: string;
+                            } | null;
+                            /** @description Amount of the next charge in cents of BRL, discount included (same rule as the price endpoint); null when there is no next charge */
+                            nextChargeAmountMinor: number | null;
                         } | null;
                         /** @description Invoice waiting for payment; null when there is none */
                         openInvoice: {

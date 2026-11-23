@@ -365,7 +365,9 @@ describe('account deletion text by plan', () => {
             card: { brand: 'visa', last4: '4242' },
             graceEndsAt: null,
             withdrawalEndsAt: null,
-            canResume: false
+            canResume: false,
+            discount: null,
+            nextChargeAmountMinor: 1490
         };
         const dialog: HTMLElement = await openModalWith(billingMe({ subscription }));
 
