@@ -32,6 +32,7 @@ import { Route as PlatformAdminIndexRouteImport } from './routes/_platform/admin
 import { Route as PlatformAdminAccountsRouteImport } from './routes/_platform/admin.accounts'
 import { Route as PlatformAdminAuditRouteImport } from './routes/_platform/admin.audit'
 import { Route as PlatformAdminLinksRouteImport } from './routes/_platform/admin.links'
+import { Route as PlatformAdminTokensRouteImport } from './routes/_platform/admin.tokens'
 import { Route as AvisosSairTokenRouteImport } from './routes/avisos.sair.$token'
 import { Route as AuthAppPortfolioIndexRouteImport } from './routes/_auth/_app/portfolio.index'
 import { Route as AuthAppPortfolioAssetsRouteImport } from './routes/_auth/_app/portfolio.assets'
@@ -161,6 +162,11 @@ const PlatformAdminLinksRoute = PlatformAdminLinksRouteImport.update({
   path: '/admin/links',
   getParentRoute: () => PlatformRoute,
 } as any)
+const PlatformAdminTokensRoute = PlatformAdminTokensRouteImport.update({
+  id: '/admin/tokens',
+  path: '/admin/tokens',
+  getParentRoute: () => PlatformRoute,
+} as any)
 const AvisosSairTokenRoute = AvisosSairTokenRouteImport.update({
   id: '/avisos/sair/$token',
   path: '/avisos/sair/$token',
@@ -267,6 +273,7 @@ export interface FileRoutesByFullPath {
   '/admin/accounts': typeof PlatformAdminAccountsRoute
   '/admin/audit': typeof PlatformAdminAuditRoute
   '/admin/links': typeof PlatformAdminLinksRoute
+  '/admin/tokens': typeof PlatformAdminTokensRoute
   '/avisos/sair/$token': typeof AvisosSairTokenRoute
   '/onboarding/': typeof AuthOnboardingIndexRoute
   '/admin/': typeof PlatformAdminIndexRoute
@@ -301,6 +308,7 @@ export interface FileRoutesByTo {
   '/admin/accounts': typeof PlatformAdminAccountsRoute
   '/admin/audit': typeof PlatformAdminAuditRoute
   '/admin/links': typeof PlatformAdminLinksRoute
+  '/admin/tokens': typeof PlatformAdminTokensRoute
   '/avisos/sair/$token': typeof AvisosSairTokenRoute
   '/onboarding': typeof AuthOnboardingIndexRoute
   '/admin': typeof PlatformAdminIndexRoute
@@ -342,6 +350,7 @@ export interface FileRoutesById {
   '/_platform/admin/accounts': typeof PlatformAdminAccountsRoute
   '/_platform/admin/audit': typeof PlatformAdminAuditRoute
   '/_platform/admin/links': typeof PlatformAdminLinksRoute
+  '/_platform/admin/tokens': typeof PlatformAdminTokensRoute
   '/avisos/sair/$token': typeof AvisosSairTokenRoute
   '/_auth/_app/': typeof AuthAppIndexRoute
   '/_auth/onboarding/': typeof AuthOnboardingIndexRoute
@@ -383,6 +392,7 @@ export interface FileRouteTypes {
     | '/admin/accounts'
     | '/admin/audit'
     | '/admin/links'
+    | '/admin/tokens'
     | '/avisos/sair/$token'
     | '/onboarding/'
     | '/admin/'
@@ -417,6 +427,7 @@ export interface FileRouteTypes {
     | '/admin/accounts'
     | '/admin/audit'
     | '/admin/links'
+    | '/admin/tokens'
     | '/avisos/sair/$token'
     | '/onboarding'
     | '/admin'
@@ -457,6 +468,7 @@ export interface FileRouteTypes {
     | '/_platform/admin/accounts'
     | '/_platform/admin/audit'
     | '/_platform/admin/links'
+    | '/_platform/admin/tokens'
     | '/avisos/sair/$token'
     | '/_auth/_app/'
     | '/_auth/onboarding/'
@@ -650,6 +662,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/links'
       fullPath: '/admin/links'
       preLoaderRoute: typeof PlatformAdminLinksRouteImport
+      parentRoute: typeof PlatformRoute
+    }
+    '/_platform/admin/tokens': {
+      id: '/_platform/admin/tokens'
+      path: '/admin/tokens'
+      fullPath: '/admin/tokens'
+      preLoaderRoute: typeof PlatformAdminTokensRouteImport
       parentRoute: typeof PlatformRoute
     }
     '/avisos/sair/$token': {
@@ -881,6 +900,7 @@ interface PlatformRouteChildren {
   PlatformAdminAccountsRoute: typeof PlatformAdminAccountsRoute
   PlatformAdminAuditRoute: typeof PlatformAdminAuditRoute
   PlatformAdminLinksRoute: typeof PlatformAdminLinksRoute
+  PlatformAdminTokensRoute: typeof PlatformAdminTokensRoute
   PlatformAdminIndexRoute: typeof PlatformAdminIndexRoute
 }
 
@@ -888,6 +908,7 @@ const PlatformRouteChildren: PlatformRouteChildren = {
   PlatformAdminAccountsRoute: PlatformAdminAccountsRoute,
   PlatformAdminAuditRoute: PlatformAdminAuditRoute,
   PlatformAdminLinksRoute: PlatformAdminLinksRoute,
+  PlatformAdminTokensRoute: PlatformAdminTokensRoute,
   PlatformAdminIndexRoute: PlatformAdminIndexRoute,
 }
 

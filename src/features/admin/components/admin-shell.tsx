@@ -1,6 +1,6 @@
 import type { ReactElement, ReactNode } from 'react';
 import { Link, useNavigate, type UseNavigateResult } from '@tanstack/react-router';
-import { Link2, ScrollText, Users, type LucideIcon } from 'lucide-react';
+import { KeyRound, Link2, ScrollText, Users, type LucideIcon } from 'lucide-react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useSession } from '@/app/providers/session-provider';
 import type { SessionContext } from '@/app/providers/session-context';
@@ -9,14 +9,15 @@ import { BrandLogo } from '@/shared/ui/brand-logo';
 import { Button } from '@/shared/ui/button';
 
 interface AdminNavItem {
-    readonly to: '/admin/links' | '/admin/accounts' | '/admin/audit';
-    readonly labelKey: 'navLinks' | 'navAccounts' | 'navAudit';
+    readonly to: '/admin/links' | '/admin/accounts' | '/admin/tokens' | '/admin/audit';
+    readonly labelKey: 'navLinks' | 'navAccounts' | 'navTokens' | 'navAudit';
     readonly icon: LucideIcon;
 }
 
 const ADMIN_NAV: readonly AdminNavItem[] = [
     { to: '/admin/links', labelKey: 'navLinks', icon: Link2 },
     { to: '/admin/accounts', labelKey: 'navAccounts', icon: Users },
+    { to: '/admin/tokens', labelKey: 'navTokens', icon: KeyRound },
     { to: '/admin/audit', labelKey: 'navAudit', icon: ScrollText }
 ];
 
