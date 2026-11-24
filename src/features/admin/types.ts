@@ -31,3 +31,10 @@ export type AccountAccess = AccessPath['responses']['200']['content']['applicati
 export type AccountSummary = NonNullable<AccountAccess['summary']>;
 export type AccountPerson = AccountSummary['people'][number];
 export type AccountData = NonNullable<AccountAccess['data']>;
+
+type TokensPath = paths['/platform/tokens'];
+
+export type PlatformTokenList = TokensPath['get']['responses']['200']['content']['application/json'];
+export type PlatformToken = PlatformTokenList['items'][number];
+export type CreatePlatformTokenInput = NonNullable<TokensPath['post']['requestBody']>['content']['application/json'];
+export type CreatedPlatformToken = TokensPath['post']['responses']['201']['content']['application/json'];

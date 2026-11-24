@@ -5,6 +5,7 @@ import type {
     AccountList,
     AuditEntry,
     PlatformOverview,
+    PlatformToken,
     SignupLink
 } from '@/features/admin/types';
 
@@ -42,7 +43,12 @@ export function signupLink(overrides: Partial<SignupLink> = {}): SignupLink {
 }
 
 export function platformOverview(overrides: Partial<PlatformOverview> = {}): PlatformOverview {
-    return { accounts: { total: 120, createdLast30Days: 14 }, plans: { free: 90, premium: 30, trials: 6 }, ...overrides };
+    return {
+        accounts: { total: 120, createdLast30Days: 14 },
+        plans: { free: 90, premium: 30, trials: 6, trialsWithCard: 4, trialsWithoutCard: 2, pastDue: 1 },
+        revenue: { estimatedMonthlyCents: 0 },
+        ...overrides
+    };
 }
 
 export function accountItem(overrides: Partial<AccountItem> = {}): AccountItem {
@@ -136,6 +142,20 @@ export function accountData(overrides: Partial<AccountData> = {}): AccountData {
         spending_settings: null,
         recurring: { series: [], suppressions: [], alerts: [] },
         bank_connections: { connections: [] },
+        ...overrides
+    };
+}
+
+export function platformToken(overrides: Partial<PlatformToken> = {}): PlatformToken {
+    return {
+        id: '55555555-5555-4555-8555-555555555555',
+        name: 'Notebook do Lucas',
+        hint: 'a1b2',
+        createdByUserId: '22222222-2222-4222-8222-222222222222',
+        expiresAt: '2099-01-01T12:00:00.000Z',
+        lastUsedAt: null,
+        revokedAt: null,
+        createdAt: '2026-11-20T12:00:00.000Z',
         ...overrides
     };
 }

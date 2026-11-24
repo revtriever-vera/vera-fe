@@ -528,6 +528,94 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/platform/tokens": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the platform tokens
+         * @description Newest first, with name, last characters, expiry, last use and revocation. The token itself is never returned.
+         */
+        get: operations["PlatformTokensController_list"];
+        put?: never;
+        /**
+         * Create a platform token
+         * @description Creates a token for the MCP server (`/mcp`). The token comes back once, in this response; only its hash is kept. It lasts 90 days by default and at most 365. Only a session of the platform company can create one (the sign-in already asked for the second factor); a platform token cannot create or revoke tokens. Records `platform_token.created` in the audit trail in the same transaction.
+         */
+        post: operations["PlatformTokensController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/platform/tokens/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Revoke a platform token
+         * @description The token stops working at once. Revoking a revoked token changes nothing in the token but still records `platform_token.revoked` in the audit trail.
+         */
+        delete: operations["PlatformTokensController_revoke"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mcp": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * MCP server of the platform: methods other than POST
+         * @description The server is stateless: only POST is accepted.
+         */
+        get: operations["McpController_refuse_get"];
+        /**
+         * MCP server of the platform: methods other than POST
+         * @description The server is stateless: only POST is accepted.
+         */
+        put: operations["McpController_refuse_put"];
+        /**
+         * MCP server of the platform: methods other than POST
+         * @description The server is stateless: only POST is accepted.
+         */
+        post: operations["McpController_refuse_post"];
+        /**
+         * MCP server of the platform: methods other than POST
+         * @description The server is stateless: only POST is accepted.
+         */
+        delete: operations["McpController_refuse_delete"];
+        /**
+         * MCP server of the platform: methods other than POST
+         * @description The server is stateless: only POST is accepted.
+         */
+        options: operations["McpController_refuse_options"];
+        /**
+         * MCP server of the platform: methods other than POST
+         * @description The server is stateless: only POST is accepted.
+         */
+        head: operations["McpController_refuse_head"];
+        /**
+         * MCP server of the platform: methods other than POST
+         * @description The server is stateless: only POST is accepted.
+         */
+        patch: operations["McpController_refuse_patch"];
+        trace?: never;
+    };
     "/platform/signup-links": {
         parameters: {
             query?: never;
@@ -5538,6 +5626,16 @@ export interface operations {
                             premium: number;
                             /** @description Accounts whose open Premium line is a trial */
                             trials: number;
+                            /** @description Trials that started with a card on file (a subset of `trials`) */
+                            trialsWithCard: number;
+                            /** @description Trials that started without a card (a subset of `trials`) */
+                            trialsWithoutCard: number;
+                            /** @description Accounts whose Premium has an overdue charge (`past_due` standing) */
+                            pastDue: number;
+                        };
+                        revenue: {
+                            /** @description Estimated monthly revenue in cents: the Premium price of every account that has an open subscription line. Launch discounts and trials are not deducted */
+                            estimatedMonthlyCents: number;
                         };
                     };
                 };
@@ -6327,6 +6425,520 @@ export interface operations {
             };
         };
     };
+    PlatformTokensController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The tokens */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Newest first */
+                        items: {
+                            /**
+                             * Format: uuid
+                             * @description Token id
+                             */
+                            id: string;
+                            /** @description What the token is for */
+                            name: string;
+                            /** @description Last characters of the token, to tell tokens apart; the token itself is never shown again */
+                            hint: string;
+                            /**
+                             * Format: uuid
+                             * @description Platform user who created the token
+                             */
+                            createdByUserId: string;
+                            /**
+                             * Format: date-time
+                             * @description When the token stops working
+                             */
+                            expiresAt: string;
+                            /**
+                             * Format: date-time
+                             * @description Last call made with the token; null when never used
+                             */
+                            lastUsedAt: string | null;
+                            /**
+                             * Format: date-time
+                             * @description When the token was revoked; null while it is valid
+                             */
+                            revokedAt: string | null;
+                            /**
+                             * Format: date-time
+                             * @description When the token was created
+                             */
+                            createdAt: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Not of the platform company (identity.platform_only) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Self-hosted deployment (identity.platform_disabled) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PlatformTokensController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description What the token is for, for example the machine or the person using it */
+                    name: string;
+                    /**
+                     * @description Days until the token stops working (1 to 365, 90 by default)
+                     * @default 90
+                     */
+                    expiresInDays?: number;
+                };
+            };
+        };
+        responses: {
+            /** @description The token, shown only now */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Token id
+                         */
+                        id: string;
+                        /** @description What the token is for */
+                        name: string;
+                        /** @description Last characters of the token, to tell tokens apart; the token itself is never shown again */
+                        hint: string;
+                        /**
+                         * Format: uuid
+                         * @description Platform user who created the token
+                         */
+                        createdByUserId: string;
+                        /**
+                         * Format: date-time
+                         * @description When the token stops working
+                         */
+                        expiresAt: string;
+                        /**
+                         * Format: date-time
+                         * @description Last call made with the token; null when never used
+                         */
+                        lastUsedAt: string | null;
+                        /**
+                         * Format: date-time
+                         * @description When the token was revoked; null while it is valid
+                         */
+                        revokedAt: string | null;
+                        /**
+                         * Format: date-time
+                         * @description When the token was created
+                         */
+                        createdAt: string;
+                        /** @description The token, `vera_pat_...`. Shown only in this response; only its hash is kept */
+                        token: string;
+                    };
+                };
+            };
+            /** @description Invalid payload (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Not of the platform company (identity.platform_only) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Self-hosted deployment (identity.platform_disabled) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PlatformTokensController_revoke: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Platform token id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Revoked */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Not of the platform company (identity.platform_only) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Self-hosted deployment (identity.platform_disabled) or no token with this id (identity.platform_token_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    McpController_refuse_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Method not allowed */
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpController_refuse_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Method not allowed */
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpController_refuse_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Method not allowed */
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpController_refuse_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Method not allowed */
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpController_refuse_options: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Method not allowed */
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpController_refuse_head: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Method not allowed */
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    McpController_refuse_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Method not allowed */
+            405: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     PlatformSignupLinksController_list: {
         parameters: {
             query?: never;
@@ -6995,6 +7607,30 @@ export interface operations {
             };
             /** @description Self-hosted deployment (identity.platform_disabled) or no link with this id (signup_links.not_found) */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The link is revoked and cannot be edited (signup_links.revoked) */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -23066,7 +23702,7 @@ export interface operations {
                                     usedBps: number;
                                 };
                             };
-                            /** @description Cap in micros of BRL; only for self-hosted with a cap */
+                            /** @description Cap in micros of BRL; null when there is no cap or it is not exposed (hosted) */
                             capMicros: number | null;
                         } | null;
                     };
@@ -23136,7 +23772,7 @@ export interface operations {
                                 usedBps: number;
                             };
                         };
-                        /** @description Cap in micros of BRL; only for self-hosted with a cap */
+                        /** @description Cap in micros of BRL; null when there is no cap or it is not exposed (hosted) */
                         capMicros: number | null;
                     };
                 };
@@ -23206,6 +23842,30 @@ export interface operations {
                          * @enum {string}
                          */
                         next: "pay_invoice";
+                    };
+                };
+            };
+            /** @description The platform company does not subscribe to Premium (billing.platform_company) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
                     };
                 };
             };
@@ -23479,7 +24139,7 @@ export interface operations {
                                     usedBps: number;
                                 };
                             };
-                            /** @description Cap in micros of BRL; only for self-hosted with a cap */
+                            /** @description Cap in micros of BRL; null when there is no cap or it is not exposed (hosted) */
                             capMicros: number | null;
                         } | null;
                         /** @description True when the withdrawal window ended Premium at once */
@@ -23685,7 +24345,7 @@ export interface operations {
                                     usedBps: number;
                                 };
                             };
-                            /** @description Cap in micros of BRL; only for self-hosted with a cap */
+                            /** @description Cap in micros of BRL; null when there is no cap or it is not exposed (hosted) */
                             capMicros: number | null;
                         } | null;
                     };
@@ -23960,7 +24620,7 @@ export interface operations {
                                     usedBps: number;
                                 };
                             };
-                            /** @description Cap in micros of BRL; only for self-hosted with a cap */
+                            /** @description Cap in micros of BRL; null when there is no cap or it is not exposed (hosted) */
                             capMicros: number | null;
                         } | null;
                     };
