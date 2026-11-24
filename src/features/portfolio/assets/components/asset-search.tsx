@@ -13,6 +13,7 @@ import { useQuotes, type QuoteBook } from '../api/use-quotes.query';
 import { colorKeyForClassKey } from '../lib/asset-types';
 import { formatUnitPrice } from '../lib/format-unit-price';
 import type { CatalogAsset, CatalogGroup, CatalogSearchResponse, Quote } from '../types';
+import { CatalogSourceNote } from './catalog-source-note';
 import { AssetResultItem, type ResultPrice } from './asset-result-item';
 
 const SEARCH_DEBOUNCE_MS: number = 250;
@@ -155,6 +156,7 @@ export function AssetSearch({
             {results.search.isError ? <Alert tone="caution" title={t('search.failed')} /> : null}
             {results.search.isPending ? <ResultSkeleton /> : null}
             <ResultList results={results} pickedId={pickedId} heldAssetIds={heldAssetIds} classes={classes} onPick={onPick} />
+            <CatalogSourceNote group={group} />
         </div>
     );
 }

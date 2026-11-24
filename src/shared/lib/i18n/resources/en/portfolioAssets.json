@@ -53,6 +53,7 @@
     "empty": "Nothing found for this search.",
     "found_one": "{{count}} result",
     "found_other": "{{count}} results",
+    "source": "Source of the asset registry: <cvm>CVM, Open Data Portal</cvm>, ODbL license",
     "failed": "We could not search right now. Try again in a moment."
   },
   "kinds": {
