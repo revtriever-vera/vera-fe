@@ -6,6 +6,7 @@ import type { SupportedLocale } from '@/shared/lib/locale';
 import { Badge } from '@/shared/ui/badge';
 import { Money } from '@/shared/ui/money';
 import type { BaseCurrency, HoldingView } from '../../types';
+import { isCvmMarket } from '../lib/cnpj';
 import { hasUnreliableValue, holdingFlags, type HoldingFlag } from '../lib/holding-flags';
 
 const FLAG_TONES: Readonly<Record<HoldingFlag, 'neutral' | 'caution'>> = {
@@ -23,6 +24,15 @@ function FlagChip({ flag, holding }: { readonly flag: HoldingFlag; readonly hold
         holding.priceDate === null ? t('flags.staleUnknown') : t('flags.stale', { date: formatIsoDate(holding.priceDate, locale) });
     const text: string = flag === 'stale' ? stale : t(`flags.${flag}`);
     return <Badge tone={FLAG_TONES[flag]}>{text}</Badge>;
+}
+
+function GrossQuoteChip({ holding }: { readonly holding: HoldingView }): ReactElement | null {
+    const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
+    const locale: SupportedLocale = useLocale();
+    if (!isCvmMarket(holding.market) || holding.priceDate === null || hasUnreliableValue(holding)) {
+        return null;
+    }
+    return <Badge tone="neutral">{t('flags.grossQuote', { date: formatIsoDate(holding.priceDate, locale) })}</Badge>;
 }
 
 export function FlagChips({ holding }: { readonly holding: HoldingView }): ReactElement | null {
@@ -58,6 +68,7 @@ export function ValueCell({ holding, baseCurrency }: ValueCellProps): ReactEleme
                     <Money amountMinor={holding.nativeValueMinor} currency={holding.nativeCurrency} />
                 </span>
             ) : null}
+            <GrossQuoteChip holding={holding} />
             <FlagChips holding={holding} />
         </span>
     );

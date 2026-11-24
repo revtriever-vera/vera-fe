@@ -6,6 +6,7 @@ import { defaultClasses } from '../../../../../test/fixtures/portfolio';
 import { mockAssetsApi, type AssetsApi } from '../../../../../test/helpers/assets-api';
 import { renderWithProviders } from '../../../../../test/render';
 import { QUOTE_MAX_POLLS, QUOTE_POLL_MS } from '../api/use-quotes.query';
+import type { CatalogAsset, CatalogGroup } from '../types';
 import { AssetSearch } from './asset-search';
 
 function renderSearch(onPick: Mock = vi.fn(), query: string = ''): void {
@@ -63,6 +64,32 @@ describe('AssetSearch', () => {
         expect(await screen.findByText('preço indisponível')).toBeInTheDocument();
     });
 
+    it('fundos: envia o CNPJ só com dígitos, mostra o aviso de previdência e a fonte', async () => {
+        const fund: CatalogAsset = catalogAsset({
+            id: 'asset-fund',
+            symbol: '00000000000191',
+            name: 'FUNDO ALFA',
+            kind: 'fund',
+            market: 'CVM',
+            typeGroup: 'fundos',
+            suggestedClassKey: null
+        });
+        const api: AssetsApi = mockAssetsApi({ assets: [fund] });
+        renderWithProviders(<Controlled group="fundos" />);
+        await screen.findByRole('option', { name: /00\.000\.000\/0001-91/ });
+
+        fireEvent.change(screen.getByRole('searchbox'), { target: { value: '00.000.000/0001-91' } });
+        await act(async () => {
+            await vi.advanceTimersByTimeAsync(300);
+        });
+
+        await waitFor(() => {
+            expect(api.searches).toEqual(['fundos|', 'fundos|00000000000191']);
+        });
+        expect(screen.getByText(/Planos de previdência PGBL e VGBL não são cobertos/)).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'CVM, Portal de Dados Abertos' })).toBeInTheDocument();
+    });
+
     it('espera o intervalo sem digitar antes de procurar', async () => {
         const api: AssetsApi = mockAssetsApi({ assets: [catalogAsset()] });
         renderWithProviders(<Controlled />);
@@ -83,11 +110,11 @@ describe('AssetSearch', () => {
     });
 });
 
-function Controlled(): React.ReactElement {
+function Controlled({ group = 'acoes_br' }: { readonly group?: CatalogGroup }): React.ReactElement {
     const [query, setQuery] = React.useState<string>('');
     return (
         <AssetSearch
-            group="acoes_br"
+            group={group}
             typeName="Ações brasileiras"
             query={query}
             onQueryChange={setQuery}

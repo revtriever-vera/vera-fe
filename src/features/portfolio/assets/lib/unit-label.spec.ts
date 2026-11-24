@@ -6,6 +6,10 @@ describe('unitLabelKey', () => {
         expect(unitLabelKey(group)).toBe('shares');
     });
 
+    it('fundos usam cotas', () => {
+        expect(unitLabelKey('fundos')).toBe('shares');
+    });
+
     it('cripto usa unidades', () => {
         expect(unitLabelKey('cripto')).toBe('units');
     });

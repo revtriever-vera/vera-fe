@@ -12,6 +12,12 @@ describe('CatalogSourceNote', () => {
         expect(screen.getByText(/licença ODbL/)).toBeInTheDocument();
     });
 
+    it('cita a CVM também nos fundos', () => {
+        renderWithProviders(<CatalogSourceNote group="fundos" />);
+
+        expect(screen.getByRole('link', { name: 'CVM, Portal de Dados Abertos' })).toBeInTheDocument();
+    });
+
     it('não aparece em grupos que não vêm da CVM', () => {
         renderWithProviders(<CatalogSourceNote group="cripto" />);
 

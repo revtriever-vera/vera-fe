@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { IVVB11, catalogAsset } from '../../../../../test/fixtures/assets';
 import { renderWithProviders } from '../../../../../test/render';
+import type { CatalogAsset } from '../types';
 import { AssetResultItem, type AssetResultItemProps } from './asset-result-item';
 
 function props(overrides: Partial<AssetResultItemProps> = {}): AssetResultItemProps {
@@ -26,6 +27,20 @@ describe('AssetResultItem', () => {
         expect(screen.getByText('Itaú Unibanco PN')).toBeInTheDocument();
         expect(screen.getByText('R$ 37,80')).toBeInTheDocument();
         expect(screen.getByText(/Ação/)).toBeInTheDocument();
+    });
+
+    it('mostra o CNPJ formatado no lugar do símbolo de um fundo', () => {
+        const fund: CatalogAsset = catalogAsset({
+            symbol: '00000000000191',
+            name: 'FUNDO ALFA',
+            kind: 'fund',
+            market: 'CVM',
+            typeGroup: 'fundos'
+        });
+        renderWithProviders(<AssetResultItem {...props({ asset: fund })} />);
+
+        expect(screen.getByText('00.000.000/0001-91')).toBeInTheDocument();
+        expect(screen.getByText(/Fundo/)).toBeInTheDocument();
     });
 
     it('mostra o chip Já na carteira só quando o ativo já está lá', () => {

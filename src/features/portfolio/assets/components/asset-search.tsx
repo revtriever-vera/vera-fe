@@ -1,3 +1,4 @@
+import { Info } from 'lucide-react';
 import { useEffect, useRef, type KeyboardEvent, type ReactElement, type RefObject } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import type { UseQueryResult } from '@tanstack/react-query';
@@ -11,6 +12,7 @@ import type { AssetClassView } from '../../types';
 import { useCatalogSearch } from '../api/use-catalog-search.query';
 import { useQuotes, type QuoteBook } from '../api/use-quotes.query';
 import { colorKeyForClassKey } from '../lib/asset-types';
+import { catalogSearchTerm } from '../lib/cnpj';
 import { formatUnitPrice } from '../lib/format-unit-price';
 import type { CatalogAsset, CatalogGroup, CatalogSearchResponse, Quote } from '../types';
 import { CatalogSourceNote } from './catalog-source-note';
@@ -59,14 +61,21 @@ function useFocusSearch(container: RefObject<HTMLDivElement | null>): void {
     }, [container]);
 }
 
-function SearchStatus({ search, count }: { readonly search: UseQueryResult<CatalogSearchResponse>; readonly count: number }): ReactElement {
+interface SearchStatusProps {
+    readonly search: UseQueryResult<CatalogSearchResponse>;
+    readonly count: number;
+    readonly group: CatalogGroup;
+}
+
+function SearchStatus({ search, count, group }: SearchStatusProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const searching: boolean = search.isFetching && search.data === undefined;
     const empty: boolean = search.isSuccess && count === 0;
+    const emptyKey: 'search.empty' | 'search.emptyFunds' = group === 'fundos' ? 'search.emptyFunds' : 'search.empty';
     return (
         <p role="status" aria-live="polite" className={empty || searching ? 'text-sm text-content-muted' : 'sr-only'}>
             {searching ? t('search.loading') : null}
-            {empty ? t('search.empty') : null}
+            {empty ? t(emptyKey) : null}
             {search.isSuccess && count > 0 ? t('search.found', { count }) : null}
         </p>
     );
@@ -80,10 +89,20 @@ interface Results {
 
 function useResults(group: CatalogGroup, query: string): Results {
     const debounced: string = useDebouncedValue(query.trim(), SEARCH_DEBOUNCE_MS);
-    const search: UseQueryResult<CatalogSearchResponse> = useCatalogSearch({ group, q: debounced });
+    const search: UseQueryResult<CatalogSearchResponse> = useCatalogSearch({ group, q: catalogSearchTerm(group, debounced) });
     const assets: readonly CatalogAsset[] = search.data?.data ?? [];
     const book: QuoteBook = useQuotes(assets.map((asset: CatalogAsset): string => asset.id));
     return { search, assets, book };
+}
+
+function FundsNotice(): ReactElement {
+    const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
+    return (
+        <p className="flex items-start gap-2 rounded-control bg-info/10 p-3 text-xs text-content">
+            <Info className="mt-px size-4 shrink-0 text-info" aria-hidden="true" />
+            {t('search.fundsNotice')}
+        </p>
+    );
 }
 
 function ResultSkeleton(): ReactElement {
@@ -149,10 +168,11 @@ export function AssetSearch({
             <SearchInput
                 value={query}
                 onChange={onQueryChange}
-                placeholder={t('search.placeholder')}
+                placeholder={t(group === 'fundos' ? 'search.placeholderFunds' : 'search.placeholder')}
                 label={t('search.label', { type: typeName })}
             />
-            <SearchStatus search={results.search} count={results.assets.length} />
+            {group === 'fundos' ? <FundsNotice /> : null}
+            <SearchStatus search={results.search} count={results.assets.length} group={group} />
             {results.search.isError ? <Alert tone="caution" title={t('search.failed')} /> : null}
             {results.search.isPending ? <ResultSkeleton /> : null}
             <ResultList results={results} pickedId={pickedId} heldAssetIds={heldAssetIds} classes={classes} onPick={onPick} />

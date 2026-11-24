@@ -5,6 +5,7 @@ import { Controller, useWatch, type FieldErrors, type UseFormReturn } from 'reac
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useLocale } from '@/shared/lib/i18n';
 import { formatCurrency } from '@/shared/lib/format/currency';
+import { formatIsoDate } from '@/shared/lib/format/date';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { Alert } from '@/shared/ui/alert';
 import { Badge } from '@/shared/ui/badge';
@@ -14,6 +15,7 @@ import { toClassColorKey } from '../../lib/class-color';
 import { valueSourceKey } from '../../lib/value-source';
 import { useClassLabel, type ClassLabel } from '../../lib/use-class-label';
 import type { AssetClassView, ValueSource } from '../../types';
+import { formatCnpj } from '../lib/cnpj';
 import { exposureKind, type ExposureKind } from '../lib/exposure-note';
 import { formatUnitPrice } from '../lib/format-unit-price';
 import { suggestedClassId } from '../lib/suggested-class';
@@ -67,7 +69,7 @@ function PreviewTitle({
         <div className="flex items-center gap-3">
             <ClassTile systemKey={shown?.systemKey ?? asset.suggestedClassKey} colorKey={toClassColorKey(shown?.colorKey ?? '')} />
             <span className="flex min-w-0 flex-col">
-                <b className="text-base font-bold text-content">{asset.symbol}</b>
+                <b className="text-base font-bold text-content">{asset.kind === 'fund' ? formatCnpj(asset.symbol) : asset.symbol}</b>
                 <span className="truncate text-sm text-content-muted">{asset.name}</span>
             </span>
         </div>
@@ -91,12 +93,21 @@ function Pills({ asset, preview }: { readonly asset: CatalogAsset; readonly prev
     );
 }
 
+function legendOf(t: TFunction<'portfolioAssets'>, asset: CatalogAsset, preview: PreviewValue, locale: SupportedLocale): string {
+    if (asset.market === 'CVM') {
+        return preview.quote === null
+            ? t('position.legendQuote')
+            : t('flags.grossQuote', { date: formatIsoDate(preview.quote.priceDate, locale) });
+    }
+    return asset.kind === 'treasury' ? t('position.legendTreasury') : t('position.legendQuote');
+}
+
 function ValueBlock({ asset, preview }: { readonly asset: CatalogAsset; readonly preview: PreviewValue }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioAssets', undefined> = useTranslation('portfolioAssets');
     const locale: SupportedLocale = useLocale();
     const text: string =
         preview.valueMinor === null ? t('position.valueEmpty') : formatCurrency(preview.valueMinor, preview.baseCurrency, locale);
-    const legend: string = asset.kind === 'treasury' ? t('position.legendTreasury') : t('position.legendQuote');
+    const legend: string = legendOf(t, asset, preview, locale);
     return (
         <>
             <ValueToday label={t('position.valueLabel')} value={text} legend={legend} />
@@ -134,6 +145,13 @@ function quantityHint(t: TFunction<'portfolioAssets'>, decimals: number): string
     return decimals === 0 ? t('position.quantityHintInteger') : t('position.quantityHint', { count: decimals });
 }
 
+function classHint(t: TFunction<'portfolioAssets'>, asset: CatalogAsset): string | undefined {
+    if (asset.suggestedClassKey !== null) {
+        return undefined;
+    }
+    return asset.kind === 'fund' ? t('position.classNoSuggestionFund') : t('position.classNoSuggestion');
+}
+
 function PositionClassField({
     asset,
     form,
@@ -155,7 +173,7 @@ function PositionClassField({
                     value={field.value}
                     classes={classes}
                     error={form.formState.errors.classId?.message}
-                    hint={asset.suggestedClassKey === null ? t('position.classNoSuggestion') : undefined}
+                    hint={classHint(t, asset)}
                     onChange={field.onChange}
                 />
             )}

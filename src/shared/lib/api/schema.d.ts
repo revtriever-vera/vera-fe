@@ -12212,9 +12212,9 @@ export interface operations {
     CatalogController_list: {
         parameters: {
             query?: {
-                /** @description Registration type card that narrows the search: acoes_br, fii, acoes_eua, reits, cripto or tesouro */
-                group?: "acoes_br" | "fii" | "acoes_eua" | "reits" | "cripto" | "tesouro";
-                /** @description Ticker or name fragment, up to 60 characters; empty or missing lists the popular assets of the group */
+                /** @description Registration type card that narrows the search: acoes_br, fii, acoes_eua, reits, cripto, tesouro or fundos */
+                group?: "acoes_br" | "fii" | "acoes_eua" | "reits" | "cripto" | "tesouro" | "fundos";
+                /** @description Ticker, name fragment or CNPJ (with or without punctuation), up to 60 characters; empty or missing lists the popular assets of the group */
                 q?: string;
                 /** @description Maximum number of results, from 1 to 30 (default 20) */
                 limit?: number;
@@ -12247,17 +12247,17 @@ export interface operations {
                              * @description Market the asset comes from
                              * @enum {string}
                              */
-                            market: "B3" | "US" | "CRYPTO" | "TESOURO";
+                            market: "B3" | "US" | "CRYPTO" | "TESOURO" | "CVM";
                             /**
                              * @description Instrument kind
                              * @enum {string}
                              */
-                            kind: "stock" | "etf" | "fii" | "bdr" | "reit" | "crypto" | "treasury";
+                            kind: "stock" | "etf" | "fii" | "bdr" | "reit" | "crypto" | "treasury" | "fund";
                             /**
                              * @description Registration type card the asset belongs to, following its exposure
                              * @enum {string}
                              */
-                            typeGroup: "acoes_br" | "fii" | "acoes_eua" | "reits" | "cripto" | "tesouro";
+                            typeGroup: "acoes_br" | "fii" | "acoes_eua" | "reits" | "cripto" | "tesouro" | "fundos";
                             /**
                              * @description Currency of the quotes
                              * @enum {string}
@@ -12385,17 +12385,17 @@ export interface operations {
                          * @description Market the asset comes from
                          * @enum {string}
                          */
-                        market: "B3" | "US" | "CRYPTO" | "TESOURO";
+                        market: "B3" | "US" | "CRYPTO" | "TESOURO" | "CVM";
                         /**
                          * @description Instrument kind
                          * @enum {string}
                          */
-                        kind: "stock" | "etf" | "fii" | "bdr" | "reit" | "crypto" | "treasury";
+                        kind: "stock" | "etf" | "fii" | "bdr" | "reit" | "crypto" | "treasury" | "fund";
                         /**
                          * @description Registration type card the asset belongs to, following its exposure
                          * @enum {string}
                          */
-                        typeGroup: "acoes_br" | "fii" | "acoes_eua" | "reits" | "cripto" | "tesouro";
+                        typeGroup: "acoes_br" | "fii" | "acoes_eua" | "reits" | "cripto" | "tesouro" | "fundos";
                         /**
                          * @description Currency of the quotes
                          * @enum {string}
