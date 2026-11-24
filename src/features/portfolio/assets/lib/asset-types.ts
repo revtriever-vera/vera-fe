@@ -1,13 +1,22 @@
-import { BarChart3, Building2, Globe, Hexagon, Home, Landmark, Percent, type LucideIcon } from 'lucide-react';
+import { BarChart3, Building2, Globe, Hexagon, Home, Landmark, Layers, Percent, type LucideIcon } from 'lucide-react';
 import { toClassColorKey } from '../../lib/class-color';
 import { isSystemClassKey } from '../../lib/class-icons';
 import { SYSTEM_CLASS_KEYS, type AssetClassView, type ClassColorKey, type SystemClassKey } from '../../types';
 import type { CatalogGroup } from '../types';
 import { suggestedClassId } from './suggested-class';
 
-export type AddAssetType = 'fixed_income' | 'tesouro' | 'acoes_br' | 'fii' | 'acoes_eua' | 'reits' | 'cripto';
+export type AddAssetType = 'fixed_income' | 'tesouro' | 'acoes_br' | 'fii' | 'acoes_eua' | 'reits' | 'cripto' | 'fundos';
 
-export const ADD_ASSET_TYPES: readonly AddAssetType[] = ['fixed_income', 'tesouro', 'acoes_br', 'fii', 'acoes_eua', 'reits', 'cripto'];
+export const ADD_ASSET_TYPES: readonly AddAssetType[] = [
+    'fixed_income',
+    'tesouro',
+    'fundos',
+    'acoes_br',
+    'fii',
+    'acoes_eua',
+    'reits',
+    'cripto'
+];
 
 export interface AssetTypeSpec {
     readonly classKey: SystemClassKey;
@@ -18,6 +27,7 @@ export interface AssetTypeSpec {
 export const ASSET_TYPE_SPECS: Readonly<Record<AddAssetType, AssetTypeSpec>> = {
     fixed_income: { classKey: SYSTEM_CLASS_KEYS.fixedIncomePost, icon: Percent, group: null },
     tesouro: { classKey: SYSTEM_CLASS_KEYS.fixedIncomeIpca, icon: Landmark, group: 'tesouro' },
+    fundos: { classKey: SYSTEM_CLASS_KEYS.fixedIncomePost, icon: Layers, group: 'fundos' },
     acoes_br: { classKey: SYSTEM_CLASS_KEYS.stocksBr, icon: BarChart3, group: 'acoes_br' },
     fii: { classKey: SYSTEM_CLASS_KEYS.fii, icon: Building2, group: 'fii' },
     acoes_eua: { classKey: SYSTEM_CLASS_KEYS.stocksUs, icon: Globe, group: 'acoes_eua' },

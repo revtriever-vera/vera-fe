@@ -8,7 +8,7 @@ import { renderWithProviders } from '../../../../../test/render';
 import { AssetTypeCards } from './asset-type-cards';
 
 describe('AssetTypeCards', () => {
-    it('mostra os sete tipos com nome e descrição', async () => {
+    it('mostra os oito tipos com nome e descrição', async () => {
         renderWithProviders(<AssetTypeCards onSelect={vi.fn()} />);
         const group: HTMLElement = await screen.findByRole('group', { name: 'Tipos de investimento' });
 
@@ -16,6 +16,7 @@ describe('AssetTypeCards', () => {
         expect(cards.map((card: HTMLElement): string => card.querySelector('span span')?.textContent ?? '')).toEqual([
             'Renda fixa',
             'Tesouro Direto',
+            'Fundos',
             'Ações brasileiras',
             'Fundos imobiliários',
             'Ações americanas',

@@ -18,13 +18,13 @@ function renderStep(
 }
 
 describe('AssetsStep', () => {
-    it('vazia: sete cards, coluna zerada e eyebrow do wizard', async () => {
+    it('vazia: oito cards, coluna zerada e eyebrow do wizard', async () => {
         mockWalletApi([]);
         renderStep(undefined, 'Etapa 1 de 2 · opcional');
 
         expect(await screen.findByRole('heading', { name: 'Sua carteira (0)' })).toBeInTheDocument();
         expect(screen.getByText('Etapa 1 de 2 · opcional')).toBeInTheDocument();
-        expect(within(screen.getByRole('group', { name: 'Tipos de investimento' })).getAllByRole('button')).toHaveLength(7);
+        expect(within(screen.getByRole('group', { name: 'Tipos de investimento' })).getAllByRole('button')).toHaveLength(8);
         expect(await screen.findByText('Nenhum ativo ainda. Escolha um tipo ao lado.')).toBeInTheDocument();
         expect(screen.getByRole('heading', { name: 'Por que essa etapa existe' })).toBeInTheDocument();
         expect(screen.getByText('Por que o cadastro é manual?')).toBeInTheDocument();

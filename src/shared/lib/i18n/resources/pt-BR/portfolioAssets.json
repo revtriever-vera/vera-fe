@@ -24,6 +24,10 @@
       "name": "Tesouro Direto",
       "description": "Selic, Prefixado, IPCA+"
     },
+    "fundos": {
+      "name": "Fundos",
+      "description": "fundos de investimento, por nome ou CNPJ"
+    },
     "acoes_br": {
       "name": "Ações brasileiras",
       "description": "ações e ETFs da B3"
@@ -54,7 +58,10 @@
     "found_one": "{{count}} resultado",
     "found_other": "{{count}} resultados",
     "source": "Fonte do cadastro: <cvm>CVM, Portal de Dados Abertos</cvm>, licença ODbL",
-    "failed": "Não foi possível buscar agora. Tente de novo em instantes."
+    "failed": "Não foi possível buscar agora. Tente de novo em instantes.",
+    "placeholderFunds": "Busque pelo nome ou pelo CNPJ do fundo",
+    "emptyFunds": "Nada encontrado. Tente buscar pelo CNPJ que está no regulamento ou na lâmina do fundo.",
+    "fundsNotice": "Planos de previdência PGBL e VGBL não são cobertos. Você pode cadastrar o fundo de previdência pelo CNPJ, mas o valor não vai bater com o extrato do plano."
   },
   "kinds": {
     "stock": "Ação",
@@ -63,7 +70,8 @@
     "bdr": "BDR",
     "reit": "REIT",
     "crypto": "Cripto",
-    "treasury": "Tesouro"
+    "treasury": "Tesouro",
+    "fund": "Fundo"
   },
   "result": {
     "held": "Já na carteira",
@@ -104,7 +112,8 @@
       "quantityDecimals_other": "Este ativo aceita até {{count}} casas decimais.",
       "priceInvalid": "Informe um preço válido.",
       "classRequired": "Escolha a classe do ativo."
-    }
+    },
+    "classNoSuggestionFund": "Multimercado e previdência: escolha a classe que representa o fundo na sua carteira."
   },
   "existing": {
     "title": "Você já tem este ativo",
@@ -225,7 +234,8 @@
     "staleUnknown": "cotação antiga",
     "estimated": "estimado",
     "matured": "vencido",
-    "missing_rate": "sem câmbio"
+    "missing_rate": "sem câmbio",
+    "grossQuote": "valor bruto · cota de {{date}}"
   },
   "classCell": {
     "label": "Classe de {{symbol}}",

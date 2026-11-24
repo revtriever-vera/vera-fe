@@ -5,6 +5,7 @@ import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/badge';
 import { ClassTile } from '../../components/class-tile';
 import type { ClassColorKey } from '../../types';
+import { formatCnpj } from '../lib/cnpj';
 import { exposureKind, type ExposureKind } from '../lib/exposure-note';
 import type { CatalogAsset } from '../types';
 
@@ -59,7 +60,8 @@ export function AssetResultItem({ asset, colorKey, price, selected, held, tabInd
             <ClassTile systemKey={asset.suggestedClassKey} colorKey={colorKey} size="sm" />
             <span className="flex min-w-0 flex-1 flex-col text-sm">
                 <span className="truncate">
-                    <b className="font-bold text-content">{asset.symbol}</b> <span className="text-content-muted">{asset.name}</span>
+                    <b className="font-bold text-content">{asset.kind === 'fund' ? formatCnpj(asset.symbol) : asset.symbol}</b>{' '}
+                    <span className="text-content-muted">{asset.name}</span>
                 </span>
                 <span className="text-xs text-content-muted">
                     {t(`kinds.${asset.kind}`)} · <PriceText price={price} />

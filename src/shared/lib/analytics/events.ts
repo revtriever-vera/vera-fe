@@ -1,7 +1,7 @@
 export type AuthProviderName = 'google' | 'facebook';
 export type MemberRoleName = 'owner' | 'editor' | 'viewer';
 export type OnboardingStepName = 'welcome' | 'assets' | 'banks' | 'done';
-export type AssetTypeName = 'fixed_income' | 'tesouro' | 'acoes_br' | 'fii' | 'acoes_eua' | 'reits' | 'cripto';
+export type AssetTypeName = 'fixed_income' | 'tesouro' | 'acoes_br' | 'fii' | 'acoes_eua' | 'reits' | 'cripto' | 'fundos';
 export type AddAssetSource = 'search' | 'fixed_income';
 export type IssuerKindName = 'bank' | 'company';
 export type FgcVerdictName = 'covered' | 'over_limit' | 'not_covered_kind' | 'not_associated' | 'not_calculated';

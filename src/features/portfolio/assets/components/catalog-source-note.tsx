@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next';
 import type { CatalogGroup } from '../types';
 
 const CVM_OPEN_DATA_URL: string = 'https://dados.cvm.gov.br/';
-const CVM_GROUPS: ReadonlySet<CatalogGroup> = new Set<CatalogGroup>(['acoes_br', 'fii']);
+const CVM_GROUPS: ReadonlySet<CatalogGroup> = new Set<CatalogGroup>(['acoes_br', 'fii', 'fundos']);
 
 function CvmLink({ children }: { readonly children?: ReactNode }): ReactElement {
     return (

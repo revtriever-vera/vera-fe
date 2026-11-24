@@ -20,12 +20,12 @@ import { server } from '../../../../../test/msw/server';
 const ITUB4: CatalogAsset = catalogAsset();
 
 describe('AddAssetModal: passo 1', () => {
-    it('abre com o título, o apoio e os sete tipos', async () => {
+    it('abre com o título, o apoio e os oito tipos', async () => {
         renderAddAsset();
 
         expect(await screen.findByRole('dialog', { name: 'O que você quer adicionar?' })).toBeInTheDocument();
         expect(screen.getByText('Escolha o tipo de investimento. Você pode adicionar quantos quiser, um de cada vez.')).toBeInTheDocument();
-        expect(within(screen.getByRole('group', { name: 'Tipos de investimento' })).getAllByRole('button')).toHaveLength(7);
+        expect(within(screen.getByRole('group', { name: 'Tipos de investimento' })).getAllByRole('button')).toHaveLength(8);
     });
 
     it('não renderiza nada fechado', () => {
@@ -167,6 +167,35 @@ describe('AddAssetModal: renda variável', () => {
         await waitFor(() => {
             expect(api.positionBodies).toEqual([{ assetId: 'asset-xyz11', quantity: '5', classId: 'class-cripto' }]);
         });
+    });
+
+    it('fundo: busca pelo tipo Fundos, mostra o selo de valor bruto e exige a classe', async () => {
+        const fund: CatalogAsset = catalogAsset({
+            id: 'asset-fund',
+            symbol: '00000000000191',
+            name: 'FUNDO ALFA MULTIMERCADO',
+            kind: 'fund',
+            market: 'CVM',
+            typeGroup: 'fundos',
+            suggestedClassKey: null,
+            quantityDecimals: 6
+        });
+        const api: AssetsApi = mockAssetsApi({
+            assets: [fund],
+            quotes: [quote('asset-fund', '2.5', { source: 'cvm', priceDate: '2026-11-20' })]
+        });
+        const { user }: AddAssetSetup = renderAddAsset();
+        await chooseType(user, '^Fundos.*por nome ou CNPJ');
+        await user.click(await screen.findByRole('option', { name: /00\.000\.000\/0001-91/ }));
+        await fillQuantity(user, '100,5');
+
+        expect(screen.getByText('valor bruto · cota de 20/11/2026')).toBeInTheDocument();
+        expect(screen.getByText(/Multimercado e previdência: escolha a classe/)).toBeInTheDocument();
+        expect(screen.getByRole('combobox', { name: 'Classe' })).toHaveTextContent('Escolha a classe');
+        await submitAdd(user);
+
+        expect(await screen.findByText('Escolha a classe do ativo.')).toBeInTheDocument();
+        expect(api.positionBodies).toEqual([]);
     });
 
     it('Tesouro aceita só duas casas e cripto oito', async () => {

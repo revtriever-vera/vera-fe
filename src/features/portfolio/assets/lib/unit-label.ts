@@ -1,8 +1,7 @@
-import type { HoldingView } from '../../types';
-
 export type UnitLabelKey = 'shares' | 'units' | 'bonds';
 
-const UNIT_KEYS: Readonly<Partial<Record<HoldingView['typeGroup'], UnitLabelKey>>> = {
+const UNIT_KEYS: Readonly<Partial<Record<string, UnitLabelKey>>> = {
+    fundos: 'shares',
     acoes_br: 'shares',
     fii: 'shares',
     acoes_eua: 'shares',
@@ -11,6 +10,6 @@ const UNIT_KEYS: Readonly<Partial<Record<HoldingView['typeGroup'], UnitLabelKey>
     tesouro: 'bonds'
 };
 
-export function unitLabelKey(typeGroup: HoldingView['typeGroup']): UnitLabelKey | null {
+export function unitLabelKey(typeGroup: string): UnitLabelKey | null {
     return UNIT_KEYS[typeGroup] ?? null;
 }

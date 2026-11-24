@@ -24,6 +24,10 @@
       "name": "Tesouro Direto",
       "description": "Selic, fixed-rate, IPCA+"
     },
+    "fundos": {
+      "name": "Funds",
+      "description": "investment funds, by name or CNPJ"
+    },
     "acoes_br": {
       "name": "Brazilian stocks",
       "description": "B3 stocks and ETFs"
@@ -54,7 +58,10 @@
     "found_one": "{{count}} result",
     "found_other": "{{count}} results",
     "source": "Source of the asset registry: <cvm>CVM, Open Data Portal</cvm>, ODbL license",
-    "failed": "We could not search right now. Try again in a moment."
+    "failed": "We could not search right now. Try again in a moment.",
+    "placeholderFunds": "Search by fund name or CNPJ",
+    "emptyFunds": "Nothing found. Try searching by the CNPJ in the fund regulation or fact sheet.",
+    "fundsNotice": "PGBL and VGBL pension plans are not covered. You can add the pension fund by its CNPJ, but the value will not match your plan statement."
   },
   "kinds": {
     "stock": "Stock",
@@ -63,7 +70,8 @@
     "bdr": "BDR",
     "reit": "REIT",
     "crypto": "Crypto",
-    "treasury": "Treasury"
+    "treasury": "Treasury",
+    "fund": "Fund"
   },
   "result": {
     "held": "Already in portfolio",
@@ -104,7 +112,8 @@
       "quantityDecimals_other": "This asset accepts up to {{count}} decimal places.",
       "priceInvalid": "Enter a valid price.",
       "classRequired": "Choose the asset's class."
-    }
+    },
+    "classNoSuggestionFund": "Multi-asset and pension: choose the class that represents the fund in your portfolio."
   },
   "existing": {
     "title": "You already have this asset",
@@ -225,7 +234,8 @@
     "staleUnknown": "old quote",
     "estimated": "estimated",
     "matured": "matured",
-    "missing_rate": "no exchange rate"
+    "missing_rate": "no exchange rate",
+    "grossQuote": "gross value · quote of {{date}}"
   },
   "classCell": {
     "label": "Class of {{symbol}}",
