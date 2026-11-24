@@ -17,6 +17,7 @@
     "test:types": "vitest run --config vitest.config.ts --typecheck",
     "format": "prettier --write \"{src,test,eslint-rules}/**/*.{ts,tsx,css,mjs}\" \"*.{mjs,ts,json}\" \".github/**/*.yml\"",
     "format:check": "prettier --check \"{src,test,eslint-rules}/**/*.{ts,tsx,css,mjs}\" \"*.{mjs,ts,json}\" \".github/**/*.yml\"",
+    "ci:local": "bash scripts/ci-local.sh",
     "api:types": "node scripts/api-types.mjs",
     "prepare": "husky"
   },

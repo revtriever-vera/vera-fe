@@ -22,6 +22,8 @@ npm run dev
 | `npm test`                                           | Vitest; `npm run test:cov` aplica o mínimo de 85% de cobertura                                                                                                                                        |
 | `npm run api:types`                                  | Gera `src/shared/lib/api/schema.d.ts` a partir do `openapi.json` gerado por `npm run openapi:dump` no `vera-api` (padrão `../vera-api/openapi.json`; outro caminho: `npm run api:types -- <arquivo>`) |
 
+`npm run ci:local` repete o job `verify` do `ci.yml` na sua máquina: lint, format, typecheck, testes com cobertura (mínimo de 85%) e build. Para no primeiro erro e imprime um resumo com o tempo de cada passo. O Sonar fica de fora porque depende do GitHub. Mantenha o script em sincronia quando o `ci.yml` ganhar ou perder um passo.
+
 ## Variáveis de ambiente
 
 Lidas em `src/shared/config/env.ts` e embutidas no build (não há configuração de runtime).
