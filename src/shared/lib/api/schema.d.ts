@@ -17956,7 +17956,7 @@ export interface operations {
                             currency: string;
                             /** @description Date (YYYY-MM-DD) of the session the price refers to */
                             priceDate: string;
-                            /** @description Provider that answered: brapi, finnhub, twelvedata, alphavantage, coingecko, tesouro or mock */
+                            /** @description Provider that answered: brapi, finnhub, twelvedata, alphavantage, coingecko, tesouro, cvm or mock */
                             source: string;
                             /** @description Whether the price is older than the freshness window; the value is still shown, with a warning */
                             stale: boolean;
@@ -18195,12 +18195,12 @@ export interface operations {
                              * @description Market of the asset; null for fixed income
                              * @enum {string|null}
                              */
-                            market: "B3" | "US" | "CRYPTO" | "TESOURO" | null;
+                            market: "B3" | "US" | "CRYPTO" | "TESOURO" | "CVM" | null;
                             /**
                              * @description Kind of holding used to group and label it
                              * @enum {string}
                              */
-                            typeGroup: "fixed_income" | "tesouro" | "acoes_br" | "fii" | "acoes_eua" | "reits" | "cripto";
+                            typeGroup: "fixed_income" | "tesouro" | "acoes_br" | "fii" | "acoes_eua" | "reits" | "cripto" | "fundos";
                             /**
                              * Format: uuid
                              * @description Asset class of the holding; null only for an orphan holding without assignment
@@ -18227,7 +18227,7 @@ export interface operations {
                              * @description Where the value comes from: the quote provider or the fixed income curve
                              * @enum {string}
                              */
-                            valueSource: "brapi" | "finnhub" | "twelvedata" | "alphavantage" | "coingecko" | "tesouro_direto" | "curve_cdi" | "curve_pre" | "curve_ipca";
+                            valueSource: "brapi" | "finnhub" | "twelvedata" | "alphavantage" | "coingecko" | "tesouro_direto" | "cvm" | "curve_cdi" | "curve_pre" | "curve_ipca";
                             /** @description Date of the quote, or the valuation date of the title (YYYY-MM-DD) */
                             priceDate: string | null;
                             /** @description True when the holding is quoted in USD or its asset has exposure to the dollar */

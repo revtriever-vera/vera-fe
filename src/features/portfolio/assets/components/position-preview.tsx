@@ -42,6 +42,7 @@ const VALUE_SOURCES: ReadonlySet<string> = new Set<string>([
     'alphavantage',
     'coingecko',
     'tesouro_direto',
+    'cvm',
     'curve_cdi',
     'curve_pre',
     'curve_ipca'

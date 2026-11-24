@@ -7,6 +7,7 @@ export type ValueSourceKey =
     | 'sources.alphavantage'
     | 'sources.coingecko'
     | 'sources.tesouro_direto'
+    | 'sources.cvm'
     | 'sources.curve_cdi'
     | 'sources.curve_pre'
     | 'sources.curve_ipca';
@@ -18,6 +19,7 @@ const SOURCE_KEYS: Readonly<Record<ValueSource, ValueSourceKey>> = {
     alphavantage: 'sources.alphavantage',
     coingecko: 'sources.coingecko',
     tesouro_direto: 'sources.tesouro_direto',
+    cvm: 'sources.cvm',
     curve_cdi: 'sources.curve_cdi',
     curve_pre: 'sources.curve_pre',
     curve_ipca: 'sources.curve_ipca'
