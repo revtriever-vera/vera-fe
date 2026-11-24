@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi, type MockInstance } from 'vitest';
 import { http, HttpResponse } from 'msw';
+import { env } from '@/shared/config/env';
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import type { AnyRouter } from '@tanstack/react-router';
@@ -60,7 +61,10 @@ describe('/spending/transactions: lista', () => {
 
         const ifood: HTMLElement = rowOf('IFOOD *RESTAURANTE SABOR');
         await waitFor(() => {
-            expect(within(ifood).getByRole('img', { name: 'Logo de Nubank' })).toHaveAttribute('src', NUBANK_LOGO_URL);
+            expect(within(ifood).getByRole('img', { name: 'Logo de Nubank' })).toHaveAttribute(
+                'src',
+                `${env.VITE_API_URL}${NUBANK_LOGO_URL}`
+            );
         });
         expect(within(rowOf('SALARIO EMPRESA X')).queryByRole('img')).not.toBeInTheDocument();
     });

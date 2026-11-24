@@ -2180,6 +2180,26 @@ export interface paths {
         patch: operations["AccountsController_rename"];
         trace?: never;
     };
+    "/spending/institution-logos/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Bank logo, served by the API
+         * @description Public, no session: an image tag cannot send the access token, and the signed token is the proof. The API fetches the logo from the provider once, keeps it in memory and serves it, so the browser never contacts a third-party origin. Only URLs the API itself signed are fetched; anything else is a 404.
+         */
+        get: operations["InstitutionLogosController_logo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/spending/summary": {
         parameters: {
             query?: never;
@@ -20762,7 +20782,7 @@ export interface operations {
                             kind: "checking" | "savings" | "credit_card" | "other";
                             /** @description Name of the bank or institution */
                             institutionName: string | null;
-                            /** @description HTTPS URL of the bank logo returned by Pluggy; null for file and sample accounts, the client falls back to initials */
+                            /** @description API-relative path of the bank logo, served and cached by the API (the browser never loads a third-party image); null for file and sample accounts, the client falls back to initials */
                             institutionLogoUrl: string | null;
                             /** @description Last four digits of the account or card number; the full number is never stored */
                             numberLast4: string | null;
@@ -20942,7 +20962,7 @@ export interface operations {
                         kind: "checking" | "savings" | "credit_card" | "other";
                         /** @description Name of the bank or institution */
                         institutionName: string | null;
-                        /** @description HTTPS URL of the bank logo returned by Pluggy; null for file and sample accounts, the client falls back to initials */
+                        /** @description API-relative path of the bank logo, served and cached by the API (the browser never loads a third-party image); null for file and sample accounts, the client falls back to initials */
                         institutionLogoUrl: string | null;
                         /** @description Last four digits of the account or card number; the full number is never stored */
                         numberLast4: string | null;
@@ -21017,6 +21037,171 @@ export interface operations {
                 };
                 content: {
                     "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    InstitutionLogosController_logo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Signed token from the institutionLogoUrl path of an account or connection */
+                token: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The logo image */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid token, or the provider logo is unavailable (transactions.logo_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/png": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    "image/jpeg": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    "image/webp": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    "image/gif": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Too many calls from this IP (core.too_many_attempts) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/png": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    "image/jpeg": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    "image/webp": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                    "image/gif": {
                         /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */
@@ -22847,7 +23032,7 @@ export interface operations {
                             itemIdHint: string;
                             /** @description Name of the bank connector */
                             connectorName: string | null;
-                            /** @description HTTPS URL of the bank logo returned by Pluggy; null when unknown, the client falls back to initials */
+                            /** @description API-relative path of the bank logo, served and cached by the API (the browser never loads a third-party image); null when unknown, the client falls back to initials */
                             institutionLogoUrl: string | null;
                             /**
                              * @description Connection status
@@ -22981,7 +23166,7 @@ export interface operations {
                                 itemIdHint: string;
                                 /** @description Name of the bank connector */
                                 connectorName: string | null;
-                                /** @description HTTPS URL of the bank logo returned by Pluggy; null when unknown, the client falls back to initials */
+                                /** @description API-relative path of the bank logo, served and cached by the API (the browser never loads a third-party image); null when unknown, the client falls back to initials */
                                 institutionLogoUrl: string | null;
                                 /**
                                  * @description Connection status

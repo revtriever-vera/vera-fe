@@ -1,9 +1,11 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { env } from '@/shared/config/env';
 import { i18n } from '@/shared/lib/i18n';
 import { InstitutionAvatar } from './institution-avatar';
 
-const LOGO: string = 'https://logos.example.test/nubank.png';
+const LOGO: string = '/spending/institution-logos/nubank.sig';
+const LOGO_SRC: string = `${env.VITE_API_URL}${LOGO}`;
 
 afterEach(async () => {
     await i18n.changeLanguage('pt-BR');
@@ -14,7 +16,7 @@ describe('InstitutionAvatar', () => {
         render(<InstitutionAvatar name="Nubank" logoUrl={LOGO} />);
 
         const image: HTMLElement = screen.getByRole('img', { name: 'Logo de Nubank' });
-        expect(image).toHaveAttribute('src', LOGO);
+        expect(image).toHaveAttribute('src', LOGO_SRC);
         expect(image).toHaveAttribute('loading', 'lazy');
         expect(image).toHaveAttribute('referrerpolicy', 'no-referrer');
         expect(screen.queryByText('Nu')).not.toBeInTheDocument();
@@ -54,8 +56,15 @@ describe('InstitutionAvatar', () => {
         const { rerender } = render(<InstitutionAvatar name="Nubank" logoUrl={LOGO} />);
         fireEvent.error(screen.getByRole('img'));
 
-        rerender(<InstitutionAvatar name="Nubank" logoUrl="https://logos.example.test/nubank-v2.png" size="sm" />);
+        rerender(<InstitutionAvatar name="Nubank" logoUrl="/spending/institution-logos/nubank-v2.sig" size="sm" />);
 
-        expect(screen.getByRole('img')).toHaveAttribute('src', 'https://logos.example.test/nubank-v2.png');
+        expect(screen.getByRole('img')).toHaveAttribute('src', `${env.VITE_API_URL}/spending/institution-logos/nubank-v2.sig`);
+    });
+
+    it('não carrega imagem de terceiros: URL fora da API vira iniciais', () => {
+        render(<InstitutionAvatar name="Nubank" logoUrl="https://logos.example.test/nubank.png" />);
+
+        expect(screen.getByText('Nu')).toBeInTheDocument();
+        expect(screen.queryByRole('img')).not.toBeInTheDocument();
     });
 });

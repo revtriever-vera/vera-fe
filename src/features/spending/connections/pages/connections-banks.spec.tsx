@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { screen, waitFor, within } from '@testing-library/react';
+import { env } from '@/shared/config/env';
 import { track } from '@/shared/lib/analytics';
 import { i18n } from '@/shared/lib/i18n';
 import type { ConnectionView } from '@/features/spending/types';
@@ -42,7 +43,7 @@ describe('ConnectionsPage: bancos conectados', () => {
         );
 
         const nubank: HTMLElement = (await screen.findByText('Nubank', { selector: 'b' })).closest('li') as HTMLElement;
-        expect(within(nubank).getByRole('img', { name: 'Logo de Nubank' })).toHaveAttribute('src', NUBANK_LOGO_URL);
+        expect(within(nubank).getByRole('img', { name: 'Logo de Nubank' })).toHaveAttribute('src', `${env.VITE_API_URL}${NUBANK_LOGO_URL}`);
         const inter: HTMLElement = screen.getByText('Banco Inter', { selector: 'b' }).closest('li') as HTMLElement;
         expect(within(inter).queryByRole('img')).not.toBeInTheDocument();
         expect(within(inter).getByText('BI')).toBeInTheDocument();
