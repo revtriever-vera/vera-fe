@@ -28,7 +28,7 @@ export const CURRENT_MONTH: string = '2026-10';
 export const CANONICAL_INCOME_MINOR: number = 2800000;
 export const CANONICAL_SAVED_MINOR: number = 336000;
 export const CANONICAL_UNCATEGORIZED_MINOR: number = 80000;
-export const NUBANK_LOGO_URL: string = 'https://logos.example.test/nubank.png';
+export const NUBANK_LOGO_URL: string = '/spending/institution-logos/nubank.sig';
 const CREATED_AT: string = '2026-10-01T12:00:00.000Z';
 
 interface CategorySeed {

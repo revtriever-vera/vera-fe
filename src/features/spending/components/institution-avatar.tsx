@@ -1,6 +1,8 @@
 import { useState, type ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
+import { env } from '@/shared/config/env';
 import { cn } from '@/shared/lib/cn';
+import { institutionLogoSrc } from '../lib/institution-logo-src';
 import { initialsOf } from '../lib/initials';
 
 export type InstitutionAvatarSize = 'sm' | 'md';
@@ -21,18 +23,19 @@ const SHELL: string = 'flex shrink-0 items-center justify-center overflow-hidden
 export function InstitutionAvatar({ name, logoUrl, size = 'md' }: InstitutionAvatarProps): ReactElement {
     const { t }: UseTranslationResponse<'spending', undefined> = useTranslation('spending');
     const [failedUrl, setFailedUrl] = useState<string | null>(null);
-    if (logoUrl !== null && failedUrl !== logoUrl) {
+    const src: string | null = institutionLogoSrc(logoUrl, env.VITE_API_URL);
+    if (src !== null && failedUrl !== src) {
         return (
             <span className={cn(SHELL, BOX[size], 'bg-surface')}>
                 {/* eslint-disable-next-line sonar/S6847 -- onError is the load-failure fallback of the image, not a user interaction */}
                 <img
-                    src={logoUrl}
+                    src={src}
                     alt={t('institution.logoAlt', { name: name ?? t('institution.unknown') })}
                     loading="lazy"
                     referrerPolicy="no-referrer"
                     className="size-full object-contain"
                     onError={(): void => {
-                        setFailedUrl(logoUrl);
+                        setFailedUrl(src);
                     }}
                 />
             </span>
