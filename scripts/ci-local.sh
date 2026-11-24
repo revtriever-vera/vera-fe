@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Repete localmente os passos do job `verify` de .github/workflows/ci.yml.
-# Falha no primeiro erro e imprime um resumo no fim. O Sonar fica de fora (depende do GitHub).
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
