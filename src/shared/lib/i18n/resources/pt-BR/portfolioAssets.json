@@ -53,6 +53,7 @@
     "empty": "Nada encontrado para essa busca.",
     "found_one": "{{count}} resultado",
     "found_other": "{{count}} resultados",
+    "source": "Fonte do cadastro: <cvm>CVM, Portal de Dados Abertos</cvm>, licença ODbL",
     "failed": "Não foi possível buscar agora. Tente de novo em instantes."
   },
   "kinds": {
