@@ -52,6 +52,7 @@
     "alphavantage": "Alpha Vantage",
     "coingecko": "CoinGecko",
     "tesouro_direto": "Tesouro Transparente",
+    "cvm": "CVM (daily quote, gross value)",
     "curve_cdi": "Estimated on the CDI curve",
     "curve_pre": "Estimated on the fixed-rate curve",
     "curve_ipca": "Estimated on the IPCA+ curve"
