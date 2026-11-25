@@ -24,6 +24,13 @@ describe('buildEffectRows', () => {
         expect(rowOf(rows)).toMatchObject({ after: { quantity: '200', averagePrice: '31' }, recalculated: false });
     });
 
+    it('só pede o modo da posição quando há linha que muda a posição', () => {
+        const effect: EffectItem[] = [effectItem({ before: BEFORE, existingPosition: true })];
+
+        expect(rowOf(buildEffectRows(effect, [previewLine({ kind: 'income' })], {}, {})).needsMode).toBe(false);
+        expect(rowOf(buildEffectRows(effect, [previewLine({ kind: 'buy' })], {}, {})).needsMode).toBe(true);
+    });
+
     it('recalcula a compra corrigida pelo preço médio ponderado', () => {
         const effect: EffectItem[] = [effectItem({ before: BEFORE, existingPosition: true })];
         const rows: EffectRow[] = buildEffectRows(effect, [previewLine({ lineId: 'a' })], { a: { quantity: '200' } }, {});
