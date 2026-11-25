@@ -3,6 +3,7 @@ import { useRouterState } from '@tanstack/react-router';
 import { X } from 'lucide-react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { BrandLogo } from '@/shared/ui/brand-logo';
+import { EndorsementSeal } from '@/shared/ui/endorsement-seal';
 import { Button } from '@/shared/ui/button';
 import { useOnboardingState } from '../api/use-onboarding-state.query';
 import { onboardingProgress, showsProgress, trimTrailingSlashes } from '../lib/onboarding-progress';
@@ -59,6 +60,7 @@ export function OnboardingFrame({ children }: { readonly children: ReactNode }):
             <main aria-label={t('regionLabel')} className={`grid flex-1 content-start justify-items-center pt-2 pb-12 ${GUTTER}`}>
                 {children}
             </main>
+            <EndorsementSeal className="pb-6" />
         </div>
     );
 }

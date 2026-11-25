@@ -389,12 +389,12 @@ describe('login route legal note', () => {
         );
     });
 
-    it('shows the powered by line', async () => {
+    it('shows the endorsement seal', async () => {
         connectProviders();
 
         await openLogin();
 
-        expect(screen.getByText(/powered by/)).toHaveTextContent('powered by Revtriever');
+        expect(screen.getByRole('link', { name: 'Vera, por Revtriever' })).toHaveAttribute('href', 'https://revtriever.com');
     });
 });
 
