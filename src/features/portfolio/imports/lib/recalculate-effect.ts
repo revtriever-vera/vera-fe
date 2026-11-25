@@ -95,7 +95,7 @@ function step(holding: Holding | null, line: PreviewLine): Holding | null {
     const steps: Readonly<Record<string, () => Holding | null>> = {
         [LINE_KIND.buy]: (): Holding | null => buy(holding, line),
         [LINE_KIND.sell]: (): Holding | null => sell(holding, line),
-        [LINE_KIND.split]: (): Holding | null => scale(holding, factor, false),
+        [LINE_KIND.split]: (): Holding | null => (line.direction === 'credit' ? bonus(holding, line) : scale(holding, factor, false)),
         [LINE_KIND.reverseSplit]: (): Holding | null => scale(holding, factor, true),
         [LINE_KIND.bonus]: (): Holding | null => bonus(holding, line)
     };

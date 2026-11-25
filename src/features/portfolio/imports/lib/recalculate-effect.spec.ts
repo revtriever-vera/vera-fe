@@ -71,11 +71,19 @@ describe('buildEffectRows', () => {
     it('desdobramento, grupamento e bonificação', () => {
         const effect: EffectItem[] = [effectItem({ before: { quantity: '100', averagePrice: '10' }, existingPosition: true })];
         const run = (kind: 'split' | 'reverse_split' | 'bonus', quantity: string): EffectRow =>
-            rowOf(buildEffectRows(effect, [previewLine({ lineId: 'e', kind, quantity })], { e: { quantity } }, {}));
+            rowOf(buildEffectRows(effect, [previewLine({ lineId: 'e', kind, quantity, direction: null })], { e: { quantity } }, {}));
 
         expect(run('split', '2').after).toEqual({ quantity: '200', averagePrice: '5' });
         expect(run('reverse_split', '4').after).toEqual({ quantity: '25', averagePrice: '40' });
         expect(run('bonus', '100').after).toEqual({ quantity: '200', averagePrice: '5' });
+    });
+
+    it('desdobro creditado soma a quantidade creditada em vez de multiplicar', () => {
+        const effect: EffectItem[] = [effectItem({ before: { quantity: '300', averagePrice: '32.23' }, existingPosition: true })];
+        const line: PreviewLine = previewLine({ lineId: 'e', kind: 'split', quantity: '100', direction: 'credit' });
+        const row: EffectRow = rowOf(buildEffectRows(effect, [line], {}, { [PETR4_ID]: 'add' }));
+
+        expect(row.after).toEqual({ quantity: '400', averagePrice: '24.1725' });
     });
 
     it('ignora linha deixada de fora e linha de provento', () => {
