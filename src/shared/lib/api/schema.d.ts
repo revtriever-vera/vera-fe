@@ -1064,6 +1064,106 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/assistant/turns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ask the assistant a question
+         * @description Stores the question and queues the answer; the answer is read from `GET /assistant/turns/{id}`. The turn is in `help` mode (answers from the help content) unless the plan includes the AI and the account allowed sending figures, then it is in `ai` mode. Refused up front, with nothing stored, when the usage band of the mode is used up. Limited to 20 turns per hour per person.
+         */
+        post: operations["AssistantChatController_send"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/assistant/turns/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read the answer of a turn
+         * @description `pending` while the answer is written, `done` with the answer, `failed` when it could not be written (ask again).
+         */
+        get: operations["AssistantChatController_turn"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/assistant/turns/{id}/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Say the answer did not help
+         * @description Only counts the signal per tool in a metric. Nothing of the question or the answer is kept or logged.
+         */
+        post: operations["AssistantChatController_feedback"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/assistant/conversations/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The current conversation of the person
+         * @description The last 20 messages of the most recent conversation, oldest first. The conversation is private to the person and is kept for 30 days.
+         */
+        get: operations["AssistantChatController_current"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/assistant/conversations/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete a conversation
+         * @description Removes the conversation and every message in it, for good.
+         */
+        delete: operations["AssistantChatController_remove"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/onboarding": {
         parameters: {
             query?: never;
@@ -2952,6 +3052,584 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    AssistantChatController_send: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: uuid
+                     * @description Conversation to continue; omitted, the current one is used or a new one is opened
+                     */
+                    conversationId?: string;
+                    /** @description The question, up to 1000 characters */
+                    text: string;
+                    /** @description The screen the person is on, so "this screen" can be understood */
+                    screen?: {
+                        /** @description Route path of the screen the person is on */
+                        path: string;
+                    };
+                };
+            };
+        };
+        responses: {
+            /** @description Question accepted */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Id to poll for the answer
+                         */
+                        turnId: string;
+                        /**
+                         * Format: uuid
+                         * @description Conversation the turn belongs to
+                         */
+                        conversationId: string;
+                    };
+                };
+            };
+            /** @description Invalid params or body (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No such turn or conversation for this person, including one that belongs to someone else (assistant.turn_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The monthly usage band is used up (usage.cap_reached, with meta.resetsAt) or the hourly limit of 20 turns per person passed (core.too_many_attempts) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The installation has no model credentials (ai.provider_disabled) */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AssistantChatController_turn: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Turn id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The turn */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * @description pending while the answer is written
+                         * @enum {string}
+                         */
+                        status: "pending" | "done" | "failed";
+                        /** @description Present when the status is done */
+                        answer?: {
+                            /** @description The answer, in markdown */
+                            text: string;
+                            /**
+                             * @description help: from the help content; ai: from the language model with the account figures
+                             * @enum {string}
+                             */
+                            source: "help" | "ai";
+                            /** @description Names of the tools the answer used */
+                            toolsUsed: string[];
+                            /** @description The figures sent to the language model are still stored */
+                            sentAvailable: boolean;
+                            /** @description Investment notice line, when the answer needs one */
+                            notice: string | null;
+                        };
+                        /** @description Usage band, so the panel shows the quota without another call */
+                        usage: {
+                            /**
+                             * @description State of the usage band that applies to the next turn
+                             * @enum {string}
+                             */
+                            state: "ok" | "warning" | "paused";
+                            /** @description Share of that band used, in basis points */
+                            usedBps: number;
+                            /** @description When the usage resets, ISO 8601 */
+                            resetsAt: string;
+                        };
+                    };
+                };
+            };
+            /** @description Invalid params or body (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No such turn or conversation for this person, including one that belongs to someone else (assistant.turn_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AssistantChatController_feedback: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Turn id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Only the negative signal is collected; nothing of the text is kept */
+                    helpful: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description Signal counted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid params or body (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No such turn or conversation for this person, including one that belongs to someone else (assistant.turn_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AssistantChatController_current: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The conversation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Current conversation, null when there is none
+                         */
+                        conversationId: string | null;
+                        /** @description The last 20 messages, oldest first */
+                        messages: {
+                            /**
+                             * Format: uuid
+                             * @description Message id; for a vera message it is also the turn id
+                             */
+                            id: string;
+                            /**
+                             * @description Who wrote it
+                             * @enum {string}
+                             */
+                            role: "person" | "vera";
+                            /** @description The text */
+                            text: string;
+                            /**
+                             * @description Status of the message
+                             * @enum {string}
+                             */
+                            status: "pending" | "done" | "failed";
+                            /** @description Tools the answer used */
+                            toolsUsed: string[];
+                            /** @description Investment notice line, when the answer needs one */
+                            notice: string | null;
+                            /** @description ISO 8601 */
+                            createdAt: string;
+                        }[];
+                        /** @description Usage band that applies to the next turn */
+                        usage: {
+                            /**
+                             * @description State of the usage band that applies to the next turn
+                             * @enum {string}
+                             */
+                            state: "ok" | "warning" | "paused";
+                            /** @description Share of that band used, in basis points */
+                            usedBps: number;
+                            /** @description When the usage resets, ISO 8601 */
+                            resetsAt: string;
+                        } | null;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AssistantChatController_remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Conversation id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Conversation deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid params or body (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No such turn or conversation for this person, including one that belongs to someone else (assistant.turn_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
     HealthController_check: {
         parameters: {
             query?: never;
