@@ -12,6 +12,7 @@ export interface InvestmentImportApiOptions {
     readonly commitStatus?: number;
     readonly undoStatus?: number;
     readonly previewType?: string;
+    readonly commitType?: string;
 }
 
 export interface InvestmentImportApi {
@@ -37,7 +38,7 @@ export function mockInvestmentImportApi(options: InvestmentImportApiOptions = {}
         http.post('*/investment-imports', async ({ request }) => {
             api.commits.push((await request.json()) as Record<string, unknown>);
             if (options.commitStatus !== undefined) {
-                return failure('preview.expired', options.commitStatus);
+                return failure(options.commitType ?? 'preview.expired', options.commitStatus);
             }
             return HttpResponse.json(options.created ?? investmentImportCreated(), { status: 201 });
         }),

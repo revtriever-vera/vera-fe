@@ -7,18 +7,30 @@ type ReasonKey =
     | 'fixedIncome.reasons.missing_data'
     | 'fixedIncome.reasons.implausible'
     | 'fixedIncome.reasons.missing_series'
-    | 'fixedIncome.reasons.event'
-    | 'fixedIncome.reasons.grace'
-    | 'fixedIncome.reasons.issue_date'
+    | 'fixedIncome.reasons.too_recent'
+    | 'fixedIncome.reasons.payment_event'
+    | 'fixedIncome.reasons.grace_period'
+    | 'fixedIncome.reasons.application_date_differs'
+    | 'fixedIncome.reasons.estimated_series'
+    | 'fixedIncome.reasons.assumed_face_price'
+    | 'fixedIncome.reasons.unsupported_kind'
+    | 'fixedIncome.reasons.incomplete_data'
+    | 'fixedIncome.reasons.duplicate'
     | 'fixedIncome.reasons.generic';
 
 const REASON_KEYS: Readonly<Record<string, ReasonKey>> = {
     missing_data: 'fixedIncome.reasons.missing_data',
     implausible: 'fixedIncome.reasons.implausible',
     missing_series: 'fixedIncome.reasons.missing_series',
-    event: 'fixedIncome.reasons.event',
-    grace: 'fixedIncome.reasons.grace',
-    issue_date: 'fixedIncome.reasons.issue_date'
+    too_recent: 'fixedIncome.reasons.too_recent',
+    payment_event: 'fixedIncome.reasons.payment_event',
+    grace_period: 'fixedIncome.reasons.grace_period',
+    application_date_differs: 'fixedIncome.reasons.application_date_differs',
+    estimated_series: 'fixedIncome.reasons.estimated_series',
+    assumed_face_price: 'fixedIncome.reasons.assumed_face_price',
+    unsupported_kind: 'fixedIncome.reasons.unsupported_kind',
+    incomplete_data: 'fixedIncome.reasons.incomplete_data',
+    duplicate: 'fixedIncome.reasons.duplicate'
 };
 
 const MONTH_YEAR_PARTS: RegExp = /^(\d{4})-(\d{2})/;
@@ -45,4 +57,10 @@ export function titleMaturityText(t: TFunction<'portfolioImports'>, title: Impor
 
 export function titleReasonText(t: TFunction<'portfolioImports'>, reason: string | null): string {
     return t(REASON_KEYS[reason ?? ''] ?? 'fixedIncome.reasons.generic');
+}
+
+export const ASSUMED_FACE_PRICE: string = 'assumed_face_price';
+
+export function titleHasAssumedFacePrice(title: ImportedTitle): boolean {
+    return title.reason === ASSUMED_FACE_PRICE;
 }

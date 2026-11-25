@@ -344,7 +344,7 @@ describe('InvestmentImportModal: renda fixa', () => {
         const preview: InvestmentPreview = investmentPreview({
             operations: [],
             effect: [],
-            fixedIncome: [importedTitle({ reason: 'event', status: 'check' })]
+            fixedIncome: [importedTitle({ reason: 'payment_event', status: 'check' })]
         });
         const { user }: InvestmentImportSetup = renderInvestmentImportModal({ preview });
         await chooseReport(user);
@@ -355,6 +355,52 @@ describe('InvestmentImportModal: renda fixa', () => {
 
         expect(screen.getByRole('button', { name: 'Confirmar' })).toBeInTheDocument();
         expect(confirmButton()).toBeDisabled();
+    });
+
+    it('aviso do PU assumido aparece antes de confirmar e some depois da decisão', async () => {
+        const preview: InvestmentPreview = investmentPreview({
+            operations: [],
+            effect: [],
+            fixedIncome: [importedTitle({ reason: 'assumed_face_price', status: 'check' })]
+        });
+        const { user }: InvestmentImportSetup = renderInvestmentImportModal({ preview });
+        await chooseReport(user);
+
+        expect(await screen.findByText(/Confira antes de confirmar: assumimos PU de R\$ 1\.000 na emissão/)).toBeInTheDocument();
+        expect(screen.getByText('Assumimos PU de R$ 1.000 na emissão. Confira o valor aplicado antes de confirmar.')).toBeInTheDocument();
+        await user.click(screen.getByRole('button', { name: 'Confirmar' }));
+        expect(screen.queryByText(/Assumimos PU de R\$ 1\.000/)).not.toBeInTheDocument();
+    });
+
+    it('emissor de tipo outro não descarta o título', async () => {
+        const issuer: Record<string, unknown> = {
+            id: 'iss-1',
+            name: 'Outro emissor',
+            groupId: 'g-1',
+            groupName: 'Outro emissor',
+            kind: 'other',
+            fgcAssociated: false
+        };
+        const preview: InvestmentPreview = investmentPreview({ operations: [], effect: [], fixedIncome: [importedTitle({ issuer })] });
+        const { user }: InvestmentImportSetup = renderInvestmentImportModal({ preview });
+        await chooseReport(user);
+
+        expect(await screen.findByText(/Achamos: CDB Banco Exemplo/)).toBeInTheDocument();
+    });
+
+    it('mostra o erro de título duplicado ao confirmar', async () => {
+        const preview: InvestmentPreview = investmentPreview({ operations: [], effect: [], fixedIncome: [importedTitle()] });
+        const { user }: InvestmentImportSetup = renderInvestmentImportModal({
+            preview,
+            commitStatus: 422,
+            commitType: 'import.fixed_income_duplicate'
+        });
+        await chooseReport(user);
+
+        await user.click(await screen.findByRole('button', { name: 'Confirmar' }));
+        await user.click(confirmButton());
+
+        expect(await screen.findByText(/Já existe um título igual na carteira. Deixe/)).toBeInTheDocument();
     });
 });
 

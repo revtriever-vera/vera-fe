@@ -130,9 +130,15 @@
       "missing_data": "the report lacks some data",
       "implausible": "the calculated rate looks unusual",
       "missing_series": "we do not have the index for the whole period",
-      "event": "the title had an interest payment or amortization",
-      "grace": "the grace period may distort the rate",
-      "issue_date": "the issue date differs from your investment date",
+      "too_recent": "the title is too recent to calculate the rate",
+      "payment_event": "the title had an interest payment or amortization",
+      "grace_period": "the grace period may distort the rate",
+      "application_date_differs": "the investment date differs from the issue date",
+      "estimated_series": "the rate uses an estimated index",
+      "assumed_face_price": "we assumed a unit price of R$ 1,000 at issue",
+      "unsupported_kind": "we do not calculate this kind of title yet",
+      "incomplete_data": "the title lacks some data",
+      "duplicate": "an equal title is already in your portfolio",
       "generic": "worth checking the data"
     },
     "confirm": "Confirm",
@@ -148,7 +154,8 @@
     "unknownRate": "rate to fill in",
     "unknownMaturity": "maturity to fill in",
     "pending_one": "Decide what to do with {{count}} fixed income title.",
-    "pending_other": "Decide what to do with {{count}} fixed income titles."
+    "pending_other": "Decide what to do with {{count}} fixed income titles.",
+    "assumedFacePrice": "We assumed a unit price of R$ 1,000 at issue. Check the amount applied before confirming."
   },
   "blockers": {
     "blocked_one": "{{count}} line needs a fix or to be left out.",
@@ -210,6 +217,7 @@
     "positionModeRequired": "Choose what to do with the positions that already exist.",
     "invalidEdit": "One of the corrections does not match the report. Send the report again.",
     "tooManyRequests": "Too many imports in a short time. Try again later.",
-    "forbidden": "Your role does not allow importing operations."
+    "forbidden": "Your role does not allow importing operations.",
+    "fixedIncomeDuplicate": "An equal title is already in your portfolio. Leave this one out or correct its data to import it anyway."
   }
 }

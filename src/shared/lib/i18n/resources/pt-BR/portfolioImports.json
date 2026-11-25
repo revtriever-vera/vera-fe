@@ -130,9 +130,15 @@
       "missing_data": "faltam dados no relatório",
       "implausible": "a taxa calculada ficou fora do comum",
       "missing_series": "não temos o índice de todo o período",
-      "event": "o título teve pagamento de juros ou amortização",
-      "grace": "a carência pode distorcer a taxa",
-      "issue_date": "a data de emissão é diferente da data da sua aplicação",
+      "too_recent": "o título é recente demais para calcular a taxa",
+      "payment_event": "o título teve pagamento de juros ou amortização",
+      "grace_period": "a carência pode distorcer a taxa",
+      "application_date_differs": "a data da aplicação é diferente da data de emissão",
+      "estimated_series": "a taxa usa um índice estimado",
+      "assumed_face_price": "assumimos PU de R$ 1.000 na emissão",
+      "unsupported_kind": "ainda não calculamos este tipo de título",
+      "incomplete_data": "faltam dados do título",
+      "duplicate": "já existe um título igual na carteira",
       "generic": "vale conferir os dados"
     },
     "confirm": "Confirmar",
@@ -148,7 +154,8 @@
     "unknownRate": "taxa a completar",
     "unknownMaturity": "vencimento a completar",
     "pending_one": "Decida o que fazer com {{count}} título de renda fixa.",
-    "pending_other": "Decida o que fazer com {{count}} títulos de renda fixa."
+    "pending_other": "Decida o que fazer com {{count}} títulos de renda fixa.",
+    "assumedFacePrice": "Assumimos PU de R$ 1.000 na emissão. Confira o valor aplicado antes de confirmar."
   },
   "blockers": {
     "blocked_one": "{{count}} linha precisa de correção ou de ficar de fora.",
@@ -210,6 +217,7 @@
     "positionModeRequired": "Escolha o que fazer com as posições que já existem.",
     "invalidEdit": "Uma das correções não bate com o relatório. Mande o relatório de novo.",
     "tooManyRequests": "Muitas importações em pouco tempo. Tente de novo mais tarde.",
-    "forbidden": "O seu papel não permite importar operações."
+    "forbidden": "O seu papel não permite importar operações.",
+    "fixedIncomeDuplicate": "Já existe um título igual na carteira. Deixe este de fora ou corrija os dados para importar mesmo assim."
   }
 }

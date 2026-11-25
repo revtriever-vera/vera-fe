@@ -11,6 +11,7 @@ export type InvestmentImportErrorKey =
     | 'errors.hasBlockedLines'
     | 'errors.positionModeRequired'
     | 'errors.invalidEdit'
+    | 'errors.fixedIncomeDuplicate'
     | 'errors.tooManyRequests'
     | 'errors.forbidden';
 
@@ -23,6 +24,7 @@ export const INVESTMENT_IMPORT_ERROR_KEYS: Readonly<Record<string, InvestmentImp
     'import.has_blocked_lines': 'errors.hasBlockedLines',
     'import.position_mode_required': 'errors.positionModeRequired',
     'import.invalid_edit': 'errors.invalidEdit',
+    'import.fixed_income_duplicate': 'errors.fixedIncomeDuplicate',
     'identity.insufficient_role': 'errors.forbidden'
 };
 
