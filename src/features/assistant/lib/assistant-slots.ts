@@ -6,9 +6,7 @@ export interface SentFrameProps {
 }
 
 export interface AssistantSlots {
-    /** The permission request of the summaries; a feature cannot import another, so `app` wires it. */
     readonly ConsentRequest: ComponentType;
-    /** The modal frame that shows what was sent. */
     readonly SentFrame: ComponentType<SentFrameProps>;
 }
 
