@@ -91,7 +91,7 @@
     "invalid_quantity": "A quantidade não veio no relatório. Corrija a quantidade.",
     "unsupported_direction": "Não sabemos tratar esta movimentação. Não importe esta linha.",
     "position_mode_required": "Escolha abaixo se esta linha soma à posição ou já está nela.",
-    "assumed_cost": "Custo médio assumido pelo preço do extrato; ajuste se souber o seu.",
+    "assumed_cost": "Custo médio assumido pelo preço que aparece no arquivo; ajuste se souber o seu.",
     "duplicate": "Esta operação já foi importada antes.",
     "skipped": "Esta linha ficou de fora da importação.",
     "generic": "Confira esta linha antes de importar.",
@@ -251,7 +251,9 @@
     "forbidden": "O seu papel não permite importar operações.",
     "fixedIncomeDuplicate": "Já existe um título igual na carteira. Deixe este de fora ou corrija os dados para importar mesmo assim.",
     "modelUnavailable": "A leitura de notas, extratos e prints está fora do ar agora. O relatório da B3 em Excel continua funcionando.",
-    "modelUnreadable": "Não conseguimos ler esse arquivo. Tente uma imagem mais nítida ou o arquivo em PDF."
+    "modelUnreadable": "Não conseguimos ler esse arquivo. Tente uma imagem mais nítida ou o arquivo em PDF.",
+    "modelNoOperations": "Não encontramos compras ou vendas nesse arquivo. Envie uma nota de corretagem, um extrato ou um print com as operações.",
+    "modelPositionsWithoutPrice": "Lemos as posições, mas os preços não estão legíveis e sem preço não dá para registrar o custo. Envie um print em que o preço apareça ou uma nota de corretagem."
   },
   "consent": {
     "title": "Enviar este arquivo?",

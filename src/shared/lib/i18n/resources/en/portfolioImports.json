@@ -91,7 +91,7 @@
     "invalid_quantity": "The quantity is not in the report. Fix the quantity.",
     "unsupported_direction": "We cannot handle this movement. Skip this line.",
     "position_mode_required": "Choose below whether this line adds to the position or is already in it.",
-    "assumed_cost": "Average cost assumed from the statement price; adjust it if you know yours.",
+    "assumed_cost": "Average cost assumed from the price shown in the file; adjust it if you know yours.",
     "duplicate": "This operation was already imported.",
     "skipped": "This line was left out of the import.",
     "generic": "Check this line before importing.",
@@ -251,7 +251,9 @@
     "forbidden": "Your role does not allow importing operations.",
     "fixedIncomeDuplicate": "An equal title is already in your portfolio. Leave this one out or correct its data to import it anyway.",
     "modelUnavailable": "Reading notes, statements and screenshots is unavailable right now. The B3 Excel report still works.",
-    "modelUnreadable": "We could not read this file. Try a sharper image or the PDF file."
+    "modelUnreadable": "We could not read this file. Try a sharper image or the PDF file.",
+    "modelNoOperations": "We found no buys or sells in this file. Send a brokerage note, a statement or a screenshot with the trades.",
+    "modelPositionsWithoutPrice": "We read the positions, but the prices are not legible, and without a price we cannot record the cost. Send a screenshot that shows the price or a brokerage note."
   },
   "consent": {
     "title": "Send this file?",
