@@ -45,7 +45,7 @@ function useAllow(consent: ConsentState): { readonly allow: () => Promise<void>;
     return { allow, pending: grant.isPending };
 }
 
-function AllowRow({ consent }: { readonly consent: ConsentState }): ReactElement {
+export function AllowRow({ consent }: { readonly consent: ConsentState }): ReactElement {
     const { t }: UseTranslationResponse<'summaries', undefined> = useTranslation('summaries');
     const { allow, pending } = useAllow(consent);
     if (!consent.canChange) {

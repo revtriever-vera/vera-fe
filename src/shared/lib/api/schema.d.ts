@@ -1104,6 +1104,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/assistant/turns/{id}/sent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * See what was sent to the language model in a turn
+         * @description The tool results of the turn, as they were serialized to the language model. Only the person who asked sees them. Empty for a `help` turn, and emptied for good when the person turns off the permission to send figures.
+         */
+        get: operations["AssistantChatController_sent"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/assistant/turns/{id}/feedback": {
         parameters: {
             query?: never;
@@ -3272,6 +3292,111 @@ export interface operations {
                             /** @description When the usage resets, ISO 8601 */
                             resetsAt: string;
                         };
+                    };
+                };
+            };
+            /** @description Invalid params or body (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No such turn or conversation for this person, including one that belongs to someone else (assistant.turn_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AssistantChatController_sent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Turn id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description What was sent */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description What went to the language model in this turn, in order; empty when nothing was sent or it was already erased */
+                        sent: {
+                            /** @description Name of the tool whose result went to the language model */
+                            tool: string;
+                            /** @description The result exactly as it was serialized to the language model: aggregates, keys and markers only */
+                            payload: {
+                                [key: string]: unknown;
+                            };
+                        }[];
                     };
                 };
             };

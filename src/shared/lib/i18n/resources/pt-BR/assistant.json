@@ -1,5 +1,7 @@
 {
-  "launcher": { "label": "Perguntar à Vera" },
+  "launcher": {
+    "label": "Perguntar à Vera"
+  },
   "panel": {
     "title": "Perguntar à Vera",
     "close": "Fechar",
@@ -18,7 +20,9 @@
     "disclosure": "Sua pergunta é enviada a um modelo de linguagem, por um serviço da Vercel. Não escreva CPF, senha ou dados de cartão.",
     "paused": "Perguntas pausadas até {{date}}."
   },
-  "quota": { "warning": "{{percent}}% da cota de {{month}} usada" },
+  "quota": {
+    "warning": "{{percent}}% da cota de {{month}} usada"
+  },
   "message": {
     "log": "Conversa",
     "person": "Você",
@@ -94,5 +98,14 @@
       "two": "Por onde eu começo?",
       "three": "Onde mudo as configurações da conta?"
     }
+  },
+  "sent": {
+    "link": "Ver o que foi enviado",
+    "loading": "Carregando o que foi enviado",
+    "failed": "Não consegui abrir o que foi enviado.",
+    "empty": "Não há nada guardado desta resposta: nada foi enviado ou o envio foi desligado."
+  },
+  "upgrade": {
+    "lock": "Os números da sua conta e o mercado estão no Premium."
   }
 }
