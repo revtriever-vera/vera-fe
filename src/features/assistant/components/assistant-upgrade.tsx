@@ -4,6 +4,7 @@ import { track } from '@/shared/lib/analytics';
 import type { BillingState } from '@/shared/lib/billing/billing-context';
 import { useBilling } from '@/shared/lib/billing/use-billing';
 import { LockLine } from '@/shared/ui/lock-line';
+import type { MessageView } from '../types';
 import { useAssistantSlots } from '../lib/use-assistant-slots';
 
 function PremiumLock(): ReactElement {
@@ -21,12 +22,11 @@ function PremiumLock(): ReactElement {
     );
 }
 
-export function AssistantUpgrade(): ReactElement | null {
-    const billing: BillingState = useBilling();
+export interface AssistantUpgradeProps {
+    readonly access: Exclude<MessageView['access'], 'ok'>;
+}
+
+export function AssistantUpgrade({ access }: AssistantUpgradeProps): ReactElement {
     const { ConsentRequest } = useAssistantSlots();
-    const access: ReturnType<BillingState['featureState']> = billing.featureState('ai');
-    if (access === 'premium_required') {
-        return <PremiumLock />;
-    }
-    return access === 'loading' || access === 'disabled' ? null : <ConsentRequest />;
+    return access === 'premium_required' ? <PremiumLock /> : <ConsentRequest />;
 }
