@@ -1,0 +1,29 @@
+import type { TFunction } from 'i18next';
+
+type ReasonKey =
+    | 'reasons.asset_not_found'
+    | 'reasons.asset_not_available'
+    | 'reasons.sell_exceeds_position'
+    | 'reasons.event_factor'
+    | 'reasons.invalid_quantity'
+    | 'reasons.unsupported_direction'
+    | 'reasons.position_mode_required'
+    | 'reasons.duplicate'
+    | 'reasons.skipped'
+    | 'reasons.generic';
+
+const REASON_KEYS: Readonly<Record<string, ReasonKey>> = {
+    asset_not_found: 'reasons.asset_not_found',
+    asset_not_available: 'reasons.asset_not_available',
+    sell_exceeds_position: 'reasons.sell_exceeds_position',
+    event_factor: 'reasons.event_factor',
+    invalid_quantity: 'reasons.invalid_quantity',
+    unsupported_direction: 'reasons.unsupported_direction',
+    position_mode_required: 'reasons.position_mode_required',
+    duplicate: 'reasons.duplicate',
+    skipped: 'reasons.skipped'
+};
+
+export function lineReasonText(t: TFunction<'portfolioImports'>, reason: string | null): string {
+    return t(REASON_KEYS[reason ?? ''] ?? 'reasons.generic');
+}

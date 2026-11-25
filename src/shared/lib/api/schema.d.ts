@@ -1800,6 +1800,70 @@ export interface paths {
         patch: operations["PositionsController_update"];
         trace?: never;
     };
+    "/investment-imports/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Preview an investment report and its effect on the portfolio
+         * @description Reads a B3 report (xlsx or csv: Negociação, Movimentação or Posição) and returns every line with its status, the position of each asset before and after, and what was left out. The file is discarded as soon as it is read and never stored: only the operations read are kept for 30 minutes, waiting for POST /investment-imports. Available on every plan.
+         */
+        post: operations["InvestmentImportsController_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/investment-imports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the investment imports of the company
+         * @description Newest first. The operations are not part of the list.
+         */
+        get: operations["InvestmentImportsController_listImports"];
+        put?: never;
+        /**
+         * Confirm an investment import from its preview
+         * @description Records the operations of the preview, with the corrections sent in `edits`, and updates the positions in one transaction. The effect is recalculated with the corrections; the call is refused while a line is `blocked` or while an asset that already has a position has lines without `positionMode`. The preview can be confirmed once. `DELETE /investment-imports/{id}` undoes it.
+         */
+        post: operations["InvestmentImportsController_commit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/investment-imports/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Undo an investment import
+         * @description Removes the operations the import recorded and restores the positions as they were before it. Refused when a later import touches the same assets or when a position was edited after the import.
+         */
+        delete: operations["InvestmentImportsController_undo"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/market-data/quotes": {
         parameters: {
             query?: never;
@@ -17900,6 +17964,770 @@ export interface operations {
             };
             /** @description Too many decimal places for the asset (positions.invalid_quantity) */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    InvestmentImportsController_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description The report (xlsx or csv), up to 10 MB
+                     */
+                    file: string;
+                    /**
+                     * Format: uuid
+                     * @description Member of the company that holds the investments; omit for the whole account
+                     */
+                    holderUserId?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description What the report holds and what would happen */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Id to send to POST /investment-imports; valid until expiresAt
+                         */
+                        previewId: string;
+                        /**
+                         * @description Kind of report read
+                         * @enum {string}
+                         */
+                        source: "b3" | "crypto_csv" | "model";
+                        /** @description Informational notes about what was left out of the import */
+                        notes: {
+                            /** @description Stable code of the note */
+                            code: string;
+                            /** @description How many rows the note refers to */
+                            count: number;
+                        }[];
+                        /** @description Every line of the report with its status and reason */
+                        operations: {
+                            /** @description Stable id of the line inside the preview */
+                            lineId: string;
+                            /**
+                             * @description ok, check (needs a choice), blocked (fix or skip), duplicate or ignored
+                             * @enum {string}
+                             */
+                            status: "ok" | "check" | "blocked" | "duplicate" | "ignored";
+                            /** @description Why the line is not ok; null when ok */
+                            reason: string | null;
+                            /**
+                             * @description Operation kind; null for ignored report rows
+                             * @enum {string|null}
+                             */
+                            kind: "buy" | "sell" | "split" | "reverse_split" | "bonus" | "income" | "transfer" | null;
+                            /**
+                             * @description Income kind, only for income
+                             * @enum {string|null}
+                             */
+                            incomeKind: "dividend" | "jcp" | "fii_income" | "interest" | "staking" | null;
+                            /**
+                             * @description Direction of the movement in the report
+                             * @enum {string|null}
+                             */
+                            direction: "credit" | "debit" | null;
+                            /** @description Trade date, YYYY-MM-DD */
+                            tradeDate: string | null;
+                            /** @description Ticker as read from the report */
+                            ticker: string | null;
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset matched; null when not found
+                             */
+                            assetId: string | null;
+                            /** @description Quantity as read, decimal string */
+                            quantity: string | null;
+                            /** @description Unit price as read, decimal string */
+                            unitPrice: string | null;
+                            /** @description Gross amount in minor units of the currency */
+                            grossMinor: number | null;
+                            /** @description Fees in minor units of the currency */
+                            feesMinor: number | null;
+                            /** @description ISO 4217 currency */
+                            currency: string | null;
+                            /**
+                             * @description Chosen or default position mode; null when the person must choose
+                             * @enum {string|null}
+                             */
+                            positionMode: "add" | "history_only" | null;
+                        }[];
+                        /** @description Position of each asset before and after the import */
+                        effect: {
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset
+                             */
+                            assetId: string;
+                            /** @description Catalog symbol of the asset */
+                            ticker: string;
+                            /** @description Catalog name of the asset */
+                            name: string;
+                            /** @description True when the portfolio already holds this asset for the holder */
+                            existingPosition: boolean;
+                            /** @description Position before the import; null when none */
+                            before: {
+                                /** @description Quantity held, decimal string */
+                                quantity: string;
+                                /** @description Average cost per unit, null when unknown */
+                                averagePrice: string | null;
+                            } | null;
+                            /** @description Position after the import; null when the position would be closed */
+                            after: {
+                                /** @description Quantity held, decimal string */
+                                quantity: string;
+                                /** @description Average cost per unit, null when unknown */
+                                averagePrice: string | null;
+                            } | null;
+                        }[];
+                        /** @description Fixed income titles found; filled by the fixed income reader */
+                        fixedIncome: unknown[];
+                        /** @description Attention points: unmatched assets, lines to choose, blocked lines */
+                        warnings: {
+                            /** @description Stable code of the note */
+                            code: string;
+                            /** @description How many rows the note refers to */
+                            count: number;
+                        }[];
+                        /**
+                         * Format: date-time
+                         * @description When the exact same file was imported before
+                         */
+                        alreadyImportedAt: string | null;
+                        /**
+                         * Format: date-time
+                         * @description When the preview stops being valid, 30 minutes after creation
+                         */
+                        expiresAt: string;
+                    };
+                };
+            };
+            /** @description Invalid fields or missing file (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The member is a viewer (identity.insufficient_role) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The file is larger than 10 MB (file.too_large) */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Not a report the reader knows (format.not_recognized, meta.suggestion says what is accepted) or too many rows (format.too_many_rows) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 60 previews in an hour for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    InvestmentImportsController_listImports: {
+        parameters: {
+            query?: {
+                /** @description Page number, starting at 1 */
+                page?: number;
+                /** @description Items per page, 1 to 200 (default 50) */
+                pageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page of imports */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Imports of the page, newest first */
+                        data: {
+                            /**
+                             * Format: uuid
+                             * @description Import id
+                             */
+                            id: string;
+                            /**
+                             * @description Kind of report read
+                             * @enum {string}
+                             */
+                            source: "b3" | "crypto_csv" | "model";
+                            /** @description Base name of the file that was uploaded */
+                            fileName: string;
+                            /**
+                             * @description `undone` imports had their operations reverted
+                             * @enum {string}
+                             */
+                            status: "completed" | "undone";
+                            /** @description Operations the import recorded */
+                            operations: number;
+                            /**
+                             * Format: date-time
+                             * @description Creation instant, ISO 8601 UTC
+                             */
+                            createdAt: string;
+                        }[];
+                        pagination: {
+                            page: number;
+                            pageSize: number;
+                            totalRecords: number;
+                            totalPages: number;
+                        };
+                    };
+                };
+            };
+            /** @description Invalid fields or missing file (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    InvestmentImportsController_commit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: uuid
+                     * @description Preview id returned by POST /investment-imports/preview
+                     */
+                    previewId: string;
+                    /**
+                     * @description Corrections by line; lines without edit are imported as read
+                     * @default []
+                     */
+                    edits?: {
+                        /** @description Line id returned by the preview */
+                        lineId: string;
+                        /**
+                         * Format: uuid
+                         * @description Catalog asset to use instead of the one matched by ticker
+                         */
+                        assetId?: string;
+                        /** @description Corrected quantity, decimal string */
+                        quantity?: string;
+                        /** @description Corrected unit price, decimal string */
+                        unitPrice?: string;
+                        /** @description Corrected trade date, YYYY-MM-DD */
+                        tradeDate?: string;
+                        /** @description Fees in minor units of the line currency */
+                        feesMinor?: number;
+                        /** @description True to leave the line out of the import */
+                        skip?: boolean;
+                        /**
+                         * @description `add` applies the line to the position; `history_only` only records it in the history
+                         * @enum {string}
+                         */
+                        positionMode?: "add" | "history_only";
+                    }[];
+                };
+            };
+        };
+        responses: {
+            /** @description The import and the resulting positions */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Id of the import, used to undo it
+                         */
+                        importId: string;
+                        /** @description Operations recorded */
+                        applied: number;
+                        /** @description Lines left out: skipped by the person, duplicates and ignored rows */
+                        skipped: number;
+                        /** @description Position of each asset after the import */
+                        positions: {
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset
+                             */
+                            assetId: string;
+                            /** @description Catalog symbol of the asset */
+                            ticker: string;
+                            /** @description Catalog name of the asset */
+                            name: string;
+                            /** @description True when the portfolio already holds this asset for the holder */
+                            existingPosition: boolean;
+                            /** @description Position before the import; null when none */
+                            before: {
+                                /** @description Quantity held, decimal string */
+                                quantity: string;
+                                /** @description Average cost per unit, null when unknown */
+                                averagePrice: string | null;
+                            } | null;
+                            /** @description Position after the import; null when the position would be closed */
+                            after: {
+                                /** @description Quantity held, decimal string */
+                                quantity: string;
+                                /** @description Average cost per unit, null when unknown */
+                                averagePrice: string | null;
+                            } | null;
+                        }[];
+                    };
+                };
+            };
+            /** @description Invalid fields or missing file (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The member is a viewer (identity.insufficient_role) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The preview expired or was already confirmed (preview.expired) */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Blocked lines remain (import.has_blocked_lines), a position mode is missing (import.position_mode_required) or an edit does not match a line (import.invalid_edit) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description More than 30 imports in an hour for the company */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    InvestmentImportsController_undo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Import id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The positions were restored */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description True when the positions were restored */
+                        undone: boolean;
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The member is a viewer (identity.insufficient_role) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The import does not exist in this company (positions.import_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description A later import or an edit of the position blocks it (import.undo_blocked), or it was already undone (positions.import_not_open) */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

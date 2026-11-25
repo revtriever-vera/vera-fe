@@ -22,6 +22,8 @@ import ptBRPortfolioOverview from './resources/pt-BR/portfolioOverview.json';
 import enPortfolioOverview from './resources/en/portfolioOverview.json';
 import ptBRPortfolioAssets from './resources/pt-BR/portfolioAssets.json';
 import enPortfolioAssets from './resources/en/portfolioAssets.json';
+import ptBRPortfolioImports from './resources/pt-BR/portfolioImports.json';
+import enPortfolioImports from './resources/en/portfolioImports.json';
 import ptBRPortfolioFixedIncome from './resources/pt-BR/portfolioFixedIncome.json';
 import enPortfolioFixedIncome from './resources/en/portfolioFixedIncome.json';
 import ptBRPortfolioTargets from './resources/pt-BR/portfolioTargets.json';
@@ -73,6 +75,7 @@ type LocaleResources = {
     readonly portfolio: typeof ptBRPortfolio;
     readonly portfolioOverview: typeof ptBRPortfolioOverview;
     readonly portfolioAssets: typeof ptBRPortfolioAssets;
+    readonly portfolioImports: typeof ptBRPortfolioImports;
     readonly portfolioFixedIncome: typeof ptBRPortfolioFixedIncome;
     readonly portfolioTargets: typeof ptBRPortfolioTargets;
     readonly portfolioContribution: typeof ptBRPortfolioContribution;
@@ -105,6 +108,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolio: ptBRPortfolio,
         portfolioOverview: ptBRPortfolioOverview,
         portfolioAssets: ptBRPortfolioAssets,
+        portfolioImports: ptBRPortfolioImports,
         portfolioFixedIncome: ptBRPortfolioFixedIncome,
         portfolioTargets: ptBRPortfolioTargets,
         portfolioContribution: ptBRPortfolioContribution,
@@ -135,6 +139,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolio: enPortfolio,
         portfolioOverview: enPortfolioOverview,
         portfolioAssets: enPortfolioAssets,
+        portfolioImports: enPortfolioImports,
         portfolioFixedIncome: enPortfolioFixedIncome,
         portfolioTargets: enPortfolioTargets,
         portfolioContribution: enPortfolioContribution,
@@ -176,6 +181,7 @@ void i18next.use(initReactI18next).init({
         'portfolio',
         'portfolioOverview',
         'portfolioAssets',
+        'portfolioImports',
         'portfolioFixedIncome',
         'portfolioTargets',
         'portfolioContribution',
