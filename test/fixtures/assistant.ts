@@ -18,11 +18,11 @@ export function assistantMessage(overrides: Partial<MessageView> = {}): MessageV
 }
 
 export function emptyConversation(overrides: Partial<ConversationView> = {}): ConversationView {
-    return { conversationId: null, messages: [], usage: assistantUsage(), ...overrides };
+    return { conversationId: null, messages: [], usage: assistantUsage(), enabled: true, ...overrides };
 }
 
 export function conversationWith(messages: MessageView[], overrides: Partial<ConversationView> = {}): ConversationView {
-    return { conversationId: 'conversation-1', messages, usage: assistantUsage(), ...overrides };
+    return { conversationId: 'conversation-1', messages, usage: assistantUsage(), enabled: true, ...overrides };
 }
 
 export function pendingTurn(overrides: Partial<TurnView> = {}): TurnView {
