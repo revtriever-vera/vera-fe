@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
+import { EndorsementSeal } from '@/shared/ui/endorsement-seal';
 import { InviteBox } from '../components/invite-box';
 import { LoginHero } from '../components/login-hero';
-import { PoweredBy } from '../components/powered-by';
 
 export function InvitePage({ token }: { readonly token: string }): ReactElement {
     return (
@@ -9,7 +9,7 @@ export function InvitePage({ token }: { readonly token: string }): ReactElement 
             <LoginHero />
             <div className="relative grid grid-cols-[minmax(0,1fr)] place-content-center place-items-center px-[clamp(16px,5vw,64px)] py-10 min-[861px]:pb-16">
                 <InviteBox token={token} />
-                <PoweredBy />
+                <EndorsementSeal className="mt-7 min-[861px]:absolute min-[861px]:inset-x-0 min-[861px]:bottom-5 min-[861px]:mt-0" />
             </div>
         </main>
     );

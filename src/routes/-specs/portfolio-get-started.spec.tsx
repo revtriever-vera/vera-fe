@@ -39,6 +39,6 @@ describe('/onboarding/assets', () => {
         renderRouterAt('/onboarding/assets', { signedIn: true });
 
         expect(await screen.findByRole('list', { name: 'Ativos da carteira' })).toHaveTextContent('ITUB4');
-        expect(within(screen.getByTestId('assets-type-picker')).getAllByRole('button')).toHaveLength(7);
+        expect(within(screen.getByTestId('assets-type-picker')).getAllByRole('button')).toHaveLength(8);
     });
 });
