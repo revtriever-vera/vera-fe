@@ -8,6 +8,7 @@ type ReasonKey =
     | 'reasons.invalid_quantity'
     | 'reasons.unsupported_direction'
     | 'reasons.position_mode_required'
+    | 'reasons.assumed_cost'
     | 'reasons.duplicate'
     | 'reasons.skipped'
     | 'reasons.generic';
@@ -20,6 +21,7 @@ const REASON_KEYS: Readonly<Record<string, ReasonKey>> = {
     invalid_quantity: 'reasons.invalid_quantity',
     unsupported_direction: 'reasons.unsupported_direction',
     position_mode_required: 'reasons.position_mode_required',
+    assumed_cost: 'reasons.assumed_cost',
     duplicate: 'reasons.duplicate',
     skipped: 'reasons.skipped'
 };

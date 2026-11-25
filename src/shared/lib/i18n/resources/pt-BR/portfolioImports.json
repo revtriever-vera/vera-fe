@@ -69,6 +69,7 @@
     "invalid_quantity": "A quantidade não veio no relatório. Corrija a quantidade.",
     "unsupported_direction": "Não sabemos tratar esta movimentação. Não importe esta linha.",
     "position_mode_required": "Escolha abaixo se esta linha soma à posição ou já está nela.",
+    "assumed_cost": "Custo médio assumido pelo preço do extrato; ajuste se souber o seu.",
     "duplicate": "Esta operação já foi importada antes.",
     "skipped": "Esta linha ficou de fora da importação.",
     "generic": "Confira esta linha antes de importar."

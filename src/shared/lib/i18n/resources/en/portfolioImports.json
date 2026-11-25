@@ -69,6 +69,7 @@
     "invalid_quantity": "The quantity is not in the report. Fix the quantity.",
     "unsupported_direction": "We cannot handle this movement. Skip this line.",
     "position_mode_required": "Choose below whether this line adds to the position or is already in it.",
+    "assumed_cost": "Average cost assumed from the statement price; adjust it if you know yours.",
     "duplicate": "This operation was already imported.",
     "skipped": "This line was left out of the import.",
     "generic": "Check this line before importing."
