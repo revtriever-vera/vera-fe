@@ -190,7 +190,7 @@
     "card": "Credit card",
     "pixHint": "One charge per month, paid on the Revtriever page.",
     "cardHint": "Renews automatically every month.",
-    "processed": "Payment processed by Revtriever.",
+    "processed": "Payment processed by Revtriever",
     "cardPrivacy": "Vera does not see or store the card data.",
     "pixPrivacy": "Vera only receives the confirmation.",
     "summary": {

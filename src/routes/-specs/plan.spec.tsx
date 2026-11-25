@@ -112,6 +112,15 @@ describe('aba Plano: Free', () => {
         expect(await screen.findByRole('button', { name: 'Assinar com Pix' })).toBeInTheDocument();
         expect(screen.queryByRole('radio', { name: 'Cartão de crédito' })).not.toBeInTheDocument();
     });
+
+    it('o checkout informa que o pagamento é processado pela Revtriever', async () => {
+        mockBilling(freeBilling());
+        const user: UserEvent = await openPlan();
+
+        await user.click(await screen.findByRole('button', { name: 'Assinar o Premium' }));
+
+        expect(await screen.findByText('Pagamento processado por Revtriever')).toBeInTheDocument();
+    });
 });
 
 describe('checkout', () => {
