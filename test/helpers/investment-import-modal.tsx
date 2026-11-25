@@ -21,7 +21,7 @@ export function renderInvestmentImportModal(options: InvestmentImportApiOptions 
     return { ...rendered, user: userEvent.setup(), onClose, api };
 }
 
-export async function chooseReport(user: UserEvent, name: string = 'negociacao.xlsx'): Promise<void> {
-    const input: HTMLElement = await screen.findByLabelText('Relatório da B3');
-    await user.upload(input, statementFile('xlsx-bytes', name, XLSX_TYPE));
+export async function chooseReport(user: UserEvent, name: string = 'negociacao.xlsx', type: string = XLSX_TYPE): Promise<void> {
+    const input: HTMLElement = await screen.findByLabelText('Arquivo');
+    await user.upload(input, statementFile('xlsx-bytes', name, type));
 }

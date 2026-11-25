@@ -18680,7 +18680,7 @@ export interface operations {
                 "multipart/form-data": {
                     /**
                      * Format: binary
-                     * @description The report (xlsx or csv), up to 10 MB
+                     * @description The report (xlsx or csv) or, with modelConsent, a PDF or image (PNG, JPEG, HEIC, WEBP), up to 10 MB
                      */
                     file: string;
                     /**
@@ -18688,6 +18688,15 @@ export interface operations {
                      * @description Member of the company that holds the investments; omit for the whole account
                      */
                     holderUserId?: string;
+                    /**
+                     * @description Date of the position report, YYYY-MM-DD, used to infer fixed income rates; defaults to the last business day
+                     */
+                    positionDate?: string;
+                    /**
+                     * @description Send `true` after the person agrees that this file goes to a language model (a PDF, image or photo). Without it, such a file is refused with model.confirmation_required and nothing is sent. Valid only for this request
+                     * @enum {string}
+                     */
+                    modelConsent?: "true" | "false";
                 };
             };
         };
@@ -18709,6 +18718,11 @@ export interface operations {
                          * @enum {string}
                          */
                         source: "b3" | "crypto_csv" | "model";
+                        /**
+                         * @description Kind of document the reader found: note, b3_report, foreign_statement or screenshot; null when the reader does not tell
+                         * @enum {string|null}
+                         */
+                        documentType: "note" | "b3_report" | "foreign_statement" | "screenshot" | null;
                         /** @description Informational notes about what was left out of the import */
                         notes: {
                             /** @description Stable code of the note */

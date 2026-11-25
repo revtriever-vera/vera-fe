@@ -12,6 +12,8 @@ export type InvestmentImportErrorKey =
     | 'errors.positionModeRequired'
     | 'errors.invalidEdit'
     | 'errors.fixedIncomeDuplicate'
+    | 'errors.modelUnavailable'
+    | 'errors.modelUnreadable'
     | 'errors.tooManyRequests'
     | 'errors.forbidden';
 
@@ -25,6 +27,8 @@ export const INVESTMENT_IMPORT_ERROR_KEYS: Readonly<Record<string, InvestmentImp
     'import.position_mode_required': 'errors.positionModeRequired',
     'import.invalid_edit': 'errors.invalidEdit',
     'import.fixed_income_duplicate': 'errors.fixedIncomeDuplicate',
+    'model.unavailable': 'errors.modelUnavailable',
+    'model.unreadable': 'errors.modelUnreadable',
     'identity.insufficient_role': 'errors.forbidden'
 };
 

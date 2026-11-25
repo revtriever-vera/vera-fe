@@ -47,6 +47,7 @@ export function investmentPreview(overrides: Partial<InvestmentPreview> = {}): I
     return {
         previewId: 'preview-1',
         source: 'b3',
+        documentType: null,
         notes: [],
         operations: [previewLine()],
         effect: [effectItem()],

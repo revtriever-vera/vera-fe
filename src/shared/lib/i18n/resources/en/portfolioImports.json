@@ -2,15 +2,15 @@
   "button": "Import operations",
   "modal": {
     "title": "Import operations",
-    "description": "Send the B3 report, check each line and confirm."
+    "description": "Send the file from your broker, check each line and confirm."
   },
   "file": {
-    "label": "B3 report",
-    "dropTitle": "Drop the report here",
-    "hint": "B3 report as Excel (.xlsx) or CSV, up to 10 MB.",
-    "reading": "Reading the report",
-    "tooLarge": "The file is over 10 MB. Send a smaller report.",
-    "invalidType": "That file is not Excel or CSV. Send the B3 report as .xlsx or .csv."
+    "label": "File",
+    "dropTitle": "Drop the file here",
+    "hint": "B3 report as Excel, brokerage note, broker statement, exchange CSV or a screenshot.",
+    "reading": "Reading the file",
+    "tooLarge": "The file is over 10 MB. Send a smaller file.",
+    "invalidType": "That format is not accepted. Send Excel, CSV, PDF or an image (PNG, JPEG, HEIC or WEBP)."
   },
   "alreadyImported": "This exact file was already imported on {{date}}. Repeated lines are left out.",
   "notes": {
@@ -220,6 +220,25 @@
     "invalidEdit": "One of the corrections does not match the report. Send the report again.",
     "tooManyRequests": "Too many imports in a short time. Try again later.",
     "forbidden": "Your role does not allow importing operations.",
-    "fixedIncomeDuplicate": "An equal title is already in your portfolio. Leave this one out or correct its data to import it anyway."
+    "fixedIncomeDuplicate": "An equal title is already in your portfolio. Leave this one out or correct its data to import it anyway.",
+    "modelUnavailable": "Reading notes, statements and screenshots is unavailable right now. The B3 Excel report still works.",
+    "modelUnreadable": "We could not read this file. Try a sharper image or the PDF file."
+  },
+  "consent": {
+    "title": "Send this file?",
+    "description": "This file is sent to a language model, through a service from Vercel.",
+    "send": "Send"
+  },
+  "foreign": {
+    "label": "Foreign currency amounts",
+    "original": "Amount in {{currency}}",
+    "ptax": "PTAX rate used",
+    "converted": "Amount in BRL"
+  },
+  "withholding": {
+    "label": "Income with tax withheld",
+    "gross": "Gross",
+    "tax": "Tax withheld",
+    "net": "Net"
   }
 }
