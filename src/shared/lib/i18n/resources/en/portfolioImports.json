@@ -31,7 +31,19 @@
     "foreign_position_not_applied_one": "The closing position of {{count}} asset in the statement had no operation in the period and did not change your portfolio.",
     "foreign_position_not_applied_other": "The closing positions of {{count}} assets in the statement had no operation in the period and did not change your portfolio.",
     "foreign_tax_unmatched_one": "{{count}} withheld tax found no matching income and was left out.",
-    "foreign_tax_unmatched_other": "{{count}} withheld taxes found no matching income and were left out."
+    "foreign_tax_unmatched_other": "{{count}} withheld taxes found no matching income and were left out.",
+    "lines_to_check_one": "{{count}} line needs checking before you import.",
+    "lines_to_check_other": "{{count}} lines need checking before you import.",
+    "crypto_transfer_check_one": "{{count}} crypto transfer needs checking: it may be a move between your own wallets.",
+    "crypto_transfer_check_other": "{{count}} crypto transfers need checking: they may be moves between your own wallets.",
+    "crypto_usd_rate_applied_one": "{{count}} dollar line was converted to reais at the day's rate.",
+    "crypto_usd_rate_applied_other": "{{count}} dollar lines were converted to reais at the day's rate.",
+    "crypto_fee_not_converted_one": "The fee of {{count}} line was not converted to reais and is left out of the cost.",
+    "crypto_fee_not_converted_other": "The fees of {{count}} lines were not converted to reais and are left out of the cost.",
+    "foreign_rate_fallback_one": "{{count}} line used the dollar rate of the previous business day, because the operation day has no rate.",
+    "foreign_rate_fallback_other": "{{count}} lines used the dollar rate of the previous business day, because the operation day has no rate.",
+    "foreign_rate_missing_one": "{{count}} line has no dollar rate and no value in reais.",
+    "foreign_rate_missing_other": "{{count}} lines have no dollar rate and no value in reais."
   },
   "table": {
     "title": "Check the operations",
@@ -79,11 +91,16 @@
     "invalid_quantity": "The quantity is not in the report. Fix the quantity.",
     "unsupported_direction": "We cannot handle this movement. Skip this line.",
     "position_mode_required": "Choose below whether this line adds to the position or is already in it.",
+    "assumed_cost": "Average cost assumed from the statement price; adjust it if you know yours.",
     "duplicate": "This operation was already imported.",
     "skipped": "This line was left out of the import.",
     "generic": "Check this line before importing.",
     "net_mismatch": "The net amount on the note does not match the values on this line. Check it against the note before importing.",
-    "out_of_order": "This operation comes before another one for the same asset in the statement. Check the date and the position before importing."
+    "out_of_order": "This operation comes before another one for the same asset in the statement. Check the date and the position before importing.",
+    "amount_mismatch": "This line's amount does not match quantity times price. Check the numbers before importing.",
+    "total_mismatch": "The note total does not match the sum of its operations. Check this line against the note before importing.",
+    "date_out_of_range": "This line's date looks outside the expected period. Check the date before importing.",
+    "position_mismatch": "The statement's closing position does not match the sum of this line's operations. Check the quantity before importing."
   },
   "actions": {
     "cancel": "Cancel",

@@ -8,6 +8,11 @@ type ReasonKey =
     | 'reasons.invalid_quantity'
     | 'reasons.unsupported_direction'
     | 'reasons.position_mode_required'
+    | 'reasons.assumed_cost'
+    | 'reasons.amount_mismatch'
+    | 'reasons.total_mismatch'
+    | 'reasons.date_out_of_range'
+    | 'reasons.position_mismatch'
     | 'reasons.net_mismatch'
     | 'reasons.out_of_order'
     | 'reasons.duplicate'
@@ -22,6 +27,11 @@ const REASON_KEYS: Readonly<Record<string, ReasonKey>> = {
     invalid_quantity: 'reasons.invalid_quantity',
     unsupported_direction: 'reasons.unsupported_direction',
     position_mode_required: 'reasons.position_mode_required',
+    assumed_cost: 'reasons.assumed_cost',
+    amount_mismatch: 'reasons.amount_mismatch',
+    total_mismatch: 'reasons.total_mismatch',
+    date_out_of_range: 'reasons.date_out_of_range',
+    position_mismatch: 'reasons.position_mismatch',
     net_mismatch: 'reasons.net_mismatch',
     out_of_order: 'reasons.out_of_order',
     duplicate: 'reasons.duplicate',
