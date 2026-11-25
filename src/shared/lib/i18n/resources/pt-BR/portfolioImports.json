@@ -1,0 +1,225 @@
+{
+  "button": "Importar operações",
+  "modal": {
+    "title": "Importar operações",
+    "description": "Mande o relatório da B3, confira cada linha e confirme."
+  },
+  "file": {
+    "label": "Relatório da B3",
+    "dropTitle": "Arraste o relatório aqui",
+    "hint": "Relatório da B3 em Excel (.xlsx) ou CSV, até 10 MB.",
+    "reading": "Lendo o relatório",
+    "tooLarge": "O arquivo passa de 10 MB. Mande um relatório menor.",
+    "invalidType": "Esse arquivo não é Excel nem CSV. Mande o relatório da B3 em .xlsx ou .csv."
+  },
+  "alreadyImported": "Esse mesmo arquivo já foi importado em {{date}}. As linhas repetidas ficam de fora.",
+  "notes": {
+    "position_report_not_applied": "A Posição da B3 não muda a sua carteira: ela serve para conferir o que você tem.",
+    "fixed_income_pending": "Títulos de renda fixa aparecem abaixo para você confirmar.",
+    "rows_rejected_one": "{{count}} linha do relatório não pôde ser lida.",
+    "rows_rejected_other": "{{count}} linhas do relatório não puderam ser lidas.",
+    "rows_ignored_one": "{{count}} linha do relatório não é operação e ficou de fora.",
+    "rows_ignored_other": "{{count}} linhas do relatório não são operações e ficaram de fora.",
+    "generic_one": "{{count}} linha ficou de fora da importação.",
+    "generic_other": "{{count}} linhas ficaram de fora da importação."
+  },
+  "table": {
+    "title": "Confira as operações",
+    "label": "Operações do relatório",
+    "empty": "Não achamos operações para importar nesse relatório.",
+    "asset": "Ativo",
+    "quantity": "Quantidade",
+    "unitPrice": "Preço",
+    "tradeDate": "Data",
+    "fees": "Taxas",
+    "decimalInvalid": "Use só números, com vírgula ou ponto.",
+    "skipped": "Esta linha não será importada.",
+    "unnamedAsset": "Ativo não identificado",
+    "otherLines_one": "{{count}} linha já importada ou fora da importação",
+    "otherLines_other": "{{count}} linhas já importadas ou fora da importação"
+  },
+  "kinds": {
+    "buy": "Compra",
+    "sell": "Venda",
+    "split": "Desdobramento",
+    "reverse_split": "Grupamento",
+    "bonus": "Bonificação",
+    "transfer": "Transferência",
+    "income": "Provento"
+  },
+  "incomeKinds": {
+    "dividend": "Dividendo",
+    "jcp": "JCP",
+    "fii_income": "Rendimento de FII",
+    "interest": "Juros",
+    "staking": "Staking"
+  },
+  "status": {
+    "ok": "Pronta",
+    "check": "Confira",
+    "blocked": "Corrija",
+    "duplicate": "Já importada",
+    "ignored": "Fora da importação"
+  },
+  "reasons": {
+    "asset_not_found": "Não achamos esse ativo no catálogo. Busque pelo código ou nome, ou não importe esta linha.",
+    "asset_not_available": "Esse ativo ainda não está disponível na Vera. Busque outro ou não importe esta linha.",
+    "sell_exceeds_position": "A venda é maior que a posição. Corrija a quantidade ou não importe esta linha.",
+    "event_factor": "O fator do evento não veio no relatório. Corrija a quantidade.",
+    "invalid_quantity": "A quantidade não veio no relatório. Corrija a quantidade.",
+    "unsupported_direction": "Não sabemos tratar esta movimentação. Não importe esta linha.",
+    "position_mode_required": "Escolha abaixo se esta linha soma à posição ou já está nela.",
+    "duplicate": "Esta operação já foi importada antes.",
+    "skipped": "Esta linha ficou de fora da importação.",
+    "generic": "Confira esta linha antes de importar."
+  },
+  "actions": {
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "confirm": "Confirmar importação",
+    "confirming": "Importando",
+    "skipLine": "Não importar esta linha",
+    "unskipLine": "Importar esta linha",
+    "searchAsset": "Buscar ativo",
+    "changeAsset": "Trocar ativo",
+    "another": "Importar outro relatório",
+    "viewAssets": "Ver ativos"
+  },
+  "catalog": {
+    "label": "Buscar no catálogo",
+    "placeholder": "Código ou nome do ativo",
+    "loading": "Buscando ativos",
+    "empty": "Nenhum ativo com esse código ou nome.",
+    "use": "Usar {{ticker}}",
+    "cancel": "Voltar"
+  },
+  "income": {
+    "title": "Proventos",
+    "description": "Entram no histórico e não mudam a posição.",
+    "label": "Proventos do relatório"
+  },
+  "effect": {
+    "title": "Efeito na carteira",
+    "label": "Efeito por ativo",
+    "created": "{{ticker}}: nova posição de {{to}}.",
+    "changed": "{{ticker}}: {{from}} → {{to}}.",
+    "closed": "{{ticker}}: {{from}} → 0. A posição será encerrada.",
+    "unchanged": "{{ticker}}: continua em {{to}}.",
+    "average": "Preço médio {{from}} → {{to}}.",
+    "averageNew": "Preço médio {{to}}.",
+    "averageUnknown": "Sem preço médio.",
+    "recalculated": "Recalculado com as suas correções.",
+    "existing": "{{ticker}} já está na sua carteira. O que fazemos com essas linhas?",
+    "choose": "Posição de {{ticker}}",
+    "add": "Somar à posição",
+    "history": "Já está na posição"
+  },
+  "fixedIncome": {
+    "title": "Renda fixa",
+    "label": "Títulos de renda fixa",
+    "found": "Achamos: {{product}}, {{rate}}, vence em {{maturity}}. Confirmar?",
+    "check": "Achamos: {{product}}, {{rate}}, vence em {{maturity}}. Confira antes de confirmar: {{reason}}",
+    "needsInput": "Não deu para calcular a taxa de {{product}}. Complete os campos que faltam.",
+    "duplicate": "{{product}} já está na sua carteira e não será importado de novo.",
+    "rates": {
+      "cdi_percent": "{{rate}} do CDI",
+      "prefixed": "{{rate}} ao ano",
+      "ipca_plus": "IPCA + {{rate}} ao ano"
+    },
+    "reasons": {
+      "missing_data": "faltam dados no relatório",
+      "implausible": "a taxa calculada ficou fora do comum",
+      "missing_series": "não temos o índice de todo o período",
+      "too_recent": "o título é recente demais para calcular a taxa",
+      "payment_event": "o título teve pagamento de juros ou amortização",
+      "grace_period": "a carência pode distorcer a taxa",
+      "application_date_differs": "a data da aplicação é diferente da data de emissão",
+      "estimated_series": "a taxa usa um índice estimado",
+      "assumed_face_price": "assumimos PU de R$ 1.000 na emissão",
+      "unsupported_kind": "ainda não calculamos este tipo de título",
+      "incomplete_data": "faltam dados do título",
+      "duplicate": "já existe um título igual na carteira",
+      "generic": "vale conferir os dados"
+    },
+    "confirm": "Confirmar",
+    "fix": "Corrigir",
+    "skip": "Não importar este título",
+    "unskip": "Importar este título",
+    "confirmed": "Título confirmado.",
+    "corrected": "Título corrigido.",
+    "skipped": "Este título não será importado.",
+    "formTitle": "Corrigir {{product}}",
+    "save": "Usar estes dados",
+    "back": "Voltar",
+    "unknownRate": "taxa a completar",
+    "unknownMaturity": "vencimento a completar",
+    "pending_one": "Decida o que fazer com {{count}} título de renda fixa.",
+    "pending_other": "Decida o que fazer com {{count}} títulos de renda fixa.",
+    "assumedFacePrice": "Assumimos PU de R$ 1.000 na emissão. Confira o valor aplicado antes de confirmar."
+  },
+  "blockers": {
+    "blocked_one": "{{count}} linha precisa de correção ou de ficar de fora.",
+    "blocked_other": "{{count}} linhas precisam de correção ou de ficar de fora.",
+    "invalid": "Corrija os números destacados.",
+    "assets_one": "Escolha o que fazer com a posição de {{count}} ativo.",
+    "assets_other": "Escolha o que fazer com a posição de {{count}} ativos.",
+    "nothing": "Não há linhas para importar."
+  },
+  "result": {
+    "title": "Importação concluída",
+    "operations_one": "{{count}} operação",
+    "operations_other": "{{count}} operações",
+    "assets_one": "{{count}} ativo",
+    "assets_other": "{{count}} ativos",
+    "titles_one": "{{count}} título de renda fixa",
+    "titles_other": "{{count}} títulos de renda fixa",
+    "summary": "{{operations}} em {{assets}}.",
+    "summaryOnlyTitles": "{{titles}}.",
+    "summaryTitles": "{{operations}} em {{assets}}. {{titles}}.",
+    "skipped_one": "{{count}} linha ficou de fora.",
+    "skipped_other": "{{count}} linhas ficaram de fora.",
+    "positions": "Posição de cada ativo"
+  },
+  "history": {
+    "title": "Importações anteriores",
+    "label": "Histórico de importações",
+    "empty": "Você ainda não importou nenhum relatório.",
+    "loadFailed": "Não conseguimos carregar o histórico de importações.",
+    "operations_one": "{{count}} operação",
+    "operations_other": "{{count}} operações",
+    "titles_one": "{{count}} título de renda fixa",
+    "titles_other": "{{count}} títulos de renda fixa",
+    "status": {
+      "completed": "Concluída",
+      "undone": "Desfeita"
+    }
+  },
+  "undo": {
+    "button": "Desfazer",
+    "buttonFor": "Desfazer a importação de {{file}}",
+    "title": "Desfazer esta importação?",
+    "description_one": "A operação dessa importação sai do histórico e a posição volta ao que era antes.",
+    "description_other": "As {{count}} operações dessa importação saem do histórico e as posições voltam ao que eram antes.",
+    "confirm": "Desfazer importação"
+  },
+  "toasts": {
+    "previewFailed": "Não conseguimos ler o relatório",
+    "importFailed": "Não conseguimos importar",
+    "undone": "Importação desfeita.",
+    "undoFailed": "Não conseguimos desfazer a importação"
+  },
+  "errors": {
+    "generic": "Não conseguimos fazer isso agora. Tente de novo em instantes.",
+    "formatNotRecognized": "Não reconhecemos esse relatório. Mande o relatório da B3 em Excel: Negociação, Movimentação ou Posição.",
+    "fileTooLarge": "O arquivo passa de 10 MB. Mande um relatório menor.",
+    "tooManyRows": "O relatório tem linhas demais. Mande um período menor.",
+    "previewExpired": "A conferência expirou. Mande o relatório de novo.",
+    "undoBlocked": "Não dá para desfazer: outra importação mexeu nos mesmos ativos ou a posição foi editada depois.",
+    "hasBlockedLines": "Ainda há linhas para corrigir ou deixar de fora.",
+    "positionModeRequired": "Escolha o que fazer com as posições que já existem.",
+    "invalidEdit": "Uma das correções não bate com o relatório. Mande o relatório de novo.",
+    "tooManyRequests": "Muitas importações em pouco tempo. Tente de novo mais tarde.",
+    "forbidden": "O seu papel não permite importar operações.",
+    "fixedIncomeDuplicate": "Já existe um título igual na carteira. Deixe este de fora ou corrija os dados para importar mesmo assim."
+  }
+}
