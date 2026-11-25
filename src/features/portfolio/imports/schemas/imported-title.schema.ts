@@ -8,7 +8,7 @@ const issuerSchema = z.object({
     name: z.string().min(1),
     groupId: z.string().min(1),
     groupName: z.string().min(1),
-    kind: z.enum(['bank', 'company', 'sovereign']),
+    kind: z.enum(['bank', 'company', 'sovereign', 'other']),
     fgcAssociated: z.boolean()
 });
 
@@ -24,7 +24,8 @@ export const importedTitleSchema = z.object({
     appliedAt: z.string().nullable(),
     maturityDate: z.string().nullable(),
     status: z.enum([TITLE_STATUS.inferred, TITLE_STATUS.check, TITLE_STATUS.needsInput, TITLE_STATUS.duplicate]),
-    reason: z.string().nullable()
+    reason: z.string().nullable(),
+    suggestion: z.string().optional()
 });
 
 export type ImportedTitle = z.infer<typeof importedTitleSchema>;

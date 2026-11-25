@@ -6,7 +6,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import type { CreateTitleBody } from '../../assets/types';
 import type { AssetClassView } from '../../types';
-import { titleMaturityText, titleRateText, titleReasonText } from '../lib/title-text';
+import { titleHasAssumedFacePrice, titleMaturityText, titleRateText, titleReasonText } from '../lib/title-text';
 import type { TitleChoice } from '../lib/title-choices';
 import { TITLE_STATUS, type ImportedTitle } from '../schemas/imported-title.schema';
 import { TitleCorrectionForm } from './title-correction-form';
@@ -43,6 +43,14 @@ function Sentence({ title, choice }: Pick<ImportedTitleCardProps, 'title' | 'cho
         return <p className="text-sm text-content">{t('fixedIncome.check', { ...params, reason: titleReasonText(t, title.reason) })}</p>;
     }
     return <p className="text-sm font-semibold text-content">{t('fixedIncome.found', params)}</p>;
+}
+
+function FacePriceNotice({ title, choice }: Pick<ImportedTitleCardProps, 'title' | 'choice'>): ReactElement | null {
+    const { t }: UseTranslationResponse<'portfolioImports', undefined> = useTranslation('portfolioImports');
+    if (!titleHasAssumedFacePrice(title) || choice !== undefined) {
+        return null;
+    }
+    return <p className="text-sm text-content-muted">{t('fixedIncome.assumedFacePrice')}</p>;
 }
 
 interface ActionsProps extends Pick<ImportedTitleCardProps, 'title' | 'choice' | 'onChoose'> {
@@ -125,6 +133,7 @@ function Body(props: ImportedTitleCardProps): ReactElement {
     return (
         <>
             <Sentence title={title} choice={choice} />
+            <FacePriceNotice title={title} choice={choice} />
             <Actions
                 title={title}
                 choice={choice}
