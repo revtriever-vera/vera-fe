@@ -3277,6 +3277,11 @@ export interface operations {
                             toolsUsed: string[];
                             /** @description The figures sent to the language model are still stored */
                             sentAvailable: boolean;
+                            /**
+                             * @description Whether the answer was held back: premium_required when the plan lacks the feature, permission_required when the plan has it but the person did not allow sending the figures to the language model, ok otherwise. For a held-back answer, it reflects the state at read time
+                             * @enum {string}
+                             */
+                            access: "ok" | "premium_required" | "permission_required";
                             /** @description Investment notice line, when the answer needs one */
                             notice: string | null;
                         };
@@ -3616,6 +3621,13 @@ export interface operations {
                             status: "pending" | "done" | "failed";
                             /** @description Tools the answer used */
                             toolsUsed: string[];
+                            /**
+                             * @description Whether the answer was held back: premium_required when the plan lacks the feature, permission_required when the plan has it but the person did not allow sending the figures to the language model, ok otherwise. For a held-back answer, it reflects the state at read time
+                             * @enum {string}
+                             */
+                            access: "ok" | "premium_required" | "permission_required";
+                            /** @description The figures sent to the language model are still stored */
+                            sentAvailable: boolean;
                             /** @description Investment notice line, when the answer needs one */
                             notice: string | null;
                             /** @description ISO 8601 */
