@@ -1,4 +1,5 @@
 import type { ReactElement, ReactNode } from 'react';
+import { AssistantLauncher } from '@/features/assistant/components/assistant-launcher';
 import type { NavItem } from './app-nav';
 import { MobileTopBar } from './mobile-top-bar';
 import { Sidebar } from './sidebar';
@@ -21,6 +22,7 @@ export function AppShell({ items, topSlot, children }: AppShellProps): ReactElem
                 </div>
                 {children}
             </div>
+            <AssistantLauncher />
         </div>
     );
 }
