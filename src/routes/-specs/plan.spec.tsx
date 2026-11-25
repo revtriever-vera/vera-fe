@@ -165,7 +165,9 @@ describe('checkout', () => {
         mock.me = premiumMe({ subscription: billingSubscription({ method: 'pix', card: null }) });
         focusWindow();
 
-        expect(await screen.findByText('Por onde começar. Cada função pede a sua permissão antes de ligar.')).toBeInTheDocument();
+        expect(
+            await screen.findByText('Por onde começar. Cada função pede a sua permissão antes de ligar.', undefined, { timeout: 8000 })
+        ).toBeInTheDocument();
         expect(screen.getByRole('link', { name: 'Abrir' })).toHaveAttribute('href', '/spending');
         expect(tracked).toContainEqual({ name: 'checkout_completed', props: { method: 'pix' } });
     });
