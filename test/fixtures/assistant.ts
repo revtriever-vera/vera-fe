@@ -11,6 +11,8 @@ export function assistantMessage(overrides: Partial<MessageView> = {}): MessageV
         text: 'Resposta',
         status: 'done',
         toolsUsed: ['help_search'],
+        access: 'ok',
+        sentAvailable: false,
         notice: null,
         createdAt: '2026-11-25T12:00:00.000Z',
         ...overrides
