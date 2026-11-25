@@ -2,15 +2,15 @@
   "button": "Importar operações",
   "modal": {
     "title": "Importar operações",
-    "description": "Mande o relatório da B3, confira cada linha e confirme."
+    "description": "Mande o arquivo da corretora, confira cada linha e confirme."
   },
   "file": {
-    "label": "Relatório da B3",
-    "dropTitle": "Arraste o relatório aqui",
-    "hint": "Relatório da B3 em Excel (.xlsx) ou CSV, até 10 MB.",
-    "reading": "Lendo o relatório",
-    "tooLarge": "O arquivo passa de 10 MB. Mande um relatório menor.",
-    "invalidType": "Esse arquivo não é Excel nem CSV. Mande o relatório da B3 em .xlsx ou .csv."
+    "label": "Arquivo",
+    "dropTitle": "Arraste o arquivo aqui",
+    "hint": "Relatório da B3 em Excel, nota de corretagem, extrato da corretora, CSV da exchange ou print da tela.",
+    "reading": "Lendo o arquivo",
+    "tooLarge": "O arquivo passa de 10 MB. Mande um arquivo menor.",
+    "invalidType": "Esse formato não é aceito. Mande Excel, CSV, PDF ou imagem (PNG, JPEG, HEIC ou WEBP)."
   },
   "alreadyImported": "Esse mesmo arquivo já foi importado em {{date}}. As linhas repetidas ficam de fora.",
   "notes": {
@@ -220,6 +220,25 @@
     "invalidEdit": "Uma das correções não bate com o relatório. Mande o relatório de novo.",
     "tooManyRequests": "Muitas importações em pouco tempo. Tente de novo mais tarde.",
     "forbidden": "O seu papel não permite importar operações.",
-    "fixedIncomeDuplicate": "Já existe um título igual na carteira. Deixe este de fora ou corrija os dados para importar mesmo assim."
+    "fixedIncomeDuplicate": "Já existe um título igual na carteira. Deixe este de fora ou corrija os dados para importar mesmo assim.",
+    "modelUnavailable": "A leitura de notas, extratos e prints está fora do ar agora. O relatório da B3 em Excel continua funcionando.",
+    "modelUnreadable": "Não conseguimos ler esse arquivo. Tente uma imagem mais nítida ou o arquivo em PDF."
+  },
+  "consent": {
+    "title": "Enviar este arquivo?",
+    "description": "Este arquivo é enviado a um modelo de linguagem, por um serviço da Vercel.",
+    "send": "Enviar"
+  },
+  "foreign": {
+    "label": "Valores em moeda estrangeira",
+    "original": "Valor em {{currency}}",
+    "ptax": "PTAX usada",
+    "converted": "Valor em BRL"
+  },
+  "withholding": {
+    "label": "Provento com imposto retido",
+    "gross": "Bruto",
+    "tax": "Imposto retido",
+    "net": "Líquido"
   }
 }

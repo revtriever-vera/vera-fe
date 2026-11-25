@@ -18,7 +18,7 @@ describe('/portfolio/assets: importar operações', () => {
         await user.click(await screen.findByRole('button', { name: 'Importar operações' }));
 
         expect(await screen.findByRole('dialog', { name: 'Importar operações' })).toBeInTheDocument();
-        expect(screen.getByLabelText('Relatório da B3')).toBeInTheDocument();
+        expect(screen.getByLabelText('Arquivo')).toBeInTheDocument();
         expect(await screen.findByText('Você ainda não importou nenhum relatório.')).toBeInTheDocument();
     });
 

@@ -11,6 +11,7 @@ import { IMPORT_ACCEPT, MAX_FILE_BYTES, importRejectionMessage } from '../lib/im
 import { noteText } from '../lib/note-text';
 import type { InvestmentImportFlow } from '../lib/use-investment-import-flow';
 import type { PreviewNote } from '../types';
+import { ModelConsentDialog } from './model-consent-dialog';
 
 function Notes({ notes }: { readonly notes: readonly PreviewNote[] }): ReactElement | null {
     const { t }: UseTranslationResponse<'portfolioImports', undefined> = useTranslation('portfolioImports');
@@ -51,6 +52,7 @@ export function InvestmentFileStep({ flow }: { readonly flow: InvestmentImportFl
                 onClear={flow.clearFile}
                 rejectionMessage={importRejectionMessage(t)}
             />
+            {flow.askingConsent ? <ModelConsentDialog onSend={flow.sendToModel} onCancel={flow.declineModel} /> : null}
             {flow.errorMessage === null ? null : <Alert title={flow.errorMessage} />}
             {flow.previewing ? (
                 <Loading label={t('file.reading')}>

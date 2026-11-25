@@ -10,6 +10,7 @@ import { LINE_REASON, LINE_STATUS, type LineStatus, type PreviewLine } from '../
 import { lineBlocked, tickerOf, draftFieldInvalid, type LineDraft, type PickedAsset } from '../lib/line-drafts';
 import { lineReasonText } from '../lib/line-reason';
 import { CatalogPicker } from './catalog-picker';
+import { ForeignAmounts } from './foreign-amounts';
 
 const DEFAULT_CURRENCY: string = 'BRL';
 
@@ -154,6 +155,7 @@ export function OperationLineCard({ line, draft, onEdit }: OperationLineCardProp
                 <div className={cn('flex flex-col gap-3', skipped && 'opacity-60')}>
                     <ReasonText line={line} draft={draft} />
                     <LineFields line={line} draft={draft} onEdit={onEdit} />
+                    <ForeignAmounts line={line} />
                     <AssetSearch line={line} draft={draft} onEdit={onEdit} />
                 </div>
                 <Button

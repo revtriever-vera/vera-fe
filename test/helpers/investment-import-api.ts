@@ -13,6 +13,7 @@ export interface InvestmentImportApiOptions {
     readonly undoStatus?: number;
     readonly previewType?: string;
     readonly commitType?: string;
+    readonly requireConsent?: boolean;
 }
 
 export interface InvestmentImportApi {
@@ -29,7 +30,11 @@ export function mockInvestmentImportApi(options: InvestmentImportApiOptions = {}
     const api: InvestmentImportApi = { previews: [], commits: [], undone: [] };
     server.use(
         http.post('*/investment-imports/preview', async ({ request }) => {
-            api.previews.push(await readImportForm(request));
+            const form: ImportRequestForm = await readImportForm(request);
+            api.previews.push(form);
+            if (options.requireConsent === true && form.fields['modelConsent'] !== 'true') {
+                return failure('model.confirmation_required', 428);
+            }
             if (options.previewStatus !== undefined) {
                 return failure(options.previewType ?? 'format.not_recognized', options.previewStatus);
             }
