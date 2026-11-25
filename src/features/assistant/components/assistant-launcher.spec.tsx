@@ -52,6 +52,28 @@ describe('AssistantLauncher', () => {
     });
 });
 
+describe('disponibilidade do modelo', () => {
+    it('não mostra o botão quando o modelo está desligado', async () => {
+        let asked: boolean = false;
+        server.use(
+            http.get('*/assistant/conversations/current', (): Response => {
+                asked = true;
+                return HttpResponse.json(emptyConversation({ enabled: false }));
+            })
+        );
+        renderSummaries(<AssistantLauncher />);
+        await waitFor(() => {
+            expect(asked).toBe(true);
+        });
+        expect(screen.queryByRole('button', { name: 'Perguntar à Vera' })).not.toBeInTheDocument();
+    });
+
+    it('mostra o botão quando o modelo está ligado', async () => {
+        renderSummaries(<AssistantLauncher />);
+        expect(await screen.findByRole('button', { name: 'Perguntar à Vera' })).toBeInTheDocument();
+    });
+});
+
 describe('cota', () => {
     it('mostra a faixa em 85%', async () => {
         serveConversation(emptyConversation({ usage: assistantUsage({ state: 'warning', usedBps: 8500 }) }));

@@ -3508,6 +3508,8 @@ export interface operations {
                             /** @description When the usage resets, ISO 8601 */
                             resetsAt: string;
                         } | null;
+                        /** @description Whether the language model is on; false means the ask-Vera button must be hidden */
+                        enabled: boolean;
                     };
                 };
             };
