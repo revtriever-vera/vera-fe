@@ -21,7 +21,17 @@
     "rows_ignored_one": "{{count}} row of the report is not an operation and was left out.",
     "rows_ignored_other": "{{count}} rows of the report are not operations and were left out.",
     "generic_one": "{{count}} line was left out of the import.",
-    "generic_other": "{{count}} lines were left out of the import."
+    "generic_other": "{{count}} lines were left out of the import.",
+    "note_total_mismatch_one": "{{count}} note has a total that differs from the sum of its operations. Check the marked lines.",
+    "note_total_mismatch_other": "{{count}} notes have a total that differs from the sum of their operations. Check the marked lines.",
+    "note_net_mismatch_one": "{{count}} note has a net amount that differs from the total plus fees. Check the marked lines.",
+    "note_net_mismatch_other": "{{count}} notes have a net amount that differs from the total plus fees. Check the marked lines.",
+    "foreign_cash_movement_one": "{{count}} cash movement in the statement is not an operation and was left out.",
+    "foreign_cash_movement_other": "{{count}} cash movements in the statement are not operations and were left out.",
+    "foreign_position_not_applied_one": "The closing position of {{count}} asset in the statement had no operation in the period and did not change your portfolio.",
+    "foreign_position_not_applied_other": "The closing positions of {{count}} assets in the statement had no operation in the period and did not change your portfolio.",
+    "foreign_tax_unmatched_one": "{{count}} withheld tax found no matching income and was left out.",
+    "foreign_tax_unmatched_other": "{{count}} withheld taxes found no matching income and were left out."
   },
   "table": {
     "title": "Check the operations",
@@ -71,7 +81,9 @@
     "position_mode_required": "Choose below whether this line adds to the position or is already in it.",
     "duplicate": "This operation was already imported.",
     "skipped": "This line was left out of the import.",
-    "generic": "Check this line before importing."
+    "generic": "Check this line before importing.",
+    "net_mismatch": "The net amount on the note does not match the values on this line. Check it against the note before importing.",
+    "out_of_order": "This operation comes before another one for the same asset in the statement. Check the date and the position before importing."
   },
   "actions": {
     "cancel": "Cancel",

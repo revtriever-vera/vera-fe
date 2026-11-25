@@ -7,6 +7,8 @@ import type {
     PreviewLine
 } from '@/features/portfolio/imports/types';
 
+type ImportedApiTitle = InvestmentPreview['fixedIncome'][number];
+
 export const PETR4_ID: string = 'asset-petr4';
 export const VALE3_ID: string = 'asset-vale3';
 
@@ -59,12 +61,13 @@ export function investmentPreview(overrides: Partial<InvestmentPreview> = {}): I
     };
 }
 
-export function importedTitle(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+export function importedTitle(overrides: Partial<ImportedApiTitle> = {}): ImportedApiTitle {
     return {
         lineId: 'fi-1',
         product: 'CDB Banco Exemplo',
         issuer: null,
         issuerName: 'Banco Exemplo',
+        issuerId: null,
         kind: 'cdb',
         indexer: 'cdi_percent',
         rateBps: 11200,
@@ -73,6 +76,7 @@ export function importedTitle(overrides: Record<string, unknown> = {}): Record<s
         maturityDate: '2029-08-01',
         status: 'inferred',
         reason: null,
+        suggestion: 'CDB Banco Exemplo, 112% do CDI, vence em 01/08/2029.',
         ...overrides
     };
 }
@@ -83,6 +87,7 @@ export function investmentImportCreated(overrides: Partial<InvestmentImportCreat
         applied: 1,
         skipped: 0,
         positions: [effectItem()],
+        fixedIncome: [],
         ...overrides
     };
 }

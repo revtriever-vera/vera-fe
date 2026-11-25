@@ -116,6 +116,36 @@ describe('InvestmentImportModal: leitura por modelo', () => {
     });
 
     it.each([
+        ['note_total_mismatch', /1 nota tem o total diferente da soma das operações/],
+        ['note_net_mismatch', /1 nota tem o valor líquido diferente do total mais as taxas/],
+        ['foreign_cash_movement', /1 movimentação de caixa do extrato não é operação/],
+        ['foreign_position_not_applied', /A posição final de 1 ativo no extrato não teve operação/],
+        ['foreign_tax_unmatched', /1 imposto retido não achou o provento correspondente/]
+    ])('mostra o aviso %s com texto próprio', async (code: string, text: RegExp) => {
+        const preview: InvestmentPreview = investmentPreview({ source: 'model', notes: [{ code, count: 1 }] });
+        const { user }: InvestmentImportSetup = renderInvestmentImportModal({ preview });
+
+        await chooseReport(user, 'nota.pdf', PDF);
+
+        expect(await screen.findByText(text)).toBeInTheDocument();
+    });
+
+    it.each([
+        ['net_mismatch', /O líquido da nota não bate com os valores desta linha/],
+        ['out_of_order', /Esta operação é anterior a outra do mesmo ativo no extrato/]
+    ])('linha "Confira" com motivo %s mostra o texto próprio', async (reason: string, text: RegExp) => {
+        const preview: InvestmentPreview = investmentPreview({
+            source: 'model',
+            operations: [previewLine({ status: 'check', reason })]
+        });
+        const { user }: InvestmentImportSetup = renderInvestmentImportModal({ preview });
+
+        await chooseReport(user, 'nota.pdf', PDF);
+
+        expect(await screen.findByText(text)).toBeInTheDocument();
+    });
+
+    it.each([
         ['model.unavailable', 503, /leitura de notas, extratos e prints está fora do ar/],
         ['model.unreadable', 422, /Não conseguimos ler esse arquivo/]
     ])('traduz o erro %s', async (type: string, status: number, text: RegExp) => {

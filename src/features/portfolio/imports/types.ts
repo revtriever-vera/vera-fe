@@ -4,15 +4,8 @@ type PreviewOperation = paths['/investment-imports/preview']['post'];
 type CommitOperation = paths['/investment-imports']['post'];
 
 export type InvestmentPreview = PreviewOperation['responses']['200']['content']['application/json'];
-type ApiPreviewLine = InvestmentPreview['operations'][number];
+export type PreviewLine = InvestmentPreview['operations'][number];
 
-export interface ForeignAmounts {
-    readonly fxRate?: string | null;
-    readonly grossBrlMinor?: number | null;
-    readonly withheldTaxMinor?: number | null;
-}
-
-export type PreviewLine = ApiPreviewLine & ForeignAmounts;
 export type EffectItem = InvestmentPreview['effect'][number];
 export type PositionBalance = NonNullable<EffectItem['before']>;
 export type PreviewWarning = InvestmentPreview['warnings'][number];
