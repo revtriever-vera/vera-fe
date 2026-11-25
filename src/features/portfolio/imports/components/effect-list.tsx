@@ -55,7 +55,9 @@ function EffectItemView({ row, modes, onMode }: { readonly row: EffectRow } & Pi
                 <span className="font-semibold">{quantityLine(t, row, locale)}</span>
                 {average === null ? null : <span> {average}</span>}
             </p>
-            {row.existingPosition && onMode !== undefined ? <ModeChoice row={row} value={modes?.[row.assetId]} onMode={onMode} /> : null}
+            {row.existingPosition && row.needsMode && onMode !== undefined ? (
+                <ModeChoice row={row} value={modes?.[row.assetId]} onMode={onMode} />
+            ) : null}
             {row.recalculated ? <p className="text-xs text-content-muted">{t('effect.recalculated')}</p> : null}
         </li>
     );

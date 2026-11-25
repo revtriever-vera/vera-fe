@@ -13,7 +13,8 @@ function toRows(positions: readonly EffectItem[], currencies: ImportOutcome['cur
     return positions.map((item: EffectItem): EffectRow => ({
         ...item,
         currency: currencies[item.assetId] ?? DEFAULT_CURRENCY,
-        recalculated: false
+        recalculated: false,
+        needsMode: false
     }));
 }
 

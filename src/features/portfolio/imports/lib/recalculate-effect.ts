@@ -13,6 +13,7 @@ import {
 export interface EffectRow extends EffectItem {
     readonly currency: string;
     readonly recalculated: boolean;
+    readonly needsMode: boolean;
 }
 
 interface Holding {
@@ -151,7 +152,8 @@ function rowOf(item: EffectItem, source: readonly PreviewLine[], drafts: Drafts,
         ...item,
         after: changed ? recalculated(item, group, modes) : item.after,
         currency: currencyOf(group),
-        recalculated: changed
+        recalculated: changed,
+        needsMode: group.lines.length > 0
     };
 }
 
