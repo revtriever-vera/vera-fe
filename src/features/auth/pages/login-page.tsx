@@ -1,9 +1,9 @@
 import { useEffect, useState, type ReactElement } from 'react';
+import { EndorsementSeal } from '@/shared/ui/endorsement-seal';
 import { Navigate, useNavigate, type UseNavigateResult } from '@tanstack/react-router';
 import { useSession } from '@/app/providers/session-provider';
 import { LoginBox } from '../components/login-box';
 import { LoginHero } from '../components/login-hero';
-import { PoweredBy } from '../components/powered-by';
 
 interface LoginPageProps {
     readonly redirectTo?: string;
@@ -35,7 +35,7 @@ export function LoginPage({ redirectTo = '/', accountDeleted = false, accountLef
             <LoginHero />
             <div className="relative grid grid-cols-[minmax(0,1fr)] place-content-center place-items-center px-[clamp(16px,5vw,64px)] py-10 min-[861px]:pb-16">
                 <LoginBox accountDeleted={showDeleted} accountLeft={showLeft} />
-                <PoweredBy />
+                <EndorsementSeal className="mt-7 min-[861px]:absolute min-[861px]:inset-x-0 min-[861px]:bottom-5 min-[861px]:mt-0" />
             </div>
         </main>
     );
