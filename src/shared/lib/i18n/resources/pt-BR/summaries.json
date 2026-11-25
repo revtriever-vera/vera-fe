@@ -53,6 +53,7 @@
     "descriptionSelfHosted": "Os textos do mês, dos cortes e da carteira são escritos pelo modelo de linguagem que você cadastrou em Integrações, a partir de totais agregados. Nomes de pessoas e de estabelecimentos, descrições das transações, contas e credenciais nunca são enviados. Desligado, nada mais é enviado.",
     "switchLabel": "Permitir o envio de totais agregados",
     "switchHint": "Desligado, nada é enviado e os resumos somem das telas.",
+    "switchScope": "Vale para os resumos e para as perguntas no app e no WhatsApp.",
     "seeSent": "Ver o que é enviado",
     "locked": "Disponível no Premium.",
     "registerModel": "Cadastrar o modelo de linguagem",

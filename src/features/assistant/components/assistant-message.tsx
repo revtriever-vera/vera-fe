@@ -5,7 +5,10 @@ import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/button';
 import { useTurnFeedback } from '../api/use-turn-feedback.mutation';
 import { TURN_STATUS, type MessageView } from '../types';
+import { asksForPremium, usedAccountData } from '../lib/answer-signals';
 import { AnswerText } from './answer-text';
+import { AssistantUpgrade } from './assistant-upgrade';
+import { SeeSent } from './assistant-sent';
 
 export interface AssistantMessageProps {
     readonly message: MessageView;
@@ -55,6 +58,8 @@ function Answer({ message }: { readonly message: MessageView }): ReactElement {
         <>
             <AnswerText text={message.text} />
             {message.notice === null ? null : <p className="m-0 text-xs text-content-subtle italic">{message.notice}</p>}
+            {usedAccountData(message) ? <SeeSent id={message.id} /> : null}
+            {asksForPremium(message) ? <AssistantUpgrade /> : null}
             <Feedback id={message.id} />
         </>
     );

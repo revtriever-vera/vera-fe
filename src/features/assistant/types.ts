@@ -24,6 +24,7 @@ export type ConversationView = Ok<'/assistant/conversations/current', 'get', 200
 export type MessageView = ConversationView['messages'][number];
 export type AssistantUsage = TurnView['usage'];
 export type AssistantUsageState = AssistantUsage['state'];
+export type SentView = Ok<'/assistant/turns/{id}/sent', 'get', 200>;
 export type SendTurnInput = Json<NonNullable<paths['/assistant/turns']['post']['requestBody']>>;
 
 export const MAX_TURN_LENGTH: number = 1000;

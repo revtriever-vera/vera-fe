@@ -1,5 +1,7 @@
 {
-  "launcher": { "label": "Ask Vera" },
+  "launcher": {
+    "label": "Ask Vera"
+  },
   "panel": {
     "title": "Ask Vera",
     "close": "Close",
@@ -18,7 +20,9 @@
     "disclosure": "Your question is sent to a language model, through a Vercel service. Don't write your CPF, passwords or card details.",
     "paused": "Questions paused until {{date}}."
   },
-  "quota": { "warning": "{{percent}}% of the {{month}} quota used" },
+  "quota": {
+    "warning": "{{percent}}% of the {{month}} quota used"
+  },
   "message": {
     "log": "Conversation",
     "person": "You",
@@ -94,5 +98,14 @@
       "two": "Where do I start?",
       "three": "Where do I change the account settings?"
     }
+  },
+  "sent": {
+    "link": "See what was sent",
+    "loading": "Loading what was sent",
+    "failed": "I could not open what was sent.",
+    "empty": "Nothing is stored for this answer: nothing was sent, or sending was turned off."
+  },
+  "upgrade": {
+    "lock": "The figures of your account and the market are in Premium."
   }
 }
