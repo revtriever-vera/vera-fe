@@ -33,6 +33,19 @@
     "unhelpful": "Não ajudou",
     "unhelpfulDone": "Anotado."
   },
+  "action": {
+    "pick": "Escolha a transação",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "done": "Feito",
+    "canceled": "Cancelado. Nada foi alterado.",
+    "expired": "O prazo para confirmar acabou. Nada foi alterado.",
+    "stale": "O que eu ia fazer mudou desde que propus. Nada foi alterado.",
+    "again": "Ver de novo",
+    "readOnly": "Só Dono ou Editor confirmam.",
+    "seeGoals": "Ver objetivos",
+    "seeTransactions": "Ver transações"
+  },
   "delete": {
     "title": "Apagar a conversa?",
     "body": "As perguntas e as respostas somem e não dá para recuperar.",
@@ -45,7 +58,13 @@
     "capReachedNoDate": "Perguntas pausadas até o 1º dia do mês que vem.",
     "providerDisabled": "As respostas não estão disponíveis agora.",
     "tooMany": "Você fez muitas perguntas seguidas. Tente de novo daqui a pouco.",
-    "notFound": "Essa conversa não existe mais. Comece uma nova."
+    "notFound": "Essa conversa não existe mais. Comece uma nova.",
+    "confirmationStale": "O que eu ia fazer mudou desde que propus. Nada foi alterado.",
+    "actionExpired": "O prazo para confirmar acabou. Nada foi alterado.",
+    "actionResolved": "Esta ação já foi resolvida.",
+    "actionNotFound": "Não encontrei esta ação.",
+    "choiceInvalid": "Escolha uma transação antes de confirmar.",
+    "forbiddenRole": "Só Dono ou Editor confirmam."
   },
   "suggestions": {
     "portfolio": {

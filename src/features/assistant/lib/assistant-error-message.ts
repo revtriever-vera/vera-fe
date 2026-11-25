@@ -9,6 +9,12 @@ const TOO_MANY_REQUESTS: number = 429;
 const ERROR_KEYS: Readonly<Record<string, ErrorKey>> = {
     'ai.provider_disabled': 'providerDisabled',
     'assistant.turn_not_found': 'notFound',
+    'assistant.confirmation_stale': 'confirmationStale',
+    'assistant.action_expired': 'actionExpired',
+    'assistant.action_resolved': 'actionResolved',
+    'assistant.action_not_found': 'actionNotFound',
+    'assistant.action_choice_invalid': 'choiceInvalid',
+    'members.forbidden_role': 'forbiddenRole',
     'core.too_many_attempts': 'tooMany'
 };
 
