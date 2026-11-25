@@ -10,6 +10,13 @@ describe('lineReasonText', () => {
         expect(lineReasonText(t, 'assumed_cost')).toBe('Custo médio assumido pelo preço do extrato; ajuste se souber o seu.');
     });
 
+    it.each(['amount_mismatch', 'total_mismatch', 'date_out_of_range', 'position_mismatch', 'net_mismatch', 'out_of_order'])(
+        'tem texto próprio para %s',
+        (reason: string) => {
+            expect(lineReasonText(t, reason)).not.toBe(lineReasonText(t, 'qualquer_outro'));
+        }
+    );
+
     it('cai no texto genérico para um motivo desconhecido', () => {
         expect(lineReasonText(t, 'qualquer_outro')).toBe('Confira esta linha antes de importar.');
     });
