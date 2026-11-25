@@ -187,6 +187,8 @@
     "loadFailed": "We could not load the import history.",
     "operations_one": "{{count}} operation",
     "operations_other": "{{count}} operations",
+    "titles_one": "{{count}} fixed income title",
+    "titles_other": "{{count}} fixed income titles",
     "status": {
       "completed": "Done",
       "undone": "Undone"

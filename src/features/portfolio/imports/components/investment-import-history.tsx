@@ -23,12 +23,19 @@ function HistoryItem({ item, onUndo }: ItemProps): ReactElement {
     const { t }: UseTranslationResponse<'portfolioImports', undefined> = useTranslation('portfolioImports');
     const locale: SupportedLocale = useLocale();
     const undone: boolean = item.status === 'undone';
+    const counts: string[] = [];
+    if (item.operations > 0 || item.fixedIncomeTitles === 0) {
+        counts.push(t('history.operations', { count: item.operations }));
+    }
+    if (item.fixedIncomeTitles > 0) {
+        counts.push(t('history.titles', { count: item.fixedIncomeTitles }));
+    }
     return (
         <li className="flex flex-wrap items-center justify-between gap-2 py-3">
             <div className={cn('flex min-w-0 flex-col gap-0.5', undone && 'text-content-subtle line-through')}>
                 <span className="truncate font-mono text-xs font-semibold">{item.fileName}</span>
                 <span className="text-xs">
-                    {formatIsoDate(item.createdAt, locale)} · {t('history.operations', { count: item.operations })}
+                    {formatIsoDate(item.createdAt, locale)} · {counts.join(' · ')}
                 </span>
             </div>
             <div className="flex items-center gap-2">

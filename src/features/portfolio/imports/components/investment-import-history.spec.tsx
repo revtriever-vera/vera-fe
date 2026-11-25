@@ -16,6 +16,17 @@ const LIST: InvestmentImportList = investmentImportList([
 ]);
 
 describe('histórico de importações', () => {
+    it('mostra os títulos de renda fixa no lugar de 0 operação', async () => {
+        renderInvestmentImportModal({
+            list: investmentImportList([investmentImportView({ operations: 0, fixedIncomeTitles: 3 })])
+        });
+
+        const history: HTMLElement = await screen.findByRole('list', { name: 'Histórico de importações' });
+
+        expect(within(history).getByText(/20\/11\/2026 · 3 títulos de renda fixa/)).toBeInTheDocument();
+        expect(within(history).queryByText(/0 operação/)).not.toBeInTheDocument();
+    });
+
     it('lista as importações com status e só deixa desfazer a concluída', async () => {
         renderInvestmentImportModal({ list: LIST });
 
