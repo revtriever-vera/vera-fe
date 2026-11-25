@@ -375,7 +375,7 @@ describe('InvestmentImportModal: renda fixa', () => {
     });
 
     it('emissor de tipo outro não descarta o título', async () => {
-        const issuer: Record<string, unknown> = {
+        const issuer: NonNullable<InvestmentPreview['fixedIncome'][number]['issuer']> = {
             id: 'iss-1',
             name: 'Outro emissor',
             groupId: 'g-1',

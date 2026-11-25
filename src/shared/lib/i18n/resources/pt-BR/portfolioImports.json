@@ -21,7 +21,17 @@
     "rows_ignored_one": "{{count}} linha do relatório não é operação e ficou de fora.",
     "rows_ignored_other": "{{count}} linhas do relatório não são operações e ficaram de fora.",
     "generic_one": "{{count}} linha ficou de fora da importação.",
-    "generic_other": "{{count}} linhas ficaram de fora da importação."
+    "generic_other": "{{count}} linhas ficaram de fora da importação.",
+    "note_total_mismatch_one": "{{count}} nota tem o total diferente da soma das operações. Confira as linhas marcadas.",
+    "note_total_mismatch_other": "{{count}} notas têm o total diferente da soma das operações. Confira as linhas marcadas.",
+    "note_net_mismatch_one": "{{count}} nota tem o valor líquido diferente do total mais as taxas. Confira as linhas marcadas.",
+    "note_net_mismatch_other": "{{count}} notas têm o valor líquido diferente do total mais as taxas. Confira as linhas marcadas.",
+    "foreign_cash_movement_one": "{{count}} movimentação de caixa do extrato não é operação e ficou de fora.",
+    "foreign_cash_movement_other": "{{count}} movimentações de caixa do extrato não são operações e ficaram de fora.",
+    "foreign_position_not_applied_one": "A posição final de {{count}} ativo no extrato não teve operação no período e não mudou a carteira.",
+    "foreign_position_not_applied_other": "A posição final de {{count}} ativos no extrato não tiveram operação no período e não mudaram a carteira.",
+    "foreign_tax_unmatched_one": "{{count}} imposto retido não achou o provento correspondente e ficou de fora.",
+    "foreign_tax_unmatched_other": "{{count}} impostos retidos não acharam o provento correspondente e ficaram de fora."
   },
   "table": {
     "title": "Confira as operações",
@@ -71,7 +81,9 @@
     "position_mode_required": "Escolha abaixo se esta linha soma à posição ou já está nela.",
     "duplicate": "Esta operação já foi importada antes.",
     "skipped": "Esta linha ficou de fora da importação.",
-    "generic": "Confira esta linha antes de importar."
+    "generic": "Confira esta linha antes de importar.",
+    "net_mismatch": "O líquido da nota não bate com os valores desta linha. Confira com a nota antes de importar.",
+    "out_of_order": "Esta operação é anterior a outra do mesmo ativo no extrato. Confira a data e a posição antes de importar."
   },
   "actions": {
     "cancel": "Cancelar",

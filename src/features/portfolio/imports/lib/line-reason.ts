@@ -8,6 +8,8 @@ type ReasonKey =
     | 'reasons.invalid_quantity'
     | 'reasons.unsupported_direction'
     | 'reasons.position_mode_required'
+    | 'reasons.net_mismatch'
+    | 'reasons.out_of_order'
     | 'reasons.duplicate'
     | 'reasons.skipped'
     | 'reasons.generic';
@@ -20,6 +22,8 @@ const REASON_KEYS: Readonly<Record<string, ReasonKey>> = {
     invalid_quantity: 'reasons.invalid_quantity',
     unsupported_direction: 'reasons.unsupported_direction',
     position_mode_required: 'reasons.position_mode_required',
+    net_mismatch: 'reasons.net_mismatch',
+    out_of_order: 'reasons.out_of_order',
     duplicate: 'reasons.duplicate',
     skipped: 'reasons.skipped'
 };
