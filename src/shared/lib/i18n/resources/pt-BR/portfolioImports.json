@@ -187,6 +187,8 @@
     "loadFailed": "Não conseguimos carregar o histórico de importações.",
     "operations_one": "{{count}} operação",
     "operations_other": "{{count}} operações",
+    "titles_one": "{{count}} título de renda fixa",
+    "titles_other": "{{count}} títulos de renda fixa",
     "status": {
       "completed": "Concluída",
       "undone": "Desfeita"

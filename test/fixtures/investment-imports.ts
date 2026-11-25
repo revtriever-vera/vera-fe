@@ -93,6 +93,7 @@ export function investmentImportView(overrides: Partial<InvestmentImportView> = 
         fileName: 'negociacao-2026.xlsx',
         status: 'completed',
         operations: 12,
+        fixedIncomeTitles: 0,
         createdAt: '2026-11-20T10:00:00.000Z',
         ...overrides
     };

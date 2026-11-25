@@ -18325,6 +18325,8 @@ export interface operations {
                             status: "completed" | "undone";
                             /** @description Operations the import recorded */
                             operations: number;
+                            /** @description Fixed income titles the import created and that still exist; 0 once undone */
+                            fixedIncomeTitles: number;
                             /**
                              * Format: date-time
                              * @description Creation instant, ISO 8601 UTC
