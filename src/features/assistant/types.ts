@@ -25,6 +25,11 @@ export type MessageView = ConversationView['messages'][number];
 export type AssistantUsage = TurnView['usage'];
 export type AssistantUsageState = AssistantUsage['state'];
 export type SentView = Ok<'/assistant/turns/{id}/sent', 'get', 200>;
+export type ActionView = Ok<'/assistant/actions/{id}', 'get', 200>;
+export type ActionSummary = Ok<'/assistant/actions/{id}/confirm', 'post', 200>;
+export type ActionCandidate = ActionView['candidates'][number];
+export type ActionStatus = ActionSummary['status'];
+export type ConfirmActionInput = Json<NonNullable<paths['/assistant/actions/{id}/confirm']['post']['requestBody']>>;
 export type SendTurnInput = Json<NonNullable<paths['/assistant/turns']['post']['requestBody']>>;
 
 export const MAX_TURN_LENGTH: number = 1000;

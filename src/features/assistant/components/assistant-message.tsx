@@ -6,6 +6,7 @@ import { Button } from '@/shared/ui/button';
 import { useTurnFeedback } from '../api/use-turn-feedback.mutation';
 import { TURN_STATUS, type MessageView } from '../types';
 import { AnswerText } from './answer-text';
+import { AssistantAction } from './assistant-action';
 import { AssistantUpgrade } from './assistant-upgrade';
 import { SeeSent } from './assistant-sent';
 
@@ -52,10 +53,11 @@ function Feedback({ id }: { readonly id: string }): ReactElement {
     );
 }
 
-function Answer({ message }: { readonly message: MessageView }): ReactElement {
+function Answer({ message, onRetry }: AssistantMessageProps): ReactElement {
     return (
         <>
             <AnswerText text={message.text} />
+            {message.action === null ? null : <AssistantAction action={message.action} onAskAgain={onRetry} />}
             {message.notice === null ? null : <p className="m-0 text-xs text-content-subtle italic">{message.notice}</p>}
             {message.sentAvailable ? <SeeSent id={message.id} /> : null}
             {message.access === 'ok' ? null : <AssistantUpgrade access={message.access} />}
@@ -68,7 +70,7 @@ function VeraBody({ message, onRetry }: AssistantMessageProps): ReactElement {
     if (message.status === TURN_STATUS.pending) {
         return <PendingLine />;
     }
-    return message.status === TURN_STATUS.failed ? <FailedLine onRetry={onRetry} /> : <Answer message={message} />;
+    return message.status === TURN_STATUS.failed ? <FailedLine onRetry={onRetry} /> : <Answer message={message} onRetry={onRetry} />;
 }
 
 export function AssistantMessage({ message, onRetry }: AssistantMessageProps): ReactElement {

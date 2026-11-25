@@ -1144,6 +1144,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/assistant/actions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read a pending action
+         * @description The action the assistant proposed, with the transactions the person can pick from when the action needs one. The descriptions of the transactions are served here, to the screen only: they never go to the language model.
+         */
+        get: operations["AssistantChatController_action"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/assistant/actions/{id}/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirm a pending action
+         * @description Runs the action the assistant proposed, once. The code executes it, never the model. Two confirmations at the same time run it once; the other gets `assistant.action_resolved`. When what the action refers to changed, nothing runs (`assistant.confirmation_stale`).
+         */
+        post: operations["AssistantChatController_confirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/assistant/actions/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cancel a pending action
+         * @description Drops the action the assistant proposed; nothing runs.
+         */
+        post: operations["AssistantChatController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/assistant/conversations/current": {
         parameters: {
             query?: never;
@@ -11461,6 +11521,27 @@ export interface operations {
                             access: "ok" | "premium_required" | "permission_required";
                             /** @description Investment notice line, when the answer needs one */
                             notice: string | null;
+                            /** @description Pending action the answer proposes, waiting for the confirmation of the person */
+                            action: {
+                                /**
+                                 * Format: uuid
+                                 * @description Pending action id
+                                 */
+                                id: string;
+                                /** @description Action kind: goal_create or transaction_categorize */
+                                tool: string;
+                                /** @description What will happen if the person confirms, in the voice of Vera */
+                                summary: string;
+                                /**
+                                 * @description open while waiting for the person; expired is reported once the confirmation window passed
+                                 * @enum {string}
+                                 */
+                                status: "open" | "confirmed" | "canceled" | "expired" | "stale";
+                                /** @description When the confirmation window ends, ISO 8601 */
+                                expiresAt: string;
+                                /** @description What was done, once confirmed */
+                                resultText: string | null;
+                            } | null;
                         };
                         /** @description Usage band, so the panel shows the quota without another call */
                         usage: {
@@ -11756,6 +11837,476 @@ export interface operations {
             };
         };
     };
+    AssistantChatController_action: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Pending action id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The action */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Pending action id
+                         */
+                        id: string;
+                        /** @description Action kind: goal_create or transaction_categorize */
+                        tool: string;
+                        /** @description What will happen if the person confirms, in the voice of Vera */
+                        summary: string;
+                        /**
+                         * @description open while waiting for the person; expired is reported once the confirmation window passed
+                         * @enum {string}
+                         */
+                        status: "open" | "confirmed" | "canceled" | "expired" | "stale";
+                        /** @description When the confirmation window ends, ISO 8601 */
+                        expiresAt: string;
+                        /** @description What was done, once confirmed */
+                        resultText: string | null;
+                        /** @description Transactions the person can pick from; empty for actions that need no choice */
+                        candidates: {
+                            /**
+                             * Format: uuid
+                             * @description Transaction id
+                             */
+                            id: string;
+                            /** @description Version of the transaction, to send back when it is picked */
+                            version: string;
+                            /** @description Transaction date, YYYY-MM-DD */
+                            date: string;
+                            /** @description Transaction description, shown on the card only */
+                            description: string;
+                            /** @description Signed amount in minor units */
+                            amountMinor: number;
+                            /** @description Currency code */
+                            currency: string;
+                            /** @description Name of the account */
+                            accountName: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Invalid params or body (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No such pending action for this person (assistant.action_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AssistantChatController_confirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Pending action id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: uuid
+                     * @description Transaction the person picked on the card, for actions that need one
+                     */
+                    transactionId?: string;
+                    /** @description Version of the picked transaction, as listed on the card */
+                    version?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description The action, confirmed, with what was done */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Pending action id
+                         */
+                        id: string;
+                        /** @description Action kind: goal_create or transaction_categorize */
+                        tool: string;
+                        /** @description What will happen if the person confirms, in the voice of Vera */
+                        summary: string;
+                        /**
+                         * @description open while waiting for the person; expired is reported once the confirmation window passed
+                         * @enum {string}
+                         */
+                        status: "open" | "confirmed" | "canceled" | "expired" | "stale";
+                        /** @description When the confirmation window ends, ISO 8601 */
+                        expiresAt: string;
+                        /** @description What was done, once confirmed */
+                        resultText: string | null;
+                    };
+                };
+            };
+            /** @description Invalid params or body (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The person has read-only access to the account (members.forbidden_role) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No such pending action for this person (assistant.action_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The action was already resolved (assistant.action_resolved), its window passed (assistant.action_expired) or what it refers to changed since it was proposed (assistant.confirmation_stale) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    AssistantChatController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Pending action id */
+                id: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The action, canceled */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /**
+                         * Format: uuid
+                         * @description Pending action id
+                         */
+                        id: string;
+                        /** @description Action kind: goal_create or transaction_categorize */
+                        tool: string;
+                        /** @description What will happen if the person confirms, in the voice of Vera */
+                        summary: string;
+                        /**
+                         * @description open while waiting for the person; expired is reported once the confirmation window passed
+                         * @enum {string}
+                         */
+                        status: "open" | "confirmed" | "canceled" | "expired" | "stale";
+                        /** @description When the confirmation window ends, ISO 8601 */
+                        expiresAt: string;
+                        /** @description What was done, once confirmed */
+                        resultText: string | null;
+                    };
+                };
+            };
+            /** @description Invalid params or body (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The person has read-only access to the account (members.forbidden_role) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description No such pending action for this person (assistant.action_not_found) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The action was already resolved (assistant.action_resolved), its window passed (assistant.action_expired) or what it refers to changed since it was proposed (assistant.confirmation_stale) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
     AssistantChatController_current: {
         parameters: {
             query?: never;
@@ -11807,6 +12358,27 @@ export interface operations {
                             sentAvailable: boolean;
                             /** @description Investment notice line, when the answer needs one */
                             notice: string | null;
+                            /** @description Pending action the message proposes */
+                            action: {
+                                /**
+                                 * Format: uuid
+                                 * @description Pending action id
+                                 */
+                                id: string;
+                                /** @description Action kind: goal_create or transaction_categorize */
+                                tool: string;
+                                /** @description What will happen if the person confirms, in the voice of Vera */
+                                summary: string;
+                                /**
+                                 * @description open while waiting for the person; expired is reported once the confirmation window passed
+                                 * @enum {string}
+                                 */
+                                status: "open" | "confirmed" | "canceled" | "expired" | "stale";
+                                /** @description When the confirmation window ends, ISO 8601 */
+                                expiresAt: string;
+                                /** @description What was done, once confirmed */
+                                resultText: string | null;
+                            } | null;
                             /** @description ISO 8601 */
                             createdAt: string;
                         }[];
