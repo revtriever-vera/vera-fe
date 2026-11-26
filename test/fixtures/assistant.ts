@@ -67,5 +67,5 @@ export function actionCandidate(overrides: Partial<ActionCandidate> = {}): Actio
 }
 
 export function actionView(overrides: Partial<ActionView> = {}): ActionView {
-    return { ...actionSummary(), candidates: [], importPreview: null, ...overrides };
+    return { ...actionSummary(), candidates: [], importPreview: null, always: null, ...overrides };
 }

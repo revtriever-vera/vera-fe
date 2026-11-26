@@ -13,6 +13,7 @@ import { assistantErrorMessage } from '../lib/assistant-error-message';
 import type { ImportCorrections } from '../lib/assistant-slots';
 import { IMPORT_TOOL, type ActionCandidate, type ActionSummary, type ActionView } from '../types';
 import { ActionButtons } from './assistant-action-buttons';
+import { ActionAlways } from './assistant-action-always';
 import { ActionCandidates } from './assistant-action-candidates';
 import { ImportOpenBody } from './assistant-import-action';
 
@@ -61,6 +62,8 @@ interface OpenState {
     readonly candidates: readonly ActionCandidate[];
     readonly picked: string | null;
     readonly setPicked: (id: string) => void;
+    readonly always: boolean | null;
+    readonly setAlways: (always: boolean) => void;
     readonly loading: boolean;
     readonly busy: boolean;
     readonly confirming: boolean;
@@ -73,17 +76,38 @@ interface OpenState {
     readonly cancel: () => void;
 }
 
+interface AlwaysState {
+    readonly always: boolean | null;
+    readonly setAlways: (always: boolean) => void;
+}
+
+function useAlwaysChoice(proposed: boolean | null): AlwaysState {
+    const [choice, setChoice] = useState<boolean | null>(null);
+    return { always: proposed === null ? null : (choice ?? proposed), setAlways: setChoice };
+}
+
+function buildChoice(picked: string | null, version: string | undefined, always: boolean | null): Record<string, unknown> {
+    return { ...(picked === null ? {} : { transactionId: picked, version }), ...(always === null ? {} : { always }) };
+}
+
+function findVersion(candidates: readonly ActionCandidate[], picked: string | null): string | undefined {
+    return candidates.find((candidate: ActionCandidate): boolean => candidate.id === picked)?.version;
+}
+
 function useOpenAction(action: ActionSummary): OpenState {
     const view: UseQueryResult<ActionView> = useAction(action.id, true);
     const confirm: UseMutationResult<ActionSummary, Error, ConfirmActionVariables> = useConfirmAction();
     const cancel: UseMutationResult<ActionSummary, Error, string> = useCancelAction();
     const [picked, setPicked] = useState<string | null>(null);
+    const { always, setAlways }: AlwaysState = useAlwaysChoice(view.data?.always ?? null);
     const candidates: readonly ActionCandidate[] = view.data?.candidates ?? [];
-    const version: string | undefined = candidates.find((candidate: ActionCandidate): boolean => candidate.id === picked)?.version;
+    const version: string | undefined = findVersion(candidates, picked);
     return {
         candidates,
         picked,
         setPicked,
+        always,
+        setAlways,
         loading: view.isPending,
         busy: confirm.isPending || cancel.isPending,
         confirming: confirm.isPending,
@@ -92,7 +116,10 @@ function useOpenAction(action: ActionSummary): OpenState {
         error: confirm.error ?? cancel.error,
         importPreview: view.data?.importPreview ?? null,
         confirm: (): void => {
-            confirm.mutate({ id: action.id, choice: picked === null ? {} : { transactionId: picked, version } });
+            confirm.mutate({
+                id: action.id,
+                choice: buildChoice(picked, version, always)
+            });
         },
         confirmImport: (corrections: ImportCorrections): void => {
             confirm.mutate({ id: action.id, choice: { edits: [...corrections.edits], fixedIncome: [...corrections.fixedIncome] } });
@@ -112,6 +139,7 @@ function ChoiceControls({ state }: { readonly state: OpenState }): ReactElement 
             {candidates.length === 0 ? null : (
                 <ActionCandidates candidates={candidates} picked={picked} disabled={busy} onPick={state.setPicked} />
             )}
+            {state.always === null ? null : <ActionAlways checked={state.always} disabled={busy} onChange={state.setAlways} />}
             {canEdit ? (
                 <ActionButtons
                     confirmPending={state.confirming}
