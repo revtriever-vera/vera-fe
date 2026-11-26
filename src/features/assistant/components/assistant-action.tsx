@@ -10,8 +10,11 @@ import { useAction } from '../api/use-action.query';
 import { useCancelAction, useConfirmAction, type ConfirmActionVariables } from '../api/use-resolve-action.mutations';
 import { actionTarget, type ActionTarget } from '../lib/action-targets';
 import { assistantErrorMessage } from '../lib/assistant-error-message';
-import type { ActionCandidate, ActionSummary, ActionView } from '../types';
+import type { ImportCorrections } from '../lib/assistant-slots';
+import { IMPORT_TOOL, type ActionCandidate, type ActionSummary, type ActionView } from '../types';
+import { ActionButtons } from './assistant-action-buttons';
 import { ActionCandidates } from './assistant-action-candidates';
+import { ImportOpenBody } from './assistant-import-action';
 
 export interface AssistantActionProps {
     readonly action: ActionSummary;
@@ -54,28 +57,6 @@ function Closed({
     );
 }
 
-interface ButtonsProps {
-    readonly confirmPending: boolean;
-    readonly busy: boolean;
-    readonly canConfirm: boolean;
-    readonly onConfirm: () => void;
-    readonly onCancel: () => void;
-}
-
-function Buttons({ confirmPending, busy, canConfirm, onConfirm, onCancel }: ButtonsProps): ReactElement {
-    const { t }: UseTranslationResponse<'assistant', undefined> = useTranslation('assistant');
-    return (
-        <div className="flex gap-2">
-            <Button size="sm" loading={confirmPending} disabled={busy || !canConfirm} onClick={onConfirm}>
-                {t('action.confirm')}
-            </Button>
-            <Button variant="ghost" size="sm" disabled={busy} onClick={onCancel}>
-                {t('action.cancel')}
-            </Button>
-        </div>
-    );
-}
-
 interface OpenState {
     readonly candidates: readonly ActionCandidate[];
     readonly picked: string | null;
@@ -86,7 +67,9 @@ interface OpenState {
     readonly confirmed: ActionSummary | null;
     readonly canceled: boolean;
     readonly error: Error | null;
+    readonly importPreview: Readonly<Record<string, unknown>> | null;
     readonly confirm: () => void;
+    readonly confirmImport: (corrections: ImportCorrections) => void;
     readonly cancel: () => void;
 }
 
@@ -107,8 +90,12 @@ function useOpenAction(action: ActionSummary): OpenState {
         confirmed: confirm.data ?? null,
         canceled: cancel.isSuccess,
         error: confirm.error ?? cancel.error,
+        importPreview: view.data?.importPreview ?? null,
         confirm: (): void => {
             confirm.mutate({ id: action.id, choice: picked === null ? {} : { transactionId: picked, version } });
+        },
+        confirmImport: (corrections: ImportCorrections): void => {
+            confirm.mutate({ id: action.id, choice: { edits: [...corrections.edits], fixedIncome: [...corrections.fixedIncome] } });
         },
         cancel: (): void => {
             cancel.mutate(action.id);
@@ -116,20 +103,17 @@ function useOpenAction(action: ActionSummary): OpenState {
     };
 }
 
-function OpenBody({ action, state }: { readonly action: ActionSummary; readonly state: OpenState }): ReactElement {
+function ChoiceControls({ state }: { readonly state: OpenState }): ReactElement {
     const { t }: UseTranslationResponse<'assistant', undefined> = useTranslation('assistant');
     const { canEdit }: { canEdit: boolean } = useRole();
-    const { candidates, picked, busy, loading, error } = state;
+    const { candidates, picked, busy, loading } = state;
     return (
-        <div className="flex flex-col gap-2">
-            <p className="m-0">{action.summary}</p>
-            {loading ? <Skeleton className="h-10 w-full" /> : null}
+        <>
             {candidates.length === 0 ? null : (
                 <ActionCandidates candidates={candidates} picked={picked} disabled={busy} onPick={state.setPicked} />
             )}
-            {error === null ? null : <Alert tone="critical" title={assistantErrorMessage(t, error, null)} />}
             {canEdit ? (
-                <Buttons
+                <ActionButtons
                     confirmPending={state.confirming}
                     busy={busy}
                     canConfirm={!loading && (candidates.length === 0 || picked !== null)}
@@ -139,6 +123,20 @@ function OpenBody({ action, state }: { readonly action: ActionSummary; readonly 
             ) : (
                 <p className="m-0 text-xs text-content-subtle">{t('action.readOnly')}</p>
             )}
+        </>
+    );
+}
+
+function OpenBody({ action, state }: { readonly action: ActionSummary; readonly state: OpenState }): ReactElement {
+    const { t }: UseTranslationResponse<'assistant', undefined> = useTranslation('assistant');
+    const isImport: boolean = action.tool === IMPORT_TOOL;
+    return (
+        <div className="flex flex-col gap-2">
+            <p className="m-0">{action.summary}</p>
+            {state.loading ? <Skeleton className="h-10 w-full" /> : null}
+            {isImport && !state.loading ? <ImportOpenBody state={state} /> : null}
+            {isImport ? null : <ChoiceControls state={state} />}
+            {state.error === null ? null : <Alert tone="critical" title={assistantErrorMessage(t, state.error, null)} />}
         </div>
     );
 }

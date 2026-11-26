@@ -7,7 +7,9 @@
     "close": "Close",
     "delete": "Delete conversation",
     "loadFailed": "I couldn't open the conversation.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "expand": "Open full screen",
+    "collapse": "Back to the side panel"
   },
   "empty": {
     "title": "What would you like to know?",
@@ -18,7 +20,13 @@
     "placeholder": "Write your question",
     "send": "Send",
     "disclosure": "Your question is sent to a language model, through a Vercel service. Don't write your CPF, passwords or card details.",
-    "paused": "Questions paused until {{date}}."
+    "paused": "Questions paused until {{date}}.",
+    "fileLabel": "File to import",
+    "fileTitle": "Drop the note, report or screenshot here",
+    "fileHint": "Brokerage note, broker statement, B3 report (Excel or CSV), PDF or screenshot (PNG, JPEG, HEIC or WEBP), up to 10 MB.",
+    "fileTooLarge": "The file is over 10 MB. Send a smaller file.",
+    "fileInvalidType": "That format is not accepted. Send Excel, CSV, PDF or an image (PNG, JPEG, HEIC or WEBP).",
+    "placeholderFile": "If you like, say what to do with the file"
   },
   "quota": {
     "warning": "{{percent}}% of the {{month}} quota used"
@@ -44,7 +52,9 @@
     "again": "See again",
     "readOnly": "Only Owners and Editors can confirm.",
     "seeGoals": "See goals",
-    "seeTransactions": "See transactions"
+    "seeTransactions": "See transactions",
+    "seeAssets": "See assets",
+    "importExpired": "The review expired. Drop the file again to import it."
   },
   "delete": {
     "title": "Delete the conversation?",
@@ -64,7 +74,17 @@
     "actionResolved": "This action was already resolved.",
     "actionNotFound": "I couldn't find this action.",
     "choiceInvalid": "Pick a transaction before confirming.",
-    "forbiddenRole": "Only Owners and Editors can confirm."
+    "forbiddenRole": "Only Owners and Editors can confirm.",
+    "fileTooLarge": "The file is over 10 MB. Send a smaller file.",
+    "formatNotRecognized": "I did not recognize this file. Send the B3 report as Excel, a brokerage note, a statement or a screenshot.",
+    "tooManyRows": "The file has too many rows. Send a shorter period.",
+    "fileUnreadable": "I could not read this file. Try a sharper image or the PDF file.",
+    "modelUnavailable": "Reading notes, statements and screenshots is unavailable right now. The B3 Excel report still works.",
+    "nothingToImport": "I found no operations to import in this file.",
+    "textRequired": "Write your question or drop a file.",
+    "previewExpired": "The review expired. Drop the file again.",
+    "importBlocked": "Some lines still need a fix or to be left out.",
+    "importInvalid": "One of the corrections does not match the file. Drop the file again."
   },
   "suggestions": {
     "portfolio": {
@@ -126,5 +146,11 @@
   },
   "upgrade": {
     "lock": "The figures of your account and the market are in Premium."
+  },
+  "consent": {
+    "title": "Send this file?",
+    "description": "This file is sent to a language model, through a service from Vercel, only to read the operations. The model of the conversation never sees the file.",
+    "send": "Send",
+    "cancel": "Cancel"
   }
 }

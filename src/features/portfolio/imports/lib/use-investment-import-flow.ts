@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import type { UseMutationResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useToast, type ToastApi } from '@/app/providers/toast-provider';
@@ -6,15 +6,16 @@ import { ApiError } from '@/shared/lib/api/api-error';
 import { HOLDER_ALL } from '../../lib/holder-filter';
 import { useCommitInvestmentImport, type CommitInvestmentImportInput } from '../api/use-commit-investment-import.mutation';
 import { usePreviewInvestmentImport } from '../api/use-preview-investment-import.mutation';
-import { MODEL_CONSENT_REQUIRED } from './import-file-rules';
-import { readImportedTitles, type ImportedTitle } from '../schemas/imported-title.schema';
+import { MODEL_CONSENT_REQUIRED } from '@/shared/lib/investment-import-files';
+import type { ImportedTitle } from '../schemas/imported-title.schema';
 import type { InvestmentImportCreated, InvestmentPreview, PositionMode, PreviewLine } from '../types';
 import type { PreviewFormInput } from './build-preview-form-data';
 import { investmentImportErrorMessage } from './investment-import-error-message';
-import { readinessOf, type Readiness } from './import-readiness';
-import { patchDraft, toEdits, type Drafts, type LineDraft, type PositionModes } from './line-drafts';
-import { buildEffectRows, type EffectRow } from './recalculate-effect';
-import { importedCount, pendingTitles, toDecisions, type TitleChoice, type TitleChoices } from './title-choices';
+import type { Readiness } from './import-readiness';
+import { toEdits, type Drafts, type LineDraft, type PositionModes } from './line-drafts';
+import type { EffectRow } from './recalculate-effect';
+import { useEditing, useReviewState, type Derived, type Editing, type ReviewState } from './use-import-review';
+import { importedCount, toDecisions, type TitleChoice, type TitleChoices } from './title-choices';
 
 export interface ImportOutcome {
     readonly created: InvestmentImportCreated;
@@ -74,44 +75,6 @@ function useFailure(): Failure {
                 return;
             }
             toast.show({ tone: 'critical', title, detail: message });
-        }
-    };
-}
-
-interface Editing {
-    readonly drafts: Drafts;
-    readonly modes: PositionModes;
-    readonly choices: TitleChoices;
-    readonly editLine: (lineId: string, patch: Partial<LineDraft>) => void;
-    readonly chooseMode: (assetId: string, mode: PositionMode) => void;
-    readonly chooseTitle: (lineId: string, choice: TitleChoice | null) => void;
-    readonly reset: () => void;
-}
-
-function useEditing(): Editing {
-    const [drafts, setDrafts] = useState<Drafts>({});
-    const [modes, setModes] = useState<PositionModes>({});
-    const [choices, setChoices] = useState<TitleChoices>({});
-    return {
-        drafts,
-        modes,
-        choices,
-        editLine: (lineId: string, patch: Partial<LineDraft>): void => {
-            setDrafts((current: Drafts): Drafts => patchDraft(current, lineId, patch));
-        },
-        chooseMode: (assetId: string, mode: PositionMode): void => {
-            setModes((current: PositionModes): PositionModes => ({ ...current, [assetId]: mode }));
-        },
-        chooseTitle: (lineId: string, choice: TitleChoice | null): void => {
-            setChoices((current: TitleChoices): TitleChoices => {
-                const { [lineId]: _removed, ...rest } = current;
-                return choice === null ? rest : { ...rest, [lineId]: choice };
-            });
-        },
-        reset: (): void => {
-            setDrafts({});
-            setModes({});
-            setChoices({});
         }
     };
 }
@@ -273,45 +236,21 @@ function useCommitStep(failure: Failure, source: CommitSource): CommitStep {
     };
 }
 
-const NO_LINES: readonly PreviewLine[] = [];
-
-interface Derived {
-    readonly lines: readonly PreviewLine[];
-    readonly titles: readonly ImportedTitle[];
-    readonly rows: readonly EffectRow[];
-}
-
-function useDerived(preview: InvestmentPreview | null, editing: Editing): Derived {
-    const lines: readonly PreviewLine[] = preview?.operations ?? NO_LINES;
-    const titles: readonly ImportedTitle[] = useMemo((): ImportedTitle[] => readImportedTitles(preview?.fixedIncome ?? []), [preview]);
-    const rows: readonly EffectRow[] = useMemo(
-        (): EffectRow[] => buildEffectRows(preview?.effect ?? [], lines, editing.drafts, editing.modes),
-        [preview, lines, editing.drafts, editing.modes]
-    );
-    return { lines, titles, rows };
-}
-
-function canConfirmOf(preview: InvestmentPreview | null, readiness: Readiness, pending: number, titles: number): boolean {
-    const clear: boolean = readiness.blocked === 0 && readiness.invalid === 0 && readiness.pendingAssets.length === 0 && pending === 0;
-    return preview !== null && clear && readiness.active + titles > 0;
-}
-
 export function useInvestmentImportFlow(): InvestmentImportFlow {
     const failure: Failure = useFailure();
     const editing: Editing = useEditing();
     const step: PreviewStep = usePreviewStep(failure, editing);
-    const derived: Derived = useDerived(step.preview, editing);
-    const readiness: Readiness = readinessOf(derived.lines, derived.rows, editing.drafts, editing.modes);
-    const pending: number = pendingTitles(derived.titles, editing.choices).length;
+    const review: ReviewState = useReviewState(step.preview, step.holder, editing);
+    const derived: Derived = { lines: review.lines, titles: review.titles, rows: review.rows };
     const committed: CommitStep = useCommitStep(failure, { preview: step.preview, editing, titles: derived.titles, rows: derived.rows });
     return {
         ...step,
         ...editing,
         ...derived,
         errorMessage: failure.errorMessage,
-        readiness,
-        pendingTitles: pending,
-        canConfirm: canConfirmOf(step.preview, readiness, pending, derived.titles.length),
+        readiness: review.readiness,
+        pendingTitles: review.pendingTitles,
+        canConfirm: review.canConfirm,
         outcome: committed.outcome,
         committing: committed.committing,
         commit: committed.commit,
