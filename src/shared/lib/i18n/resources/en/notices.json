@@ -54,6 +54,7 @@
     "confirm": "Stop getting it",
     "doneTitle": "Done, stopped",
     "doneBody": "You no longer get the \"{{notice}}\" notice by e-mail.",
+    "doneBodyMany": "You will no longer get: {{notices}}.",
     "openApp": "Open Vera"
   },
   "errors": {
