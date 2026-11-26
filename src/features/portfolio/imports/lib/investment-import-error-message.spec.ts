@@ -6,8 +6,8 @@ import { investmentImportErrorMessage } from './investment-import-error-message'
 
 const t: TFunction<'portfolioImports'> = i18n.getFixedT('pt-BR', 'portfolioImports');
 
-function apiError(type: string, status: number = 422): ApiError {
-    return new ApiError({ type, title: 'x', status, detail: 'd', requestId: null });
+function apiError(type: string, status: number = 422, meta?: Record<string, unknown>): ApiError {
+    return new ApiError({ type, title: 'x', status, detail: 'd', requestId: null, ...(meta === undefined ? {} : { meta }) });
 }
 
 describe('investmentImportErrorMessage', () => {
@@ -23,6 +23,15 @@ describe('investmentImportErrorMessage', () => {
         ['identity.insufficient_role', 'não permite importar']
     ])('traduz %s', (type: string, fragment: string) => {
         expect(investmentImportErrorMessage(t, apiError(type))).toContain(fragment);
+    });
+
+    it.each([
+        ['invalid_response', 'imagem mais nítida'],
+        ['no_operations', 'Não encontramos compras ou vendas'],
+        ['positions_without_price', 'os preços não estão legíveis'],
+        ['desconhecido', 'imagem mais nítida']
+    ])('model.unreadable com o motivo %s tem texto próprio', (reason: string, fragment: string) => {
+        expect(investmentImportErrorMessage(t, apiError('model.unreadable', 422, { reason }))).toContain(fragment);
     });
 
     it('429 vira o aviso de excesso, e o resto cai no texto genérico', () => {

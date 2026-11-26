@@ -1,5 +1,7 @@
 {
-  "launcher": { "label": "Ask Vera" },
+  "launcher": {
+    "label": "Ask Vera"
+  },
   "panel": {
     "title": "Ask Vera",
     "close": "Close",
@@ -18,7 +20,9 @@
     "disclosure": "Your question is sent to a language model, through a Vercel service. Don't write your CPF, passwords or card details.",
     "paused": "Questions paused until {{date}}."
   },
-  "quota": { "warning": "{{percent}}% of the {{month}} quota used" },
+  "quota": {
+    "warning": "{{percent}}% of the {{month}} quota used"
+  },
   "message": {
     "log": "Conversation",
     "person": "You",
@@ -28,6 +32,19 @@
     "retry": "Try again",
     "unhelpful": "Didn't help",
     "unhelpfulDone": "Noted."
+  },
+  "action": {
+    "pick": "Pick the transaction",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "done": "Done",
+    "canceled": "Canceled. Nothing was changed.",
+    "expired": "The time to confirm has passed. Nothing was changed.",
+    "stale": "What I was going to do changed since I proposed it. Nothing was changed.",
+    "again": "See again",
+    "readOnly": "Only Owners and Editors can confirm.",
+    "seeGoals": "See goals",
+    "seeTransactions": "See transactions"
   },
   "delete": {
     "title": "Delete the conversation?",
@@ -41,7 +58,13 @@
     "capReachedNoDate": "Questions paused until the 1st of next month.",
     "providerDisabled": "Answers aren't available right now.",
     "tooMany": "You asked many questions in a row. Try again in a moment.",
-    "notFound": "That conversation no longer exists. Start a new one."
+    "notFound": "That conversation no longer exists. Start a new one.",
+    "confirmationStale": "What I was going to do changed since I proposed it. Nothing was changed.",
+    "actionExpired": "The time to confirm has passed. Nothing was changed.",
+    "actionResolved": "This action was already resolved.",
+    "actionNotFound": "I couldn't find this action.",
+    "choiceInvalid": "Pick a transaction before confirming.",
+    "forbiddenRole": "Only Owners and Editors can confirm."
   },
   "suggestions": {
     "portfolio": {
@@ -94,5 +117,14 @@
       "two": "Where do I start?",
       "three": "Where do I change the account settings?"
     }
+  },
+  "sent": {
+    "link": "See what was sent",
+    "loading": "Loading what was sent",
+    "failed": "I could not open what was sent.",
+    "empty": "Nothing is stored for this answer: nothing was sent, or sending was turned off."
+  },
+  "upgrade": {
+    "lock": "The figures of your account and the market are in Premium."
   }
 }

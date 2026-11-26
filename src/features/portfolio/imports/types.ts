@@ -5,8 +5,10 @@ type CommitOperation = paths['/investment-imports']['post'];
 
 export type InvestmentPreview = PreviewOperation['responses']['200']['content']['application/json'];
 export type PreviewLine = InvestmentPreview['operations'][number];
+
 export type EffectItem = InvestmentPreview['effect'][number];
 export type PositionBalance = NonNullable<EffectItem['before']>;
+export type PreviewWarning = InvestmentPreview['warnings'][number];
 export type PreviewNote = InvestmentPreview['notes'][number];
 
 export type CommitBody = CommitOperation['requestBody']['content']['application/json'];

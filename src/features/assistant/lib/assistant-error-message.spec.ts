@@ -24,6 +24,12 @@ describe('assistantErrorMessage', () => {
     it.each([
         ['ai.provider_disabled', 503, 'As respostas não estão disponíveis agora.'],
         ['assistant.turn_not_found', 404, 'Essa conversa não existe mais. Comece uma nova.'],
+        ['assistant.confirmation_stale', 409, 'O que eu ia fazer mudou desde que propus. Nada foi alterado.'],
+        ['assistant.action_expired', 409, 'O prazo para confirmar acabou. Nada foi alterado.'],
+        ['assistant.action_resolved', 409, 'Esta ação já foi resolvida.'],
+        ['assistant.action_not_found', 404, 'Não encontrei esta ação.'],
+        ['assistant.action_choice_invalid', 400, 'Escolha uma transação antes de confirmar.'],
+        ['members.forbidden_role', 403, 'Só Dono ou Editor confirmam.'],
         ['qualquer.coisa', 429, 'Você fez muitas perguntas seguidas. Tente de novo daqui a pouco.'],
         ['qualquer.coisa', 500, 'Não consegui enviar a pergunta. Tente de novo.']
     ])('%s (%i)', (type, status, message) => {

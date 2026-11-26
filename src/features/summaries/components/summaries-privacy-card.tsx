@@ -107,6 +107,7 @@ function SwitchRow({ consent }: { readonly consent: ConsentState }): ReactElemen
             <div className="flex min-w-0 flex-col gap-0.5">
                 <span className="text-sm font-semibold text-content">{t('privacy.switchLabel')}</span>
                 <span className="text-xs text-content-muted">{consent.canChange ? t('privacy.switchHint') : t('privacy.askEditor')}</span>
+                <span className="text-xs text-content-muted">{t('privacy.switchScope')}</span>
             </div>
             {toggle.confirming ? (
                 <ConfirmDialog

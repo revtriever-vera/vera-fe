@@ -44,7 +44,9 @@ describe('InvestmentImportModal: arquivo', () => {
         });
         const { user, api }: InvestmentImportSetup = renderInvestmentImportModal({ preview });
 
-        expect(await screen.findByText('Relatório da B3 em Excel (.xlsx) ou CSV, até 10 MB.')).toBeInTheDocument();
+        expect(
+            await screen.findByText('Relatório da B3 em Excel, nota de corretagem, extrato da corretora, CSV da exchange ou print da tela.')
+        ).toBeInTheDocument();
         await chooseReport(user);
 
         expect(await screen.findByRole('heading', { name: 'Confira as operações' })).toBeInTheDocument();
@@ -259,7 +261,7 @@ describe('InvestmentImportModal: confirmação', () => {
 
         await user.click(screen.getByRole('button', { name: 'Importar outro relatório' }));
 
-        expect(await screen.findByLabelText('Relatório da B3')).toBeInTheDocument();
+        expect(await screen.findByLabelText('Arquivo')).toBeInTheDocument();
         expect(screen.queryByText('Importação concluída')).not.toBeInTheDocument();
     });
 });
@@ -373,7 +375,7 @@ describe('InvestmentImportModal: renda fixa', () => {
     });
 
     it('emissor de tipo outro não descarta o título', async () => {
-        const issuer: Record<string, unknown> = {
+        const issuer: NonNullable<InvestmentPreview['fixedIncome'][number]['issuer']> = {
             id: 'iss-1',
             name: 'Outro emissor',
             groupId: 'g-1',

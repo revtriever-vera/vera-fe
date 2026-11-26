@@ -2,15 +2,15 @@
   "button": "Importar operações",
   "modal": {
     "title": "Importar operações",
-    "description": "Mande o relatório da B3, confira cada linha e confirme."
+    "description": "Mande o arquivo da corretora, confira cada linha e confirme."
   },
   "file": {
-    "label": "Relatório da B3",
-    "dropTitle": "Arraste o relatório aqui",
-    "hint": "Relatório da B3 em Excel (.xlsx) ou CSV, até 10 MB.",
-    "reading": "Lendo o relatório",
-    "tooLarge": "O arquivo passa de 10 MB. Mande um relatório menor.",
-    "invalidType": "Esse arquivo não é Excel nem CSV. Mande o relatório da B3 em .xlsx ou .csv."
+    "label": "Arquivo",
+    "dropTitle": "Arraste o arquivo aqui",
+    "hint": "Relatório da B3 em Excel, nota de corretagem, extrato da corretora, CSV da exchange ou print da tela.",
+    "reading": "Lendo o arquivo",
+    "tooLarge": "O arquivo passa de 10 MB. Mande um arquivo menor.",
+    "invalidType": "Esse formato não é aceito. Mande Excel, CSV, PDF ou imagem (PNG, JPEG, HEIC ou WEBP)."
   },
   "alreadyImported": "Esse mesmo arquivo já foi importado em {{date}}. As linhas repetidas ficam de fora.",
   "notes": {
@@ -21,7 +21,29 @@
     "rows_ignored_one": "{{count}} linha do relatório não é operação e ficou de fora.",
     "rows_ignored_other": "{{count}} linhas do relatório não são operações e ficaram de fora.",
     "generic_one": "{{count}} linha ficou de fora da importação.",
-    "generic_other": "{{count}} linhas ficaram de fora da importação."
+    "generic_other": "{{count}} linhas ficaram de fora da importação.",
+    "note_total_mismatch_one": "{{count}} nota tem o total diferente da soma das operações. Confira as linhas marcadas.",
+    "note_total_mismatch_other": "{{count}} notas têm o total diferente da soma das operações. Confira as linhas marcadas.",
+    "note_net_mismatch_one": "{{count}} nota tem o valor líquido diferente do total mais as taxas. Confira as linhas marcadas.",
+    "note_net_mismatch_other": "{{count}} notas têm o valor líquido diferente do total mais as taxas. Confira as linhas marcadas.",
+    "foreign_cash_movement_one": "{{count}} movimentação de caixa do extrato não é operação e ficou de fora.",
+    "foreign_cash_movement_other": "{{count}} movimentações de caixa do extrato não são operações e ficaram de fora.",
+    "foreign_position_not_applied_one": "A posição final de {{count}} ativo no extrato não teve operação no período e não mudou a carteira.",
+    "foreign_position_not_applied_other": "A posição final de {{count}} ativos no extrato não tiveram operação no período e não mudaram a carteira.",
+    "foreign_tax_unmatched_one": "{{count}} imposto retido não achou o provento correspondente e ficou de fora.",
+    "foreign_tax_unmatched_other": "{{count}} impostos retidos não acharam o provento correspondente e ficaram de fora.",
+    "lines_to_check_one": "{{count}} linha precisa de conferência antes de importar.",
+    "lines_to_check_other": "{{count}} linhas precisam de conferência antes de importar.",
+    "crypto_transfer_check_one": "{{count}} transferência de cripto precisa de conferência: pode ser movimentação entre carteiras suas.",
+    "crypto_transfer_check_other": "{{count}} transferências de cripto precisam de conferência: podem ser movimentações entre carteiras suas.",
+    "crypto_usd_rate_applied_one": "{{count}} linha em dólar foi convertida para reais pela cotação do dia.",
+    "crypto_usd_rate_applied_other": "{{count}} linhas em dólar foram convertidas para reais pela cotação do dia.",
+    "crypto_fee_not_converted_one": "A taxa de {{count}} linha não foi convertida para reais e ficou de fora do custo.",
+    "crypto_fee_not_converted_other": "As taxas de {{count}} linhas não foram convertidas para reais e ficaram de fora do custo.",
+    "foreign_rate_fallback_one": "{{count}} linha usou a cotação do dólar do dia útil anterior, porque o dia da operação não tem cotação.",
+    "foreign_rate_fallback_other": "{{count}} linhas usaram a cotação do dólar do dia útil anterior, porque o dia da operação não tem cotação.",
+    "foreign_rate_missing_one": "{{count}} linha ficou sem cotação do dólar e sem valor em reais.",
+    "foreign_rate_missing_other": "{{count}} linhas ficaram sem cotação do dólar e sem valor em reais."
   },
   "table": {
     "title": "Confira as operações",
@@ -69,9 +91,16 @@
     "invalid_quantity": "A quantidade não veio no relatório. Corrija a quantidade.",
     "unsupported_direction": "Não sabemos tratar esta movimentação. Não importe esta linha.",
     "position_mode_required": "Escolha abaixo se esta linha soma à posição ou já está nela.",
+    "assumed_cost": "Custo médio assumido pelo preço que aparece no arquivo; ajuste se souber o seu.",
     "duplicate": "Esta operação já foi importada antes.",
     "skipped": "Esta linha ficou de fora da importação.",
-    "generic": "Confira esta linha antes de importar."
+    "generic": "Confira esta linha antes de importar.",
+    "net_mismatch": "O líquido da nota não bate com os valores desta linha. Confira com a nota antes de importar.",
+    "out_of_order": "Esta operação é anterior a outra do mesmo ativo no extrato. Confira a data e a posição antes de importar.",
+    "amount_mismatch": "O valor desta linha não bate com quantidade vezes preço. Confira os números antes de importar.",
+    "total_mismatch": "O total da nota não bate com a soma das operações. Confira esta linha com a nota antes de importar.",
+    "date_out_of_range": "A data desta linha parece fora do período esperado. Confira a data antes de importar.",
+    "position_mismatch": "A posição final do extrato não bate com a soma das operações desta linha. Confira a quantidade antes de importar."
   },
   "actions": {
     "cancel": "Cancelar",
@@ -220,6 +249,27 @@
     "invalidEdit": "Uma das correções não bate com o relatório. Mande o relatório de novo.",
     "tooManyRequests": "Muitas importações em pouco tempo. Tente de novo mais tarde.",
     "forbidden": "O seu papel não permite importar operações.",
-    "fixedIncomeDuplicate": "Já existe um título igual na carteira. Deixe este de fora ou corrija os dados para importar mesmo assim."
+    "fixedIncomeDuplicate": "Já existe um título igual na carteira. Deixe este de fora ou corrija os dados para importar mesmo assim.",
+    "modelUnavailable": "A leitura de notas, extratos e prints está fora do ar agora. O relatório da B3 em Excel continua funcionando.",
+    "modelUnreadable": "Não conseguimos ler esse arquivo. Tente uma imagem mais nítida ou o arquivo em PDF.",
+    "modelNoOperations": "Não encontramos compras ou vendas nesse arquivo. Envie uma nota de corretagem, um extrato ou um print com as operações.",
+    "modelPositionsWithoutPrice": "Lemos as posições, mas os preços não estão legíveis e sem preço não dá para registrar o custo. Envie um print em que o preço apareça ou uma nota de corretagem."
+  },
+  "consent": {
+    "title": "Enviar este arquivo?",
+    "description": "Este arquivo é enviado a um modelo de linguagem, por um serviço da Vercel.",
+    "send": "Enviar"
+  },
+  "foreign": {
+    "label": "Valores em moeda estrangeira",
+    "original": "Valor em {{currency}}",
+    "ptax": "PTAX usada",
+    "converted": "Valor em BRL"
+  },
+  "withholding": {
+    "label": "Provento com imposto retido",
+    "gross": "Bruto",
+    "tax": "Imposto retido",
+    "net": "Líquido"
   }
 }
