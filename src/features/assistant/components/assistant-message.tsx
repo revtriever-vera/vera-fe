@@ -4,7 +4,7 @@ import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/button';
 import { useTurnFeedback } from '../api/use-turn-feedback.mutation';
-import { TURN_STATUS, type MessageView } from '../types';
+import { IMPORT_TOOL, TURN_STATUS, type MessageView } from '../types';
 import { AnswerText } from './answer-text';
 import { AssistantAction } from './assistant-action';
 import { AssistantUpgrade } from './assistant-upgrade';
@@ -82,7 +82,8 @@ export function AssistantMessage({ message, onRetry }: AssistantMessageProps): R
             <div
                 className={cn(
                     'flex max-w-[90%] flex-col gap-2 rounded-card px-3 py-2 text-sm',
-                    fromPerson ? 'bg-accent-strong text-accent-contrast' : 'bg-surface-muted text-content'
+                    fromPerson ? 'bg-accent-strong text-accent-contrast' : 'bg-surface-muted text-content',
+                    message.action?.tool === IMPORT_TOOL && 'w-full max-w-full'
                 )}
             >
                 {fromPerson ? <p className="m-0 whitespace-pre-line">{message.text}</p> : <VeraBody message={message} onRetry={onRetry} />}
