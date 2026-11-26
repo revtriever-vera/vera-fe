@@ -73,6 +73,54 @@ describe('categorizar: escolha da transação', () => {
     });
 });
 
+describe('categorizar: sempre para esta categoria', () => {
+    async function confirmWith(proposed: boolean, toggle: boolean): Promise<unknown[]> {
+        serveView(actionView({ tool: 'transaction_categorize', always: proposed, candidates: [actionCandidate()] }));
+        const sent: unknown[] = [];
+        server.use(
+            http.post('*/assistant/actions/:id/confirm', async ({ request }): Promise<Response> => {
+                sent.push(await request.json());
+                return HttpResponse.json(
+                    actionSummary({ tool: 'transaction_categorize', status: 'confirmed', resultText: 'Categorizada.' })
+                );
+            })
+        );
+        const user: UserEvent = userEvent.setup();
+        renderAction(actionSummary({ tool: 'transaction_categorize' }));
+        const box: HTMLElement = await screen.findByRole('checkbox', { name: 'Sempre para esta categoria' });
+        if (proposed) {
+            expect(box).toBeChecked();
+        } else {
+            expect(box).not.toBeChecked();
+        }
+        if (toggle) {
+            await user.click(box);
+        }
+        await user.click(screen.getByRole('radio', { name: /NETFLIX/ }));
+        await user.click(screen.getByRole('button', { name: 'Confirmar' }));
+        await screen.findByText('Feito');
+        return sent;
+    }
+
+    it('abre com o valor proposto e manda o que a pessoa deixou', async () => {
+        expect(await confirmWith(true, false)).toEqual([{ transactionId: 'tx-1', version: '2026-11-20T10:00:00.000Z', always: true }]);
+    });
+
+    it('a pessoa desliga a regra proposta', async () => {
+        expect(await confirmWith(true, true)).toEqual([{ transactionId: 'tx-1', version: '2026-11-20T10:00:00.000Z', always: false }]);
+    });
+
+    it('a pessoa liga a regra que não foi proposta', async () => {
+        expect(await confirmWith(false, true)).toEqual([{ transactionId: 'tx-1', version: '2026-11-20T10:00:00.000Z', always: true }]);
+    });
+
+    it('sem always (outra ação) não mostra a opção', async () => {
+        renderAction(actionSummary());
+        await screen.findByRole('button', { name: 'Confirmar' });
+        expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+    });
+});
+
 describe('erros e estados finais', () => {
     it('409 de estado mudado mostra o texto próprio', async () => {
         server.use(http.post('*/assistant/actions/:id/confirm', (): Response => problem('assistant.confirmation_stale', 409)));

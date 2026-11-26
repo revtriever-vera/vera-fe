@@ -1175,7 +1175,7 @@ export interface paths {
         put?: never;
         /**
          * Confirm a pending action
-         * @description Runs the action the assistant proposed, once. The code executes it, never the model. Two confirmations at the same time run it once; the other gets `assistant.action_resolved`. When what the action refers to changed, nothing runs (`assistant.confirmation_stale`).
+         * @description Runs the action the assistant proposed, once. The code executes it, never the model. Two confirmations at the same time run it once; the other gets `assistant.action_resolved`. When what the action refers to changed, nothing runs (`assistant.confirmation_stale`). On a categorize card, `always` replaces what was proposed (the rule is saved or not) and the result text follows it; on other actions it is refused with 422.
          */
         post: operations["AssistantChatController_confirm"];
         delete?: never;
@@ -12143,6 +12143,8 @@ export interface operations {
                         resultText: string | null;
                         /** @description Id of what the action created, once confirmed: the importId for an import */
                         reference: string | null;
+                        /** @description Categorize cards: whether the assistant proposed the "always to this category" rule; null for other actions */
+                        always: boolean | null;
                         /** @description Transactions the person can pick from; empty for actions that need no choice */
                         candidates: {
                             /**
@@ -12272,6 +12274,8 @@ export interface operations {
                     fixedIncome?: {
                         [key: string]: unknown;
                     }[];
+                    /** @description Categorize cards only: whether to also save the "always to this category" rule. When sent, it replaces what the assistant proposed; other cards answer 422 (assistant.action_always_not_applicable) */
+                    always?: boolean;
                 };
             };
         };
@@ -12404,6 +12408,30 @@ export interface operations {
             };
             /** @description The action was already resolved (assistant.action_resolved), its window passed (assistant.action_expired) or what it refers to changed since it was proposed (assistant.confirmation_stale) */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description `always` was sent for an action that is not a categorization (assistant.action_always_not_applicable) */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
