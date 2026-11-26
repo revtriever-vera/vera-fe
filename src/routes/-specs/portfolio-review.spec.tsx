@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { http, HttpResponse } from 'msw';
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import type { MonthlyReview, MonthlyReviewList } from '@/features/portfolio/review/types';
 import { problem } from '../../../test/fixtures/auth';
 import { freeBilling } from '../../../test/fixtures/billing';
@@ -140,6 +141,31 @@ describe('Raio-X do mês: parágrafo', () => {
 
         expect(await screen.findByText(PARAGRAPH)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Ver o que é enviado' })).toBeInTheDocument();
+    });
+
+    it('parágrafos separados por linha em branco, número principal em negrito, e o link do payload manda o mês', async () => {
+        const text: string = 'A carteira rendeu **+1,42%** em outubro.\n\nO ITUB4 subiu no preço.';
+        serve(sampleReviewList(), sampleReview({ summary: text }));
+        const queries: URLSearchParams[] = [];
+        server.use(
+            http.get('*/ai/payload', ({ request }): Response => {
+                queries.push(new URL(request.url).searchParams);
+                return HttpResponse.json({ kind: 'monthly_review', noticeVersion: 1, payload: { mes: '2026-10' } });
+            })
+        );
+        renderRouterAt('/portfolio/review', { signedIn: true });
+
+        const bold: HTMLElement = await screen.findByText('+1,42%', { selector: 'strong' });
+        expect(bold.closest('p')).toHaveTextContent('A carteira rendeu +1,42% em outubro.');
+        expect(screen.getByText('O ITUB4 subiu no preço.').closest('p')).not.toBe(bold.closest('p'));
+        expect(screen.queryByText(/\*\*/)).not.toBeInTheDocument();
+
+        await userEvent.click(screen.getByRole('button', { name: 'Ver o que é enviado' }));
+        await waitFor((): void => {
+            expect(queries).toHaveLength(1);
+        });
+        expect(queries[0]?.get('kind')).toBe('monthly_review');
+        expect(queries[0]?.get('month')).toBe('2026-10');
     });
 
     it('Premium sem parágrafo mostra só os números', async () => {
