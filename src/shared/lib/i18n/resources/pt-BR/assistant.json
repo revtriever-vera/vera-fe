@@ -7,7 +7,9 @@
     "close": "Fechar",
     "delete": "Apagar conversa",
     "loadFailed": "Não consegui abrir a conversa.",
-    "retry": "Tentar de novo"
+    "retry": "Tentar de novo",
+    "expand": "Abrir em tela inteira",
+    "collapse": "Voltar ao painel lateral"
   },
   "empty": {
     "title": "O que você quer saber?",
@@ -18,7 +20,13 @@
     "placeholder": "Escreva sua pergunta",
     "send": "Enviar",
     "disclosure": "Sua pergunta é enviada a um modelo de linguagem, por um serviço da Vercel. Não escreva CPF, senha ou dados de cartão.",
-    "paused": "Perguntas pausadas até {{date}}."
+    "paused": "Perguntas pausadas até {{date}}.",
+    "fileLabel": "Arquivo para importar",
+    "fileTitle": "Solte aqui a nota, o relatório ou o print",
+    "fileHint": "Nota de corretagem, extrato da corretora, relatório da B3 (Excel ou CSV), PDF ou print (PNG, JPEG, HEIC ou WEBP), até 10 MB.",
+    "fileTooLarge": "O arquivo passa de 10 MB. Mande um arquivo menor.",
+    "fileInvalidType": "Esse formato não é aceito. Mande Excel, CSV, PDF ou imagem (PNG, JPEG, HEIC ou WEBP).",
+    "placeholderFile": "Se quiser, diga o que fazer com o arquivo"
   },
   "quota": {
     "warning": "{{percent}}% da cota de {{month}} usada"
@@ -44,7 +52,9 @@
     "again": "Ver de novo",
     "readOnly": "Só Dono ou Editor confirmam.",
     "seeGoals": "Ver objetivos",
-    "seeTransactions": "Ver transações"
+    "seeTransactions": "Ver transações",
+    "seeAssets": "Ver ativos",
+    "importExpired": "A conferência expirou. Solte o arquivo de novo para importar."
   },
   "delete": {
     "title": "Apagar a conversa?",
@@ -64,7 +74,17 @@
     "actionResolved": "Esta ação já foi resolvida.",
     "actionNotFound": "Não encontrei esta ação.",
     "choiceInvalid": "Escolha uma transação antes de confirmar.",
-    "forbiddenRole": "Só Dono ou Editor confirmam."
+    "forbiddenRole": "Só Dono ou Editor confirmam.",
+    "fileTooLarge": "O arquivo passa de 10 MB. Mande um arquivo menor.",
+    "formatNotRecognized": "Não reconheci esse arquivo. Mande o relatório da B3 em Excel, uma nota de corretagem, um extrato ou um print.",
+    "tooManyRows": "O arquivo tem linhas demais. Mande um período menor.",
+    "fileUnreadable": "Não consegui ler esse arquivo. Tente uma imagem mais nítida ou o arquivo em PDF.",
+    "modelUnavailable": "A leitura de notas, extratos e prints está fora do ar agora. O relatório da B3 em Excel continua funcionando.",
+    "nothingToImport": "Não encontrei operações nesse arquivo para importar.",
+    "textRequired": "Escreva sua pergunta ou solte um arquivo.",
+    "previewExpired": "A conferência expirou. Solte o arquivo de novo.",
+    "importBlocked": "Ainda há linhas para corrigir ou deixar de fora.",
+    "importInvalid": "Uma das correções não bate com o arquivo. Solte o arquivo de novo."
   },
   "suggestions": {
     "portfolio": {
@@ -126,5 +146,11 @@
   },
   "upgrade": {
     "lock": "Os números da sua conta e o mercado estão no Premium."
+  },
+  "consent": {
+    "title": "Enviar este arquivo?",
+    "description": "Este arquivo é enviado a um modelo de linguagem, por um serviço da Vercel, só para ler as operações. O modelo da conversa não vê o arquivo.",
+    "send": "Enviar",
+    "cancel": "Cancelar"
   }
 }

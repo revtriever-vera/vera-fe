@@ -1075,7 +1075,7 @@ export interface paths {
         put?: never;
         /**
          * Ask the assistant a question
-         * @description Stores the question and queues the answer; the answer is read from `GET /assistant/turns/{id}`. The turn is in `help` mode (answers from the help content) unless the plan includes the AI and the account allowed sending figures, then it is in `ai` mode. Refused up front, with nothing stored, when the usage band of the mode is used up. Limited to 20 turns per hour per person.
+         * @description Stores the question and queues the answer; the answer is read from `GET /assistant/turns/{id}`. The turn is in `help` mode (answers from the help content) unless the plan includes the AI and the account allowed sending figures, then it is in `ai` mode. Refused up front, with nothing stored, when the usage band of the mode is used up. Limited to 20 turns per hour per person. Sent as multipart with a `file` (the same files and limits as POST /investment-imports/preview, editors only), the turn runs the preview of the import before the answer: the language model of the assistant never receives the file, the lines or the amounts, only that a file was attached. The answer then carries a pending action (`investment_import`) whose card shows the preview (GET /assistant/actions/{id}) and is confirmed at POST /assistant/actions/{id}/confirm. A PDF or an image goes to a language reader and needs `modelConsent=true`, otherwise the call is refused with model.confirmation_required and nothing is stored. The conversation keeps only "Arquivo: <name>".
          */
         post: operations["AssistantChatController_send"];
         delete?: never;
@@ -11320,17 +11320,55 @@ export interface operations {
             content: {
                 "application/json": {
                     /**
+                     * Format: binary
+                     * @description Multipart only. The report to import, up to 10 MB: xlsx or csv, or with `modelConsent` a PDF or an image
+                     */
+                    file?: string;
+                    /**
                      * Format: uuid
                      * @description Conversation to continue; omitted, the current one is used or a new one is opened
                      */
                     conversationId?: string;
-                    /** @description The question, up to 1000 characters */
-                    text: string;
-                    /** @description The screen the person is on, so "this screen" can be understood */
+                    /** @description The question, up to 1000 characters; required unless a `file` is sent */
+                    text?: string;
+                    /** @description The screen the person is on, so "this screen" can be understood (JSON body) */
                     screen?: {
                         /** @description Route path of the screen the person is on */
                         path: string;
                     };
+                    /** @description Same as `screen.path`, for the multipart form where an object cannot be sent */
+                    screenPath?: string;
+                    /**
+                     * @description Multipart only. Send `true` after the person agrees that the `file` goes to a language model (a PDF, image or photo). Without it, such a file is refused with model.confirmation_required and nothing is sent. Valid only for this request
+                     * @enum {string}
+                     */
+                    modelConsent?: "true" | "false";
+                };
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description Multipart only. The report to import, up to 10 MB: xlsx or csv, or with `modelConsent` a PDF or an image
+                     */
+                    file?: string;
+                    /**
+                     * Format: uuid
+                     * @description Conversation to continue; omitted, the current one is used or a new one is opened
+                     */
+                    conversationId?: string;
+                    /** @description The question, up to 1000 characters; required unless a `file` is sent */
+                    text?: string;
+                    /** @description The screen the person is on, so "this screen" can be understood (JSON body) */
+                    screen?: {
+                        /** @description Route path of the screen the person is on */
+                        path: string;
+                    };
+                    /** @description Same as `screen.path`, for the multipart form where an object cannot be sent */
+                    screenPath?: string;
+                    /**
+                     * @description Multipart only. Send `true` after the person agrees that the `file` goes to a language model (a PDF, image or photo). Without it, such a file is refused with model.confirmation_required and nothing is sent. Valid only for this request
+                     * @enum {string}
+                     */
+                    modelConsent?: "true" | "false";
                 };
             };
         };
@@ -11403,8 +11441,104 @@ export interface operations {
                     };
                 };
             };
+            /** @description The person has read-only access to the account (members.forbidden_role) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
             /** @description No such turn or conversation for this person, including one that belongs to someone else (assistant.turn_not_found) */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The file is larger than 10 MB (file.too_large) */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Not a report the reader knows (format.not_recognized), a damaged file (file.unreadable), a file the model could not read (model.unreadable) or nothing to import (import.nothing_to_import) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The file goes to a language model and `modelConsent=true` was not sent (model.confirmation_required) */
+            428: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -11541,6 +11675,8 @@ export interface operations {
                                 expiresAt: string;
                                 /** @description What was done, once confirmed */
                                 resultText: string | null;
+                                /** @description Id of what the action created, once confirmed: the importId for an import */
+                                reference: string | null;
                             } | null;
                         };
                         /** @description Usage band, so the panel shows the quota without another call */
@@ -11874,6 +12010,8 @@ export interface operations {
                         expiresAt: string;
                         /** @description What was done, once confirmed */
                         resultText: string | null;
+                        /** @description Id of what the action created, once confirmed: the importId for an import */
+                        reference: string | null;
                         /** @description Transactions the person can pick from; empty for actions that need no choice */
                         candidates: {
                             /**
@@ -11894,6 +12032,10 @@ export interface operations {
                             /** @description Name of the account */
                             accountName: string;
                         }[];
+                        /** @description Import cards only: the preview of the file, in the shape of the response of POST /investment-imports/preview. Null for other actions and when the preview expired: the card asks for the file again */
+                        importPreview: {
+                            [key: string]: unknown;
+                        } | null;
                     };
                 };
             };
@@ -11991,6 +12133,14 @@ export interface operations {
                     transactionId?: string;
                     /** @description Version of the picked transaction, as listed on the card */
                     version?: string;
+                    /** @description Import cards only: corrections by line, the `edits` of POST /investment-imports */
+                    edits?: {
+                        [key: string]: unknown;
+                    }[];
+                    /** @description Import cards only: decision by fixed income line, the `fixedIncome` of POST /investment-imports */
+                    fixedIncome?: {
+                        [key: string]: unknown;
+                    }[];
                 };
             };
         };
@@ -12020,6 +12170,8 @@ export interface operations {
                         expiresAt: string;
                         /** @description What was done, once confirmed */
                         resultText: string | null;
+                        /** @description Id of what the action created, once confirmed: the importId for an import */
+                        reference: string | null;
                     };
                 };
             };
@@ -12182,6 +12334,8 @@ export interface operations {
                         expiresAt: string;
                         /** @description What was done, once confirmed */
                         resultText: string | null;
+                        /** @description Id of what the action created, once confirmed: the importId for an import */
+                        reference: string | null;
                     };
                 };
             };
@@ -12378,6 +12532,8 @@ export interface operations {
                                 expiresAt: string;
                                 /** @description What was done, once confirmed */
                                 resultText: string | null;
+                                /** @description Id of what the action created, once confirmed: the importId for an import */
+                                reference: string | null;
                             } | null;
                             /** @description ISO 8601 */
                             createdAt: string;
