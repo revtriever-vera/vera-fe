@@ -54,6 +54,7 @@
     "confirm": "Parar de receber",
     "doneTitle": "Pronto, parou",
     "doneBody": "Você não recebe mais o aviso \"{{notice}}\" por e-mail.",
+    "doneBodyMany": "Você não vai mais receber: {{notices}}.",
     "openApp": "Abrir a Vera"
   },
   "errors": {

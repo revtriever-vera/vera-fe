@@ -6,7 +6,7 @@ import { BrandLogo } from '@/shared/ui/brand-logo';
 import { Button, buttonVariants } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { useUnsubscribe } from '../api/use-unsubscribe.mutation';
-import { noticeTitle } from '../lib/notice-text';
+import { noticeTitleList, noticeTypes } from '../lib/notice-text';
 import { noticesErrorMessage } from '../lib/notices-error-message';
 import type { UnsubscribeResult } from '../types';
 
@@ -15,11 +15,14 @@ export interface UnsubscribePageProps {
 }
 
 function Done({ result }: { readonly result: UnsubscribeResult }): ReactElement {
-    const { t }: UseTranslationResponse<'notices', undefined> = useTranslation('notices');
+    const { t, i18n }: UseTranslationResponse<'notices', undefined> = useTranslation('notices');
+    const notices: string = noticeTitleList(t, i18n.language, result.type);
+    const body: string =
+        noticeTypes(result.type).length > 1 ? t('unsubscribe.doneBodyMany', { notices }) : t('unsubscribe.doneBody', { notice: notices });
     return (
         <>
             <h1 className="text-xl font-semibold text-content">{t('unsubscribe.doneTitle')}</h1>
-            <p className="text-sm text-content-muted">{t('unsubscribe.doneBody', { notice: noticeTitle(t, result.type) })}</p>
+            <p className="text-sm text-content-muted">{body}</p>
             <Link to="/" className={buttonVariants({ variant: 'secondary' })}>
                 {t('unsubscribe.openApp')}
             </Link>

@@ -98,6 +98,16 @@ describe('Página de descadastro', () => {
         expect(screen.getByRole('link', { name: 'Abrir a Vera' })).toBeInTheDocument();
     });
 
+    it('lista os nomes de todos os avisos quando o descadastro agrupa vários tipos', async () => {
+        server.use(http.post('*/notifications/unsubscribe/:token', () => HttpResponse.json({ type: 'recurring_week,goal_behind' })));
+        const user: UserEvent = userEvent.setup();
+        renderRouterAt('/avisos/sair/token-do-email');
+
+        await user.click(await screen.findByRole('button', { name: 'Parar de receber' }));
+
+        expect(await screen.findByText('Você não vai mais receber: Débitos da semana e Objetivo atrasado.')).toBeInTheDocument();
+    });
+
     it('explica quando o link não vale mais', async () => {
         server.use(
             http.post('*/notifications/unsubscribe/:token', () => HttpResponse.json(problem('notices.invalid_token', 404), { status: 404 }))
