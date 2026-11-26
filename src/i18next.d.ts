@@ -14,6 +14,9 @@ import type ptBRPortfolioFixedIncome from './shared/lib/i18n/resources/pt-BR/por
 import type ptBRPortfolioTargets from './shared/lib/i18n/resources/pt-BR/portfolioTargets.json';
 import type ptBRPortfolioContribution from './shared/lib/i18n/resources/pt-BR/portfolioContribution.json';
 import type ptBRPortfolioGoals from './shared/lib/i18n/resources/pt-BR/portfolioGoals.json';
+import type ptBRPortfolioAgenda from './shared/lib/i18n/resources/pt-BR/portfolioAgenda.json';
+import type ptBRPortfolioChanges from './shared/lib/i18n/resources/pt-BR/portfolioChanges.json';
+import type ptBRPortfolioReview from './shared/lib/i18n/resources/pt-BR/portfolioReview.json';
 import type ptBRSpendingRecurring from './shared/lib/i18n/resources/pt-BR/spendingRecurring.json';
 import type ptBROnboarding from './shared/lib/i18n/resources/pt-BR/onboarding.json';
 import type ptBRSpending from './shared/lib/i18n/resources/pt-BR/spending.json';
@@ -50,6 +53,9 @@ declare module 'i18next' {
             portfolioTargets: typeof ptBRPortfolioTargets;
             portfolioContribution: typeof ptBRPortfolioContribution;
             portfolioGoals: typeof ptBRPortfolioGoals;
+            portfolioAgenda: typeof ptBRPortfolioAgenda;
+            portfolioChanges: typeof ptBRPortfolioChanges;
+            portfolioReview: typeof ptBRPortfolioReview;
             spendingRecurring: typeof ptBRSpendingRecurring;
             onboarding: typeof ptBROnboarding;
             spending: typeof ptBRSpending;

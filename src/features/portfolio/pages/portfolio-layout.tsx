@@ -14,7 +14,10 @@ export function PortfolioLayout(): ReactElement {
         { to: '/portfolio/targets', label: t('layout.tabs.targets') },
         { to: '/portfolio/contribution', label: t('layout.tabs.contribution') },
         { to: '/portfolio/goals', label: t('layout.tabs.goals'), search },
-        { to: '/portfolio/assets', label: t('layout.tabs.assets'), search }
+        { to: '/portfolio/assets', label: t('layout.tabs.assets'), search },
+        { to: '/portfolio/agenda', label: t('layout.tabs.agenda'), search },
+        { to: '/portfolio/changes', label: t('layout.tabs.changes'), search },
+        { to: '/portfolio/review', label: t('layout.tabs.review'), search }
     ];
     return (
         <div className="mx-auto flex w-full max-w-5xl min-w-0 flex-col gap-4 px-page-x py-page-y">

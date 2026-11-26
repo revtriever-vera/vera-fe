@@ -1,0 +1,69 @@
+{
+  "title": "Month X-ray",
+  "subtitle": "The month's numbers for your portfolio, calculated by the code from your positions and operations.",
+  "loading": "Loading the month X-ray",
+  "loadError": "Could not load the month X-ray.",
+  "retry": "Try again",
+  "notice": "This is not a recommendation to buy or sell.",
+  "month": {
+    "label": "X-ray month"
+  },
+  "empty": {
+    "title": "The first X-ray is not out yet",
+    "description": "It is built at the start of each month, with the month that just closed.",
+    "missing": "There is no X-ray for this month."
+  },
+  "returns": {
+    "title": "Return of the month",
+    "method": "Return with contributions and withdrawals, from your imported operations.",
+    "portfolio": "Your portfolio",
+    "byClassTitle": "By class",
+    "byClassDescription": "Each class against the month's indexes.",
+    "values": "From {{start}} to {{end}}",
+    "otherClass": "No class",
+    "unavailable": "No return",
+    "noOperations": "The return shows up once your operations are imported.",
+    "importLink": "Import operations",
+    "noPreviousSnapshot": "The return shows up from {{month}}.",
+    "classesNotClosing": "The total return is not shown because some classes do not match your imported operations.",
+    "noBase": "The return is not shown because the portfolio had no value at the start of the month."
+  },
+  "classReasons": {
+    "quantity_mismatch": "The quantity does not match your imported operations.",
+    "fixed_income_flow_unknown": "The fixed income flow is missing from the imported operations.",
+    "asset_without_snapshot": "An asset has no record at the start of the month.",
+    "unconvertible_flow": "An operation in another currency has no rate to convert it.",
+    "no_base": "The class had no value at the start of the month."
+  },
+  "benchmarks": {
+    "cdi": "CDI",
+    "ipca": "IPCA",
+    "ibovespa": "Ibovespa",
+    "reference": "for {{month}}",
+    "not_configured": "Unavailable: the index source is not configured.",
+    "no_data": "No reading for this month."
+  },
+  "moves": {
+    "title": "Gainers and losers",
+    "description": "Price change of the assets in the month. It is market data, not an estimate of your account.",
+    "gainers": "Biggest gains",
+    "losers": "Biggest drops",
+    "none": "No asset in this group."
+  },
+  "income": {
+    "title": "Income of the month",
+    "none": "No income in the month.",
+    "operations": "From your imported operations.",
+    "ledger": "from your position on the ex-date"
+  },
+  "concentration": {
+    "issuers": "Concentration by issuer",
+    "issuersDescription": "The largest issuers of the portfolio at the end of the month.",
+    "sectors": "Concentration by sector",
+    "sectorsDescription": "Sectors of stocks, REITs and real estate funds.",
+    "sectorsEmpty": "No sector to show.",
+    "fgcClear": "Nothing above the FGC limit per institution.",
+    "fgcOver": "Above the FGC limit: {{amount}}.",
+    "fgcGroup": "{{name}}: {{amount}} above the limit"
+  }
+}

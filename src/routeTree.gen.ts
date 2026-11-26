@@ -35,10 +35,13 @@ import { Route as PlatformAdminLinksRouteImport } from './routes/_platform/admin
 import { Route as PlatformAdminTokensRouteImport } from './routes/_platform/admin.tokens'
 import { Route as AvisosSairTokenRouteImport } from './routes/avisos.sair.$token'
 import { Route as AuthAppPortfolioIndexRouteImport } from './routes/_auth/_app/portfolio.index'
+import { Route as AuthAppPortfolioAgendaRouteImport } from './routes/_auth/_app/portfolio.agenda'
 import { Route as AuthAppPortfolioAssetsRouteImport } from './routes/_auth/_app/portfolio.assets'
+import { Route as AuthAppPortfolioChangesRouteImport } from './routes/_auth/_app/portfolio.changes'
 import { Route as AuthAppPortfolioContributionRouteImport } from './routes/_auth/_app/portfolio.contribution'
 import { Route as AuthAppPortfolioGetStartedRouteImport } from './routes/_auth/_app/portfolio.get-started'
 import { Route as AuthAppPortfolioGoalsRouteImport } from './routes/_auth/_app/portfolio.goals'
+import { Route as AuthAppPortfolioReviewRouteImport } from './routes/_auth/_app/portfolio.review'
 import { Route as AuthAppPortfolioTargetsRouteImport } from './routes/_auth/_app/portfolio.targets'
 import { Route as AuthAppSettingsIndexRouteImport } from './routes/_auth/_app/settings.index'
 import { Route as AuthAppSettingsTabRouteImport } from './routes/_auth/_app/settings.$tab'
@@ -177,9 +180,19 @@ const AuthAppPortfolioIndexRoute = AuthAppPortfolioIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthAppPortfolioRoute,
 } as any)
+const AuthAppPortfolioAgendaRoute = AuthAppPortfolioAgendaRouteImport.update({
+  id: '/agenda',
+  path: '/agenda',
+  getParentRoute: () => AuthAppPortfolioRoute,
+} as any)
 const AuthAppPortfolioAssetsRoute = AuthAppPortfolioAssetsRouteImport.update({
   id: '/assets',
   path: '/assets',
+  getParentRoute: () => AuthAppPortfolioRoute,
+} as any)
+const AuthAppPortfolioChangesRoute = AuthAppPortfolioChangesRouteImport.update({
+  id: '/changes',
+  path: '/changes',
   getParentRoute: () => AuthAppPortfolioRoute,
 } as any)
 const AuthAppPortfolioContributionRoute =
@@ -197,6 +210,11 @@ const AuthAppPortfolioGetStartedRoute =
 const AuthAppPortfolioGoalsRoute = AuthAppPortfolioGoalsRouteImport.update({
   id: '/goals',
   path: '/goals',
+  getParentRoute: () => AuthAppPortfolioRoute,
+} as any)
+const AuthAppPortfolioReviewRoute = AuthAppPortfolioReviewRouteImport.update({
+  id: '/review',
+  path: '/review',
   getParentRoute: () => AuthAppPortfolioRoute,
 } as any)
 const AuthAppPortfolioTargetsRoute = AuthAppPortfolioTargetsRouteImport.update({
@@ -277,10 +295,13 @@ export interface FileRoutesByFullPath {
   '/avisos/sair/$token': typeof AvisosSairTokenRoute
   '/onboarding/': typeof AuthOnboardingIndexRoute
   '/admin/': typeof PlatformAdminIndexRoute
+  '/portfolio/agenda': typeof AuthAppPortfolioAgendaRoute
   '/portfolio/assets': typeof AuthAppPortfolioAssetsRoute
+  '/portfolio/changes': typeof AuthAppPortfolioChangesRoute
   '/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
   '/portfolio/goals': typeof AuthAppPortfolioGoalsRoute
+  '/portfolio/review': typeof AuthAppPortfolioReviewRoute
   '/portfolio/targets': typeof AuthAppPortfolioTargetsRoute
   '/settings/$tab': typeof AuthAppSettingsTabRoute
   '/spending/connections': typeof AuthAppSpendingConnectionsRoute
@@ -312,10 +333,13 @@ export interface FileRoutesByTo {
   '/avisos/sair/$token': typeof AvisosSairTokenRoute
   '/onboarding': typeof AuthOnboardingIndexRoute
   '/admin': typeof PlatformAdminIndexRoute
+  '/portfolio/agenda': typeof AuthAppPortfolioAgendaRoute
   '/portfolio/assets': typeof AuthAppPortfolioAssetsRoute
+  '/portfolio/changes': typeof AuthAppPortfolioChangesRoute
   '/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
   '/portfolio/goals': typeof AuthAppPortfolioGoalsRoute
+  '/portfolio/review': typeof AuthAppPortfolioReviewRoute
   '/portfolio/targets': typeof AuthAppPortfolioTargetsRoute
   '/settings/$tab': typeof AuthAppSettingsTabRoute
   '/spending/connections': typeof AuthAppSpendingConnectionsRoute
@@ -355,10 +379,13 @@ export interface FileRoutesById {
   '/_auth/_app/': typeof AuthAppIndexRoute
   '/_auth/onboarding/': typeof AuthOnboardingIndexRoute
   '/_platform/admin/': typeof PlatformAdminIndexRoute
+  '/_auth/_app/portfolio/agenda': typeof AuthAppPortfolioAgendaRoute
   '/_auth/_app/portfolio/assets': typeof AuthAppPortfolioAssetsRoute
+  '/_auth/_app/portfolio/changes': typeof AuthAppPortfolioChangesRoute
   '/_auth/_app/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/_auth/_app/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
   '/_auth/_app/portfolio/goals': typeof AuthAppPortfolioGoalsRoute
+  '/_auth/_app/portfolio/review': typeof AuthAppPortfolioReviewRoute
   '/_auth/_app/portfolio/targets': typeof AuthAppPortfolioTargetsRoute
   '/_auth/_app/settings/$tab': typeof AuthAppSettingsTabRoute
   '/_auth/_app/spending/connections': typeof AuthAppSpendingConnectionsRoute
@@ -396,10 +423,13 @@ export interface FileRouteTypes {
     | '/avisos/sair/$token'
     | '/onboarding/'
     | '/admin/'
+    | '/portfolio/agenda'
     | '/portfolio/assets'
+    | '/portfolio/changes'
     | '/portfolio/contribution'
     | '/portfolio/get-started'
     | '/portfolio/goals'
+    | '/portfolio/review'
     | '/portfolio/targets'
     | '/settings/$tab'
     | '/spending/connections'
@@ -431,10 +461,13 @@ export interface FileRouteTypes {
     | '/avisos/sair/$token'
     | '/onboarding'
     | '/admin'
+    | '/portfolio/agenda'
     | '/portfolio/assets'
+    | '/portfolio/changes'
     | '/portfolio/contribution'
     | '/portfolio/get-started'
     | '/portfolio/goals'
+    | '/portfolio/review'
     | '/portfolio/targets'
     | '/settings/$tab'
     | '/spending/connections'
@@ -473,10 +506,13 @@ export interface FileRouteTypes {
     | '/_auth/_app/'
     | '/_auth/onboarding/'
     | '/_platform/admin/'
+    | '/_auth/_app/portfolio/agenda'
     | '/_auth/_app/portfolio/assets'
+    | '/_auth/_app/portfolio/changes'
     | '/_auth/_app/portfolio/contribution'
     | '/_auth/_app/portfolio/get-started'
     | '/_auth/_app/portfolio/goals'
+    | '/_auth/_app/portfolio/review'
     | '/_auth/_app/portfolio/targets'
     | '/_auth/_app/settings/$tab'
     | '/_auth/_app/spending/connections'
@@ -685,11 +721,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAppPortfolioIndexRouteImport
       parentRoute: typeof AuthAppPortfolioRoute
     }
+    '/_auth/_app/portfolio/agenda': {
+      id: '/_auth/_app/portfolio/agenda'
+      path: '/agenda'
+      fullPath: '/portfolio/agenda'
+      preLoaderRoute: typeof AuthAppPortfolioAgendaRouteImport
+      parentRoute: typeof AuthAppPortfolioRoute
+    }
     '/_auth/_app/portfolio/assets': {
       id: '/_auth/_app/portfolio/assets'
       path: '/assets'
       fullPath: '/portfolio/assets'
       preLoaderRoute: typeof AuthAppPortfolioAssetsRouteImport
+      parentRoute: typeof AuthAppPortfolioRoute
+    }
+    '/_auth/_app/portfolio/changes': {
+      id: '/_auth/_app/portfolio/changes'
+      path: '/changes'
+      fullPath: '/portfolio/changes'
+      preLoaderRoute: typeof AuthAppPortfolioChangesRouteImport
       parentRoute: typeof AuthAppPortfolioRoute
     }
     '/_auth/_app/portfolio/contribution': {
@@ -711,6 +761,13 @@ declare module '@tanstack/react-router' {
       path: '/goals'
       fullPath: '/portfolio/goals'
       preLoaderRoute: typeof AuthAppPortfolioGoalsRouteImport
+      parentRoute: typeof AuthAppPortfolioRoute
+    }
+    '/_auth/_app/portfolio/review': {
+      id: '/_auth/_app/portfolio/review'
+      path: '/review'
+      fullPath: '/portfolio/review'
+      preLoaderRoute: typeof AuthAppPortfolioReviewRouteImport
       parentRoute: typeof AuthAppPortfolioRoute
     }
     '/_auth/_app/portfolio/targets': {
@@ -787,20 +844,26 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthAppPortfolioRouteChildren {
+  AuthAppPortfolioAgendaRoute: typeof AuthAppPortfolioAgendaRoute
   AuthAppPortfolioAssetsRoute: typeof AuthAppPortfolioAssetsRoute
+  AuthAppPortfolioChangesRoute: typeof AuthAppPortfolioChangesRoute
   AuthAppPortfolioContributionRoute: typeof AuthAppPortfolioContributionRoute
   AuthAppPortfolioGetStartedRoute: typeof AuthAppPortfolioGetStartedRoute
   AuthAppPortfolioGoalsRoute: typeof AuthAppPortfolioGoalsRoute
+  AuthAppPortfolioReviewRoute: typeof AuthAppPortfolioReviewRoute
   AuthAppPortfolioTargetsRoute: typeof AuthAppPortfolioTargetsRoute
   AuthAppPortfolioIndexRoute: typeof AuthAppPortfolioIndexRoute
   AuthAppPortfolioClassesClassIdRoute: typeof AuthAppPortfolioClassesClassIdRoute
 }
 
 const AuthAppPortfolioRouteChildren: AuthAppPortfolioRouteChildren = {
+  AuthAppPortfolioAgendaRoute: AuthAppPortfolioAgendaRoute,
   AuthAppPortfolioAssetsRoute: AuthAppPortfolioAssetsRoute,
+  AuthAppPortfolioChangesRoute: AuthAppPortfolioChangesRoute,
   AuthAppPortfolioContributionRoute: AuthAppPortfolioContributionRoute,
   AuthAppPortfolioGetStartedRoute: AuthAppPortfolioGetStartedRoute,
   AuthAppPortfolioGoalsRoute: AuthAppPortfolioGoalsRoute,
+  AuthAppPortfolioReviewRoute: AuthAppPortfolioReviewRoute,
   AuthAppPortfolioTargetsRoute: AuthAppPortfolioTargetsRoute,
   AuthAppPortfolioIndexRoute: AuthAppPortfolioIndexRoute,
   AuthAppPortfolioClassesClassIdRoute: AuthAppPortfolioClassesClassIdRoute,
