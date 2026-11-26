@@ -2164,6 +2164,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/portfolio-watch/agenda": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Agenda of the portfolio: events of the assets held and fixed income maturities
+         * @description Ex-dates, payments, assemblies and earnings releases of the assets the account holds, plus the maturities of fixed income securities and Tesouro Direto positions, earliest first, inside the window. Each item carries the amount per unit and the amount for the account (current quantity x amount per unit, or the projected value at maturity), always marked as estimated, and the link to the notice when there is one. With `holder` the quantities and the maturities are only those of that holder. Available on every plan.
+         */
+        get: operations["PortfolioWatchController_agendaOf"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/portfolio-watch/changes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What changed in the portfolio: official documents of the assets held, summarized
+         * @description Documents published in the last 7 or 30 days about the assets the account holds (relevant facts, notices, results, monthly reports). Each item carries the summary made once per document, its kind and relevance, the share of the asset in the portfolio (written by the code, no model per account), the link and the source. The most relevant for the portfolio come first, then the newest. A document without summary (over the daily budget, scanned, too large) shows only its title link and "Resumo indisponível". With `classId` only assets of that class; with `holder` only what is theirs. Premium: other plans get `plan.feature_locked` with the count of documents and no content.
+         */
+        get: operations["PortfolioWatchController_changesOf"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/portfolio-watch/monthly-reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Months that have a monthly review
+         * @description The months with a review of the portfolio, newest first, with the return of the portfolio in each when there is one. Available on every plan.
+         */
+        get: operations["PortfolioWatchController_monthlyReviewsOf"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/portfolio-watch/monthly-reviews/{month}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Monthly review of the portfolio
+         * @description The numbers of one month, all written by the code: return of the portfolio and of each class (only where the imported operations explain the change in quantities), CDI, IPCA and Ibovespa for the month, assets that rose and fell the most, income, concentration by issuer and sector and the exposure above the FGC limit. Built once at the start of the next month. The numbers are on every plan; `summary`, the paragraph written over them, comes only on Premium and only when it was written (it needs the permission to send the numbers).
+         */
+        get: operations["PortfolioWatchController_monthlyReviewOf"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/portfolio/concentration": {
         parameters: {
             query?: never;
@@ -10482,8 +10562,8 @@ export interface operations {
         parameters: {
             query: {
                 /** @description Which summary the payload is for */
-                kind: "month" | "cuts" | "portfolio";
-                /** @description Month, YYYY-MM, for month and cuts; defaults to the last closed month */
+                kind: "month" | "cuts" | "portfolio" | "monthly_review";
+                /** @description Month, YYYY-MM, for month and cuts (defaults to the last closed month) and monthly_review (required) */
                 month?: string;
                 /** @description Simulated savings goal in basis points, for cuts */
                 goalBps?: number;
@@ -10507,7 +10587,7 @@ export interface operations {
                          * @description Which summary the payload is for
                          * @enum {string}
                          */
-                        kind: "month" | "cuts" | "portfolio";
+                        kind: "month" | "cuts" | "portfolio" | "monthly_review";
                         /** @description Current notice version */
                         noticeVersion: number;
                         /** @description Exactly the object sent to the language model, figures only */
@@ -10623,6 +10703,57 @@ export interface operations {
                                     /** @description Amount, formatted */
                                     valor: string;
                                 }[];
+                            };
+                        } | {
+                            /** @description Month reviewed, YYYY-MM */
+                            mes: string;
+                            /** @description Return of the portfolio in the month, formatted with sign */
+                            rentabilidade_pct: string | null;
+                            /**
+                             * @description Why the return is missing
+                             * @enum {string|null}
+                             */
+                            sem_rentabilidade_motivo: "no_operations" | "no_previous_snapshot" | "classes_not_closing" | "no_base" | null;
+                            /** @description Return by class */
+                            por_classe: {
+                                /** @description Stable key of the class: the system key or custom_<n> */
+                                chave: string;
+                                /** @description Default label of a system class in the effective locale */
+                                rotulo_padrao?: string;
+                                /** @description Return of the class in the month, formatted with sign */
+                                rentabilidade_pct: string | null;
+                            }[];
+                            indices: {
+                                /** @description CDI in the month, formatted */
+                                cdi_pct: string | null;
+                                /** @description IPCA in the month, formatted */
+                                ipca_pct: string | null;
+                                /** @description Ibovespa in the month, formatted */
+                                ibovespa_pct: string | null;
+                            };
+                            /** @description Assets that rose the most */
+                            maiores_altas: {
+                                /** @description Key of the asset, to be written as a marker */
+                                chave: string;
+                                /** @description Price variation in the month, formatted */
+                                variacao_pct: string;
+                            }[];
+                            /** @description Assets that fell the most */
+                            maiores_quedas: {
+                                /** @description Key of the asset, to be written as a marker */
+                                chave: string;
+                                /** @description Price variation in the month, formatted */
+                                variacao_pct: string;
+                            }[];
+                            /** @description Income of the month as a share of the portfolio, formatted */
+                            proventos_pct_carteira: string | null;
+                            concentracao: {
+                                /** @description Share of the largest issuer, formatted */
+                                maior_emissor_pct: string | null;
+                                /** @description Share of the largest sector of the equity portfolio, formatted */
+                                maior_setor_pct: string | null;
+                                /** @description Whether any amount is above the FGC limit */
+                                acima_do_fgc: boolean;
                             };
                         };
                     };
@@ -21282,6 +21413,562 @@ export interface operations {
                         };
                     };
                     "text/csv": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PortfolioWatchController_agendaOf: {
+        parameters: {
+            query: {
+                /** @description First day of the window, YYYY-MM-DD, inclusive */
+                from: string;
+                /** @description Last day of the window, YYYY-MM-DD, inclusive. At most 366 days after `from` */
+                to: string;
+                /** @description Holder filter: `any` (default) is everything, `all` is only what belongs to the whole account ("Conta toda"), or the id of a person to see only what is theirs */
+                holder?: ("any" | "all") | string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Agenda of the window */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description First day of the window, YYYY-MM-DD */
+                        from: string;
+                        /** @description Last day of the window, YYYY-MM-DD */
+                        to: string;
+                        /** @description Events of the assets the account holds and fixed income maturities, earliest first */
+                        items: {
+                            /**
+                             * Format: uuid
+                             * @description Id of the event, or of the security or Tesouro Direto position that matures
+                             */
+                            id: string;
+                            /**
+                             * @description What happens: a payout, an assembly, an earnings release or the maturity of a fixed income holding
+                             * @enum {string}
+                             */
+                            kind: "dividend" | "jcp" | "fii_income" | "amortization" | "assembly" | "earnings_release" | "fixed_income_maturity" | "treasury_maturity";
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset the event is about; null for the maturity of a fixed income security
+                             */
+                            assetId: string | null;
+                            /**
+                             * Format: uuid
+                             * @description Fixed income security id or Tesouro Direto position id; null for an event of an asset
+                             */
+                            holdingId: string | null;
+                            /** @description Ticker of the asset, or name of the security. Untrusted text */
+                            name: string;
+                            /** @description Date the item sorts by, YYYY-MM-DD: the earliest of its dates that falls inside the window */
+                            date: string;
+                            /** @description Ex-date (data-com), YYYY-MM-DD; null when it does not apply */
+                            exDate: string | null;
+                            /** @description Payment date, YYYY-MM-DD; null when it does not apply or is not announced */
+                            paymentDate: string | null;
+                            /** @description Date of the assembly, of the release or of the maturity, YYYY-MM-DD; null for a payout */
+                            eventDate: string | null;
+                            /** @description Amount per unit held, decimal string in `currency`; null when the notice has none */
+                            amountPerUnit: string | null;
+                            /** @description Currency of the amounts, ISO 4217 */
+                            currency: string;
+                            /** @description Estimated amount for the account in minor units of `currency`: current quantity x amount per unit, or the projected value at maturity */
+                            amountForAccountMinor: number | null;
+                            /** @description True when `amountForAccountMinor` rests on today quantity or on a projection, so it can change */
+                            estimated: boolean;
+                            /** @description Link to the notice that announced the event, when there is one */
+                            documentUrl: string | null;
+                        }[];
+                    };
+                };
+            };
+            /** @description Invalid query (zod validation details in meta.errors) or a window that ends before it starts or spans more than 366 days */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PortfolioWatchController_changesOf: {
+        parameters: {
+            query?: {
+                /** @description Size of the window, in days back from now: 7 (default) or 30 */
+                days?: "7" | "30";
+                /** @description Only the assets of this asset class */
+                classId?: string;
+                /** @description Holder filter: `any` (default) is everything, `all` is only what belongs to the whole account ("Conta toda"), or the id of a person to see only what is theirs */
+                holder?: ("any" | "all") | string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Documents of the window */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Window used, in days */
+                        days: number;
+                        /** @description Fixed line, written by the code, that this is not a recommendation to buy or sell */
+                        notice: string;
+                        /** @description Documents of the assets the account holds, most relevant for the portfolio first, then newest */
+                        items: {
+                            /**
+                             * Format: uuid
+                             * @description Id of the document
+                             */
+                            id: string;
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset the document is about, the heaviest in the portfolio when it covers more than one
+                             */
+                            assetId: string;
+                            /** @description Ticker of the asset. Untrusted text */
+                            symbol: string;
+                            /** @description Where the document comes from: `cvm_ipe`, `cvm_itr` or `b3_fnet` */
+                            source: string;
+                            /** @description Category of the document as published, for example `relevant_fact` */
+                            category: string;
+                            /** @description Title of the document as published. Untrusted text */
+                            title: string;
+                            /**
+                             * @description What the document is, from the summary; null when there is no summary
+                             * @enum {string|null}
+                             */
+                            kind: "result" | "income" | "relevant_fact" | "meeting" | "management" | "routine" | null;
+                            /** @description Publication date, YYYY-MM-DD */
+                            date: string;
+                            /** @description Summary of 2 to 3 sentences in the language of the account, or "Resumo indisponível" when there is none. Untrusted text */
+                            summary: string;
+                            /** @description False when the document has only its title and link: over the daily budget, scanned, too large or a financial statements package */
+                            summaryAvailable: boolean;
+                            /** @description How much the document weighs, 0 to 3; null when there is no summary */
+                            relevance: number | null;
+                            /** @description Share of the asset in the portfolio, in basis points; null when the asset has no value yet */
+                            weightBps: number | null;
+                            /** @description Sentence written by the code, for example "XPLG11 é 8% da sua carteira." */
+                            weightLine: string | null;
+                            /** @description Link to the official document */
+                            documentUrl: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Invalid query (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The account is not on Premium; meta.documentCount is how many documents the window has */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PortfolioWatchController_monthlyReviewsOf: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Months with a review */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Months that have a review, newest first */
+                        items: {
+                            /** @description Month reviewed, YYYY-MM */
+                            month: string;
+                            /** @description Return of the portfolio in the month, in percent */
+                            returnPct: number | null;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PortfolioWatchController_monthlyReviewOf: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Month of the review, YYYY-MM */
+                month: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Review of the month */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Month reviewed, YYYY-MM */
+                        month: string;
+                        /** @description Base currency of every amount, ISO 4217 */
+                        baseCurrency: string;
+                        /** @description Return of the whole portfolio in the month, in percent. Absent unless every class is explained by the operations */
+                        returnPct?: number;
+                        /** @description Value and return by asset class */
+                        byClass: {
+                            /**
+                             * Format: uuid
+                             * @description Asset class; null for what could not be tied to a class
+                             */
+                            classId: string | null;
+                            /** @description Value of the class at the start of the month, minor units of the base currency */
+                            startMinor: number;
+                            /** @description Value of the class at the end of the month, minor units of the base currency */
+                            endMinor: number;
+                            /** @description Return of the class in the month, in percent. Absent when the operations do not explain the class */
+                            returnPct?: number;
+                            /**
+                             * @description Why the class has no return
+                             * @enum {string}
+                             */
+                            reason?: "quantity_mismatch" | "fixed_income_flow_unknown" | "asset_without_snapshot" | "unconvertible_flow" | "no_base";
+                        }[];
+                        benchmarks: {
+                            cdi: {
+                                /**
+                                 * @description `ok`, `not_configured` (the index source has no token) or `no_data` (no reading for the month)
+                                 * @enum {string}
+                                 */
+                                state: "ok" | "not_configured" | "no_data";
+                                /** @description Variation of the index in the month, in percent */
+                                returnPct: number | null;
+                                /** @description Month the reading refers to, YYYY-MM */
+                                referenceMonth: string | null;
+                            };
+                            ipca: {
+                                /**
+                                 * @description `ok`, `not_configured` (the index source has no token) or `no_data` (no reading for the month)
+                                 * @enum {string}
+                                 */
+                                state: "ok" | "not_configured" | "no_data";
+                                /** @description Variation of the index in the month, in percent */
+                                returnPct: number | null;
+                                /** @description Month the reading refers to, YYYY-MM */
+                                referenceMonth: string | null;
+                            };
+                            ibovespa: {
+                                /**
+                                 * @description `ok`, `not_configured` (the index source has no token) or `no_data` (no reading for the month)
+                                 * @enum {string}
+                                 */
+                                state: "ok" | "not_configured" | "no_data";
+                                /** @description Variation of the index in the month, in percent */
+                                returnPct: number | null;
+                                /** @description Month the reading refers to, YYYY-MM */
+                                referenceMonth: string | null;
+                            };
+                        };
+                        /** @description Assets that rose the most in price, up to 3 */
+                        topGainers: {
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset
+                             */
+                            assetId: string;
+                            /** @description Ticker of the asset. Untrusted text */
+                            symbol: string;
+                            /** @description Price variation between the two monthly photos, in percent. Market data, not an estimate of the account */
+                            variationPct: number;
+                        }[];
+                        /** @description Assets that fell the most in price, up to 3 */
+                        topLosers: {
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset
+                             */
+                            assetId: string;
+                            /** @description Ticker of the asset. Untrusted text */
+                            symbol: string;
+                            /** @description Price variation between the two monthly photos, in percent. Market data, not an estimate of the account */
+                            variationPct: number;
+                        }[];
+                        income: {
+                            /** @description Income of the month, minor units of the base currency */
+                            amountMinor: number;
+                            /**
+                             * @description `operations` from the imported history, `ledger` from the position held on the ex-date
+                             * @enum {string}
+                             */
+                            source: "operations" | "ledger";
+                        };
+                        concentration: {
+                            /** @description Largest issuers of the portfolio */
+                            topIssuers: {
+                                /** @description Issuer group id or bucket key */
+                                key: string;
+                                /** @description Name of the issuer group, when known. Untrusted text */
+                                name: string | null;
+                                /** @description Value held, minor units of the base currency */
+                                valueMinor: number;
+                                /** @description Share of the portfolio, basis points */
+                                shareBps: number;
+                            }[];
+                            /** @description Sectors of the equity portfolio */
+                            sectors: {
+                                /** @description Sector key */
+                                key: string;
+                                /** @description Value held, minor units of the base currency */
+                                valueMinor: number;
+                                /** @description Share of the equity portfolio, basis points */
+                                shareBps: number;
+                            }[];
+                            fgcExposure: {
+                                /** @description Total above the FGC limit per institution, minor units */
+                                overLimitMinor: number;
+                                /** @description Conglomerates with an amount above the limit */
+                                groups: {
+                                    /** @description Financial conglomerate id */
+                                    groupId: string;
+                                    /** @description Name of the conglomerate. Untrusted text */
+                                    groupName: string;
+                                    /** @description Amount above the FGC limit, minor units */
+                                    overMinor: number;
+                                }[];
+                            };
+                        };
+                        coverage: {
+                            /**
+                             * @description Why the portfolio return is missing; null when it is there
+                             * @enum {string|null}
+                             */
+                            reason: "no_operations" | "no_previous_snapshot" | "classes_not_closing" | "no_base" | null;
+                            /** @description Sentence written by the code explaining the missing return */
+                            message: string | null;
+                            /** @description When the review was built, ISO 8601 */
+                            generatedAt: string;
+                        };
+                        /** @description Paragraph written over the numbers (paragraphs separated by a blank line, the main figure wrapped in ** **); null on the free plan, without the permission to send the numbers, or when it was not written */
+                        summary: string | null;
+                    };
+                };
+            };
+            /** @description Invalid month (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description There is no review for the month */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
                         /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
                         type: string;
                         /** @description Error class name */

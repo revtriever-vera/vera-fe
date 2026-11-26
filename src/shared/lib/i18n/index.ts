@@ -32,6 +32,12 @@ import ptBRPortfolioContribution from './resources/pt-BR/portfolioContribution.j
 import enPortfolioContribution from './resources/en/portfolioContribution.json';
 import ptBRPortfolioGoals from './resources/pt-BR/portfolioGoals.json';
 import enPortfolioGoals from './resources/en/portfolioGoals.json';
+import ptBRPortfolioAgenda from './resources/pt-BR/portfolioAgenda.json';
+import enPortfolioAgenda from './resources/en/portfolioAgenda.json';
+import ptBRPortfolioChanges from './resources/pt-BR/portfolioChanges.json';
+import ptBRPortfolioReview from './resources/pt-BR/portfolioReview.json';
+import enPortfolioChanges from './resources/en/portfolioChanges.json';
+import enPortfolioReview from './resources/en/portfolioReview.json';
 import ptBRSpendingRecurring from './resources/pt-BR/spendingRecurring.json';
 import enSpendingRecurring from './resources/en/spendingRecurring.json';
 import ptBROnboarding from './resources/pt-BR/onboarding.json';
@@ -82,6 +88,9 @@ type LocaleResources = {
     readonly portfolioTargets: typeof ptBRPortfolioTargets;
     readonly portfolioContribution: typeof ptBRPortfolioContribution;
     readonly portfolioGoals: typeof ptBRPortfolioGoals;
+    readonly portfolioAgenda: typeof ptBRPortfolioAgenda;
+    readonly portfolioChanges: typeof ptBRPortfolioChanges;
+    readonly portfolioReview: typeof ptBRPortfolioReview;
     readonly spendingRecurring: typeof ptBRSpendingRecurring;
     readonly onboarding: typeof ptBROnboarding;
     readonly spending: typeof ptBRSpending;
@@ -116,6 +125,9 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolioTargets: ptBRPortfolioTargets,
         portfolioContribution: ptBRPortfolioContribution,
         portfolioGoals: ptBRPortfolioGoals,
+        portfolioAgenda: ptBRPortfolioAgenda,
+        portfolioChanges: ptBRPortfolioChanges,
+        portfolioReview: ptBRPortfolioReview,
         spendingRecurring: ptBRSpendingRecurring,
         onboarding: ptBROnboarding,
         spending: ptBRSpending,
@@ -148,6 +160,9 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolioTargets: enPortfolioTargets,
         portfolioContribution: enPortfolioContribution,
         portfolioGoals: enPortfolioGoals,
+        portfolioAgenda: enPortfolioAgenda,
+        portfolioChanges: enPortfolioChanges,
+        portfolioReview: enPortfolioReview,
         spendingRecurring: enSpendingRecurring,
         onboarding: enOnboarding,
         spending: enSpending,
@@ -191,6 +206,9 @@ void i18next.use(initReactI18next).init({
         'portfolioTargets',
         'portfolioContribution',
         'portfolioGoals',
+        'portfolioAgenda',
+        'portfolioChanges',
+        'portfolioReview',
         'spendingRecurring',
         'onboarding',
         'spending',

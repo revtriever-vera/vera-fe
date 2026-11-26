@@ -1,0 +1,46 @@
+{
+  "title": "Agenda",
+  "subtitle": "O que acontece nos próximos 30 dias com os ativos que você tem: datas de proventos, assembleias, resultados e vencimentos.",
+  "loading": "Carregando a agenda",
+  "loadError": "Não foi possível carregar a agenda.",
+  "retry": "Tentar de novo",
+  "empty": "Nenhum evento nos próximos 30 dias para os seus ativos.",
+  "emptyFiltered": "Nenhum evento nos próximos 30 dias com este filtro.",
+  "week": "Semana de {{date}}",
+  "filter": {
+    "label": "Filtrar por tipo",
+    "all": "Todos",
+    "income": "Proventos",
+    "assembly": "Assembleias e resultados",
+    "maturity": "Vencimentos"
+  },
+  "kinds": {
+    "dividend": "Dividendo",
+    "jcp": "JCP",
+    "fii_income": "Rendimento de FII",
+    "amortization": "Amortização",
+    "assembly": "Assembleia",
+    "earnings_release": "Resultado",
+    "fixed_income_maturity": "Vencimento",
+    "treasury_maturity": "Vencimento do Tesouro"
+  },
+  "item": {
+    "exDate": "Data-com {{date}}",
+    "paymentDate": "Pagamento {{date}}",
+    "eventDate": {
+      "assembly": "Assembleia em {{date}}",
+      "earnings_release": "Resultado em {{date}}",
+      "fixed_income_maturity": "Vence em {{date}}",
+      "treasury_maturity": "Vence em {{date}}",
+      "dividend": "{{date}}",
+      "jcp": "{{date}}",
+      "fii_income": "{{date}}",
+      "amortization": "{{date}}"
+    },
+    "perUnit": "{{amount}} por cota",
+    "forYou": "Para você",
+    "forYouEstimated": "Estimado para você",
+    "document": "Abrir o documento de {{name}}",
+    "fixedIncome": "Ver {{name}} em renda fixa"
+  }
+}

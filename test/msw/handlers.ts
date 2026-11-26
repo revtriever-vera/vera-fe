@@ -5,6 +5,9 @@ import { assistantHandlers } from './handlers/assistant.handlers';
 import { authHandlers } from './handlers/auth.handlers';
 import { calendarHandlers } from './handlers/calendar.handlers';
 import { billingHandlers } from './handlers/billing.handlers';
+import { agendaHandlers } from './handlers/agenda.handlers';
+import { changesHandlers } from './handlers/changes.handlers';
+import { monthlyReviewHandlers } from './handlers/monthly-review.handlers';
 import { goalsHandlers } from './handlers/goals.handlers';
 import { integrationsHandlers } from './handlers/integrations.handlers';
 import { membersHandlers } from './handlers/members.handlers';
@@ -28,6 +31,9 @@ export const handlers: RequestHandler[] = [
     ...integrationsHandlers,
     ...onboardingHandlers(),
     ...portfolioHandlers(),
+    ...agendaHandlers(),
+    ...changesHandlers(),
+    ...monthlyReviewHandlers(),
     ...goalsHandlers(),
     ...spendingHandlers(),
     ...whatsappHandlers,

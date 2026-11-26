@@ -1,0 +1,36 @@
+{
+  "title": "What changed",
+  "subtitle": "New official documents about the assets you hold, with a short summary and the weight of each asset in your portfolio.",
+  "seeAll": "See all",
+  "loading": "Loading what changed",
+  "loadError": "Could not load what changed.",
+  "retry": "Try again",
+  "notice": "This is not a recommendation to buy or sell.",
+  "empty": {
+    "7": "No new documents about your assets this week.",
+    "30": "No new documents about your assets in the last 30 days."
+  },
+  "window": {
+    "label": "Period",
+    "7": "7 days",
+    "30": "30 days"
+  },
+  "kinds": {
+    "result": "Results",
+    "income": "Income",
+    "relevant_fact": "Material fact",
+    "meeting": "Meeting",
+    "management": "Management",
+    "routine": "Routine",
+    "other": "Document"
+  },
+  "item": {
+    "unavailable": "Summary unavailable",
+    "document": "View document for {{symbol}}"
+  },
+  "locked": {
+    "count_one": "{{count}} new document about your assets this week. With Premium you read a summary of each one.",
+    "count_other": "{{count}} new documents about your assets this week. With Premium you read a summary of each one.",
+    "noCount": "With Premium you see the new documents about your assets, with a summary of each one."
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "title": "Raio-X do mês",
+  "subtitle": "Os números do mês da sua carteira, calculados pelo código a partir das suas posições e operações.",
+  "loading": "Carregando o Raio-X do mês",
+  "loadError": "Não foi possível carregar o Raio-X do mês.",
+  "retry": "Tentar de novo",
+  "notice": "Isto não é uma recomendação de compra ou venda.",
+  "month": {
+    "label": "Mês do Raio-X"
+  },
+  "empty": {
+    "title": "O primeiro Raio-X ainda não saiu",
+    "description": "Ele é montado no início de cada mês, com o mês que acabou de fechar.",
+    "missing": "Não há Raio-X para este mês."
+  },
+  "returns": {
+    "title": "Rentabilidade do mês",
+    "method": "Rentabilidade com aportes e resgates, pelas suas operações importadas.",
+    "portfolio": "Sua carteira",
+    "byClassTitle": "Por classe",
+    "byClassDescription": "Cada classe contra os indicadores do mês.",
+    "values": "De {{start}} para {{end}}",
+    "otherClass": "Sem classe",
+    "unavailable": "Sem rentabilidade",
+    "noOperations": "A rentabilidade aparece quando as suas operações estiverem importadas.",
+    "importLink": "Importar operações",
+    "noPreviousSnapshot": "A rentabilidade aparece a partir de {{month}}.",
+    "classesNotClosing": "A rentabilidade total não aparece porque há classes que não fecham com as suas operações importadas.",
+    "noBase": "A rentabilidade não aparece porque a carteira não tinha valor no início do mês."
+  },
+  "classReasons": {
+    "quantity_mismatch": "A quantidade não fecha com as suas operações importadas.",
+    "fixed_income_flow_unknown": "Falta o fluxo da renda fixa nas operações importadas.",
+    "asset_without_snapshot": "Há ativo sem registro no início do mês.",
+    "unconvertible_flow": "Há operação em outra moeda sem cotação para converter.",
+    "no_base": "A classe não tinha valor no início do mês."
+  },
+  "benchmarks": {
+    "cdi": "CDI",
+    "ipca": "IPCA",
+    "ibovespa": "Ibovespa",
+    "reference": "referente a {{month}}",
+    "not_configured": "Indisponível: a fonte do índice não está configurada.",
+    "no_data": "Sem leitura para este mês."
+  },
+  "moves": {
+    "title": "Altas e quedas",
+    "description": "Variação de preço dos ativos no mês. É dado de mercado, não uma estimativa da sua conta.",
+    "gainers": "Maiores altas",
+    "losers": "Maiores quedas",
+    "none": "Nenhum ativo neste grupo."
+  },
+  "income": {
+    "title": "Proventos do mês",
+    "none": "Nenhum provento no mês.",
+    "operations": "Pelas suas operações importadas.",
+    "ledger": "pela sua posição na data-com"
+  },
+  "concentration": {
+    "issuers": "Concentração por emissor",
+    "issuersDescription": "Os maiores emissores da carteira no fim do mês.",
+    "sectors": "Concentração por setor",
+    "sectorsDescription": "Setores das ações, FIIs e REITs.",
+    "sectorsEmpty": "Nenhum setor para mostrar.",
+    "fgcClear": "Nenhum valor acima do limite do FGC por instituição.",
+    "fgcOver": "Acima do limite do FGC: {{amount}}.",
+    "fgcGroup": "{{name}}: {{amount}} acima do limite"
+  }
+}
