@@ -76,16 +76,32 @@ interface OpenState {
     readonly cancel: () => void;
 }
 
+interface AlwaysState {
+    readonly always: boolean | null;
+    readonly setAlways: (always: boolean) => void;
+}
+
+function useAlwaysChoice(proposed: boolean | null): AlwaysState {
+    const [choice, setChoice] = useState<boolean | null>(null);
+    return { always: proposed === null ? null : (choice ?? proposed), setAlways: setChoice };
+}
+
+function buildChoice(picked: string | null, version: string | undefined, always: boolean | null): Record<string, unknown> {
+    return { ...(picked === null ? {} : { transactionId: picked, version }), ...(always === null ? {} : { always }) };
+}
+
+function findVersion(candidates: readonly ActionCandidate[], picked: string | null): string | undefined {
+    return candidates.find((candidate: ActionCandidate): boolean => candidate.id === picked)?.version;
+}
+
 function useOpenAction(action: ActionSummary): OpenState {
     const view: UseQueryResult<ActionView> = useAction(action.id, true);
     const confirm: UseMutationResult<ActionSummary, Error, ConfirmActionVariables> = useConfirmAction();
     const cancel: UseMutationResult<ActionSummary, Error, string> = useCancelAction();
     const [picked, setPicked] = useState<string | null>(null);
-    const [alwaysChoice, setAlways] = useState<boolean | null>(null);
-    const proposedAlways: boolean | null = view.data?.always ?? null;
-    const always: boolean | null = proposedAlways === null ? null : (alwaysChoice ?? proposedAlways);
+    const { always, setAlways }: AlwaysState = useAlwaysChoice(view.data?.always ?? null);
     const candidates: readonly ActionCandidate[] = view.data?.candidates ?? [];
-    const version: string | undefined = candidates.find((candidate: ActionCandidate): boolean => candidate.id === picked)?.version;
+    const version: string | undefined = findVersion(candidates, picked);
     return {
         candidates,
         picked,
@@ -102,7 +118,7 @@ function useOpenAction(action: ActionSummary): OpenState {
         confirm: (): void => {
             confirm.mutate({
                 id: action.id,
-                choice: { ...(picked === null ? {} : { transactionId: picked, version }), ...(always === null ? {} : { always }) }
+                choice: buildChoice(picked, version, always)
             });
         },
         confirmImport: (corrections: ImportCorrections): void => {
