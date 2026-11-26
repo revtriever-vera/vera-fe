@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatClock, formatDate, formatDayMonthNumeric, formatIsoDate, formatMonthName, isSameLocalDay } from './date';
+import { formatClock, formatDate, formatDayMonthNumeric, formatIsoDate, formatMonthName, formatMonthYear, isSameLocalDay } from './date';
 
 const SAME_INSTANT: Date = new Date('2026-01-15T14:30:00Z');
 
@@ -34,6 +34,17 @@ describe('formatMonthName', () => {
 
     it('devolve o texto de entrada quando não é um mês', () => {
         expect(formatMonthName('hoje', 'pt-BR')).toBe('hoje');
+    });
+});
+
+describe('formatMonthYear', () => {
+    it('escreve mês e ano, no idioma pedido', () => {
+        expect(formatMonthYear('2026-09', 'pt-BR')).toBe('setembro de 2026');
+        expect(formatMonthYear('2026-09', 'en')).toBe('September 2026');
+    });
+
+    it('devolve o texto de entrada quando não é um mês', () => {
+        expect(formatMonthYear('hoje', 'pt-BR')).toBe('hoje');
     });
 });
 

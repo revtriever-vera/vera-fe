@@ -41,6 +41,7 @@ import { Route as AuthAppPortfolioChangesRouteImport } from './routes/_auth/_app
 import { Route as AuthAppPortfolioContributionRouteImport } from './routes/_auth/_app/portfolio.contribution'
 import { Route as AuthAppPortfolioGetStartedRouteImport } from './routes/_auth/_app/portfolio.get-started'
 import { Route as AuthAppPortfolioGoalsRouteImport } from './routes/_auth/_app/portfolio.goals'
+import { Route as AuthAppPortfolioReviewRouteImport } from './routes/_auth/_app/portfolio.review'
 import { Route as AuthAppPortfolioTargetsRouteImport } from './routes/_auth/_app/portfolio.targets'
 import { Route as AuthAppSettingsIndexRouteImport } from './routes/_auth/_app/settings.index'
 import { Route as AuthAppSettingsTabRouteImport } from './routes/_auth/_app/settings.$tab'
@@ -211,6 +212,11 @@ const AuthAppPortfolioGoalsRoute = AuthAppPortfolioGoalsRouteImport.update({
   path: '/goals',
   getParentRoute: () => AuthAppPortfolioRoute,
 } as any)
+const AuthAppPortfolioReviewRoute = AuthAppPortfolioReviewRouteImport.update({
+  id: '/review',
+  path: '/review',
+  getParentRoute: () => AuthAppPortfolioRoute,
+} as any)
 const AuthAppPortfolioTargetsRoute = AuthAppPortfolioTargetsRouteImport.update({
   id: '/targets',
   path: '/targets',
@@ -295,6 +301,7 @@ export interface FileRoutesByFullPath {
   '/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
   '/portfolio/goals': typeof AuthAppPortfolioGoalsRoute
+  '/portfolio/review': typeof AuthAppPortfolioReviewRoute
   '/portfolio/targets': typeof AuthAppPortfolioTargetsRoute
   '/settings/$tab': typeof AuthAppSettingsTabRoute
   '/spending/connections': typeof AuthAppSpendingConnectionsRoute
@@ -332,6 +339,7 @@ export interface FileRoutesByTo {
   '/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
   '/portfolio/goals': typeof AuthAppPortfolioGoalsRoute
+  '/portfolio/review': typeof AuthAppPortfolioReviewRoute
   '/portfolio/targets': typeof AuthAppPortfolioTargetsRoute
   '/settings/$tab': typeof AuthAppSettingsTabRoute
   '/spending/connections': typeof AuthAppSpendingConnectionsRoute
@@ -377,6 +385,7 @@ export interface FileRoutesById {
   '/_auth/_app/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/_auth/_app/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
   '/_auth/_app/portfolio/goals': typeof AuthAppPortfolioGoalsRoute
+  '/_auth/_app/portfolio/review': typeof AuthAppPortfolioReviewRoute
   '/_auth/_app/portfolio/targets': typeof AuthAppPortfolioTargetsRoute
   '/_auth/_app/settings/$tab': typeof AuthAppSettingsTabRoute
   '/_auth/_app/spending/connections': typeof AuthAppSpendingConnectionsRoute
@@ -420,6 +429,7 @@ export interface FileRouteTypes {
     | '/portfolio/contribution'
     | '/portfolio/get-started'
     | '/portfolio/goals'
+    | '/portfolio/review'
     | '/portfolio/targets'
     | '/settings/$tab'
     | '/spending/connections'
@@ -457,6 +467,7 @@ export interface FileRouteTypes {
     | '/portfolio/contribution'
     | '/portfolio/get-started'
     | '/portfolio/goals'
+    | '/portfolio/review'
     | '/portfolio/targets'
     | '/settings/$tab'
     | '/spending/connections'
@@ -501,6 +512,7 @@ export interface FileRouteTypes {
     | '/_auth/_app/portfolio/contribution'
     | '/_auth/_app/portfolio/get-started'
     | '/_auth/_app/portfolio/goals'
+    | '/_auth/_app/portfolio/review'
     | '/_auth/_app/portfolio/targets'
     | '/_auth/_app/settings/$tab'
     | '/_auth/_app/spending/connections'
@@ -751,6 +763,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAppPortfolioGoalsRouteImport
       parentRoute: typeof AuthAppPortfolioRoute
     }
+    '/_auth/_app/portfolio/review': {
+      id: '/_auth/_app/portfolio/review'
+      path: '/review'
+      fullPath: '/portfolio/review'
+      preLoaderRoute: typeof AuthAppPortfolioReviewRouteImport
+      parentRoute: typeof AuthAppPortfolioRoute
+    }
     '/_auth/_app/portfolio/targets': {
       id: '/_auth/_app/portfolio/targets'
       path: '/targets'
@@ -831,6 +850,7 @@ interface AuthAppPortfolioRouteChildren {
   AuthAppPortfolioContributionRoute: typeof AuthAppPortfolioContributionRoute
   AuthAppPortfolioGetStartedRoute: typeof AuthAppPortfolioGetStartedRoute
   AuthAppPortfolioGoalsRoute: typeof AuthAppPortfolioGoalsRoute
+  AuthAppPortfolioReviewRoute: typeof AuthAppPortfolioReviewRoute
   AuthAppPortfolioTargetsRoute: typeof AuthAppPortfolioTargetsRoute
   AuthAppPortfolioIndexRoute: typeof AuthAppPortfolioIndexRoute
   AuthAppPortfolioClassesClassIdRoute: typeof AuthAppPortfolioClassesClassIdRoute
@@ -843,6 +863,7 @@ const AuthAppPortfolioRouteChildren: AuthAppPortfolioRouteChildren = {
   AuthAppPortfolioContributionRoute: AuthAppPortfolioContributionRoute,
   AuthAppPortfolioGetStartedRoute: AuthAppPortfolioGetStartedRoute,
   AuthAppPortfolioGoalsRoute: AuthAppPortfolioGoalsRoute,
+  AuthAppPortfolioReviewRoute: AuthAppPortfolioReviewRoute,
   AuthAppPortfolioTargetsRoute: AuthAppPortfolioTargetsRoute,
   AuthAppPortfolioIndexRoute: AuthAppPortfolioIndexRoute,
   AuthAppPortfolioClassesClassIdRoute: AuthAppPortfolioClassesClassIdRoute,

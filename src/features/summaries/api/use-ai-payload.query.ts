@@ -1,11 +1,11 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { apiClient, unwrap } from '@/shared/lib/api/client';
-import type { PayloadView, SummaryKind, SummaryParams } from '../types';
+import type { PayloadKind, PayloadView, SummaryParams } from '../types';
 import { aiKeys } from './ai-keys';
 
 const NO_CONTENT: number = 204;
 
-export function useAiPayload(kind: SummaryKind, params: SummaryParams, enabled: boolean = true): UseQueryResult<PayloadView | null> {
+export function useAiPayload(kind: PayloadKind, params: SummaryParams, enabled: boolean = true): UseQueryResult<PayloadView | null> {
     return useQuery({
         queryKey: aiKeys.payload(kind, params),
         queryFn: async ({ signal }): Promise<PayloadView | null> => {

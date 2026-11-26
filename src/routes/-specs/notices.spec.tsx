@@ -35,6 +35,12 @@ describe('Avisos por e-mail em Preferências', () => {
         expect(within(card).queryByText('Outros avisos')).toBeNull();
     });
 
+    it('lista o aviso mensal do Raio-X', async () => {
+        const card: HTMLElement = await openPreferences();
+
+        expect(await within(card).findByRole('switch', { name: 'Raio-X do mês' })).toBeChecked();
+    });
+
     it('lista o resumo semanal do que mudou', async () => {
         const card: HTMLElement = await openPreferences();
 
