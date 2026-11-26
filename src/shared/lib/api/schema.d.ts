@@ -1075,7 +1075,7 @@ export interface paths {
         put?: never;
         /**
          * Ask the assistant a question
-         * @description Stores the question and queues the answer; the answer is read from `GET /assistant/turns/{id}`. The turn is in `help` mode (answers from the help content) unless the plan includes the AI and the account allowed sending figures, then it is in `ai` mode. Refused up front, with nothing stored, when the usage band of the mode is used up. Limited to 20 turns per hour per person.
+         * @description Stores the question and queues the answer; the answer is read from `GET /assistant/turns/{id}`. The turn is in `help` mode (answers from the help content) unless the plan includes the AI and the account allowed sending figures, then it is in `ai` mode. Refused up front, with nothing stored, when the usage band of the mode is used up. Limited to 20 turns per hour per person. Sent as multipart with a `file` (the same files and limits as POST /investment-imports/preview, editors only), the turn runs the preview of the import before the answer: the language model of the assistant never receives the file, the lines or the amounts, only that a file was attached. The answer then carries a pending action (`investment_import`) whose card shows the preview (GET /assistant/actions/{id}) and is confirmed at POST /assistant/actions/{id}/confirm. A PDF or an image goes to a language reader and needs `modelConsent=true`, otherwise the call is refused with model.confirmation_required and nothing is stored. The conversation keeps only "Arquivo: <name>".
          */
         post: operations["AssistantChatController_send"];
         delete?: never;
@@ -2193,7 +2193,7 @@ export interface paths {
         };
         /**
          * What changed in the portfolio: official documents of the assets held, summarized
-         * @description Documents published in the last 7 or 30 days about the assets the account holds. Each item carries the summary, its kind and relevance, the share of the asset in the portfolio, the link and the source. A document without summary shows only its title link and "Resumo indisponível". Premium: other plans get `plan.feature_locked` with the count of documents and no content.
+         * @description Documents published in the last 7 or 30 days about the assets the account holds (relevant facts, notices, results, monthly reports). Each item carries the summary made once per document, its kind and relevance, the share of the asset in the portfolio (written by the code, no model per account), the link and the source. The most relevant for the portfolio come first, then the newest. A document without summary (over the daily budget, scanned, too large) shows only its title link and "Resumo indisponível". With `classId` only assets of that class; with `holder` only what is theirs. Premium: other plans get `plan.feature_locked` with the count of documents and no content.
          */
         get: operations["PortfolioWatchController_changesOf"];
         put?: never;
@@ -2233,7 +2233,7 @@ export interface paths {
         };
         /**
          * Monthly review of the portfolio
-         * @description The numbers of one month, all written by the code: return of the portfolio and of each class (only where the imported operations explain the change in quantities), CDI, IPCA and Ibovespa for the month, assets that rose and fell the most, income, concentration by issuer and sector and the exposure above the FGC limit. Built once at the start of the next month. Available on every plan.
+         * @description The numbers of one month, all written by the code: return of the portfolio and of each class (only where the imported operations explain the change in quantities), CDI, IPCA and Ibovespa for the month, assets that rose and fell the most, income, concentration by issuer and sector and the exposure above the FGC limit. Built once at the start of the next month. The numbers are on every plan; `summary`, the paragraph written over them, comes only on Premium and only when it was written (it needs the permission to send the numbers).
          */
         get: operations["PortfolioWatchController_monthlyReviewOf"];
         put?: never;
@@ -10563,7 +10563,7 @@ export interface operations {
             query: {
                 /** @description Which summary the payload is for */
                 kind: "month" | "cuts" | "portfolio" | "monthly_review";
-                /** @description Month, YYYY-MM, for month and cuts; defaults to the last closed month */
+                /** @description Month, YYYY-MM, for month and cuts (defaults to the last closed month) and monthly_review (required) */
                 month?: string;
                 /** @description Simulated savings goal in basis points, for cuts */
                 goalBps?: number;
@@ -10587,7 +10587,7 @@ export interface operations {
                          * @description Which summary the payload is for
                          * @enum {string}
                          */
-                        kind: "month" | "cuts" | "portfolio";
+                        kind: "month" | "cuts" | "portfolio" | "monthly_review";
                         /** @description Current notice version */
                         noticeVersion: number;
                         /** @description Exactly the object sent to the language model, figures only */
@@ -10703,6 +10703,57 @@ export interface operations {
                                     /** @description Amount, formatted */
                                     valor: string;
                                 }[];
+                            };
+                        } | {
+                            /** @description Month reviewed, YYYY-MM */
+                            mes: string;
+                            /** @description Return of the portfolio in the month, formatted with sign */
+                            rentabilidade_pct: string | null;
+                            /**
+                             * @description Why the return is missing
+                             * @enum {string|null}
+                             */
+                            sem_rentabilidade_motivo: "no_operations" | "no_previous_snapshot" | "classes_not_closing" | "no_base" | null;
+                            /** @description Return by class */
+                            por_classe: {
+                                /** @description Stable key of the class: the system key or custom_<n> */
+                                chave: string;
+                                /** @description Default label of a system class in the effective locale */
+                                rotulo_padrao?: string;
+                                /** @description Return of the class in the month, formatted with sign */
+                                rentabilidade_pct: string | null;
+                            }[];
+                            indices: {
+                                /** @description CDI in the month, formatted */
+                                cdi_pct: string | null;
+                                /** @description IPCA in the month, formatted */
+                                ipca_pct: string | null;
+                                /** @description Ibovespa in the month, formatted */
+                                ibovespa_pct: string | null;
+                            };
+                            /** @description Assets that rose the most */
+                            maiores_altas: {
+                                /** @description Key of the asset, to be written as a marker */
+                                chave: string;
+                                /** @description Price variation in the month, formatted */
+                                variacao_pct: string;
+                            }[];
+                            /** @description Assets that fell the most */
+                            maiores_quedas: {
+                                /** @description Key of the asset, to be written as a marker */
+                                chave: string;
+                                /** @description Price variation in the month, formatted */
+                                variacao_pct: string;
+                            }[];
+                            /** @description Income of the month as a share of the portfolio, formatted */
+                            proventos_pct_carteira: string | null;
+                            concentracao: {
+                                /** @description Share of the largest issuer, formatted */
+                                maior_emissor_pct: string | null;
+                                /** @description Share of the largest sector of the equity portfolio, formatted */
+                                maior_setor_pct: string | null;
+                                /** @description Whether any amount is above the FGC limit */
+                                acima_do_fgc: boolean;
                             };
                         };
                     };
@@ -11400,17 +11451,55 @@ export interface operations {
             content: {
                 "application/json": {
                     /**
+                     * Format: binary
+                     * @description Multipart only. The report to import, up to 10 MB: xlsx or csv, or with `modelConsent` a PDF or an image
+                     */
+                    file?: string;
+                    /**
                      * Format: uuid
                      * @description Conversation to continue; omitted, the current one is used or a new one is opened
                      */
                     conversationId?: string;
-                    /** @description The question, up to 1000 characters */
-                    text: string;
-                    /** @description The screen the person is on, so "this screen" can be understood */
+                    /** @description The question, up to 1000 characters; required unless a `file` is sent */
+                    text?: string;
+                    /** @description The screen the person is on, so "this screen" can be understood (JSON body) */
                     screen?: {
                         /** @description Route path of the screen the person is on */
                         path: string;
                     };
+                    /** @description Same as `screen.path`, for the multipart form where an object cannot be sent */
+                    screenPath?: string;
+                    /**
+                     * @description Multipart only. Send `true` after the person agrees that the `file` goes to a language model (a PDF, image or photo). Without it, such a file is refused with model.confirmation_required and nothing is sent. Valid only for this request
+                     * @enum {string}
+                     */
+                    modelConsent?: "true" | "false";
+                };
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description Multipart only. The report to import, up to 10 MB: xlsx or csv, or with `modelConsent` a PDF or an image
+                     */
+                    file?: string;
+                    /**
+                     * Format: uuid
+                     * @description Conversation to continue; omitted, the current one is used or a new one is opened
+                     */
+                    conversationId?: string;
+                    /** @description The question, up to 1000 characters; required unless a `file` is sent */
+                    text?: string;
+                    /** @description The screen the person is on, so "this screen" can be understood (JSON body) */
+                    screen?: {
+                        /** @description Route path of the screen the person is on */
+                        path: string;
+                    };
+                    /** @description Same as `screen.path`, for the multipart form where an object cannot be sent */
+                    screenPath?: string;
+                    /**
+                     * @description Multipart only. Send `true` after the person agrees that the `file` goes to a language model (a PDF, image or photo). Without it, such a file is refused with model.confirmation_required and nothing is sent. Valid only for this request
+                     * @enum {string}
+                     */
+                    modelConsent?: "true" | "false";
                 };
             };
         };
@@ -11483,8 +11572,104 @@ export interface operations {
                     };
                 };
             };
+            /** @description The person has read-only access to the account (members.forbidden_role) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
             /** @description No such turn or conversation for this person, including one that belongs to someone else (assistant.turn_not_found) */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The file is larger than 10 MB (file.too_large) */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Not a report the reader knows (format.not_recognized), a damaged file (file.unreadable), a file the model could not read (model.unreadable) or nothing to import (import.nothing_to_import) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The file goes to a language model and `modelConsent=true` was not sent (model.confirmation_required) */
+            428: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -11621,6 +11806,8 @@ export interface operations {
                                 expiresAt: string;
                                 /** @description What was done, once confirmed */
                                 resultText: string | null;
+                                /** @description Id of what the action created, once confirmed: the importId for an import */
+                                reference: string | null;
                             } | null;
                         };
                         /** @description Usage band, so the panel shows the quota without another call */
@@ -11954,6 +12141,8 @@ export interface operations {
                         expiresAt: string;
                         /** @description What was done, once confirmed */
                         resultText: string | null;
+                        /** @description Id of what the action created, once confirmed: the importId for an import */
+                        reference: string | null;
                         /** @description Transactions the person can pick from; empty for actions that need no choice */
                         candidates: {
                             /**
@@ -11974,6 +12163,10 @@ export interface operations {
                             /** @description Name of the account */
                             accountName: string;
                         }[];
+                        /** @description Import cards only: the preview of the file, in the shape of the response of POST /investment-imports/preview. Null for other actions and when the preview expired: the card asks for the file again */
+                        importPreview: {
+                            [key: string]: unknown;
+                        } | null;
                     };
                 };
             };
@@ -12071,6 +12264,14 @@ export interface operations {
                     transactionId?: string;
                     /** @description Version of the picked transaction, as listed on the card */
                     version?: string;
+                    /** @description Import cards only: corrections by line, the `edits` of POST /investment-imports */
+                    edits?: {
+                        [key: string]: unknown;
+                    }[];
+                    /** @description Import cards only: decision by fixed income line, the `fixedIncome` of POST /investment-imports */
+                    fixedIncome?: {
+                        [key: string]: unknown;
+                    }[];
                 };
             };
         };
@@ -12100,6 +12301,8 @@ export interface operations {
                         expiresAt: string;
                         /** @description What was done, once confirmed */
                         resultText: string | null;
+                        /** @description Id of what the action created, once confirmed: the importId for an import */
+                        reference: string | null;
                     };
                 };
             };
@@ -12262,6 +12465,8 @@ export interface operations {
                         expiresAt: string;
                         /** @description What was done, once confirmed */
                         resultText: string | null;
+                        /** @description Id of what the action created, once confirmed: the importId for an import */
+                        reference: string | null;
                     };
                 };
             };
@@ -12458,6 +12663,8 @@ export interface operations {
                                 expiresAt: string;
                                 /** @description What was done, once confirmed */
                                 resultText: string | null;
+                                /** @description Id of what the action created, once confirmed: the importId for an import */
+                                reference: string | null;
                             } | null;
                             /** @description ISO 8601 */
                             createdAt: string;
@@ -21225,6 +21432,562 @@ export interface operations {
             };
         };
     };
+    PortfolioWatchController_agendaOf: {
+        parameters: {
+            query: {
+                /** @description First day of the window, YYYY-MM-DD, inclusive */
+                from: string;
+                /** @description Last day of the window, YYYY-MM-DD, inclusive. At most 366 days after `from` */
+                to: string;
+                /** @description Holder filter: `any` (default) is everything, `all` is only what belongs to the whole account ("Conta toda"), or the id of a person to see only what is theirs */
+                holder?: ("any" | "all") | string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Agenda of the window */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description First day of the window, YYYY-MM-DD */
+                        from: string;
+                        /** @description Last day of the window, YYYY-MM-DD */
+                        to: string;
+                        /** @description Events of the assets the account holds and fixed income maturities, earliest first */
+                        items: {
+                            /**
+                             * Format: uuid
+                             * @description Id of the event, or of the security or Tesouro Direto position that matures
+                             */
+                            id: string;
+                            /**
+                             * @description What happens: a payout, an assembly, an earnings release or the maturity of a fixed income holding
+                             * @enum {string}
+                             */
+                            kind: "dividend" | "jcp" | "fii_income" | "amortization" | "assembly" | "earnings_release" | "fixed_income_maturity" | "treasury_maturity";
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset the event is about; null for the maturity of a fixed income security
+                             */
+                            assetId: string | null;
+                            /**
+                             * Format: uuid
+                             * @description Fixed income security id or Tesouro Direto position id; null for an event of an asset
+                             */
+                            holdingId: string | null;
+                            /** @description Ticker of the asset, or name of the security. Untrusted text */
+                            name: string;
+                            /** @description Date the item sorts by, YYYY-MM-DD: the earliest of its dates that falls inside the window */
+                            date: string;
+                            /** @description Ex-date (data-com), YYYY-MM-DD; null when it does not apply */
+                            exDate: string | null;
+                            /** @description Payment date, YYYY-MM-DD; null when it does not apply or is not announced */
+                            paymentDate: string | null;
+                            /** @description Date of the assembly, of the release or of the maturity, YYYY-MM-DD; null for a payout */
+                            eventDate: string | null;
+                            /** @description Amount per unit held, decimal string in `currency`; null when the notice has none */
+                            amountPerUnit: string | null;
+                            /** @description Currency of the amounts, ISO 4217 */
+                            currency: string;
+                            /** @description Estimated amount for the account in minor units of `currency`: current quantity x amount per unit, or the projected value at maturity */
+                            amountForAccountMinor: number | null;
+                            /** @description True when `amountForAccountMinor` rests on today quantity or on a projection, so it can change */
+                            estimated: boolean;
+                            /** @description Link to the notice that announced the event, when there is one */
+                            documentUrl: string | null;
+                        }[];
+                    };
+                };
+            };
+            /** @description Invalid query (zod validation details in meta.errors) or a window that ends before it starts or spans more than 366 days */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PortfolioWatchController_changesOf: {
+        parameters: {
+            query?: {
+                /** @description Size of the window, in days back from now: 7 (default) or 30 */
+                days?: "7" | "30";
+                /** @description Only the assets of this asset class */
+                classId?: string;
+                /** @description Holder filter: `any` (default) is everything, `all` is only what belongs to the whole account ("Conta toda"), or the id of a person to see only what is theirs */
+                holder?: ("any" | "all") | string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Documents of the window */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Window used, in days */
+                        days: number;
+                        /** @description Fixed line, written by the code, that this is not a recommendation to buy or sell */
+                        notice: string;
+                        /** @description Documents of the assets the account holds, most relevant for the portfolio first, then newest */
+                        items: {
+                            /**
+                             * Format: uuid
+                             * @description Id of the document
+                             */
+                            id: string;
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset the document is about, the heaviest in the portfolio when it covers more than one
+                             */
+                            assetId: string;
+                            /** @description Ticker of the asset. Untrusted text */
+                            symbol: string;
+                            /** @description Where the document comes from: `cvm_ipe`, `cvm_itr` or `b3_fnet` */
+                            source: string;
+                            /** @description Category of the document as published, for example `relevant_fact` */
+                            category: string;
+                            /** @description Title of the document as published. Untrusted text */
+                            title: string;
+                            /**
+                             * @description What the document is, from the summary; null when there is no summary
+                             * @enum {string|null}
+                             */
+                            kind: "result" | "income" | "relevant_fact" | "meeting" | "management" | "routine" | null;
+                            /** @description Publication date, YYYY-MM-DD */
+                            date: string;
+                            /** @description Summary of 2 to 3 sentences in the language of the account, or "Resumo indisponível" when there is none. Untrusted text */
+                            summary: string;
+                            /** @description False when the document has only its title and link: over the daily budget, scanned, too large or a financial statements package */
+                            summaryAvailable: boolean;
+                            /** @description How much the document weighs, 0 to 3; null when there is no summary */
+                            relevance: number | null;
+                            /** @description Share of the asset in the portfolio, in basis points; null when the asset has no value yet */
+                            weightBps: number | null;
+                            /** @description Sentence written by the code, for example "XPLG11 é 8% da sua carteira." */
+                            weightLine: string | null;
+                            /** @description Link to the official document */
+                            documentUrl: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Invalid query (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The account is not on Premium; meta.documentCount is how many documents the window has */
+            402: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PortfolioWatchController_monthlyReviewsOf: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Months with a review */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Months that have a review, newest first */
+                        items: {
+                            /** @description Month reviewed, YYYY-MM */
+                            month: string;
+                            /** @description Return of the portfolio in the month, in percent */
+                            returnPct: number | null;
+                        }[];
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PortfolioWatchController_monthlyReviewOf: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Month of the review, YYYY-MM */
+                month: unknown;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Review of the month */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Month reviewed, YYYY-MM */
+                        month: string;
+                        /** @description Base currency of every amount, ISO 4217 */
+                        baseCurrency: string;
+                        /** @description Return of the whole portfolio in the month, in percent. Absent unless every class is explained by the operations */
+                        returnPct?: number;
+                        /** @description Value and return by asset class */
+                        byClass: {
+                            /**
+                             * Format: uuid
+                             * @description Asset class; null for what could not be tied to a class
+                             */
+                            classId: string | null;
+                            /** @description Value of the class at the start of the month, minor units of the base currency */
+                            startMinor: number;
+                            /** @description Value of the class at the end of the month, minor units of the base currency */
+                            endMinor: number;
+                            /** @description Return of the class in the month, in percent. Absent when the operations do not explain the class */
+                            returnPct?: number;
+                            /**
+                             * @description Why the class has no return
+                             * @enum {string}
+                             */
+                            reason?: "quantity_mismatch" | "fixed_income_flow_unknown" | "asset_without_snapshot" | "unconvertible_flow" | "no_base";
+                        }[];
+                        benchmarks: {
+                            cdi: {
+                                /**
+                                 * @description `ok`, `not_configured` (the index source has no token) or `no_data` (no reading for the month)
+                                 * @enum {string}
+                                 */
+                                state: "ok" | "not_configured" | "no_data";
+                                /** @description Variation of the index in the month, in percent */
+                                returnPct: number | null;
+                                /** @description Month the reading refers to, YYYY-MM */
+                                referenceMonth: string | null;
+                            };
+                            ipca: {
+                                /**
+                                 * @description `ok`, `not_configured` (the index source has no token) or `no_data` (no reading for the month)
+                                 * @enum {string}
+                                 */
+                                state: "ok" | "not_configured" | "no_data";
+                                /** @description Variation of the index in the month, in percent */
+                                returnPct: number | null;
+                                /** @description Month the reading refers to, YYYY-MM */
+                                referenceMonth: string | null;
+                            };
+                            ibovespa: {
+                                /**
+                                 * @description `ok`, `not_configured` (the index source has no token) or `no_data` (no reading for the month)
+                                 * @enum {string}
+                                 */
+                                state: "ok" | "not_configured" | "no_data";
+                                /** @description Variation of the index in the month, in percent */
+                                returnPct: number | null;
+                                /** @description Month the reading refers to, YYYY-MM */
+                                referenceMonth: string | null;
+                            };
+                        };
+                        /** @description Assets that rose the most in price, up to 3 */
+                        topGainers: {
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset
+                             */
+                            assetId: string;
+                            /** @description Ticker of the asset. Untrusted text */
+                            symbol: string;
+                            /** @description Price variation between the two monthly photos, in percent. Market data, not an estimate of the account */
+                            variationPct: number;
+                        }[];
+                        /** @description Assets that fell the most in price, up to 3 */
+                        topLosers: {
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset
+                             */
+                            assetId: string;
+                            /** @description Ticker of the asset. Untrusted text */
+                            symbol: string;
+                            /** @description Price variation between the two monthly photos, in percent. Market data, not an estimate of the account */
+                            variationPct: number;
+                        }[];
+                        income: {
+                            /** @description Income of the month, minor units of the base currency */
+                            amountMinor: number;
+                            /**
+                             * @description `operations` from the imported history, `ledger` from the position held on the ex-date
+                             * @enum {string}
+                             */
+                            source: "operations" | "ledger";
+                        };
+                        concentration: {
+                            /** @description Largest issuers of the portfolio */
+                            topIssuers: {
+                                /** @description Issuer group id or bucket key */
+                                key: string;
+                                /** @description Name of the issuer group, when known. Untrusted text */
+                                name: string | null;
+                                /** @description Value held, minor units of the base currency */
+                                valueMinor: number;
+                                /** @description Share of the portfolio, basis points */
+                                shareBps: number;
+                            }[];
+                            /** @description Sectors of the equity portfolio */
+                            sectors: {
+                                /** @description Sector key */
+                                key: string;
+                                /** @description Value held, minor units of the base currency */
+                                valueMinor: number;
+                                /** @description Share of the equity portfolio, basis points */
+                                shareBps: number;
+                            }[];
+                            fgcExposure: {
+                                /** @description Total above the FGC limit per institution, minor units */
+                                overLimitMinor: number;
+                                /** @description Conglomerates with an amount above the limit */
+                                groups: {
+                                    /** @description Financial conglomerate id */
+                                    groupId: string;
+                                    /** @description Name of the conglomerate. Untrusted text */
+                                    groupName: string;
+                                    /** @description Amount above the FGC limit, minor units */
+                                    overMinor: number;
+                                }[];
+                            };
+                        };
+                        coverage: {
+                            /**
+                             * @description Why the portfolio return is missing; null when it is there
+                             * @enum {string|null}
+                             */
+                            reason: "no_operations" | "no_previous_snapshot" | "classes_not_closing" | "no_base" | null;
+                            /** @description Sentence written by the code explaining the missing return */
+                            message: string | null;
+                            /** @description When the review was built, ISO 8601 */
+                            generatedAt: string;
+                        };
+                        /** @description Paragraph written over the numbers (paragraphs separated by a blank line, the main figure wrapped in ** **); null on the free plan, without the permission to send the numbers, or when it was not written */
+                        summary: string | null;
+                    };
+                };
+            };
+            /** @description Invalid month (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description There is no review for the month */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
     ConcentrationController_get: {
         parameters: {
             query?: never;
@@ -28580,539 +29343,6 @@ export interface operations {
             };
             /** @description Too many calls from this IP (core.too_many_attempts) */
             429: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    PortfolioWatchController_agendaOf: {
-        parameters: {
-            query: {
-                /** @description First day of the window, YYYY-MM-DD, inclusive */
-                from: string;
-                /** @description Last day of the window, YYYY-MM-DD, inclusive. At most 366 days after `from` */
-                to: string;
-                /** @description Holder filter: `any` (default) is everything, `all` is only what belongs to the whole account ("Conta toda"), or the id of a person to see only what is theirs */
-                holder?: ("any" | "all") | string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Agenda of the window */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description First day of the window, YYYY-MM-DD */
-                        from: string;
-                        /** @description Last day of the window, YYYY-MM-DD */
-                        to: string;
-                        /** @description Events of the assets the account holds and fixed income maturities, earliest first */
-                        items: {
-                            /**
-                             * Format: uuid
-                             * @description Id of the event, or of the security or Tesouro Direto position that matures
-                             */
-                            id: string;
-                            /**
-                             * @description What happens: a payout, an assembly, an earnings release or the maturity of a fixed income holding
-                             * @enum {string}
-                             */
-                            kind: "dividend" | "jcp" | "fii_income" | "amortization" | "assembly" | "earnings_release" | "fixed_income_maturity" | "treasury_maturity";
-                            /**
-                             * Format: uuid
-                             * @description Catalog asset the event is about; null for the maturity of a fixed income security
-                             */
-                            assetId: string | null;
-                            /**
-                             * Format: uuid
-                             * @description Fixed income security id or Tesouro Direto position id; null for an event of an asset
-                             */
-                            holdingId: string | null;
-                            /** @description Ticker of the asset, or name of the security. Untrusted text */
-                            name: string;
-                            /** @description Date the item sorts by, YYYY-MM-DD: the earliest of its dates that falls inside the window */
-                            date: string;
-                            /** @description Ex-date (data-com), YYYY-MM-DD; null when it does not apply */
-                            exDate: string | null;
-                            /** @description Payment date, YYYY-MM-DD; null when it does not apply or is not announced */
-                            paymentDate: string | null;
-                            /** @description Date of the assembly, of the release or of the maturity, YYYY-MM-DD; null for a payout */
-                            eventDate: string | null;
-                            /** @description Amount per unit held, decimal string in `currency`; null when the notice has none */
-                            amountPerUnit: string | null;
-                            /** @description Currency of the amounts, ISO 4217 */
-                            currency: string;
-                            /** @description Estimated amount for the account in minor units of `currency`: current quantity x amount per unit, or the projected value at maturity */
-                            amountForAccountMinor: number | null;
-                            /** @description True when `amountForAccountMinor` rests on today quantity or on a projection, so it can change */
-                            estimated: boolean;
-                            /** @description Link to the notice that announced the event, when there is one */
-                            documentUrl: string | null;
-                        }[];
-                    };
-                };
-            };
-            /** @description Invalid query (zod validation details in meta.errors) or a window that ends before it starts or spans more than 366 days */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    PortfolioWatchController_monthlyReviewsOf: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Months with a review */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Months that have a review, newest first */
-                        items: {
-                            /** @description Month reviewed, YYYY-MM */
-                            month: string;
-                            /** @description Return of the portfolio in the month, in percent */
-                            returnPct: number | null;
-                        }[];
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    PortfolioWatchController_monthlyReviewOf: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description Month of the review, YYYY-MM */
-                month: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Review of the month */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Month reviewed, YYYY-MM */
-                        month: string;
-                        /** @description Base currency of every amount, ISO 4217 */
-                        baseCurrency: string;
-                        /** @description Return of the whole portfolio in the month, in percent. Absent unless every class is explained by the operations */
-                        returnPct?: number;
-                        /** @description Value and return by asset class */
-                        byClass: {
-                            /**
-                             * Format: uuid
-                             * @description Asset class; null for what could not be tied to a class
-                             */
-                            classId: string | null;
-                            /** @description Value of the class at the start of the month, minor units of the base currency */
-                            startMinor: number;
-                            /** @description Value of the class at the end of the month, minor units of the base currency */
-                            endMinor: number;
-                            /** @description Return of the class in the month, in percent. Absent when the operations do not explain the class */
-                            returnPct?: number;
-                            /** @description Why the class has no return */
-                            reason?: "quantity_mismatch" | "fixed_income_flow_unknown" | "asset_without_snapshot" | "unconvertible_flow" | "no_base";
-                        }[];
-                        benchmarks: {
-                            cdi: {
-                            /** @description `ok`, `not_configured` (the index source has no token) or `no_data` (no reading for the month) */
-                            state: "ok" | "not_configured" | "no_data";
-                            /** @description Variation of the index in the month, in percent */
-                            returnPct: number | null;
-                            /** @description Month the reading refers to, YYYY-MM */
-                            referenceMonth: string | null;
-                        };
-                            ipca: {
-                            /** @description `ok`, `not_configured` (the index source has no token) or `no_data` (no reading for the month) */
-                            state: "ok" | "not_configured" | "no_data";
-                            /** @description Variation of the index in the month, in percent */
-                            returnPct: number | null;
-                            /** @description Month the reading refers to, YYYY-MM */
-                            referenceMonth: string | null;
-                        };
-                            ibovespa: {
-                            /** @description `ok`, `not_configured` (the index source has no token) or `no_data` (no reading for the month) */
-                            state: "ok" | "not_configured" | "no_data";
-                            /** @description Variation of the index in the month, in percent */
-                            returnPct: number | null;
-                            /** @description Month the reading refers to, YYYY-MM */
-                            referenceMonth: string | null;
-                        };
-                        };
-                        /** @description Assets that rose the most in price, up to 3 */
-                        topGainers: {
-                            /**
-                             * Format: uuid
-                             * @description Catalog asset
-                             */
-                            assetId: string;
-                            /** @description Ticker of the asset. Untrusted text */
-                            symbol: string;
-                            /** @description Price variation between the two monthly photos, in percent. Market data, not an estimate of the account */
-                            variationPct: number;
-                        }[];
-                        /** @description Assets that fell the most in price, up to 3 */
-                        topLosers: {
-                            /**
-                             * Format: uuid
-                             * @description Catalog asset
-                             */
-                            assetId: string;
-                            /** @description Ticker of the asset. Untrusted text */
-                            symbol: string;
-                            /** @description Price variation between the two monthly photos, in percent. Market data, not an estimate of the account */
-                            variationPct: number;
-                        }[];
-                        income: {
-                            /** @description Income of the month, minor units of the base currency */
-                            amountMinor: number;
-                            /** @description `operations` from the imported history, `ledger` from the position held on the ex-date */
-                            source: "operations" | "ledger";
-                        };
-                        concentration: {
-                            /** @description Largest issuers of the portfolio */
-                            topIssuers: {
-                                /** @description Issuer group id or bucket key */
-                                key: string;
-                                /** @description Name of the issuer group, when known. Untrusted text */
-                                name: string | null;
-                                /** @description Value held, minor units of the base currency */
-                                valueMinor: number;
-                                /** @description Share of the portfolio, basis points */
-                                shareBps: number;
-                            }[];
-                            /** @description Sectors of the equity portfolio */
-                            sectors: {
-                                /** @description Sector key */
-                                key: string;
-                                /** @description Value held, minor units of the base currency */
-                                valueMinor: number;
-                                /** @description Share of the equity portfolio, basis points */
-                                shareBps: number;
-                            }[];
-                            fgcExposure: {
-                                /** @description Total above the FGC limit per institution, minor units */
-                                overLimitMinor: number;
-                                /** @description Conglomerates with an amount above the limit */
-                                groups: {
-                                    /** @description Financial conglomerate id */
-                                    groupId: string;
-                                    /** @description Name of the conglomerate. Untrusted text */
-                                    groupName: string;
-                                    /** @description Amount above the FGC limit, minor units */
-                                    overMinor: number;
-                                }[];
-                            };
-                        };
-                        coverage: {
-                            /** @description Why the portfolio return is missing; null when it is there */
-                            reason: ("no_operations" | "no_previous_snapshot" | "classes_not_closing" | "no_base") | null;
-                            /** @description Sentence written by the code explaining the missing return */
-                            message: string | null;
-                            /** @description When the review was built, ISO 8601 */
-                            generatedAt: string;
-                        };
-                    };
-                };
-            };
-            /** @description Invalid month (zod validation details in meta.errors) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description There is no review for the month */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-        };
-    };
-    PortfolioWatchController_changesOf: {
-        parameters: {
-            query?: {
-                /** @description Size of the window, in days back from now: 7 (default) or 30 */
-                days?: "7" | "30";
-                /** @description Only the assets of this asset class */
-                classId?: string;
-                /** @description Holder filter: `any` (default) is everything, `all` is only what belongs to the whole account ("Conta toda"), or the id of a person to see only what is theirs */
-                holder?: ("any" | "all") | string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Documents of the window */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Window used, in days */
-                        days: 7 | 30;
-                        /** @description Fixed line, written by the code, that this is not a recommendation to buy or sell */
-                        notice: string;
-                        /** @description Documents of the assets the account holds, most relevant for the portfolio first, then newest */
-                        items: {
-                            /**
-                             * Format: uuid
-                             * @description Id of the document
-                             */
-                            id: string;
-                            /**
-                             * Format: uuid
-                             * @description Catalog asset the document is about, the heaviest in the portfolio when it covers more than one
-                             */
-                            assetId: string;
-                            /** @description Ticker of the asset. Untrusted text */
-                            symbol: string;
-                            /** @description Where the document comes from: `cvm_ipe`, `cvm_itr` or `b3_fnet` */
-                            source: string;
-                            /** @description Category of the document as published, for example `relevant_fact` */
-                            category: string;
-                            /** @description Title of the document as published. Untrusted text */
-                            title: string;
-                            /** @description What the document is, from the summary; null when there is no summary */
-                            kind: ("result" | "income" | "relevant_fact" | "meeting" | "management" | "routine") | null;
-                            /** @description Publication date, YYYY-MM-DD */
-                            date: string;
-                            /** @description Summary of 2 to 3 sentences in the language of the account, or "Resumo indisponível" when there is none. Untrusted text */
-                            summary: string;
-                            /** @description False when the document has only its title and link: over the daily budget, scanned, too large or a financial statements package */
-                            summaryAvailable: boolean;
-                            /** @description How much the document weighs, 0 to 3; null when there is no summary */
-                            relevance: number | null;
-                            /** @description Share of the asset in the portfolio, in basis points; null when the asset has no value yet */
-                            weightBps: number | null;
-                            /** @description Sentence written by the code, for example "XPLG11 é 8% da sua carteira." */
-                            weightLine: string | null;
-                            /** @description Link to the official document */
-                            documentUrl: string;
-                        }[];
-                    };
-                };
-            };
-            /** @description Invalid query (zod validation details in meta.errors) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description Missing or invalid access token (identity.unauthorized) */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
-                        type: string;
-                        /** @description Error class name */
-                        title: string;
-                        /** @description HTTP status code */
-                        status: number;
-                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
-                        detail: string;
-                        /** @description Correlation id — send it to support to locate the full trail */
-                        requestId: string | null;
-                        /** @description Structured details safe for the frontend (field errors, ids) */
-                        meta?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            /** @description The account is not on Premium; meta.documentCount is how many documents the window has */
-            402: {
                 headers: {
                     [name: string]: unknown;
                 };

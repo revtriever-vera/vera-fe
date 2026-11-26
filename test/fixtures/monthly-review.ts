@@ -42,6 +42,7 @@ export function sampleReview(overrides: Partial<MonthlyReview> = {}): MonthlyRev
             }
         },
         coverage: { reason: null, message: null, generatedAt: '2026-11-01T08:00:00.000Z' },
+        summary: null,
         ...overrides
     };
 }

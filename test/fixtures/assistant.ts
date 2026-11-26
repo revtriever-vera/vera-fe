@@ -48,6 +48,7 @@ export function actionSummary(overrides: Partial<ActionSummary> = {}): ActionSum
         status: 'open',
         expiresAt: '2026-11-25T12:30:00.000Z',
         resultText: null,
+        reference: null,
         ...overrides
     };
 }
@@ -66,5 +67,5 @@ export function actionCandidate(overrides: Partial<ActionCandidate> = {}): Actio
 }
 
 export function actionView(overrides: Partial<ActionView> = {}): ActionView {
-    return { ...actionSummary(), candidates: [], ...overrides };
+    return { ...actionSummary(), candidates: [], importPreview: null, ...overrides };
 }
