@@ -15,6 +15,22 @@
       "title": "Day before a debit",
       "description": "An e-mail the day before each charge of the series where you turned the notice on."
     },
+    "portfolio_ex_date_tomorrow": {
+      "title": "Ex-date tomorrow",
+      "description": "An e-mail the day before the ex-date of a payout from the assets you hold."
+    },
+    "portfolio_payment_today": {
+      "title": "Payout paid today",
+      "description": "An e-mail on the day a payout from your assets is paid."
+    },
+    "portfolio_assembly_soon": {
+      "title": "Assembly coming up",
+      "description": "An e-mail before an assembly of the assets you hold."
+    },
+    "fixed_income_maturity_soon": {
+      "title": "Fixed income maturity",
+      "description": "An e-mail before a fixed income security or Tesouro Direto position matures."
+    },
     "other": {
       "title": "Other notices",
       "description": "Vera notices by e-mail."

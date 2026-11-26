@@ -32,6 +32,8 @@ import ptBRPortfolioContribution from './resources/pt-BR/portfolioContribution.j
 import enPortfolioContribution from './resources/en/portfolioContribution.json';
 import ptBRPortfolioGoals from './resources/pt-BR/portfolioGoals.json';
 import enPortfolioGoals from './resources/en/portfolioGoals.json';
+import ptBRPortfolioAgenda from './resources/pt-BR/portfolioAgenda.json';
+import enPortfolioAgenda from './resources/en/portfolioAgenda.json';
 import ptBRSpendingRecurring from './resources/pt-BR/spendingRecurring.json';
 import enSpendingRecurring from './resources/en/spendingRecurring.json';
 import ptBROnboarding from './resources/pt-BR/onboarding.json';
@@ -82,6 +84,7 @@ type LocaleResources = {
     readonly portfolioTargets: typeof ptBRPortfolioTargets;
     readonly portfolioContribution: typeof ptBRPortfolioContribution;
     readonly portfolioGoals: typeof ptBRPortfolioGoals;
+    readonly portfolioAgenda: typeof ptBRPortfolioAgenda;
     readonly spendingRecurring: typeof ptBRSpendingRecurring;
     readonly onboarding: typeof ptBROnboarding;
     readonly spending: typeof ptBRSpending;
@@ -116,6 +119,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolioTargets: ptBRPortfolioTargets,
         portfolioContribution: ptBRPortfolioContribution,
         portfolioGoals: ptBRPortfolioGoals,
+        portfolioAgenda: ptBRPortfolioAgenda,
         spendingRecurring: ptBRSpendingRecurring,
         onboarding: ptBROnboarding,
         spending: ptBRSpending,
@@ -148,6 +152,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolioTargets: enPortfolioTargets,
         portfolioContribution: enPortfolioContribution,
         portfolioGoals: enPortfolioGoals,
+        portfolioAgenda: enPortfolioAgenda,
         spendingRecurring: enSpendingRecurring,
         onboarding: enOnboarding,
         spending: enSpending,
@@ -191,6 +196,7 @@ void i18next.use(initReactI18next).init({
         'portfolioTargets',
         'portfolioContribution',
         'portfolioGoals',
+        'portfolioAgenda',
         'spendingRecurring',
         'onboarding',
         'spending',
