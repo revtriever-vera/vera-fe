@@ -175,7 +175,7 @@ describe('objetivos: navegação', () => {
 
         const tabs: HTMLElement = await screen.findByRole('navigation', { name: 'Seções da carteira' });
         const labels: string[] = Array.from(tabs.querySelectorAll('a')).map((link: HTMLElement): string => link.textContent ?? '');
-        expect(labels).toEqual(['Visão geral', 'Carteira-alvo', 'Onde aportar', 'Objetivos', 'Meus ativos', 'Agenda']);
+        expect(labels).toEqual(['Visão geral', 'Carteira-alvo', 'Onde aportar', 'Objetivos', 'Meus ativos', 'Agenda', 'O que mudou']);
     });
 
     it('degrada um parâmetro create inválido sem lançar', async () => {

@@ -1,0 +1,36 @@
+{
+  "title": "O que mudou",
+  "subtitle": "Documentos oficiais novos sobre os ativos que você tem, com um resumo curto e o peso de cada ativo na carteira.",
+  "seeAll": "Ver tudo",
+  "loading": "Carregando o que mudou",
+  "loadError": "Não foi possível carregar o que mudou.",
+  "retry": "Tentar de novo",
+  "notice": "Isto não é uma recomendação de compra ou venda.",
+  "empty": {
+    "7": "Nenhum documento novo sobre os seus ativos nesta semana.",
+    "30": "Nenhum documento novo sobre os seus ativos nos últimos 30 dias."
+  },
+  "window": {
+    "label": "Período",
+    "7": "7 dias",
+    "30": "30 dias"
+  },
+  "kinds": {
+    "result": "Resultado",
+    "income": "Proventos",
+    "relevant_fact": "Fato relevante",
+    "meeting": "Assembleia",
+    "management": "Gestão",
+    "routine": "Rotina",
+    "other": "Documento"
+  },
+  "item": {
+    "unavailable": "Resumo indisponível",
+    "document": "Ver documento de {{symbol}}"
+  },
+  "locked": {
+    "count_one": "{{count}} documento novo sobre os seus ativos nesta semana. Com o Premium você lê o resumo de cada um.",
+    "count_other": "{{count}} documentos novos sobre os seus ativos nesta semana. Com o Premium você lê o resumo de cada um.",
+    "noCount": "Com o Premium você vê os documentos novos sobre os seus ativos, com um resumo de cada um."
+  }
+}

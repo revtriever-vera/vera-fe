@@ -34,6 +34,8 @@ import ptBRPortfolioGoals from './resources/pt-BR/portfolioGoals.json';
 import enPortfolioGoals from './resources/en/portfolioGoals.json';
 import ptBRPortfolioAgenda from './resources/pt-BR/portfolioAgenda.json';
 import enPortfolioAgenda from './resources/en/portfolioAgenda.json';
+import ptBRPortfolioChanges from './resources/pt-BR/portfolioChanges.json';
+import enPortfolioChanges from './resources/en/portfolioChanges.json';
 import ptBRSpendingRecurring from './resources/pt-BR/spendingRecurring.json';
 import enSpendingRecurring from './resources/en/spendingRecurring.json';
 import ptBROnboarding from './resources/pt-BR/onboarding.json';
@@ -85,6 +87,7 @@ type LocaleResources = {
     readonly portfolioContribution: typeof ptBRPortfolioContribution;
     readonly portfolioGoals: typeof ptBRPortfolioGoals;
     readonly portfolioAgenda: typeof ptBRPortfolioAgenda;
+    readonly portfolioChanges: typeof ptBRPortfolioChanges;
     readonly spendingRecurring: typeof ptBRSpendingRecurring;
     readonly onboarding: typeof ptBROnboarding;
     readonly spending: typeof ptBRSpending;
@@ -120,6 +123,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolioContribution: ptBRPortfolioContribution,
         portfolioGoals: ptBRPortfolioGoals,
         portfolioAgenda: ptBRPortfolioAgenda,
+        portfolioChanges: ptBRPortfolioChanges,
         spendingRecurring: ptBRSpendingRecurring,
         onboarding: ptBROnboarding,
         spending: ptBRSpending,
@@ -153,6 +157,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolioContribution: enPortfolioContribution,
         portfolioGoals: enPortfolioGoals,
         portfolioAgenda: enPortfolioAgenda,
+        portfolioChanges: enPortfolioChanges,
         spendingRecurring: enSpendingRecurring,
         onboarding: enOnboarding,
         spending: enSpending,
@@ -197,6 +202,7 @@ void i18next.use(initReactI18next).init({
         'portfolioContribution',
         'portfolioGoals',
         'portfolioAgenda',
+        'portfolioChanges',
         'spendingRecurring',
         'onboarding',
         'spending',
