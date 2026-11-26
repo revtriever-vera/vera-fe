@@ -6,7 +6,24 @@ import { EffectList } from './effect-list';
 import { FixedIncomeSection } from './fixed-income-section';
 import { OperationsTable } from './operations-table';
 
-export function blockerText(flow: InvestmentImportFlow, t: TFunction<'portfolioImports'>): string | null {
+export type ReviewFlow = Pick<
+    InvestmentImportFlow,
+    | 'lines'
+    | 'drafts'
+    | 'editLine'
+    | 'titles'
+    | 'choices'
+    | 'holder'
+    | 'chooseTitle'
+    | 'rows'
+    | 'modes'
+    | 'chooseMode'
+    | 'readiness'
+    | 'pendingTitles'
+    | 'canConfirm'
+>;
+
+export function blockerText(flow: ReviewFlow, t: TFunction<'portfolioImports'>): string | null {
     const { readiness } = flow;
     if (readiness.blocked > 0) {
         return t('blockers.blocked', { count: readiness.blocked });
@@ -23,7 +40,7 @@ export function blockerText(flow: InvestmentImportFlow, t: TFunction<'portfolioI
     return flow.canConfirm ? null : t('blockers.nothing');
 }
 
-export function InvestmentReviewStep({ flow }: { readonly flow: InvestmentImportFlow }): ReactElement {
+export function InvestmentReviewStep({ flow }: { readonly flow: ReviewFlow }): ReactElement {
     const { t }: UseTranslationResponse<'portfolioImports', undefined> = useTranslation('portfolioImports');
     const blocker: string | null = blockerText(flow, t);
     return (

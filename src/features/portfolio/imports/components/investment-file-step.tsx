@@ -1,19 +1,20 @@
 import type { ReactElement } from 'react';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { useLocale } from '@/shared/lib/i18n';
+import { INVESTMENT_IMPORT_ACCEPT, INVESTMENT_IMPORT_MAX_FILE_BYTES } from '@/shared/lib/investment-import-files';
 import { formatIsoDate } from '@/shared/lib/format/date';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { Alert } from '@/shared/ui/alert';
 import { FileDrop } from '@/shared/ui/file-drop';
 import { Loading, Skeleton } from '@/shared/ui/skeleton';
 import { HolderField } from '../../assets/components/holder-field';
-import { IMPORT_ACCEPT, MAX_FILE_BYTES, importRejectionMessage } from '../lib/import-file-rules';
+import { importRejectionMessage } from '../lib/import-file-rules';
 import { noteText } from '../lib/note-text';
 import type { InvestmentImportFlow } from '../lib/use-investment-import-flow';
 import type { PreviewNote } from '../types';
 import { ModelConsentDialog } from './model-consent-dialog';
 
-function Notes({ notes }: { readonly notes: readonly PreviewNote[] }): ReactElement | null {
+export function Notes({ notes }: { readonly notes: readonly PreviewNote[] }): ReactElement | null {
     const { t }: UseTranslationResponse<'portfolioImports', undefined> = useTranslation('portfolioImports');
     if (notes.length === 0) {
         return null;
@@ -27,7 +28,7 @@ function Notes({ notes }: { readonly notes: readonly PreviewNote[] }): ReactElem
     );
 }
 
-function AlreadyImported({ at }: { readonly at: string | null }): ReactElement | null {
+export function AlreadyImported({ at }: { readonly at: string | null }): ReactElement | null {
     const { t }: UseTranslationResponse<'portfolioImports', undefined> = useTranslation('portfolioImports');
     const locale: SupportedLocale = useLocale();
     if (at === null) {
@@ -45,8 +46,8 @@ export function InvestmentFileStep({ flow }: { readonly flow: InvestmentImportFl
                 label={t('file.label')}
                 title={t('file.dropTitle')}
                 hint={t('file.hint')}
-                accept={IMPORT_ACCEPT}
-                maxSizeBytes={MAX_FILE_BYTES}
+                accept={INVESTMENT_IMPORT_ACCEPT}
+                maxSizeBytes={INVESTMENT_IMPORT_MAX_FILE_BYTES}
                 fileName={flow.file?.name ?? null}
                 onPicked={flow.pickFile}
                 onClear={flow.clearFile}

@@ -33,3 +33,10 @@ export type ConfirmActionInput = Json<NonNullable<paths['/assistant/actions/{id}
 export type SendTurnInput = Json<NonNullable<paths['/assistant/turns']['post']['requestBody']>>;
 
 export const MAX_TURN_LENGTH: number = 1000;
+
+export interface SendDraft {
+    readonly text: string;
+    readonly file: File | null;
+}
+
+export const IMPORT_TOOL: string = 'investment_import';
