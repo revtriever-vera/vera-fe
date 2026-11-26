@@ -171,11 +171,27 @@ function usePreviewRunner(
     };
 }
 
-function usePreviewStep(failure: Failure, editing: Editing): PreviewStep {
+interface PreviewState {
+    readonly file: File | null;
+    readonly setFile: (file: File | null) => void;
+    readonly holder: string;
+    readonly setHolder: (holder: string) => void;
+    readonly preview: InvestmentPreview | null;
+    readonly setPreview: (preview: InvestmentPreview | null) => void;
+    readonly askingConsent: boolean;
+    readonly setAskingConsent: (asking: boolean) => void;
+}
+
+function usePreviewState(): PreviewState {
     const [file, setFile] = useState<File | null>(null);
     const [holder, setHolder] = useState<string>(HOLDER_ALL);
     const [preview, setPreview] = useState<InvestmentPreview | null>(null);
     const [askingConsent, setAskingConsent] = useState<boolean>(false);
+    return { file, setFile, holder, setHolder, preview, setPreview, askingConsent, setAskingConsent };
+}
+
+function usePreviewStep(failure: Failure, editing: Editing): PreviewStep {
+    const { file, setFile, holder, setHolder, preview, setPreview, askingConsent, setAskingConsent }: PreviewState = usePreviewState();
     const runner: Runner = usePreviewRunner(failure, editing, setPreview, (): void => {
         setAskingConsent(true);
     });
