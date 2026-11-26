@@ -8,7 +8,8 @@ export function noticesHandlers(): RequestHandler[] {
         portfolio_ex_date_tomorrow: true,
         portfolio_payment_today: true,
         portfolio_assembly_soon: false,
-        fixed_income_maturity_soon: true
+        fixed_income_maturity_soon: true,
+        portfolio_weekly_changes: true
     };
     return [
         http.get('*/notifications/preferences', () =>

@@ -35,6 +35,12 @@ describe('Avisos por e-mail em Preferências', () => {
         expect(within(card).queryByText('Outros avisos')).toBeNull();
     });
 
+    it('lista o resumo semanal do que mudou', async () => {
+        const card: HTMLElement = await openPreferences();
+
+        expect(await within(card).findByRole('switch', { name: 'Resumo semanal: o que mudou' })).toBeChecked();
+    });
+
     it('liga a véspera e avisa', async () => {
         const user: UserEvent = userEvent.setup();
         const card: HTMLElement = await openPreferences();

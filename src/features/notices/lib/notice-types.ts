@@ -6,6 +6,7 @@ export const NOTICE_TYPE: {
     readonly portfolioPaymentToday: 'portfolio_payment_today';
     readonly portfolioAssemblySoon: 'portfolio_assembly_soon';
     readonly fixedIncomeMaturitySoon: 'fixed_income_maturity_soon';
+    readonly portfolioWeeklyChanges: 'portfolio_weekly_changes';
 } = {
     goalBehind: 'goal_behind',
     recurringWeek: 'recurring_week',
@@ -13,7 +14,8 @@ export const NOTICE_TYPE: {
     portfolioExDateTomorrow: 'portfolio_ex_date_tomorrow',
     portfolioPaymentToday: 'portfolio_payment_today',
     portfolioAssemblySoon: 'portfolio_assembly_soon',
-    fixedIncomeMaturitySoon: 'fixed_income_maturity_soon'
+    fixedIncomeMaturitySoon: 'fixed_income_maturity_soon',
+    portfolioWeeklyChanges: 'portfolio_weekly_changes'
 } as const;
 
 export type KnownNoticeType = (typeof NOTICE_TYPE)[keyof typeof NOTICE_TYPE];

@@ -2184,6 +2184,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/portfolio-watch/changes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What changed in the portfolio: official documents of the assets held, summarized
+         * @description Documents published in the last 7 or 30 days about the assets the account holds. Each item carries the summary, its kind and relevance, the share of the asset in the portfolio, the link and the source. A document without summary shows only its title link and "Resumo indisponível". Premium: other plans get `plan.feature_locked` with the count of documents and no content.
+         */
+        get: operations["PortfolioWatchController_changesOf"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/portfolio/concentration": {
         parameters: {
             query?: never;
@@ -28643,6 +28663,147 @@ export interface operations {
             };
             /** @description Missing or invalid access token (identity.unauthorized) */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PortfolioWatchController_changesOf: {
+        parameters: {
+            query?: {
+                /** @description Size of the window, in days back from now: 7 (default) or 30 */
+                days?: "7" | "30";
+                /** @description Only the assets of this asset class */
+                classId?: string;
+                /** @description Holder filter: `any` (default) is everything, `all` is only what belongs to the whole account ("Conta toda"), or the id of a person to see only what is theirs */
+                holder?: ("any" | "all") | string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Documents of the window */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Window used, in days */
+                        days: 7 | 30;
+                        /** @description Fixed line, written by the code, that this is not a recommendation to buy or sell */
+                        notice: string;
+                        /** @description Documents of the assets the account holds, most relevant for the portfolio first, then newest */
+                        items: {
+                            /**
+                             * Format: uuid
+                             * @description Id of the document
+                             */
+                            id: string;
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset the document is about, the heaviest in the portfolio when it covers more than one
+                             */
+                            assetId: string;
+                            /** @description Ticker of the asset. Untrusted text */
+                            symbol: string;
+                            /** @description Where the document comes from: `cvm_ipe`, `cvm_itr` or `b3_fnet` */
+                            source: string;
+                            /** @description Category of the document as published, for example `relevant_fact` */
+                            category: string;
+                            /** @description Title of the document as published. Untrusted text */
+                            title: string;
+                            /** @description What the document is, from the summary; null when there is no summary */
+                            kind: ("result" | "income" | "relevant_fact" | "meeting" | "management" | "routine") | null;
+                            /** @description Publication date, YYYY-MM-DD */
+                            date: string;
+                            /** @description Summary of 2 to 3 sentences in the language of the account, or "Resumo indisponível" when there is none. Untrusted text */
+                            summary: string;
+                            /** @description False when the document has only its title and link: over the daily budget, scanned, too large or a financial statements package */
+                            summaryAvailable: boolean;
+                            /** @description How much the document weighs, 0 to 3; null when there is no summary */
+                            relevance: number | null;
+                            /** @description Share of the asset in the portfolio, in basis points; null when the asset has no value yet */
+                            weightBps: number | null;
+                            /** @description Sentence written by the code, for example "XPLG11 é 8% da sua carteira." */
+                            weightLine: string | null;
+                            /** @description Link to the official document */
+                            documentUrl: string;
+                        }[];
+                    };
+                };
+            };
+            /** @description Invalid query (zod validation details in meta.errors) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description The account is not on Premium; meta.documentCount is how many documents the window has */
+            402: {
                 headers: {
                     [name: string]: unknown;
                 };

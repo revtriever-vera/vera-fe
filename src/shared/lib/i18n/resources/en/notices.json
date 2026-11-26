@@ -31,6 +31,10 @@
       "title": "Fixed income maturity",
       "description": "An e-mail before a fixed income security or Tesouro Direto position matures."
     },
+    "portfolio_weekly_changes": {
+      "title": "Weekly digest: what changed",
+      "description": "On Monday, an email with the most relevant official documents about your assets. It only arrives when something relevant came out. Premium."
+    },
     "other": {
       "title": "Other notices",
       "description": "Vera notices by e-mail."

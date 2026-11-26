@@ -31,6 +31,10 @@
       "title": "Vencimento de renda fixa",
       "description": "Um e-mail antes de um título de renda fixa ou do Tesouro Direto vencer."
     },
+    "portfolio_weekly_changes": {
+      "title": "Resumo semanal: o que mudou",
+      "description": "Na segunda-feira, um e-mail com os documentos oficiais mais relevantes sobre os seus ativos. Só chega quando houver algo relevante. Premium."
+    },
     "other": {
       "title": "Outros avisos",
       "description": "Avisos da Vera por e-mail."

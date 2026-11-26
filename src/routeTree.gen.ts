@@ -37,6 +37,7 @@ import { Route as AvisosSairTokenRouteImport } from './routes/avisos.sair.$token
 import { Route as AuthAppPortfolioIndexRouteImport } from './routes/_auth/_app/portfolio.index'
 import { Route as AuthAppPortfolioAgendaRouteImport } from './routes/_auth/_app/portfolio.agenda'
 import { Route as AuthAppPortfolioAssetsRouteImport } from './routes/_auth/_app/portfolio.assets'
+import { Route as AuthAppPortfolioChangesRouteImport } from './routes/_auth/_app/portfolio.changes'
 import { Route as AuthAppPortfolioContributionRouteImport } from './routes/_auth/_app/portfolio.contribution'
 import { Route as AuthAppPortfolioGetStartedRouteImport } from './routes/_auth/_app/portfolio.get-started'
 import { Route as AuthAppPortfolioGoalsRouteImport } from './routes/_auth/_app/portfolio.goals'
@@ -188,6 +189,11 @@ const AuthAppPortfolioAssetsRoute = AuthAppPortfolioAssetsRouteImport.update({
   path: '/assets',
   getParentRoute: () => AuthAppPortfolioRoute,
 } as any)
+const AuthAppPortfolioChangesRoute = AuthAppPortfolioChangesRouteImport.update({
+  id: '/changes',
+  path: '/changes',
+  getParentRoute: () => AuthAppPortfolioRoute,
+} as any)
 const AuthAppPortfolioContributionRoute =
   AuthAppPortfolioContributionRouteImport.update({
     id: '/contribution',
@@ -285,6 +291,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof PlatformAdminIndexRoute
   '/portfolio/agenda': typeof AuthAppPortfolioAgendaRoute
   '/portfolio/assets': typeof AuthAppPortfolioAssetsRoute
+  '/portfolio/changes': typeof AuthAppPortfolioChangesRoute
   '/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
   '/portfolio/goals': typeof AuthAppPortfolioGoalsRoute
@@ -321,6 +328,7 @@ export interface FileRoutesByTo {
   '/admin': typeof PlatformAdminIndexRoute
   '/portfolio/agenda': typeof AuthAppPortfolioAgendaRoute
   '/portfolio/assets': typeof AuthAppPortfolioAssetsRoute
+  '/portfolio/changes': typeof AuthAppPortfolioChangesRoute
   '/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
   '/portfolio/goals': typeof AuthAppPortfolioGoalsRoute
@@ -365,6 +373,7 @@ export interface FileRoutesById {
   '/_platform/admin/': typeof PlatformAdminIndexRoute
   '/_auth/_app/portfolio/agenda': typeof AuthAppPortfolioAgendaRoute
   '/_auth/_app/portfolio/assets': typeof AuthAppPortfolioAssetsRoute
+  '/_auth/_app/portfolio/changes': typeof AuthAppPortfolioChangesRoute
   '/_auth/_app/portfolio/contribution': typeof AuthAppPortfolioContributionRoute
   '/_auth/_app/portfolio/get-started': typeof AuthAppPortfolioGetStartedRoute
   '/_auth/_app/portfolio/goals': typeof AuthAppPortfolioGoalsRoute
@@ -407,6 +416,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/portfolio/agenda'
     | '/portfolio/assets'
+    | '/portfolio/changes'
     | '/portfolio/contribution'
     | '/portfolio/get-started'
     | '/portfolio/goals'
@@ -443,6 +453,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/portfolio/agenda'
     | '/portfolio/assets'
+    | '/portfolio/changes'
     | '/portfolio/contribution'
     | '/portfolio/get-started'
     | '/portfolio/goals'
@@ -486,6 +497,7 @@ export interface FileRouteTypes {
     | '/_platform/admin/'
     | '/_auth/_app/portfolio/agenda'
     | '/_auth/_app/portfolio/assets'
+    | '/_auth/_app/portfolio/changes'
     | '/_auth/_app/portfolio/contribution'
     | '/_auth/_app/portfolio/get-started'
     | '/_auth/_app/portfolio/goals'
@@ -711,6 +723,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAppPortfolioAssetsRouteImport
       parentRoute: typeof AuthAppPortfolioRoute
     }
+    '/_auth/_app/portfolio/changes': {
+      id: '/_auth/_app/portfolio/changes'
+      path: '/changes'
+      fullPath: '/portfolio/changes'
+      preLoaderRoute: typeof AuthAppPortfolioChangesRouteImport
+      parentRoute: typeof AuthAppPortfolioRoute
+    }
     '/_auth/_app/portfolio/contribution': {
       id: '/_auth/_app/portfolio/contribution'
       path: '/contribution'
@@ -808,6 +827,7 @@ declare module '@tanstack/react-router' {
 interface AuthAppPortfolioRouteChildren {
   AuthAppPortfolioAgendaRoute: typeof AuthAppPortfolioAgendaRoute
   AuthAppPortfolioAssetsRoute: typeof AuthAppPortfolioAssetsRoute
+  AuthAppPortfolioChangesRoute: typeof AuthAppPortfolioChangesRoute
   AuthAppPortfolioContributionRoute: typeof AuthAppPortfolioContributionRoute
   AuthAppPortfolioGetStartedRoute: typeof AuthAppPortfolioGetStartedRoute
   AuthAppPortfolioGoalsRoute: typeof AuthAppPortfolioGoalsRoute
@@ -819,6 +839,7 @@ interface AuthAppPortfolioRouteChildren {
 const AuthAppPortfolioRouteChildren: AuthAppPortfolioRouteChildren = {
   AuthAppPortfolioAgendaRoute: AuthAppPortfolioAgendaRoute,
   AuthAppPortfolioAssetsRoute: AuthAppPortfolioAssetsRoute,
+  AuthAppPortfolioChangesRoute: AuthAppPortfolioChangesRoute,
   AuthAppPortfolioContributionRoute: AuthAppPortfolioContributionRoute,
   AuthAppPortfolioGetStartedRoute: AuthAppPortfolioGetStartedRoute,
   AuthAppPortfolioGoalsRoute: AuthAppPortfolioGoalsRoute,
