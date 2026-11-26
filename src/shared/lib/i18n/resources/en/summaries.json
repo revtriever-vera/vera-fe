@@ -9,6 +9,10 @@
     "loading": "Writing the summary",
     "loadingConsent": "Checking the permission"
   },
+  "monthlyReview": {
+    "title": "The month in words",
+    "locked": "On Premium, Vera writes a paragraph about these numbers here, in up to 4 sentences."
+  },
   "locked": {
     "text": "With Premium, Vera writes a summary of these numbers here in 3 or 4 sentences."
   },

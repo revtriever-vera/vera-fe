@@ -35,6 +35,10 @@
       "title": "Weekly digest: what changed",
       "description": "On Monday, an email with the most relevant official documents about your assets. It only arrives when something relevant came out. Premium."
     },
+    "portfolio_monthly_review": {
+      "title": "Month X-ray",
+      "description": "At the start of each month, an email with the main numbers of your portfolio X-ray and the paragraph that explains them. Premium."
+    },
     "other": {
       "title": "Other notices",
       "description": "Vera notices by e-mail."

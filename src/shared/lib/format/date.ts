@@ -40,3 +40,13 @@ export function formatDayMonthNumeric(date: Date, locale: SupportedLocale): stri
 export function isSameLocalDay(left: Date, right: Date): boolean {
     return left.toDateString() === right.toDateString();
 }
+
+export function formatMonthYear(month: string, locale: SupportedLocale): string {
+    const match: RegExpMatchArray | null = MONTH_PATTERN.exec(month);
+    if (match === null) {
+        return month;
+    }
+    const year: number = Number.parseInt(match[1] ?? '2000', RADIX);
+    const index: number = Number.parseInt(match[2] ?? '1', RADIX) - 1;
+    return new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(year, index, 1)));
+}

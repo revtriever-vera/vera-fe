@@ -9,6 +9,10 @@
     "loading": "Escrevendo o resumo",
     "loadingConsent": "Verificando a permissão"
   },
+  "monthlyReview": {
+    "title": "O mês em palavras",
+    "locked": "No Premium, a Vera escreve aqui um parágrafo sobre estes números, em até 4 frases."
+  },
   "locked": {
     "text": "No Premium, a Vera escreve aqui um resumo destes números em 3 ou 4 frases."
   },
