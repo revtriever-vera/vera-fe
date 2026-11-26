@@ -1,5 +1,7 @@
 import type { ReactElement, ReactNode } from 'react';
 import type { NavItem } from './app-nav';
+import { EndorsementSeal } from '@/shared/ui/endorsement-seal';
+import { AssistantMount } from './assistant-mount';
 import { MobileTopBar } from './mobile-top-bar';
 import { Sidebar } from './sidebar';
 import { UserMenu } from './user-menu';
@@ -20,7 +22,9 @@ export function AppShell({ items, topSlot, children }: AppShellProps): ReactElem
                     <UserMenu />
                 </div>
                 {children}
+                <EndorsementSeal className="px-page-x py-6" />
             </div>
+            <AssistantMount />
         </div>
     );
 }

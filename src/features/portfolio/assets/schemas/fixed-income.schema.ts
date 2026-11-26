@@ -77,7 +77,7 @@ const issuerSchema = z.object({
     name: z.string().min(1),
     groupId: z.string().min(1),
     groupName: z.string().min(1),
-    kind: z.enum(['bank', 'company', 'sovereign']),
+    kind: z.enum(['bank', 'company', 'sovereign', 'other']),
     fgcAssociated: z.boolean()
 });
 

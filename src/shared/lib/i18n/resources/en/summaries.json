@@ -53,6 +53,7 @@
     "descriptionSelfHosted": "The texts for the month, the cuts and the portfolio are written by the language model you registered in Integrations, from aggregated totals. Names of people and merchants, transaction descriptions, accounts and credentials are never sent. When it is off, nothing more is sent.",
     "switchLabel": "Allow sending aggregated totals",
     "switchHint": "When off, nothing is sent and the summaries disappear from the screens.",
+    "switchScope": "Applies to the summaries and to the questions in the app and on WhatsApp.",
     "seeSent": "See what is sent",
     "locked": "Available with Premium.",
     "registerModel": "Register the language model",

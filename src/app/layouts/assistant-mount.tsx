@@ -1,0 +1,15 @@
+import type { ReactElement } from 'react';
+import { AssistantLauncher } from '@/features/assistant/components/assistant-launcher';
+import { AssistantSlotsContext, type AssistantSlots } from '@/features/assistant/lib/assistant-slots';
+import { PayloadFrame } from '@/features/summaries/components/payload-modal';
+import { SummaryConsentRequest } from '@/features/summaries/components/summary-consent-request';
+
+export const ASSISTANT_SLOTS: AssistantSlots = { ConsentRequest: SummaryConsentRequest, SentFrame: PayloadFrame };
+
+export function AssistantMount(): ReactElement {
+    return (
+        <AssistantSlotsContext value={ASSISTANT_SLOTS}>
+            <AssistantLauncher />
+        </AssistantSlotsContext>
+    );
+}

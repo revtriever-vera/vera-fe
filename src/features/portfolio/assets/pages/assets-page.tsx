@@ -22,6 +22,7 @@ import { useClasses } from '../../api/use-classes.query';
 import { useHoldings } from '../../api/use-holdings.query';
 import type { ClassesResponse, HoldingsResponse } from '../../types';
 import { AddAssetModal } from '../components/add-asset-modal';
+import { ImportOperationsButton } from '../../imports/components/import-operations-button';
 import { AssetsTabs } from '../components/assets-tabs';
 import { ExportMenu } from '../components/export-menu';
 import { HoldingsSection } from '../components/holdings-section';
@@ -119,6 +120,7 @@ function AssetsHeader({ empty, onAdd }: { readonly empty: boolean; readonly onAd
                 <HolderFilter />
                 <BaseCurrencySwitch />
                 <ExportMenu />
+                <ImportOperationsButton />
                 {empty ? null : (
                     <RoleGate min="editor">
                         <Button onClick={onAdd}>

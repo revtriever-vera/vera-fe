@@ -22,6 +22,8 @@ import ptBRPortfolioOverview from './resources/pt-BR/portfolioOverview.json';
 import enPortfolioOverview from './resources/en/portfolioOverview.json';
 import ptBRPortfolioAssets from './resources/pt-BR/portfolioAssets.json';
 import enPortfolioAssets from './resources/en/portfolioAssets.json';
+import ptBRPortfolioImports from './resources/pt-BR/portfolioImports.json';
+import enPortfolioImports from './resources/en/portfolioImports.json';
 import ptBRPortfolioFixedIncome from './resources/pt-BR/portfolioFixedIncome.json';
 import enPortfolioFixedIncome from './resources/en/portfolioFixedIncome.json';
 import ptBRPortfolioTargets from './resources/pt-BR/portfolioTargets.json';
@@ -55,7 +57,9 @@ import enBilling from './resources/en/billing.json';
 import ptBRSummaries from './resources/pt-BR/summaries.json';
 import enSummaries from './resources/en/summaries.json';
 import ptBRAdmin from './resources/pt-BR/admin.json';
+import ptBRAssistant from './resources/pt-BR/assistant.json';
 import enAdmin from './resources/en/admin.json';
+import enAssistant from './resources/en/assistant.json';
 import { DEFAULT_LOCALE, resolveLocale, type SupportedLocale } from './resolve-locale';
 
 type CommonResource = typeof ptBRCommon;
@@ -73,6 +77,7 @@ type LocaleResources = {
     readonly portfolio: typeof ptBRPortfolio;
     readonly portfolioOverview: typeof ptBRPortfolioOverview;
     readonly portfolioAssets: typeof ptBRPortfolioAssets;
+    readonly portfolioImports: typeof ptBRPortfolioImports;
     readonly portfolioFixedIncome: typeof ptBRPortfolioFixedIncome;
     readonly portfolioTargets: typeof ptBRPortfolioTargets;
     readonly portfolioContribution: typeof ptBRPortfolioContribution;
@@ -90,6 +95,7 @@ type LocaleResources = {
     readonly billing: typeof ptBRBilling;
     readonly summaries: typeof ptBRSummaries;
     readonly admin: typeof ptBRAdmin;
+    readonly assistant: typeof ptBRAssistant;
 };
 
 const resources: Record<SupportedLocale, LocaleResources> = {
@@ -105,6 +111,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolio: ptBRPortfolio,
         portfolioOverview: ptBRPortfolioOverview,
         portfolioAssets: ptBRPortfolioAssets,
+        portfolioImports: ptBRPortfolioImports,
         portfolioFixedIncome: ptBRPortfolioFixedIncome,
         portfolioTargets: ptBRPortfolioTargets,
         portfolioContribution: ptBRPortfolioContribution,
@@ -121,7 +128,8 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         settings: ptBRSettings,
         billing: ptBRBilling,
         summaries: ptBRSummaries,
-        admin: ptBRAdmin
+        admin: ptBRAdmin,
+        assistant: ptBRAssistant
     },
     en: {
         common: enCommon,
@@ -135,6 +143,7 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         portfolio: enPortfolio,
         portfolioOverview: enPortfolioOverview,
         portfolioAssets: enPortfolioAssets,
+        portfolioImports: enPortfolioImports,
         portfolioFixedIncome: enPortfolioFixedIncome,
         portfolioTargets: enPortfolioTargets,
         portfolioContribution: enPortfolioContribution,
@@ -151,7 +160,8 @@ const resources: Record<SupportedLocale, LocaleResources> = {
         settings: enSettings,
         billing: enBilling,
         summaries: enSummaries,
-        admin: enAdmin
+        admin: enAdmin,
+        assistant: enAssistant
     }
 };
 
@@ -176,6 +186,7 @@ void i18next.use(initReactI18next).init({
         'portfolio',
         'portfolioOverview',
         'portfolioAssets',
+        'portfolioImports',
         'portfolioFixedIncome',
         'portfolioTargets',
         'portfolioContribution',
@@ -192,7 +203,8 @@ void i18next.use(initReactI18next).init({
         'settings',
         'billing',
         'summaries',
-        'admin'
+        'admin',
+        'assistant'
     ],
     defaultNS: 'common',
     interpolation: { escapeValue: false },

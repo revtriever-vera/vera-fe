@@ -1,0 +1,130 @@
+{
+  "launcher": {
+    "label": "Ask Vera"
+  },
+  "panel": {
+    "title": "Ask Vera",
+    "close": "Close",
+    "delete": "Delete conversation",
+    "loadFailed": "I couldn't open the conversation.",
+    "retry": "Try again"
+  },
+  "empty": {
+    "title": "What would you like to know?",
+    "hint": "Pick a question or write your own."
+  },
+  "composer": {
+    "label": "Your question",
+    "placeholder": "Write your question",
+    "send": "Send",
+    "disclosure": "Your question is sent to a language model, through a Vercel service. Don't write your CPF, passwords or card details.",
+    "paused": "Questions paused until {{date}}."
+  },
+  "quota": {
+    "warning": "{{percent}}% of the {{month}} quota used"
+  },
+  "message": {
+    "log": "Conversation",
+    "person": "You",
+    "vera": "Vera",
+    "pending": "Looking into it...",
+    "failed": "I couldn't answer right now.",
+    "retry": "Try again",
+    "unhelpful": "Didn't help",
+    "unhelpfulDone": "Noted."
+  },
+  "action": {
+    "pick": "Pick the transaction",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "done": "Done",
+    "canceled": "Canceled. Nothing was changed.",
+    "expired": "The time to confirm has passed. Nothing was changed.",
+    "stale": "What I was going to do changed since I proposed it. Nothing was changed.",
+    "again": "See again",
+    "readOnly": "Only Owners and Editors can confirm.",
+    "seeGoals": "See goals",
+    "seeTransactions": "See transactions"
+  },
+  "delete": {
+    "title": "Delete the conversation?",
+    "body": "The questions and answers are gone for good.",
+    "confirm": "Delete conversation",
+    "failed": "I couldn't delete the conversation."
+  },
+  "errors": {
+    "generic": "I couldn't send the question. Try again.",
+    "capReached": "Questions paused until {{date}}.",
+    "capReachedNoDate": "Questions paused until the 1st of next month.",
+    "providerDisabled": "Answers aren't available right now.",
+    "tooMany": "You asked many questions in a row. Try again in a moment.",
+    "notFound": "That conversation no longer exists. Start a new one.",
+    "confirmationStale": "What I was going to do changed since I proposed it. Nothing was changed.",
+    "actionExpired": "The time to confirm has passed. Nothing was changed.",
+    "actionResolved": "This action was already resolved.",
+    "actionNotFound": "I couldn't find this action.",
+    "choiceInvalid": "Pick a transaction before confirming.",
+    "forbiddenRole": "Only Owners and Editors can confirm."
+  },
+  "suggestions": {
+    "portfolio": {
+      "one": "What does the Portfolio screen show?",
+      "two": "How do I add an asset?",
+      "three": "Where do I see my allocation by class?"
+    },
+    "targets": {
+      "one": "How do class targets work?",
+      "two": "What is the tolerance band?",
+      "three": "How do I change a target?"
+    },
+    "contribution": {
+      "one": "How does Where to invest work?",
+      "two": "Why does Vera suggest this amount?",
+      "three": "Where do I record the contribution I made?"
+    },
+    "goals": {
+      "one": "How do I create a goal?",
+      "two": "How does Vera calculate progress?",
+      "three": "Can I have more than one goal?"
+    },
+    "assets": {
+      "one": "How do I add an asset?",
+      "two": "How do I import my investments?",
+      "three": "How do I delete an asset?"
+    },
+    "spending": {
+      "one": "How does Vera gather my spending?",
+      "two": "How do I connect a bank?",
+      "three": "Where do I see uncategorized spending?"
+    },
+    "transactions": {
+      "one": "How do I change the category of an expense?",
+      "two": "How do I create a category rule?",
+      "three": "How do I import a statement?"
+    },
+    "recurring": {
+      "one": "What are recurring expenses?",
+      "two": "How do I confirm a recurring expense?",
+      "three": "How do I ignore a recurring expense?"
+    },
+    "cuts": {
+      "one": "What are the suggested cuts?",
+      "two": "How does Vera pick the cuts?",
+      "three": "How do I set my savings goal?"
+    },
+    "other": {
+      "one": "What does Vera do?",
+      "two": "Where do I start?",
+      "three": "Where do I change the account settings?"
+    }
+  },
+  "sent": {
+    "link": "See what was sent",
+    "loading": "Loading what was sent",
+    "failed": "I could not open what was sent.",
+    "empty": "Nothing is stored for this answer: nothing was sent, or sending was turned off."
+  },
+  "upgrade": {
+    "lock": "The figures of your account and the market are in Premium."
+  }
+}

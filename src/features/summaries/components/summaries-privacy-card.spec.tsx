@@ -29,6 +29,7 @@ describe('SummariesPrivacyCard', () => {
         ).toBeInTheDocument();
         expect(await within(region).findByRole('switch', { name: 'Permitir o envio de totais agregados' })).not.toBeChecked();
         expect(within(region).getByText('Desligado, nada é enviado e os resumos somem das telas.')).toBeInTheDocument();
+        expect(within(region).getByText('Vale para os resumos e para as perguntas no app e no WhatsApp.')).toBeInTheDocument();
     });
 
     it('ligar grava a permissão das configurações e avisa', async () => {

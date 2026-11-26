@@ -1,0 +1,130 @@
+{
+  "launcher": {
+    "label": "Perguntar à Vera"
+  },
+  "panel": {
+    "title": "Perguntar à Vera",
+    "close": "Fechar",
+    "delete": "Apagar conversa",
+    "loadFailed": "Não consegui abrir a conversa.",
+    "retry": "Tentar de novo"
+  },
+  "empty": {
+    "title": "O que você quer saber?",
+    "hint": "Escolha uma pergunta ou escreva a sua."
+  },
+  "composer": {
+    "label": "Sua pergunta",
+    "placeholder": "Escreva sua pergunta",
+    "send": "Enviar",
+    "disclosure": "Sua pergunta é enviada a um modelo de linguagem, por um serviço da Vercel. Não escreva CPF, senha ou dados de cartão.",
+    "paused": "Perguntas pausadas até {{date}}."
+  },
+  "quota": {
+    "warning": "{{percent}}% da cota de {{month}} usada"
+  },
+  "message": {
+    "log": "Conversa",
+    "person": "Você",
+    "vera": "Vera",
+    "pending": "Consultando...",
+    "failed": "Não consegui responder agora.",
+    "retry": "Tentar de novo",
+    "unhelpful": "Não ajudou",
+    "unhelpfulDone": "Anotado."
+  },
+  "action": {
+    "pick": "Escolha a transação",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "done": "Feito",
+    "canceled": "Cancelado. Nada foi alterado.",
+    "expired": "O prazo para confirmar acabou. Nada foi alterado.",
+    "stale": "O que eu ia fazer mudou desde que propus. Nada foi alterado.",
+    "again": "Ver de novo",
+    "readOnly": "Só Dono ou Editor confirmam.",
+    "seeGoals": "Ver objetivos",
+    "seeTransactions": "Ver transações"
+  },
+  "delete": {
+    "title": "Apagar a conversa?",
+    "body": "As perguntas e as respostas somem e não dá para recuperar.",
+    "confirm": "Apagar conversa",
+    "failed": "Não consegui apagar a conversa."
+  },
+  "errors": {
+    "generic": "Não consegui enviar a pergunta. Tente de novo.",
+    "capReached": "Perguntas pausadas até {{date}}.",
+    "capReachedNoDate": "Perguntas pausadas até o 1º dia do mês que vem.",
+    "providerDisabled": "As respostas não estão disponíveis agora.",
+    "tooMany": "Você fez muitas perguntas seguidas. Tente de novo daqui a pouco.",
+    "notFound": "Essa conversa não existe mais. Comece uma nova.",
+    "confirmationStale": "O que eu ia fazer mudou desde que propus. Nada foi alterado.",
+    "actionExpired": "O prazo para confirmar acabou. Nada foi alterado.",
+    "actionResolved": "Esta ação já foi resolvida.",
+    "actionNotFound": "Não encontrei esta ação.",
+    "choiceInvalid": "Escolha uma transação antes de confirmar.",
+    "forbiddenRole": "Só Dono ou Editor confirmam."
+  },
+  "suggestions": {
+    "portfolio": {
+      "one": "O que mostra a tela Carteira?",
+      "two": "Como adiciono um ativo?",
+      "three": "Onde vejo minha alocação por classe?"
+    },
+    "targets": {
+      "one": "Como funcionam as metas por classe?",
+      "two": "O que é a faixa de tolerância?",
+      "three": "Como mudo uma meta?"
+    },
+    "contribution": {
+      "one": "Como funciona Onde aportar?",
+      "two": "Por que a Vera sugere esse valor?",
+      "three": "Onde registro o aporte que fiz?"
+    },
+    "goals": {
+      "one": "Como crio um objetivo?",
+      "two": "Como a Vera calcula o progresso?",
+      "three": "Posso ter mais de um objetivo?"
+    },
+    "assets": {
+      "one": "Como adiciono um ativo?",
+      "two": "Como importo meus investimentos?",
+      "three": "Como apago um ativo?"
+    },
+    "spending": {
+      "one": "Como a Vera junta meus gastos?",
+      "two": "Como conecto um banco?",
+      "three": "Onde vejo os gastos sem categoria?"
+    },
+    "transactions": {
+      "one": "Como mudo a categoria de um gasto?",
+      "two": "Como crio uma regra de categoria?",
+      "three": "Como importo um extrato?"
+    },
+    "recurring": {
+      "one": "O que são gastos recorrentes?",
+      "two": "Como confirmo um gasto recorrente?",
+      "three": "Como ignoro um gasto recorrente?"
+    },
+    "cuts": {
+      "one": "O que são os cortes sugeridos?",
+      "two": "Como a Vera escolhe os cortes?",
+      "three": "Como defino minha meta de economia?"
+    },
+    "other": {
+      "one": "O que a Vera faz?",
+      "two": "Por onde eu começo?",
+      "three": "Onde mudo as configurações da conta?"
+    }
+  },
+  "sent": {
+    "link": "Ver o que foi enviado",
+    "loading": "Carregando o que foi enviado",
+    "failed": "Não consegui abrir o que foi enviado.",
+    "empty": "Não há nada guardado desta resposta: nada foi enviado ou o envio foi desligado."
+  },
+  "upgrade": {
+    "lock": "Os números da sua conta e o mercado estão no Premium."
+  }
+}
