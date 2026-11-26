@@ -67,8 +67,38 @@ function ChangesHeader({ days }: { readonly days: ChangesWindow }): ReactElement
     );
 }
 
-function ChangesBody({ days }: { readonly days: ChangesWindow }): ReactElement {
+function ChangesLoading(): ReactElement {
     const { t }: UseTranslationResponse<'portfolioChanges', undefined> = useTranslation('portfolioChanges');
+    return (
+        <Loading label={t('loading')} className="flex flex-col gap-4">
+            <Skeleton className="h-32 w-full" />
+            <Skeleton className="h-32 w-full" />
+        </Loading>
+    );
+}
+
+function ChangesFailure({ error, onRetry }: { readonly error: Error; readonly onRetry: () => void }): ReactElement {
+    const { t }: UseTranslationResponse<'portfolioChanges', undefined> = useTranslation('portfolioChanges');
+    return (
+        <div className="flex flex-col items-start gap-3">
+            <FailureAlert error={error} title={t('loadError')} />
+            <Button variant="secondary" onClick={onRetry}>
+                {t('retry')}
+            </Button>
+        </div>
+    );
+}
+
+function ChangesEmpty({ days }: { readonly days: ChangesWindow }): ReactElement {
+    const { t }: UseTranslationResponse<'portfolioChanges', undefined> = useTranslation('portfolioChanges');
+    return (
+        <output className="block rounded-card border border-dashed border-border p-6 text-center text-sm text-content-muted">
+            {t(`empty.${days}`)}
+        </output>
+    );
+}
+
+function ChangesBody({ days }: { readonly days: ChangesWindow }): ReactElement {
     const holder: HolderParam = useHolderParam();
     const changes: ReturnType<typeof useChanges> = useChanges(days, holder);
     const lock: ReturnType<typeof changesLockOf> = changesLockOf(changes.error);
@@ -77,30 +107,18 @@ function ChangesBody({ days }: { readonly days: ChangesWindow }): ReactElement {
     }
     if (changes.data === undefined) {
         return changes.error === null ? (
-            <Loading label={t('loading')} className="flex flex-col gap-4">
-                <Skeleton className="h-32 w-full" />
-                <Skeleton className="h-32 w-full" />
-            </Loading>
+            <ChangesLoading />
         ) : (
-            <div className="flex flex-col items-start gap-3">
-                <FailureAlert error={changes.error} title={t('loadError')} />
-                <Button
-                    variant="secondary"
-                    onClick={(): void => {
-                        void changes.refetch();
-                    }}
-                >
-                    {t('retry')}
-                </Button>
-            </div>
+            <ChangesFailure
+                error={changes.error}
+                onRetry={(): void => {
+                    void changes.refetch();
+                }}
+            />
         );
     }
     if (changes.data.items.length === 0) {
-        return (
-            <output className="block rounded-card border border-dashed border-border p-6 text-center text-sm text-content-muted">
-                {t(`empty.${days}`)}
-            </output>
-        );
+        return <ChangesEmpty days={days} />;
     }
     return (
         <Card className="flex flex-col gap-2">

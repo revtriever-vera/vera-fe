@@ -7,11 +7,13 @@ import { installOverviewApi } from '../../../../../test/helpers/overview-api';
 import { server } from '../../../../../test/msw/server';
 import { renderRouterAt } from '../../../../../test/router';
 
+import type { ChangeItem } from '../types';
+
 describe('O que mudou na visão geral', () => {
     it('mostra os 3 primeiros itens, o link Ver tudo e a linha fixa', async () => {
         installOverviewApi();
-        const items = ['AAA1', 'BBB2', 'CCC3', 'DDD4'].map((symbol: string, index: number) =>
-            changeItem({ id: `00000000-0000-4000-8000-00000000010${index}`, symbol, weightLine: `${symbol} é 5% da sua carteira.` })
+        const items: ChangeItem[] = ['AAA1', 'BBB2', 'CCC3', 'DDD4'].map((symbol: string, index: number) =>
+            changeItem({ id: `00000000-0000-4000-8000-00000000010${String(index)}`, symbol, weightLine: `${symbol} é 5% da sua carteira.` })
         );
         server.use(http.get('*/portfolio-watch/changes', () => HttpResponse.json(sampleChanges(items))));
         renderRouterAt('/portfolio', { signedIn: true });
