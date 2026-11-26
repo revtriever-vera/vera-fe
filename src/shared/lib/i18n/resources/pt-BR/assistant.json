@@ -43,6 +43,7 @@
   },
   "action": {
     "pick": "Escolha a transação",
+    "always": "Sempre para esta categoria",
     "confirm": "Confirmar",
     "cancel": "Cancelar",
     "done": "Feito",
