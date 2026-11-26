@@ -6,12 +6,14 @@ import { useLocale } from '@/shared/lib/i18n';
 import type { SupportedLocale } from '@/shared/lib/locale';
 import { Button } from '@/shared/ui/button';
 import { MAX_TURN_LENGTH, type AssistantUsage } from '../types';
+import { AssistantFileField } from './assistant-file-field';
 
 export interface AssistantComposerProps {
     readonly inputRef: RefObject<HTMLTextAreaElement | null>;
     readonly usage: AssistantUsage | null;
     readonly busy: boolean;
-    readonly onSend: (text: string) => void;
+    readonly canAttach: boolean;
+    readonly onSend: (text: string, file: File | null) => void;
 }
 
 function submitOnEnter(event: KeyboardEvent<HTMLTextAreaElement>, submit: () => void): void {
@@ -42,21 +44,25 @@ function Disclosure({ id }: { readonly id: string }): ReactElement {
 
 interface ComposerState {
     readonly text: string;
+    readonly file: File | null;
     readonly canSend: boolean;
     readonly setText: (text: string) => void;
+    readonly setFile: (file: File | null) => void;
     readonly submit: () => void;
 }
 
-function useComposerState(paused: boolean, busy: boolean, onSend: (text: string) => void): ComposerState {
+function useComposerState(paused: boolean, busy: boolean, onSend: (text: string, file: File | null) => void): ComposerState {
     const [text, setText] = useState<string>('');
-    const canSend: boolean = !paused && !busy && text.trim() !== '';
+    const [file, setFile] = useState<File | null>(null);
+    const canSend: boolean = !paused && !busy && (text.trim() !== '' || file !== null);
     const submit = (): void => {
         if (canSend) {
-            onSend(text.trim());
+            onSend(text.trim(), file);
             setText('');
+            setFile(null);
         }
     };
-    return { text, canSend, setText, submit };
+    return { text, file, canSend, setText, setFile, submit };
 }
 
 interface FieldProps {
@@ -78,7 +84,7 @@ function ComposerField({ id, noteId, inputRef, paused, state }: FieldProps): Rea
                 value={state.text}
                 maxLength={MAX_TURN_LENGTH}
                 disabled={paused}
-                placeholder={t('composer.placeholder')}
+                placeholder={state.file === null ? t('composer.placeholder') : t('composer.placeholderFile')}
                 aria-describedby={noteId}
                 onChange={(event): void => {
                     state.setText(event.target.value);
@@ -95,7 +101,7 @@ function ComposerField({ id, noteId, inputRef, paused, state }: FieldProps): Rea
     );
 }
 
-export function AssistantComposer({ inputRef, usage, busy, onSend }: AssistantComposerProps): ReactElement {
+export function AssistantComposer({ inputRef, usage, busy, canAttach, onSend }: AssistantComposerProps): ReactElement {
     const { t }: UseTranslationResponse<'assistant', undefined> = useTranslation('assistant');
     const fieldId: string = useId();
     const noteId: string = useId();
@@ -103,13 +109,22 @@ export function AssistantComposer({ inputRef, usage, busy, onSend }: AssistantCo
     const state: ComposerState = useComposerState(paused, busy, onSend);
     return (
         <form
-            className="flex flex-col gap-2 border-t border-border p-3"
+            className="flex flex-col gap-2 p-3"
             onSubmit={(event): void => {
                 event.preventDefault();
                 state.submit();
             }}
         >
             {usage !== null && paused ? <PausedNote usage={usage} /> : null}
+            {canAttach && !paused ? (
+                <AssistantFileField
+                    file={state.file}
+                    onPicked={state.setFile}
+                    onClear={(): void => {
+                        state.setFile(null);
+                    }}
+                />
+            ) : null}
             <label htmlFor={fieldId} className="sr-only">
                 {t('composer.label')}
             </label>

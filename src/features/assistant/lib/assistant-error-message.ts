@@ -15,6 +15,20 @@ const ERROR_KEYS: Readonly<Record<string, ErrorKey>> = {
     'assistant.action_not_found': 'actionNotFound',
     'assistant.action_choice_invalid': 'choiceInvalid',
     'members.forbidden_role': 'forbiddenRole',
+    'file.too_large': 'fileTooLarge',
+    'format.not_recognized': 'formatNotRecognized',
+    'format.too_many_rows': 'tooManyRows',
+    'file.unreadable': 'fileUnreadable',
+    'file.too_many_pages': 'fileUnreadable',
+    'model.unreadable': 'fileUnreadable',
+    'model.unavailable': 'modelUnavailable',
+    'import.nothing_to_import': 'nothingToImport',
+    'assistant.text_required': 'textRequired',
+    'preview.expired': 'previewExpired',
+    'import.has_blocked_lines': 'importBlocked',
+    'import.position_mode_required': 'importBlocked',
+    'import.invalid_edit': 'importInvalid',
+    'import.invalid_corrections': 'importInvalid',
     'core.too_many_attempts': 'tooMany'
 };
 
