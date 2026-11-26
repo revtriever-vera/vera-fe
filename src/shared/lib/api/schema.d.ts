@@ -2164,6 +2164,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/portfolio-watch/agenda": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Agenda of the portfolio: events of the assets held and fixed income maturities
+         * @description Ex-dates, payments, assemblies and earnings releases of the assets the account holds, plus the maturities of fixed income securities and Tesouro Direto positions, earliest first, inside the window. Each item carries the amount per unit and the amount for the account (current quantity x amount per unit, or the projected value at maturity), always marked as estimated, and the link to the notice when there is one. With `holder` the quantities and the maturities are only those of that holder. Available on every plan.
+         */
+        get: operations["PortfolioWatchController_agendaOf"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/portfolio/concentration": {
         parameters: {
             query?: never;
@@ -28500,6 +28520,129 @@ export interface operations {
             };
             /** @description Too many calls from this IP (core.too_many_attempts) */
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+        };
+    };
+    PortfolioWatchController_agendaOf: {
+        parameters: {
+            query: {
+                /** @description First day of the window, YYYY-MM-DD, inclusive */
+                from: string;
+                /** @description Last day of the window, YYYY-MM-DD, inclusive. At most 366 days after `from` */
+                to: string;
+                /** @description Holder filter: `any` (default) is everything, `all` is only what belongs to the whole account ("Conta toda"), or the id of a person to see only what is theirs */
+                holder?: ("any" | "all") | string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Agenda of the window */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description First day of the window, YYYY-MM-DD */
+                        from: string;
+                        /** @description Last day of the window, YYYY-MM-DD */
+                        to: string;
+                        /** @description Events of the assets the account holds and fixed income maturities, earliest first */
+                        items: {
+                            /**
+                             * Format: uuid
+                             * @description Id of the event, or of the security or Tesouro Direto position that matures
+                             */
+                            id: string;
+                            /**
+                             * @description What happens: a payout, an assembly, an earnings release or the maturity of a fixed income holding
+                             * @enum {string}
+                             */
+                            kind: "dividend" | "jcp" | "fii_income" | "amortization" | "assembly" | "earnings_release" | "fixed_income_maturity" | "treasury_maturity";
+                            /**
+                             * Format: uuid
+                             * @description Catalog asset the event is about; null for the maturity of a fixed income security
+                             */
+                            assetId: string | null;
+                            /**
+                             * Format: uuid
+                             * @description Fixed income security id or Tesouro Direto position id; null for an event of an asset
+                             */
+                            holdingId: string | null;
+                            /** @description Ticker of the asset, or name of the security. Untrusted text */
+                            name: string;
+                            /** @description Date the item sorts by, YYYY-MM-DD: the earliest of its dates that falls inside the window */
+                            date: string;
+                            /** @description Ex-date (data-com), YYYY-MM-DD; null when it does not apply */
+                            exDate: string | null;
+                            /** @description Payment date, YYYY-MM-DD; null when it does not apply or is not announced */
+                            paymentDate: string | null;
+                            /** @description Date of the assembly, of the release or of the maturity, YYYY-MM-DD; null for a payout */
+                            eventDate: string | null;
+                            /** @description Amount per unit held, decimal string in `currency`; null when the notice has none */
+                            amountPerUnit: string | null;
+                            /** @description Currency of the amounts, ISO 4217 */
+                            currency: string;
+                            /** @description Estimated amount for the account in minor units of `currency`: current quantity x amount per unit, or the projected value at maturity */
+                            amountForAccountMinor: number | null;
+                            /** @description True when `amountForAccountMinor` rests on today quantity or on a projection, so it can change */
+                            estimated: boolean;
+                            /** @description Link to the notice that announced the event, when there is one */
+                            documentUrl: string | null;
+                        }[];
+                    };
+                };
+            };
+            /** @description Invalid query (zod validation details in meta.errors) or a window that ends before it starts or spans more than 366 days */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description Stable machine-readable error code (e.g. positions.position_not_found) */
+                        type: string;
+                        /** @description Error class name */
+                        title: string;
+                        /** @description HTTP status code */
+                        status: number;
+                        /** @description Technical detail for logs/debugging — never a user-facing translated message */
+                        detail: string;
+                        /** @description Correlation id — send it to support to locate the full trail */
+                        requestId: string | null;
+                        /** @description Structured details safe for the frontend (field errors, ids) */
+                        meta?: {
+                            [key: string]: unknown;
+                        };
+                    };
+                };
+            };
+            /** @description Missing or invalid access token (identity.unauthorized) */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };

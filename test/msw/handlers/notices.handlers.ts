@@ -1,7 +1,15 @@
 import { http, HttpResponse, type RequestHandler } from 'msw';
 
 export function noticesHandlers(): RequestHandler[] {
-    const enabled: Record<string, boolean> = { goal_behind: true, recurring_due: false, recurring_week: true };
+    const enabled: Record<string, boolean> = {
+        goal_behind: true,
+        recurring_due: false,
+        recurring_week: true,
+        portfolio_ex_date_tomorrow: true,
+        portfolio_payment_today: true,
+        portfolio_assembly_soon: false,
+        fixed_income_maturity_soon: true
+    };
     return [
         http.get('*/notifications/preferences', () =>
             HttpResponse.json({ items: Object.entries(enabled).map(([type, on]: [string, boolean]) => ({ type, enabled: on })) })
