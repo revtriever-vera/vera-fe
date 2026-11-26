@@ -1,0 +1,46 @@
+{
+  "title": "Agenda",
+  "subtitle": "What happens in the next 30 days to the assets you hold: payout dates, assemblies, earnings releases and maturities.",
+  "loading": "Loading the agenda",
+  "loadError": "Could not load the agenda.",
+  "retry": "Try again",
+  "empty": "No events in the next 30 days for your assets.",
+  "emptyFiltered": "No events in the next 30 days with this filter.",
+  "week": "Week of {{date}}",
+  "filter": {
+    "label": "Filter by type",
+    "all": "All",
+    "income": "Payouts",
+    "assembly": "Assemblies and releases",
+    "maturity": "Maturities"
+  },
+  "kinds": {
+    "dividend": "Dividend",
+    "jcp": "JCP",
+    "fii_income": "REIT income",
+    "amortization": "Amortization",
+    "assembly": "Assembly",
+    "earnings_release": "Earnings release",
+    "fixed_income_maturity": "Maturity",
+    "treasury_maturity": "Treasury maturity"
+  },
+  "item": {
+    "exDate": "Ex-date {{date}}",
+    "paymentDate": "Payment {{date}}",
+    "eventDate": {
+      "assembly": "Assembly on {{date}}",
+      "earnings_release": "Release on {{date}}",
+      "fixed_income_maturity": "Matures on {{date}}",
+      "treasury_maturity": "Matures on {{date}}",
+      "dividend": "{{date}}",
+      "jcp": "{{date}}",
+      "fii_income": "{{date}}",
+      "amortization": "{{date}}"
+    },
+    "perUnit": "{{amount}} per unit",
+    "forYou": "For you",
+    "forYouEstimated": "Estimated for you",
+    "document": "Open the document for {{name}}",
+    "fixedIncome": "See {{name}} in fixed income"
+  }
+}

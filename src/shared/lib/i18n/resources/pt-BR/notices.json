@@ -15,6 +15,30 @@
       "title": "Véspera do débito",
       "description": "Um e-mail na véspera de cada cobrança das séries em que você ligou o aviso."
     },
+    "portfolio_ex_date_tomorrow": {
+      "title": "Data-com amanhã",
+      "description": "Um e-mail na véspera da data-com de um provento dos ativos que você tem."
+    },
+    "portfolio_payment_today": {
+      "title": "Pagamento de provento hoje",
+      "description": "Um e-mail no dia em que um provento dos seus ativos é pago."
+    },
+    "portfolio_assembly_soon": {
+      "title": "Assembleia chegando",
+      "description": "Um e-mail antes de uma assembleia dos ativos que você tem."
+    },
+    "fixed_income_maturity_soon": {
+      "title": "Vencimento de renda fixa",
+      "description": "Um e-mail antes de um título de renda fixa ou do Tesouro Direto vencer."
+    },
+    "portfolio_weekly_changes": {
+      "title": "Resumo semanal: o que mudou",
+      "description": "Na segunda-feira, um e-mail com os documentos oficiais mais relevantes sobre os seus ativos. Só chega quando houver algo relevante. Premium."
+    },
+    "portfolio_monthly_review": {
+      "title": "Raio-X do mês",
+      "description": "No início de cada mês, um e-mail com os números principais do Raio-X da sua carteira e o parágrafo que os explica. Premium."
+    },
     "other": {
       "title": "Outros avisos",
       "description": "Avisos da Vera por e-mail."

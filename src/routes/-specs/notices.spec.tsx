@@ -25,6 +25,28 @@ describe('Avisos por e-mail em Preferências', () => {
         expect(within(card).getByRole('switch', { name: 'Objetivo atrasado' })).toBeChecked();
     });
 
+    it('lista os avisos novos da carteira, com o texto de cada um', async () => {
+        const card: HTMLElement = await openPreferences();
+
+        expect(await within(card).findByRole('switch', { name: 'Data-com amanhã' })).toBeChecked();
+        expect(within(card).getByRole('switch', { name: 'Pagamento de provento hoje' })).toBeChecked();
+        expect(within(card).getByRole('switch', { name: 'Assembleia chegando' })).not.toBeChecked();
+        expect(within(card).getByRole('switch', { name: 'Vencimento de renda fixa' })).toBeChecked();
+        expect(within(card).queryByText('Outros avisos')).toBeNull();
+    });
+
+    it('lista o aviso mensal do Raio-X', async () => {
+        const card: HTMLElement = await openPreferences();
+
+        expect(await within(card).findByRole('switch', { name: 'Raio-X do mês' })).toBeChecked();
+    });
+
+    it('lista o resumo semanal do que mudou', async () => {
+        const card: HTMLElement = await openPreferences();
+
+        expect(await within(card).findByRole('switch', { name: 'Resumo semanal: o que mudou' })).toBeChecked();
+    });
+
     it('liga a véspera e avisa', async () => {
         const user: UserEvent = userEvent.setup();
         const card: HTMLElement = await openPreferences();
