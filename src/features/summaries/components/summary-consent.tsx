@@ -45,7 +45,7 @@ function useAllow(consent: ConsentState): { readonly allow: () => Promise<void>;
     return { allow, pending: grant.isPending };
 }
 
-export function AllowRow({ consent }: { readonly consent: ConsentState }): ReactElement {
+export function AllowRow({ consent, label }: { readonly consent: ConsentState; readonly label?: string }): ReactElement {
     const { t }: UseTranslationResponse<'summaries', undefined> = useTranslation('summaries');
     const { allow, pending } = useAllow(consent);
     if (!consent.canChange) {
@@ -54,7 +54,7 @@ export function AllowRow({ consent }: { readonly consent: ConsentState }): React
     return (
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <Button size="sm" loading={pending} onClick={(): void => void allow()}>
-                {t('consent.allow')}
+                {label ?? t('consent.allow')}
             </Button>
             <span className="text-xs text-content-muted">{t('consent.hint')}</span>
         </div>
