@@ -4,6 +4,7 @@ import { env } from '@/shared/config/env';
 export interface ProviderAvailability {
     readonly google: boolean;
     readonly facebook: boolean;
+    readonly configured: boolean;
     readonly markGoogleBlocked: () => void;
     readonly markFacebookBlocked: () => void;
 }
@@ -20,6 +21,7 @@ export function useProviderAvailability(): ProviderAvailability {
     return {
         google: env.VITE_GOOGLE_CLIENT_ID !== '' && !googleBlocked,
         facebook: env.VITE_FACEBOOK_APP_ID !== '' && !facebookBlocked,
+        configured: env.VITE_GOOGLE_CLIENT_ID !== '' || env.VITE_FACEBOOK_APP_ID !== '',
         markGoogleBlocked,
         markFacebookBlocked
     };

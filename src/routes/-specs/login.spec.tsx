@@ -129,13 +129,14 @@ describe('login route providers', () => {
         expect(screen.getByRole('group', { name: 'Continuar com Google' })).toBeInTheDocument();
     });
 
-    it('warns that sign-in is unavailable when no provider is configured', async () => {
+    it('says sign-in is not set up when no provider is configured', async () => {
         mocks.env['VITE_GOOGLE_CLIENT_ID'] = '';
         mocks.env['VITE_FACEBOOK_APP_ID'] = '';
 
         await openLogin();
 
-        expect(screen.getByRole('alert')).toHaveTextContent('Não foi possível carregar as opções de entrada.');
+        expect(screen.getByRole('alert')).toHaveTextContent('O login ainda não está configurado neste servidor.');
+        expect(screen.getByRole('alert')).not.toHaveTextContent(/conexão|bloqueadores/);
         expect(screen.getByText(/Ao continuar, você concorda/)).toBeInTheDocument();
     });
 
