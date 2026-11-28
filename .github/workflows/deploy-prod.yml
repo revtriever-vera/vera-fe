@@ -61,6 +61,10 @@ jobs:
         env:
           VITE_API_URL: https://${{ vars.VERA_HOST_PREFIX }}api.${{ vars.VERA_DOMAIN }}
           VITE_POSTHOG_KEY: ${{ vars.POSTHOG_KEY }}
+          VITE_GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+          VITE_FACEBOOK_APP_ID: ${{ vars.FACEBOOK_APP_ID }}
+          VITE_TERMS_URL: https://vera.${{ vars.VERA_DOMAIN }}/termos/
+          VITE_PRIVACY_URL: https://vera.${{ vars.VERA_DOMAIN }}/privacidade/
 
       - uses: cloudflare/wrangler-action@v3
         if: steps.gate.outputs.enabled == 'true'
