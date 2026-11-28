@@ -11,12 +11,12 @@ describe('LoginHero', () => {
         mocks.env['VITE_LOGIN_PHOTO_URL'] = '';
     });
 
-    it('shows the pink gradient and no image without a photo url', () => {
+    it('shows the bundled photo under the pink overlay without a photo url', () => {
         const { container } = render(<LoginHero />);
 
+        expect(container.querySelector('img')?.getAttribute('src')).toMatch(/vera-login.*\.jpg$/);
         expect(container.querySelector('.login-photo-placeholder')).toBeInTheDocument();
         expect(container.querySelector('.login-photo-overlay')).toBeInTheDocument();
-        expect(container.querySelector('img')).not.toBeInTheDocument();
     });
 
     it('puts the configured photo over the gradient', () => {

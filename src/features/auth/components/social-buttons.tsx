@@ -20,7 +20,12 @@ export function SocialButtons({ providers, login, showFacebook = true }: SocialB
 
     return (
         <>
-            {noProvider ? <Alert tone="caution" title={t('unavailableTitle')} detail={t('unavailableDetail')} /> : null}
+            {noProvider && providers.configured ? (
+                <Alert tone="caution" title={t('unavailableTitle')} detail={t('unavailableDetail')} />
+            ) : null}
+            {noProvider && !providers.configured ? (
+                <Alert tone="caution" title={t('notConfiguredTitle')} detail={t('notConfiguredDetail')} />
+            ) : null}
             {providers.google ? (
                 <GoogleSignIn
                     clientId={env.VITE_GOOGLE_CLIENT_ID}

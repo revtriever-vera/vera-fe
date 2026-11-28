@@ -33,7 +33,7 @@ export function LoginPage({ redirectTo = '/', accountDeleted = false, accountLef
     return (
         <main className="grid min-h-dvh grid-cols-[minmax(0,1fr)] grid-rows-[220px_1fr] bg-surface min-[861px]:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] min-[861px]:grid-rows-1">
             <LoginHero />
-            <div className="relative grid grid-cols-[minmax(0,1fr)] place-content-center place-items-center px-[clamp(16px,5vw,64px)] py-10 min-[861px]:pb-16">
+            <div className="relative grid grid-cols-[minmax(0,1fr)] content-start justify-items-center px-[clamp(16px,5vw,64px)] py-8 min-[861px]:place-content-center min-[861px]:place-items-center min-[861px]:py-10 min-[861px]:pb-16">
                 <LoginBox accountDeleted={showDeleted} accountLeft={showLeft} />
                 <EndorsementSeal className="mt-7 min-[861px]:absolute min-[861px]:inset-x-0 min-[861px]:bottom-5 min-[861px]:mt-0" />
             </div>
