@@ -11,7 +11,10 @@
   },
   "monthlyReview": {
     "title": "O mês em palavras",
-    "locked": "No Premium, a Vera escreve aqui um parágrafo sobre estes números, em até 4 frases."
+    "locked": "No Premium, a Vera escreve aqui um parágrafo sobre estes números, em até 4 frases.",
+    "consentIntro": "A Vera pode escrever aqui um parágrafo sobre estes números, em até 4 frases. Para isso, ela precisa da sua permissão, e o parágrafo começa a aparecer no próximo Raio-X.",
+    "consentAllow": "Permitir o envio",
+    "consentGranted": "Permissão dada. O parágrafo começa a aparecer no próximo Raio-X, aqui e no e-mail do mês."
   },
   "locked": {
     "text": "No Premium, a Vera escreve aqui um resumo destes números em 3 ou 4 frases."

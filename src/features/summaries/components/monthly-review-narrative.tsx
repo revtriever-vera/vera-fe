@@ -1,11 +1,15 @@
 import { useId, useState, type ReactElement } from 'react';
+import type { UseQueryResult } from '@tanstack/react-query';
 import { useTranslation, type UseTranslationResponse } from 'react-i18next';
 import { track } from '@/shared/lib/analytics';
 import type { BillingState } from '@/shared/lib/billing/billing-context';
 import { useBilling } from '@/shared/lib/billing/use-billing';
 import { Card } from '@/shared/ui/card';
 import { LockLine } from '@/shared/ui/lock-line';
+import { useAiConsent } from '../api/use-ai-consent.query';
+import type { ConsentState } from '../types';
 import { LinkButton } from './link-button';
+import { MonthlyReviewConsent, MonthlyReviewConsentGranted } from './monthly-review-consent';
 import { MonthlyReviewPayload } from './monthly-review-payload';
 import { SummaryText } from './summary-text';
 
@@ -68,6 +72,20 @@ function NarrativeText({ month, text }: { readonly month: string; readonly text:
     );
 }
 
+/** Premium without a paragraph: when the permission is missing, ask for it here (#374); otherwise show nothing. */
+function NarrativeMissing({ month }: { readonly month: string }): ReactElement | null {
+    const consent: UseQueryResult<ConsentState> = useAiConsent();
+    const [asked, setAsked] = useState<boolean>(false);
+    const needsConsent: boolean = consent.data?.available === true && consent.data.needsConsent;
+    if (needsConsent && !asked) {
+        setAsked(true);
+    }
+    if (needsConsent && consent.data !== undefined) {
+        return <MonthlyReviewConsent month={month} consent={consent.data} />;
+    }
+    return asked && consent.data?.granted === true ? <MonthlyReviewConsentGranted /> : null;
+}
+
 export function MonthlyReviewNarrative({ month, text }: MonthlyReviewNarrativeProps): ReactElement | null {
     const billing: BillingState = useBilling();
     const access: ReturnType<BillingState['featureState']> = billing.featureState('ai');
@@ -77,5 +95,5 @@ export function MonthlyReviewNarrative({ month, text }: MonthlyReviewNarrativePr
     if (access === 'premium_required') {
         return <NarrativeLocked />;
     }
-    return text === null || text.trim() === '' ? null : <NarrativeText month={month} text={text} />;
+    return text === null || text.trim() === '' ? <NarrativeMissing month={month} /> : <NarrativeText month={month} text={text} />;
 }

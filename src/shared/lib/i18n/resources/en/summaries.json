@@ -11,7 +11,10 @@
   },
   "monthlyReview": {
     "title": "The month in words",
-    "locked": "On Premium, Vera writes a paragraph about these numbers here, in up to 4 sentences."
+    "locked": "On Premium, Vera writes a paragraph about these numbers here, in up to 4 sentences.",
+    "consentIntro": "Vera can write a paragraph about these numbers here, in up to 4 sentences. It needs your permission first, and the paragraph starts with the next monthly review.",
+    "consentAllow": "Allow sending",
+    "consentGranted": "Permission given. The paragraph starts with the next monthly review, here and in the monthly email."
   },
   "locked": {
     "text": "With Premium, Vera writes a summary of these numbers here in 3 or 4 sentences."

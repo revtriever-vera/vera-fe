@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import type { MonthlyReview, MonthlyReviewList } from '@/features/portfolio/review/types';
 import { problem } from '../../../test/fixtures/auth';
 import { freeBilling } from '../../../test/fixtures/billing';
+import { consentState } from '../../../test/fixtures/summaries';
 import { reviewWithoutOperations, sampleReview, sampleReviewList } from '../../../test/fixtures/monthly-review';
 import { server } from '../../../test/msw/server';
 import { renderRouterAt } from '../../../test/router';
@@ -175,6 +176,40 @@ describe('Raio-X do mês: parágrafo', () => {
         await screen.findByRole('img', { name: 'Sua carteira: +1,42%' });
         expect(screen.queryByRole('button', { name: 'Ver o que é enviado' })).not.toBeInTheDocument();
         expect(screen.queryByText('O mês em palavras')).not.toBeInTheDocument();
+    });
+
+    it('Premium sem permissão de envio vê o convite no lugar do parágrafo e, ao permitir, sabe que vem no próximo Raio-X (#374)', async () => {
+        serve(sampleReviewList(), sampleReview());
+        const granted: unknown[] = [];
+        server.use(
+            http.get('*/ai/consent', (): Response =>
+                HttpResponse.json(granted.length === 0 ? consentState() : consentState({ granted: true, needsConsent: false }))
+            ),
+            http.put('*/ai/consent', async ({ request }): Promise<Response> => {
+                granted.push(await request.json());
+                return HttpResponse.json(consentState({ granted: true, needsConsent: false }));
+            })
+        );
+        renderRouterAt('/portfolio/review', { signedIn: true });
+
+        const region: HTMLElement = await screen.findByRole('region', { name: 'O mês em palavras' });
+        expect(within(region).getByText(/precisa da sua permissão, e o parágrafo começa a aparecer no próximo Raio-X/)).toBeInTheDocument();
+        expect(within(region).getByRole('button', { name: 'Ver o que é enviado' })).toBeInTheDocument();
+
+        await userEvent.click(within(region).getByRole('button', { name: 'Permitir o envio' }));
+
+        expect(await screen.findByText(/Permissão dada\. O parágrafo começa a aparecer no próximo Raio-X/)).toBeInTheDocument();
+        expect(granted).toEqual([{ noticeVersion: 1, source: 'summary_card' }]);
+    });
+
+    it('Premium sem permissão e sem poder mudar pede a um Dono ou Editor', async () => {
+        serve(sampleReviewList(), sampleReview());
+        server.use(http.get('*/ai/consent', (): Response => HttpResponse.json(consentState({ canChange: false }))));
+        renderRouterAt('/portfolio/review', { signedIn: true });
+
+        const region: HTMLElement = await screen.findByRole('region', { name: 'O mês em palavras' });
+        expect(within(region).getByText('Peça a um Dono ou Editor para permitir.')).toBeInTheDocument();
+        expect(within(region).queryByRole('button', { name: 'Permitir o envio' })).not.toBeInTheDocument();
     });
 
     it('Free vê os números completos e o parágrafo com o cadeado do Premium', async () => {
